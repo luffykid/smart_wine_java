@@ -126,7 +126,7 @@ public class RoleController {
             if(roleDTO.getId().equals(null) || roleDTO.getId() == null){
                 return JsonReturnUtil.getJsonIntReturn(1, "角色信息有误");
             }
-            Role roleOld = roleRepository.findOne(roleDTO.getId());
+            Role roleOld = roleRepository.getOne(roleDTO.getId());
             if (roleOld == null) {
                 return JsonReturnUtil.getJsonIntReturn(4, "找不到角色id" + roleDTO.getId());
             }
@@ -207,7 +207,7 @@ public class RoleController {
             if (adminUser == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到token" + token);
             } else {
-                Role role = roleRepository.findOne(roleId);
+                Role role = roleRepository.getOne(roleId);
                 if(null == role){
                     return JsonReturnUtil.getJsonIntReturn(1, "角色信息有误" + token);
                 }
@@ -230,7 +230,7 @@ public class RoleController {
             if (adminUser == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到token" + token);
             } else {
-                Role role = roleRepository.findOne(roleId);
+                Role role = roleRepository.getOne(roleId);
                 if(null == role){
                     return JsonReturnUtil.getJsonIntReturn(1, "角色信息有误" + token);
                 }

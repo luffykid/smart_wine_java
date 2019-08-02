@@ -94,10 +94,10 @@ public class BannerService {
                             bannerDTOList.add(bannerDTO);
                         }
                     } else if (banner.getMarketActivityId() != null) {
-                        MarketActivity marketActivity = marketActivityRepository.findOne(banner.getMarketActivityId());
+                        MarketActivity marketActivity = marketActivityRepository.getOne(banner.getMarketActivityId());
                        /* MarketActivityType marketActivityType = marketActivityTypeRepository.findByWineryIdAndLike(user.getWineryId(),"生日赠券");*/
                         if (marketActivity!=null) {
-                            MarketActivityType marketActivityType = marketActivityTypeRepository.findOne(marketActivity.getMarketActivityTypeId());
+                            MarketActivityType marketActivityType = marketActivityTypeRepository.getOne(marketActivity.getMarketActivityTypeId());
                             if (marketActivityType!=null && marketActivityType.getName().equals("新会员赠券")){
                                 bannerDTOList.add(bannerDTO);
                             }
@@ -186,14 +186,14 @@ public class BannerService {
                 if (banner.getActivityId() != null) {
                     sBannerDTO.setActivityId(banner.getActivityId());
                     sBannerDTO.setActivityType("A");
-                    Activity activity = activityRepository.findOne(banner.getActivityId());
+                    Activity activity = activityRepository.getOne(banner.getActivityId());
                     if (activity != null) {
                         sBannerDTO.setActivityName(activity.getName());
                     }
                 } else {
                     sBannerDTO.setActivityId(banner.getMarketActivityId());
                     sBannerDTO.setActivityType("M");
-                    MarketActivity marketActivity = marketActivityRepository.findOne(banner.getMarketActivityId());
+                    MarketActivity marketActivity = marketActivityRepository.getOne(banner.getMarketActivityId());
                     if (marketActivity != null) {
                         sBannerDTO.setActivityName(marketActivity.getName());
                     }
@@ -213,7 +213,7 @@ public class BannerService {
      * @Description
      * */
     public SBannerDTO getBannerDetail(AdminUser adminUser, Integer bannerId) {
-        Banner banner = bannerRepository.findOne(bannerId);
+        Banner banner = bannerRepository.getOne(bannerId);
         SBannerDTO sBannerDTO = new SBannerDTO();
         sBannerDTO.setId(banner.getId());
         sBannerDTO.setName(banner.getName());
@@ -224,14 +224,14 @@ public class BannerService {
         if (banner.getActivityId() != null) {
             sBannerDTO.setActivityId(banner.getActivityId());
             sBannerDTO.setActivityType("A");
-            Activity activity = activityRepository.findOne(banner.getActivityId());
+            Activity activity = activityRepository.getOne(banner.getActivityId());
             if (activity != null) {
                 sBannerDTO.setActivityName(activity.getName());
             }
         } else {
             sBannerDTO.setActivityId(banner.getMarketActivityId());
             sBannerDTO.setActivityType("M");
-            MarketActivity marketActivity = marketActivityRepository.findOne(banner.getMarketActivityId());
+            MarketActivity marketActivity = marketActivityRepository.getOne(banner.getMarketActivityId());
             if (marketActivity != null) {
                 sBannerDTO.setActivityName(marketActivity.getName());
             }
@@ -261,14 +261,14 @@ public class BannerService {
             }
         }
 
-        Banner banner = bannerRepository.findOne(bannerId);
+        Banner banner = bannerRepository.getOne(bannerId);
         if (banner.getMarketActivityId()!=null){
-           MarketActivity marketActivity = marketActivityRepository.findOne(banner.getMarketActivityId());
+           MarketActivity marketActivity = marketActivityRepository.getOne(banner.getMarketActivityId());
            if (marketActivity.getStatus().equals("P")){
                return "活动已禁用，请先启用关联活动";
            }
         }else{
-           Activity activity = activityRepository.findOne(banner.getActivityId());
+           Activity activity = activityRepository.getOne(banner.getActivityId());
             if (activity.getStatus().equals("P")){
                 return "活动已禁用，请先启用关联活动";
             }
@@ -286,9 +286,9 @@ public class BannerService {
      * @Description
      * */
     public Boolean deleteBanner(Integer bannerId) {
-        Banner banner = bannerRepository.findOne(bannerId);
+        Banner banner = bannerRepository.getOne(bannerId);
         if (banner.getStatus().equals("P")) {
-            bannerRepository.delete(bannerId);
+            bannerRepository.deleteById(bannerId);
         } else {
             return false;
         }
@@ -307,7 +307,7 @@ public class BannerService {
         if (banerLike != null && !banerLike.getId().equals(sBannerDTO.getId())) {
             return "banner名称不可重复";
         }
-        Banner banner = bannerRepository.findOne(sBannerDTO.getId());
+        Banner banner = bannerRepository.getOne(sBannerDTO.getId());
         if (sBannerDTO.getActivityType() != null) {
             if (sBannerDTO.getActivityType().equals("A")) {
                 banner.setActivityId(sBannerDTO.getActivityId());

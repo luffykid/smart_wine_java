@@ -142,7 +142,7 @@ public class ThemeService {
         List<ProdChanged> list = prodChangedRepository.findByWineryId(user.getWineryId());
         List<DiscountListDTO> discountLists = new ArrayList<>();
         for (ProdChanged prodChanged : list) {
-            Prod prod = prodRepository.findOne(prodChanged.getProdId());
+            Prod prod = prodRepository.getOne(prodChanged.getProdId());
             if (prod != null && prod.getStatus().equals("Y") && prod.getMemberDiscount().equals("P")) {
                 DiscountListDTO discountList = new DiscountListDTO();
                 discountList.setId(prodChanged.getProdId());
@@ -215,7 +215,7 @@ public class ThemeService {
     }
 
     public Theme checkId(Integer id) {
-        return themeRepository.findOne(id);
+        return themeRepository.getOne(id);
     }
 
     public ThemeDetailDTO themeDetail(Theme theme, User user) {
@@ -233,7 +233,7 @@ public class ThemeService {
         List<ThemeProd> prodList = themeProdRepository.findByTheId(theme.getId());
         List<NewProdListDTO> newProdLists = new ArrayList<>();
         for (ThemeProd themeProd : prodList) {
-            Prod prod = prodRepository.findOne(themeProd.getProdId());
+            Prod prod = prodRepository.getOne(themeProd.getProdId());
             if (prod != null && prod.getStatus().equals("Y")) {
                 NewProdListDTO newProdList = new NewProdListDTO();
                 newProdList.setId(themeProd.getProdId());
@@ -284,7 +284,7 @@ public class ThemeService {
     }
 
     public Prod checkProdId(Integer id) {
-        return prodRepository.findOne(id);
+        return prodRepository.getOne(id);
     }
 
     public ProdDetailDTO getProdDetail(User user, Prod prod) {
@@ -346,7 +346,7 @@ public class ThemeService {
 
         ProdProdSpec prodProdSpec = prodProdSpecRepository.findByProdId(prod.getId());
         if (prodProdSpec != null) {
-            ProdSpec prodSpec = prodSpecRepository.findOne(prodProdSpec.getProdSpecId());
+            ProdSpec prodSpec = prodSpecRepository.getOne(prodProdSpec.getProdSpecId());
             if (prodSpec != null) {
                 prodDetail.setSpecDetail(prod.getTitle() + "  " + prodSpec.getSpecValue());
             }
@@ -401,13 +401,13 @@ public class ThemeService {
 
     public ProdSpecDTO getProdSpecDetail(Integer prodId) {
         ProdSpecDTO prodSpecDTO = new ProdSpecDTO();
-        Prod prod = prodRepository.findOne(prodId);
+        Prod prod = prodRepository.getOne(prodId);
         if (prod == null) {
             return null;
         }
         ProdProdSpec prodProdSpec = prodProdSpecRepository.findByProdId(prodId);
         if (prodProdSpec != null) {
-            ProdSpec prodSpec = prodSpecRepository.findOne(prodProdSpec.getProdSpecId());
+            ProdSpec prodSpec = prodSpecRepository.getOne(prodProdSpec.getProdSpecId());
             if (prodSpec != null) {
                 List<Map<String, Object>> mapList = new ArrayList<>();
                 List<ProdSpec> specList = prodSpecRepository.findByProdSpecGroupId(prodSpec.getProdSpecGroupId());
@@ -415,7 +415,7 @@ public class ThemeService {
                     List<ProdProdSpec> specList1 = prodProdSpecRepository.findByProdSpecId(prodSpec1.getId());
                     if (specList1 != null && specList1.size() != 0) {
                         for (ProdProdSpec spec : specList1) {
-                            Prod prod1 = prodRepository.findOne(spec.getProdId());
+                            Prod prod1 = prodRepository.getOne(spec.getProdId());
                             if (prod1 != null) {
                                 Map<String, Object> map = new HashMap<>();
                                 map.put("prodSpecName", prod1.getName() + "  " + prodSpec1.getSpecValue());
@@ -496,7 +496,7 @@ public class ThemeService {
     }
 
     public void openTheMe(Integer themeId, String status) {
-        Theme theme = themeRepository.findOne(themeId);
+        Theme theme = themeRepository.getOne(themeId);
         if (theme != null) {
 //            theme.setStatusTime(new Date());
             theme.setStatus(status);
@@ -505,12 +505,12 @@ public class ThemeService {
     }
 
     public void delTheMe(Integer themeId) {
-        themeRepository.delete(themeId);
+        themeRepository.deleteById(themeId);
     }
 
     public AddTheMeDTO theMeDetail(Integer themeId) {
         AddTheMeDTO addTheMeDTO = new AddTheMeDTO();
-        Theme theme = themeRepository.findOne(themeId);
+        Theme theme = themeRepository.getOne(themeId);
         if (theme != null) {
             addTheMeDTO.setThemeName(theme.getName());
             ThemeLogo logo = themeLogoRepository.findThemeLogoDefault(themeId);
@@ -555,7 +555,7 @@ public class ThemeService {
 
     @Transactional(rollbackFor = Exception.class)
     public void updateTheMe(AddTheMeDTO addTheMeDTO, AdminUser adminUser) {
-        Theme theme = themeRepository.findOne(addTheMeDTO.getThemeId());
+        Theme theme = themeRepository.getOne(addTheMeDTO.getThemeId());
         if (theme != null) {
             theme.setAuthor(String.valueOf(adminUser.getId()));
             theme.setContext(addTheMeDTO.getThemeDescri());
@@ -604,11 +604,11 @@ public class ThemeService {
     }
 
     public Theme findOne(Integer themeId) {
-        return themeRepository.findOne(themeId);
+        return themeRepository.getOne(themeId);
     }
 
     public void toppingTheMe(Integer themeId) {
-        Theme theme = themeRepository.findOne(themeId);
+        Theme theme = themeRepository.getOne(themeId);
         if (theme != null) {
             theme.setStatusTime(new Date());
             themeRepository.save(theme);

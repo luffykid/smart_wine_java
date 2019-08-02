@@ -37,7 +37,7 @@ public class UserDepositDetailService {
         if (userDepositDetailList != null && userDepositDetailList.size() > 0) {
             List<UserDepositDetailDTO> userDepositDetailDTOList = new ArrayList<>();
             for (UserDepositDetail userDepositDetail : userDepositDetailList) {
-                DepositOrder depositOrder = this.depositOrderRepository.findOne(userDepositDetail.getOrderId());
+                DepositOrder depositOrder = depositOrderRepository.getOne(userDepositDetail.getOrderId());
                 UserDepositDetailDTO userDepositDetailDTO = new UserDepositDetailDTO();
                 userDepositDetailDTO.setOrderId(userDepositDetail.getOrderId());
                 userDepositDetailDTO.setMoney(userDepositDetail.getBalance());

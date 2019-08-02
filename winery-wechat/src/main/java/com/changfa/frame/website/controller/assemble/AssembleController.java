@@ -184,7 +184,7 @@ public class AssembleController {
             }else{
                 return JsonReturnUtil.getJsonReturn(37003, "商品信息有误");
             }
-            AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+            AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
             if(null != assembleCommodity ){
                 //检查剩余团购数量是否满足
                 Integer assemblenum = assembleService.checkAssemblenum(assembleCommodity);
@@ -262,7 +262,7 @@ public class AssembleController {
             }else{
                 return JsonReturnUtil.getJsonReturn(37003, "商品信息有误");
             }
-            AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+            AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
             if(null == assembleCommodity ){
                 return JsonReturnUtil.getJsonReturn(37003, "商品信息有误");
             }
@@ -361,10 +361,10 @@ public class AssembleController {
                 return JsonReturnUtil.getJsonReturn(37003, "商品拼团信息有误");
             }
 
-            AssembleList assembleList = assembleListRepository.findOne(assembleListId);
+            AssembleList assembleList = assembleListRepository.getOne(assembleListId);
             AssembleCommodity assembleCommodity = null;
             if(null != assembleList){
-                assembleCommodity = assembleCommodityRepository.findOne(assembleList.getAssembleCommodity());
+                assembleCommodity = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
             }
             if (null != assembleCommodity) {
                 //检查剩余团购数量是否满足

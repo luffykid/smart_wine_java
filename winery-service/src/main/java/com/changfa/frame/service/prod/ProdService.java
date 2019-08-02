@@ -85,7 +85,7 @@ public class ProdService {
 
     //修改规格
     public Integer updateProdSpecGroup(AdminUser adminUser, String specGroup, String specList, Integer specGroupId) {
-        ProdSpecGroup prodSpecGroup = prodSpecGroupRepository.findOne(specGroupId);
+        ProdSpecGroup prodSpecGroup = prodSpecGroupRepository.getOne(specGroupId);
         if (prodSpecGroup == null) {
             return 1;
         }
@@ -145,7 +145,7 @@ public class ProdService {
     }
 
     public Integer updateProdCategory(AdminUser adminUser, String cateName, String descri, String status, Integer cateId) {
-        ProdCategory prodCategory = prodCategoryRepository.findOne(cateId);
+        ProdCategory prodCategory = prodCategoryRepository.getOne(cateId);
         if (prodCategory == null) {
             return 1;
         }
@@ -179,7 +179,7 @@ public class ProdService {
 
 
     public Integer updateProdBrand(AdminUser adminUser, String brandName, String status, Integer brandId) {
-        ProdBrand prodBrand = prodBrandRepository.findOne(brandId);
+        ProdBrand prodBrand = prodBrandRepository.getOne(brandId);
         if (prodBrand == null) {
             return 1;
         }
@@ -211,29 +211,29 @@ public class ProdService {
 
     public AddProdDTO prodDetail(Integer prodId) {
         AddProdDTO addProdDTO = new AddProdDTO();
-        Prod prod = prodRepository.findOne(prodId);
+        Prod prod = prodRepository.getOne(prodId);
         if (prod != null) {
             addProdDTO.setProdName(prod.getName());
             addProdDTO.setProdTitle(prod.getTitle());
             addProdDTO.setProdCode(prod.getCode());
             addProdDTO.setProdCategoryId(prod.getProdCategoryId());
-            ProdCategory category = prodCategoryRepository.findOne(prod.getProdCategoryId());
+            ProdCategory category = prodCategoryRepository.getOne(prod.getProdCategoryId());
             if (category != null) {
                 addProdDTO.setProdCategoryName(category.getName());
             }
             addProdDTO.setBrandId(prod.getBrandId());
-            ProdBrand brand = prodBrandRepository.findOne(prod.getBrandId());
+            ProdBrand brand = prodBrandRepository.getOne(prod.getBrandId());
             if (brand != null) {
                 addProdDTO.setBrandName(brand.getName());
             }
             ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prodId);
             if (prodSpec != null) {
                 addProdDTO.setProdSpecId(prodSpec.getProdSpecId());
-                ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+                ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
                 if (spec != null) {
                     addProdDTO.setProdSpecName(spec.getSpecValue());
                     addProdDTO.setProdSpecGroupId(spec.getProdSpecGroupId());
-                    ProdSpecGroup group = prodSpecGroupRepository.findOne(spec.getProdSpecGroupId());
+                    ProdSpecGroup group = prodSpecGroupRepository.getOne(spec.getProdSpecGroupId());
                     if (group != null) {
                         addProdDTO.setProdSpecGroupName(group.getName());
                     }
@@ -275,7 +275,7 @@ public class ProdService {
                 ProdMemberDiscountDTO discountListDTO = new ProdMemberDiscountDTO();
                 discountListDTO.setMemberLevelId(prodPriceLevel.getMemberLevelId());
                 if (prodPriceLevel.getMemberLevelId() != null) {
-                    MemberLevel level = memberLevelRepository.findOne(prodPriceLevel.getMemberLevelId());
+                    MemberLevel level = memberLevelRepository.getOne(prodPriceLevel.getMemberLevelId());
                     if (level != null) {
                         discountListDTO.setValue(level.getName());
                     }
@@ -304,7 +304,7 @@ public class ProdService {
     }
     public void updateProd(AdminUser adminUser, AddProdDTO addProdDTO) {
         System.out.println("~~~~~~~~~~~~" + addProdDTO.toString());
-        Prod prod = prodRepository.findOne(addProdDTO.getProdId());
+        Prod prod = prodRepository.getOne(addProdDTO.getProdId());
         if (prod == null) {
             prod = new Prod();
         }
@@ -600,11 +600,11 @@ public class ProdService {
             }
             prodListDTO.setCode(prod.getCode());
             prodListDTO.setProdName(prod.getName());
-            ProdCategory category = prodCategoryRepository.findOne(prod.getProdCategoryId());
+            ProdCategory category = prodCategoryRepository.getOne(prod.getProdCategoryId());
             if (category != null) {
                 prodListDTO.setProdCataName(category.getName());
             }
-            ProdBrand brand = prodBrandRepository.findOne(prod.getBrandId());
+            ProdBrand brand = prodBrandRepository.getOne(prod.getBrandId());
             if (brand != null) {
                 prodListDTO.setProdBrandName(brand.getName());
             }
@@ -627,24 +627,24 @@ public class ProdService {
 
     public void delProd(Integer prodId) {
         prodContentRepository.deleteByProdId(prodId);
-        prodRepository.delete(prodId);
+        prodRepository.deleteById(prodId);
     }
 
     public void delProdSpecGroup(Integer specGroupId) {
-        prodSpecGroupRepository.delete(specGroupId);
+        prodSpecGroupRepository.deleteById(specGroupId);
     }
 
     public void delProdCategory(Integer cateId) {
-        prodCategoryRepository.delete(cateId);
+        prodCategoryRepository.deleteById(cateId);
     }
 
     public void delProdBrand(Integer brandId) {
-        prodBrandRepository.delete(brandId);
+        prodBrandRepository.deleteById(brandId);
     }
 
 
     public void openProdCategory(Integer cateId, String status) {
-        ProdCategory category = prodCategoryRepository.findOne(cateId);
+        ProdCategory category = prodCategoryRepository.getOne(cateId);
         if (category != null) {
             category.setStatus(status);
             prodCategoryRepository.save(category);
@@ -652,7 +652,7 @@ public class ProdService {
     }
 
     public void openProdBrand(Integer brandId, String status) {
-        ProdBrand brand = prodBrandRepository.findOne(brandId);
+        ProdBrand brand = prodBrandRepository.getOne(brandId);
         if (brand != null) {
             brand.setStatus(status);
             brand.setStatusTime(new Date());
@@ -670,7 +670,7 @@ public class ProdService {
             List<ProdProdSpec> specList = prodProdSpecRepository.findByProdSpecId(prodSpec.getId());
             if (specList != null && specList.size() != 0) {
                 for (ProdProdSpec spec : specList) {
-                    Prod prod = prodRepository.findOne(spec.getProdId());
+                    Prod prod = prodRepository.getOne(spec.getProdId());
                     if (prod != null && prod.getStatus().equals("Y")) {
                         return 1;
                     }
@@ -720,14 +720,14 @@ public class ProdService {
     }
 
     public void openCloseProd(Integer prodId, String n) {
-        Prod prod = prodRepository.findOne(prodId);
+        Prod prod = prodRepository.getOne(prodId);
         prod.setStatus(n);
         prod.setStatusTime(new Date());
         prodRepository.saveAndFlush(prod);
     }
 
     public void toppingProd(Integer prodId) {
-        Prod prod = prodRepository.findOne(prodId);
+        Prod prod = prodRepository.getOne(prodId);
         if (prod != null) {
             prod.setToppingTime(new Date());
             prodRepository.save(prod);
@@ -843,7 +843,7 @@ public class ProdService {
 
     public void updateOperateProd(AdminUser adminUser, AddProdDTO addProdDTO, List<Integer> wineryList) {
         System.out.println("~~~~~~~~~~~~" + addProdDTO.toString());
-        Prod prod = prodRepository.findOne(addProdDTO.getProdId());
+        Prod prod = prodRepository.getOne(addProdDTO.getProdId());
         if (prod == null) {
             prod = new Prod();
         }

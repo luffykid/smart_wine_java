@@ -175,7 +175,7 @@ public class PointRewardRuleService {
         List<MemberLevel> upgradeMemberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(user.getWineryId(), "A");
         if (upgradeMemberLevelList != null) {
             for (MemberLevel memberLevel : upgradeMemberLevelList) {
-                MemberLevel userMemberLevel = memberLevelRepository.findOne(memberUser.getMemberLevelId());
+                MemberLevel userMemberLevel = memberLevelRepository.getOne(memberUser.getMemberLevelId());
                 if (userExperienceSave.getExperience() >= memberLevel.getUpgradeExperience()) {
                     if (memberLevel.getUpgradeExperience() > userMemberLevel.getUpgradeExperience()) {
                         memberUser.setMemberLevelId(memberLevel.getId());
@@ -242,7 +242,7 @@ public class PointRewardRuleService {
         List<PointExchangeVoucher> pointExchangeVoucherList = pointExchangeVoucherRepository.findByPointRewardRuleIdAndStatus(pointRewardRule.getId(), "A");
         if (pointExchangeVoucherList != null && pointExchangeVoucherList.size() > 0) {
             for (PointExchangeVoucher pointExchangeVoucher : pointExchangeVoucherList) {
-                Voucher voucher = voucherRepository.findOne(pointExchangeVoucher.getVoucherId());
+                Voucher voucher = voucherRepository.getOne(pointExchangeVoucher.getVoucherId());
                 if (voucher != null) {
                     VoucherInstDTO voucherInstDTO = new VoucherInstDTO();
                     voucherInstDTO.setName(voucher.getName());
@@ -257,7 +257,7 @@ public class PointRewardRuleService {
                         voucherInstDTO.setType("D");
                     }
                     if (voucher.getType().equals("G")) {
-                        Prod prod = prodRepository.findOne(voucher.getExchangeProdId());
+                        Prod prod = prodRepository.getOne(voucher.getExchangeProdId());
                         if (prod != null) {
                             voucherInstDTO.setGift(prod.getName());
                         }
@@ -290,7 +290,7 @@ public class PointRewardRuleService {
         UserPoint userPoint = userPointRepository.findByUserId(user.getId());
         //判断用户积分是否可以兑换
         if (userPoint.getPoint() >= pointExchangeVoucher.getPoint()) {
-            Voucher voucher = voucherRepository.findOne(voucherId);
+            Voucher voucher = voucherRepository.getOne(voucherId);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
             String tempUserId = String.format("%02d", user.getId());
             String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
@@ -358,7 +358,7 @@ public class PointRewardRuleService {
     public Map<String, Object> getVoucherDetail(User user, Integer voucherId) {
         Map<String, Object> map = new HashMap<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Voucher voucher = voucherRepository.findOne(voucherId);
+        Voucher voucher = voucherRepository.getOne(voucherId);
         PointExchangeVoucher pointExchangeVoucher = pointExchangeVoucherRepository.findByWineryIdAndVoucherId(user.getWineryId(), voucherId);
         VoucherInstDTO voucherInstDTO = new VoucherInstDTO();
         voucherInstDTO.setName(voucher.getName());
@@ -373,7 +373,7 @@ public class PointRewardRuleService {
             voucherInstDTO.setType("D");
         }
         if (voucher.getType().equals("G")) {
-            Prod prod = prodRepository.findOne(voucher.getExchangeProdId());
+            Prod prod = prodRepository.getOne(voucher.getExchangeProdId());
             if (prod != null) {
                 voucherInstDTO.setGift(prod.getName());
             }

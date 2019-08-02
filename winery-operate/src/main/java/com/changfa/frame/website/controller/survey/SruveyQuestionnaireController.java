@@ -310,7 +310,7 @@ public class SruveyQuestionnaireController {
                 resultMap.put("message", "找不到token");
                 return ResponseEntity.status(HttpStatus.CREATED).body(resultMap);
             }
-            SurveyAnswer surveyAnswer = this.surveyAnswerRepository.findOne(answererId);
+            SurveyAnswer surveyAnswer = this.surveyAnswerRepository.getOne(answererId);
             if(surveyAnswer != null ){
                 surveyQuestionnaireService.submitMessage(surveyAnswer,message);
             }else{

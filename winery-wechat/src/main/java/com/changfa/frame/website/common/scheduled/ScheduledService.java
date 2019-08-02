@@ -73,7 +73,7 @@ public class ScheduledService {
                                 if (memberUser.getBirthday() != null) {
                                     int compare = compare_monuthAndDay(dateFormat.format(memberUser.getBirthday()), getPastDate(7));
                                     if (compare == 0) {
-                                        User user = userRepository.findOne(memberUser.getUserId());
+                                        User user = userRepository.getOne(memberUser.getUserId());
                                         if (user != null) {
                                             try {
                                                 marketActivityService.birthdaySendVoucher(memberUser, user, birthdayActivity, "O");
@@ -137,7 +137,7 @@ public class ScheduledService {
                         List<MemberUser> memberUserList = memberUserRepository.findByMemberLevelId(birthdayRange, oldUserActivity.getWineryId());
                         if (memberUserList != null) {
                             for (MemberUser memberUser : memberUserList) {
-                                User user = userRepository.findOne(memberUser.getUserId());
+                                User user = userRepository.getOne(memberUser.getUserId());
                                 String one = getAfterMonth(dateFormat.format(user.getCreateTime()),1);
                                 String two = getAfterMonth(dateFormat.format(user.getCreateTime()),2);
                                 if (user != null && new Date().after(dateFormat.parse(one)) && new Date().before(dateFormat.parse(two))) {
@@ -178,7 +178,7 @@ public class ScheduledService {
                                 List<MemberUser> memberUserList = memberUserRepository.findByMemberLevelId(birthdayRange, marketActivity.getWineryId());
                                 if (memberUserList != null) {
                                     for (MemberUser memberUser : memberUserList) {
-                                        User user = userRepository.findOne(memberUser.getUserId());
+                                        User user = userRepository.getOne(memberUser.getUserId());
                                         if (user.getPhone() != null) {
                                             //SMSUtil.sendRemindSMS(user.getPhone(), "智慧酒旗星", smsTemp.getCode(), new StringBuffer("{'name':'" + memberUser.getNickName() + "'}"));
                                             log.info("发送成功");

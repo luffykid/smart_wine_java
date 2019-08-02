@@ -94,7 +94,7 @@ public class BargainingService {
 		for (BargainingCommodity bc : bargainingList) {
 			BargainingCommodityListDTO bcListDTO = new BargainingCommodityListDTO();
 			bcListDTO.setId(bc.getId());
-			Prod prod = prodRepository.findOne(bc.getProdId());
+			Prod prod = prodRepository.getOne(bc.getProdId());
 			if(null != prod){
 				bcListDTO.setProdName(prod.getName());
 			}
@@ -149,11 +149,11 @@ public class BargainingService {
 	 */
 	public BargainingCommodityDTO bargainingDetail(Integer bargainingId) {
 		BargainingCommodityDTO bcDTO = new BargainingCommodityDTO();
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingId);
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
 
 		if (bargainingCommodity != null) {
 			bcDTO.setId(bargainingCommodity.getId());
-			Prod prod = prodRepository.findOne(bargainingCommodity.getProdId());
+			Prod prod = prodRepository.getOne(bargainingCommodity.getProdId());
 			if(null != prod){
 				bcDTO.setProd(prod);
 			}
@@ -168,7 +168,7 @@ public class BargainingService {
 	//检查是否可以编辑(在活动时间内，不允许编辑。)
 	public Boolean checkisUpdate(Integer bargainingId) {
 		Boolean ret = false;
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingId);
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
 		if(null != bargainingCommodity ){
 			if(bargainingCommodity.getStartTime().getTime() <= System.currentTimeMillis()  &&
 					System.currentTimeMillis() <= bargainingCommodity.getEndTime().getTime() ){
@@ -183,7 +183,7 @@ public class BargainingService {
 
 	//修改砍价商品
 	public void updateBargaining(AdminUser adminUser, BargainingCommodityDTO bargainingCommodityDTO) {
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingCommodityDTO.getId());
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingCommodityDTO.getId());
 		if (bargainingCommodity == null) {
 			bargainingCommodity = new BargainingCommodity();
 			bargainingCommodity.setCreateTime(new Date());
@@ -212,7 +212,7 @@ public class BargainingService {
 
 	//砍价商品置顶
 	public void topBargaining(Integer bargainingId) {
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingId);
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
 		if (bargainingCommodity != null) {
 			bargainingCommodity.setTopTime(new Date());
 			bargainingCommodityRepository.saveAndFlush(bargainingCommodity);
@@ -221,7 +221,7 @@ public class BargainingService {
 
 	//砍价商品取消置顶
 	public void untopBargaining(Integer bargainingId) {
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingId);
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
 		if (bargainingCommodity != null) {
 			bargainingCommodity.setTopTime(bargainingCommodity.getCreateTime());
 			bargainingCommodityRepository.saveAndFlush(bargainingCommodity);
@@ -230,7 +230,7 @@ public class BargainingService {
 
 	//删除砍价商品
 	public void delBargaining(Integer bargainingId) {
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingId);
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
 		if (bargainingCommodity != null) {
 			bargainingCommodity.setIsDelete(0);
 			bargainingCommodityRepository.saveAndFlush(bargainingCommodity);
@@ -254,7 +254,7 @@ public class BargainingService {
 		for (BargainingCommodity bc : bargainingList) {
 			BargainingWeichatListDTO bcListDTO = new BargainingWeichatListDTO();
 			bcListDTO.setId(bc.getId());
-			Prod prod = prodRepository.findOne(bc.getProdId());
+			Prod prod = prodRepository.getOne(bc.getProdId());
 			if(null != prod){
 				ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
 				if (prodLogo != null) {
@@ -264,7 +264,7 @@ public class BargainingService {
 				bcListDTO.setProdTitle(prod.getTitle());
 				ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 				if (prodSpec != null) {
-					ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+					ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 					if (spec != null) {
 						bcListDTO.setProdSpecName(spec.getSpecValue());
 					}
@@ -290,9 +290,9 @@ public class BargainingService {
 	public BargainingPordDetailWeichatDTO bargainingProdWchat(User user, Integer bargainingId) {
 		BargainingPordDetailWeichatDTO bcDetailDTO = new BargainingPordDetailWeichatDTO();
 		if(null != bargainingId){
-			BargainingCommodity bc = bargainingCommodityRepository.findOne(bargainingId);
+			BargainingCommodity bc = bargainingCommodityRepository.getOne(bargainingId);
 			bcDetailDTO.setId(bc.getId());
-			Prod prod = prodRepository.findOne(bc.getProdId());
+			Prod prod = prodRepository.getOne(bc.getProdId());
 			if(null != prod){
 				bcDetailDTO.setProdName(prod.getName());
 				bcDetailDTO.setProdTitle(prod.getTitle());
@@ -302,7 +302,7 @@ public class BargainingService {
 				}
 				ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 				if (prodSpec != null) {
-					ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+					ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 					if (spec != null) {
 						bcDetailDTO.setProdSpecName(spec.getSpecValue());
 					}
@@ -329,7 +329,7 @@ public class BargainingService {
 	 * @return
 	 */
 	public Integer bargainingButton(User user,Integer bargainingId) {
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingId);
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
 		if(null != bargainingCommodity){
 			BargainingUser bargainingUser = new BargainingUser();
 			bargainingUser.setUserId(user.getId());
@@ -352,19 +352,19 @@ public class BargainingService {
 	 * @return
 	 */
 	public BargainingDetailWeichatDTO bargainingDetail(User user,Integer bargainingUserId) {
-		BargainingUser bargainingUser = bargainingUserRepository.findOne(bargainingUserId);
+		BargainingUser bargainingUser = bargainingUserRepository.getOne(bargainingUserId);
 		BargainingDetailWeichatDTO bdwd = new BargainingDetailWeichatDTO();
 		if(null != bargainingUser){
 			bdwd.setId(bargainingUser.getId());
 			bdwd.setUserId(bargainingUser.getUserId());
-			User startUser = userRepository.findOne(bargainingUser.getUserId());
+			User startUser = userRepository.getOne(bargainingUser.getUserId());
 			if(null != user){
 				bdwd.setUserLogo(startUser.getUserIcon());
 			}
-			BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingUser.getBargainingCommodity());
+			BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingUser.getBargainingCommodity());
 			if(null != bargainingCommodity){
 				bdwd.setBargainingPrice(bargainingCommodity.getBargainingPrice());
-				Prod prod = prodRepository.findOne(bargainingCommodity.getProdId());
+				Prod prod = prodRepository.getOne(bargainingCommodity.getProdId());
 				if(null != prod){
 					bdwd.setProdName(prod.getName());
 					ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
@@ -386,7 +386,7 @@ public class BargainingService {
 				for(BargainingHelp bargainingHelp : bHelpList){
 					BargainingUserWeichatListDTO buwld = new BargainingUserWeichatListDTO();
 					buwld.setId(bargainingHelp.getId());
-					User helpUser = userRepository.findOne(bargainingHelp.getUserId());
+					User helpUser = userRepository.getOne(bargainingHelp.getUserId());
 					if(null != helpUser){
 						buwld.setUserID(helpUser.getId());
 						buwld.setIcon(helpUser.getUserIcon());
@@ -416,9 +416,9 @@ public class BargainingService {
 	 * @return
 	 */
 	public void bargainingHelp(User user,Integer bargainingUserId) {
-		BargainingUser bargainingUser = bargainingUserRepository.findOne(bargainingUserId);
+		BargainingUser bargainingUser = bargainingUserRepository.getOne(bargainingUserId);
 		if(null != bargainingUser){
-			BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingUser.getBargainingCommodity());
+			BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingUser.getBargainingCommodity());
 			BigDecimal prodPrice = new BigDecimal(0); //商品的原价格
 			BigDecimal lessPrice = new BigDecimal(0); //一共砍掉的价格
 			Integer knifeNum = 0;  //需要帮砍多少刀看到最低价
@@ -427,7 +427,7 @@ public class BargainingService {
 			if(null != bargainingCommodity){
 				knifeNum = bargainingCommodity.getKnifeNum();
 				bargainingPrice = bargainingCommodity.getBargainingPrice();
-				Prod prod = prodRepository.findOne(bargainingCommodity.getProdId());
+				Prod prod = prodRepository.getOne(bargainingCommodity.getProdId());
 				if(null != prod){
 					ProdPrice price = prodPriceRepository.findProdPriceByProdId(prod.getId());
 					if (price != null) {
@@ -482,13 +482,13 @@ public class BargainingService {
 	 * @return
 	 */
 	public BargainingWeichatDTO buyNowPrice(User user,Integer bargainingUserId,BigDecimal nowPrice) {
-		BargainingUser bargainingUser = bargainingUserRepository.findOne(bargainingUserId);
+		BargainingUser bargainingUser = bargainingUserRepository.getOne(bargainingUserId);
 		if(null != bargainingUser){
 			BargainingWeichatDTO bargainingWeichatDTO = new BargainingWeichatDTO();
-			BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingUser.getBargainingCommodity());
+			BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingUser.getBargainingCommodity());
 			bargainingWeichatDTO.setId(bargainingUser.getId());
 			if(null != bargainingCommodity){
-				Prod prod = prodRepository.findOne(bargainingCommodity.getProdId());
+				Prod prod = prodRepository.getOne(bargainingCommodity.getProdId());
 				if(null != prod){
 					ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
 					if (prodLogo != null) {
@@ -497,7 +497,7 @@ public class BargainingService {
 					bargainingWeichatDTO.setProdTitle(prod.getTitle());
 					ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 					if (prodSpec != null) {
-						ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+						ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 						if (spec != null) {
 							bargainingWeichatDTO.setProdSpecName(spec.getSpecValue());
 						}
@@ -546,7 +546,7 @@ public class BargainingService {
 	 * @return
 	 */
 	public void createBargaining(User user, UserAddress userAddress,  String descri, BargainingUser bargainingUser,BigDecimal nowPrice) {
-		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingUser.getBargainingCommodity());
+		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingUser.getBargainingCommodity());
 		//砍价订单
 		Order order = new Order();
 		order.setWineryId(user.getWineryId());

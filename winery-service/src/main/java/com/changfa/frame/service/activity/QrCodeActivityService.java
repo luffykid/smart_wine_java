@@ -68,8 +68,8 @@ public class QrCodeActivityService {
      * */
     public Map<String, Object> getQrcodeType(Integer wineryId) {
         Map<String, Object> map = new HashMap<>();
-        QrCodeActivity qrCodeActivity = qrCodeActivityRepository.findOne(wineryId);
-        QrCodeUrl qrCodeUrl = qrCodeUrlRepository.findOne(qrCodeActivity.getQrCodeUrlId());
+        QrCodeActivity qrCodeActivity = qrCodeActivityRepository.getOne(wineryId);
+        QrCodeUrl qrCodeUrl = qrCodeUrlRepository.getOne(qrCodeActivity.getQrCodeUrlId());
         if (qrCodeActivity.getType().equals("O")) {
             map.put("url", qrCodeUrl.getUrl() + qrCodeActivity.getProdId());
         } else if (qrCodeActivity.getType().equals("T")) {
@@ -198,7 +198,7 @@ public class QrCodeActivityService {
         List<QRCodeDTO> qrCodeDTOList = new ArrayList<>();
         if (qrCodeActivitieList != null && qrCodeActivitieList.size() > 0) {
             for (QrCodeActivity qrCodeActivity : qrCodeActivitieList) {
-                WineryQrCode wineryQrCode = wineryQrCodeRepository.findOne(qrCodeActivity.getWineryQRCodeId());
+                WineryQrCode wineryQrCode = wineryQrCodeRepository.getOne(qrCodeActivity.getWineryQRCodeId());
                 qrCodeDTOList.add(getQRCodeDetail(wineryQrCode, qrCodeActivity));
             }
         }
@@ -211,25 +211,25 @@ public class QrCodeActivityService {
         qrCodeDTO.setId(qrCodeActivity.getId());
         qrCodeDTO.setUrl((wineryQrCode.getUrl().startsWith("/")) ? (Constant.XINDEQI_ICON_PATH.concat(wineryQrCode.getUrl())) : wineryQrCode.getUrl());
         if (qrCodeActivity.getType().equals("M")) {
-            MarketActivity marketActivity = marketActivityRepository.findOne(qrCodeActivity.getActivityId());
+            MarketActivity marketActivity = marketActivityRepository.getOne(qrCodeActivity.getActivityId());
             if (marketActivity != null) {
                 qrCodeDTO.setActivityName(marketActivity.getName());
             }
             qrCodeDTO.setActivityType("A");
         } else if (qrCodeActivity.getType().equals("A")) {
-            Activity activity = activityRepository.findOne(qrCodeActivity.getActivityId());
+            Activity activity = activityRepository.getOne(qrCodeActivity.getActivityId());
             if (activity != null) {
                 qrCodeDTO.setActivityName(activity.getName());
             }
             qrCodeDTO.setActivityType("A");
         } else if (qrCodeActivity.getType().equals("O")) {
-            Prod prod = prodRepository.findOne(qrCodeActivity.getProdId());
+            Prod prod = prodRepository.getOne(qrCodeActivity.getProdId());
             if (prod != null) {
                 qrCodeDTO.setActivityName(prod.getName());
             }
             qrCodeDTO.setActivityType("O");
         } else {
-            Theme theme = themeRepository.findOne(qrCodeActivity.getThemeId());
+            Theme theme = themeRepository.getOne(qrCodeActivity.getThemeId());
             if (theme != null) {
                 qrCodeDTO.setActivityName(theme.getName());
             }
@@ -247,12 +247,12 @@ public class QrCodeActivityService {
     }
 
     public WineryQrCode getWineryQrCode(Integer id) {
-        return wineryQrCodeRepository.findOne(id);
+        return wineryQrCodeRepository.getOne(id);
     }
 
 
     public QrCodeActivity getQrCodeActivity(Integer id) {
-        return qrCodeActivityRepository.findOne(id);
+        return qrCodeActivityRepository.getOne(id);
     }
 
     public void delete(Integer id) {

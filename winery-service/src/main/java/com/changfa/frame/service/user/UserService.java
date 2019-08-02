@@ -225,7 +225,7 @@ public class UserService {
         if (userWineList != null && userWineList.size() > 0) {
             for (UserWine userWine : userWineList) {
                 quantity += userWine.getQuantity();
-                Wine wine = wineRepository.findOne(userWine.getWineId());
+                Wine wine = wineRepository.getOne(userWine.getWineId());
                 if (userWine.getQuantity() != null && userWine.getQuantity() != 0) {
                     price = price.add(wine.getPrice().multiply(new BigDecimal(userWine.getQuantity())));
                 }
@@ -516,7 +516,7 @@ public class UserService {
     }
 
     public UserAddress checkUserAddressId(Integer userAddressId) {
-        return userAddressRepository.findOne(userAddressId);
+        return userAddressRepository.getOne(userAddressId);
     }
 
 
@@ -604,7 +604,7 @@ public class UserService {
     }
 
     public Map<String, Object> getUserDetail(Integer userId) {
-        User user = userRepository.findOne(userId);
+        User user = userRepository.getOne(userId);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         MemberUser memberUser = memberUserRepository.findByUserId(userId);
         Map<String, Object> map = new HashMap<>();
@@ -630,7 +630,7 @@ public class UserService {
             }
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        User user = userRepository.findOne(userId);
+        User user = userRepository.getOne(userId);
         MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
         if (phone != null && !phone.equals("")) {
             user.setPhone(phone);
@@ -803,7 +803,7 @@ public class UserService {
         for (Distributor distributor : distributorList) {
             DistributorDTO distributorDTO = new DistributorDTO();
             distributorDTO.setId(distributor.getId());
-            Winery winery = wineryRepository.findOne(distributor.getWineryId());
+            Winery winery = wineryRepository.getOne(distributor.getWineryId());
             if(null != winery){
                 distributorDTO.setWineryName(winery.getName());
             }
@@ -819,7 +819,7 @@ public class UserService {
 
     //审核分销员
     public void examineDistributor( Integer distributorId, Integer status) {
-        Distributor distributor =  distributorRepository.findOne(distributorId);
+        Distributor distributor =  distributorRepository.getOne(distributorId);
         if(null != distributor){
             distributor.setStatus(status);
             distributorRepository.saveAndFlush(distributor);

@@ -88,7 +88,7 @@ public class OfflineOrderService {
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (UserVoucher userVoucher : userVoucherList) {
-                VoucherInst voucherInst = voucherInstRepository.findOne(userVoucher.getVoucherInstId());
+                VoucherInst voucherInst = voucherInstRepository.getOne(userVoucher.getVoucherInstId());
                 if (voucherInst.getScope().equals("A") || voucherInst.getScope().equals("C")) {
                     if (!voucherInst.getType().equals("G")) {
                         voucherInstDTOList.add(getVoucherInstDTO(voucherInst));
@@ -113,7 +113,7 @@ public class OfflineOrderService {
             voucherInstDTO.setDisCount(voucherInst.getDiscount().divide(new BigDecimal(100)).toString());
         }
         if (voucherInst.getType().equals("G")) {
-            Prod prod = prodRepository.findOne(voucherInst.getExchangeProdId());
+            Prod prod = prodRepository.getOne(voucherInst.getExchangeProdId());
             voucherInstDTO.setGift(prod.getId().toString());
         }
         voucherInstDTO.setMoney(voucherInst.getMoney());
@@ -152,7 +152,7 @@ public class OfflineOrderService {
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (UserVoucher userVoucher : userVoucherList) {
-                VoucherInst voucherInst = voucherInstRepository.findOne(userVoucher.getVoucherInstId());
+                VoucherInst voucherInst = voucherInstRepository.getOne(userVoucher.getVoucherInstId());
                 if (voucherInst.getScope().equals("A") || voucherInst.getScope().equals("C")) {
                     if (!voucherInst.getType().equals("G")) {
                         if (voucherInst.getEffectiveTime().before(new Date()) && price.compareTo(voucherInst.getEnableMoney()) >= 0) {
@@ -197,7 +197,7 @@ public class OfflineOrderService {
         VoucherInst voucherInst = null;
         if (map.get("voucherInstId") != null && !map.get("voucherInstId").equals("")) {
             Integer voucherInstId = Integer.valueOf(map.get("voucherInstId").toString());
-            voucherInst = voucherInstRepository.findOne(voucherInstId);
+            voucherInst = voucherInstRepository.getOne(voucherInstId);
         }
         //生成订单
         OfflineOrder offlineOrder = new OfflineOrder();
@@ -285,7 +285,7 @@ public class OfflineOrderService {
         //作废优惠券
         OfflineOrderVoucher offlineOrderVoucher = offlineOrderVoucherRepository.findByOfflineOrderId(offlineOrder.getId());
         if (offlineOrderVoucher != null) {
-            VoucherInst voucherInst = voucherInstRepository.findOne(offlineOrderVoucher.getVoucherInstId());
+            VoucherInst voucherInst = voucherInstRepository.getOne(offlineOrderVoucher.getVoucherInstId());
             voucherInst.setStatus("U");
             voucherInst.setStatusTime(new Date());
             voucherInstRepository.saveAndFlush(voucherInst);
@@ -305,7 +305,7 @@ public class OfflineOrderService {
      * */
     public void paySuccess(String orderNo, Map<String, String> map, String type) {
         OfflineOrder offlineOrder = offlineOrderRepository.findByOrderNo(orderNo);
-        User user = userRepository.findOne(offlineOrder.getUserId());
+        User user = userRepository.getOne(offlineOrder.getUserId());
         OrderPay orderPay = new OrderPay();
         //使用余额支付不够的用微信
         if (type.equals("B")) {
@@ -348,7 +348,7 @@ public class OfflineOrderService {
         //将订单使用的券作废
         OfflineOrderVoucher offlineOrderVoucher = offlineOrderVoucherRepository.findByOfflineOrderId(offlineOrder.getId());
         if (offlineOrderVoucher != null) {
-            VoucherInst voucherInst = voucherInstRepository.findOne(offlineOrderVoucher.getVoucherInstId());
+            VoucherInst voucherInst = voucherInstRepository.getOne(offlineOrderVoucher.getVoucherInstId());
             voucherInst.setStatus("U");
             voucherInst.setStatusTime(new Date());
             voucherInstRepository.saveAndFlush(voucherInst);
@@ -392,7 +392,7 @@ public class OfflineOrderService {
     }
 
     public OfflineOrder findById(Integer id) {
-        return offlineOrderRepository.findOne(id);
+        return offlineOrderRepository.getOne(id);
     }
 
     public void offlinePay(OfflineOrder activityOrder) {

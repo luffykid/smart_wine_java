@@ -118,6 +118,7 @@ public class AdminUserService {
 
     //根据token查saas用户
     public AdminUser findAdminUserByToken(String token) {
+//        return adminUserRepository.findAdminUserByToken(token);
         return adminUserRepository.findAdminUserByToken(token);
     }
 
@@ -164,7 +165,7 @@ public class AdminUserService {
 
     //根据id查会员等级规则
     public MemberLevel findMemberLevel(String id) {
-        return memberLevelRepository.findOne(Integer.valueOf(id));
+        return memberLevelRepository.getOne(Integer.valueOf(id));
     }
 
     //编辑会员等级规则
@@ -198,11 +199,11 @@ public class AdminUserService {
 
     //删除会员等级规则
     public void delMemberLevel(MemberLevel memberLevel, AdminUser adminUser) {
-        memberLevelRepository.delete(memberLevel.getId());
+        memberLevelRepository.deleteById(memberLevel.getId());
     }
 
     public MemberLevel memberLevelDetail(String id) {
-        MemberLevel level = memberLevelRepository.findOne(Integer.valueOf(id));
+        MemberLevel level = memberLevelRepository.getOne(Integer.valueOf(id));
         if (level != null) {
             MemberLevelRight right = memberLevelRightRepository.findByMemberLevelId(level.getId());
             if (right != null) {
@@ -301,7 +302,7 @@ public class AdminUserService {
 
 
     public MemberListDTO memberlDetail(Integer userId) {
-        User user = userRepository.findOne(userId);
+        User user = userRepository.getOne(userId);
         SimpleDateFormat sd = new SimpleDateFormat("MM月dd日");
         List<Dict> dicts = CacheUtil.getDicts();
         MemberListDTO memberList = new MemberListDTO();
@@ -380,7 +381,7 @@ public class AdminUserService {
             MemberUser memberUser = memberUserRepository.findByUserId(userId);
             OrderListDTO orderList = new OrderListDTO();
             if (order.getCreateUserId() != null) {
-                AdminUser createUser = adminUserRepository.findOne(order.getCreateUserId());
+                AdminUser createUser = adminUserRepository.getOne(order.getCreateUserId());
                 orderList.setCreateName(createUser.getUserName());
             } else {
                 orderList.setCreateName(memberUser.getNickName());
@@ -397,7 +398,7 @@ public class AdminUserService {
             MemberUser memberUser = memberUserRepository.findByUserId(userId);
             OrderListDTO orderList = new OrderListDTO();
             if (offlineOrder.getCreateUserId() != null) {
-                AdminUser createUser = adminUserRepository.findOne(offlineOrder.getCreateUserId());
+                AdminUser createUser = adminUserRepository.getOne(offlineOrder.getCreateUserId());
                 orderList.setCreateName(createUser.getUserName());
             } else {
                 orderList.setCreateName(memberUser.getNickName());
@@ -423,7 +424,7 @@ public class AdminUserService {
             MemberUser memberUser = memberUserRepository.findByUserId(userId);
             OrderListDTO orderList = new OrderListDTO();
             if (activityOrder.getCreateUserId() != null) {
-                AdminUser createUser = adminUserRepository.findOne(activityOrder.getCreateUserId());
+                AdminUser createUser = adminUserRepository.getOne(activityOrder.getCreateUserId());
                 if (createUser!=null) {
                     orderList.setCreateName(createUser.getUserName());
                 }
@@ -488,7 +489,7 @@ public class AdminUserService {
     }
 
     public AdminUser findAdminUserById(Integer userId) {
-        return adminUserRepository.findOne(userId);
+        return adminUserRepository.getOne(userId);
     }
 
     public void updateUser(AdminUser adminUserByToken, String userName, String phone, List<String> roleId, AdminUser adminUser) {
@@ -547,7 +548,7 @@ public class AdminUserService {
             List<UserRole> list = userRoleRepository.findByUserId(adminUser.getId());
             int count = 0;
             for (UserRole userRole : list) {
-                Role role = roleRepository.findOne(userRole.getRoleId());
+                Role role = roleRepository.getOne(userRole.getRoleId());
                 if (role != null) {
                     if (count == 0) {
                         roleName += role.getName();
@@ -564,18 +565,18 @@ public class AdminUserService {
     }
 
     public void delUser(AdminUser adminUser) {
-        adminUserRepository.delete(adminUser.getId());
+        adminUserRepository.deleteById(adminUser.getId());
     }
 
     public List<OrderListDTO> depositOrder(Integer userId) {
         List<OrderListDTO> orderLists = new ArrayList<>();
         List<DepositOrder> list = depositOrderRepository.findByUserId(userId);
         for (DepositOrder order : list) {
-            User user = userRepository.findOne(userId);
+            User user = userRepository.getOne(userId);
             MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
             OrderListDTO orderList = new OrderListDTO();
             if (order.getCreateUserId() != null) {
-                AdminUser createUser = adminUserRepository.findOne(order.getCreateUserId());
+                AdminUser createUser = adminUserRepository.getOne(order.getCreateUserId());
                 orderList.setCreateName(createUser.getUserName());
             } else {
                 orderList.setCreateName(memberUser.getNickName());
@@ -601,7 +602,7 @@ public class AdminUserService {
         for (UserPointDetail order : list) {
             if (order.getPoint()>0) {
                 OrderListDTO orderList = new OrderListDTO();
-                User user = userRepository.findOne(userId);
+                User user = userRepository.getOne(userId);
                 MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
                 orderList.setCreateName(memberUser.getNickName());
                 if (user != null) {
@@ -634,10 +635,10 @@ public class AdminUserService {
             String status = userVoucherRepository.findOrderByUseVoucher(order.getId());
             if (status != null) {
                 if (status.equals("F") || status.equals("H") || status.equals("R") || status.equals("S")) {
-                    VoucherInst inst = voucherInstRepository.findOne(order.getVoucherInstId());
+                    VoucherInst inst = voucherInstRepository.getOne(order.getVoucherInstId());
                     if (inst != null) {
                         OrderListDTO orderList = new OrderListDTO();
-                        User user = userRepository.findOne(userId);
+                        User user = userRepository.getOne(userId);
                         if (user != null) {
                             orderList.setUserName(user.getName());
                         }
@@ -646,7 +647,7 @@ public class AdminUserService {
                         } else if (inst.getType().equals("D")) {
                             orderList.setFinalPrice(String.valueOf(inst.getDiscount().doubleValue() / 10) + "折");
                         } else if (inst.getType().equals("G")) {
-                            Prod one = prodRepository.findOne(inst.getExchangeProdId());
+                            Prod one = prodRepository.getOne(inst.getExchangeProdId());
                             if (one != null) {
                                 orderList.setFinalPrice(one.getName());
                             }
@@ -718,7 +719,7 @@ public class AdminUserService {
             List<Integer> menuIdList = roleMenuRepository.findMenuIdList(roleList);
 
 
-            List<Menu> parentMenuList = menuRepository.findAll(menuIdList);
+            List<Menu> parentMenuList = menuRepository.findAllById(menuIdList);
 
             List<Menu> allChildList = menuRepository.findByParentMenuIdIn(menuIdList);
 
@@ -901,7 +902,7 @@ public class AdminUserService {
             List<UserRole> list = userRoleRepository.findByUserId(adminUser.getId());
             int count = 0;
             for (UserRole userRole : list) {
-                Role role = roleRepository.findOne(userRole.getRoleId());
+                Role role = roleRepository.getOne(userRole.getRoleId());
                 if (role != null) {
                     if (count == 0) {
                         roleName += role.getName();

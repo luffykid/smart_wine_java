@@ -52,9 +52,9 @@ public class VoucherInstService {
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (UserVoucher userVoucher : userVoucherList) {
-                VoucherInst voucherInst = voucherInstRepository.findOne(userVoucher.getVoucherInstId());
+                VoucherInst voucherInst = voucherInstRepository.getOne(userVoucher.getVoucherInstId());
                 if (voucherInst.getType().equals("G")) {
-                    Prod prod = prodRepository.findOne(voucherInst.getExchangeProdId());
+                    Prod prod = prodRepository.getOne(voucherInst.getExchangeProdId());
                     if (prod != null) {
                         voucherInstDTOList.add(getVoucherInstDTO(voucherInst, status, prod));
                     }

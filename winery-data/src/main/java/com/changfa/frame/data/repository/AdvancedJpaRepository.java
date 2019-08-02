@@ -2,7 +2,8 @@ package com.changfa.frame.data.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
@@ -16,5 +17,6 @@ import java.io.Serializable;
  */
 @NoRepositoryBean
 public interface AdvancedJpaRepository<T, ID extends Serializable> extends JpaRepository<T, ID>,
-        JpaSpecificationExecutor<T>, QueryDslPredicateExecutor<T> {
+        JpaSpecificationExecutor<T>, QuerydslPredicateExecutor<T> {
+//        JpaSpecificationExecutor<T>, QueryDslPredicateExecutor<T> {
 }

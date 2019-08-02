@@ -211,7 +211,7 @@ public class ActivityService {
      * */
     public ActivityDTO getActivityDetail(User user, int activityId) {
         ActivityDTO activityDTO = new ActivityDTO();
-        Activity activity = activityRepository.findOne(activityId);
+        Activity activity = activityRepository.getOne(activityId);
         if (user != null) {
             MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
             List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevelId());
@@ -261,7 +261,7 @@ public class ActivityService {
     }
 
     public ActivityOrder findByOrderId(Integer orderId) {
-        return activityOrderRepository.findOne(orderId);
+        return activityOrderRepository.getOne(orderId);
     }
 
     /* *
@@ -271,7 +271,7 @@ public class ActivityService {
      * @Description
      * */
     public ActivityDTO enroll(User user, Integer activityId) {
-        Activity activity = activityRepository.findOne(activityId);
+        Activity activity = activityRepository.getOne(activityId);
         MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
         if (activity != null) {
             List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevelId());
@@ -296,7 +296,7 @@ public class ActivityService {
      * @Description
      * */
     public BigDecimal getOrderPrice(Integer activityId, Integer quantity) {
-        Activity activity = activityRepository.findOne(activityId);
+        Activity activity = activityRepository.getOne(activityId);
         return activity.getEnrollPrice().multiply(new BigDecimal(quantity));
     }
 
@@ -386,7 +386,7 @@ public class ActivityService {
         String name = map.get("name").toString();
         String phone = map.get("phone").toString();
         Integer quantity = Integer.valueOf(map.get("quantity").toString());
-        Activity activity = activityRepository.findOne(activityId);
+        Activity activity = activityRepository.getOne(activityId);
         //判断是剩余名额是否够报名
         Integer sum = (activityOrderRepository.findSumByActivityAndStatus(activity.getId())) == null ? 0 : (activityOrderRepository.findSumByActivityAndStatus(activity.getId()));
         if (activity.getEndTime().before(new Date())) {
@@ -412,7 +412,7 @@ public class ActivityService {
                 ActivityOrder activityOrderSave = null;
                 if (map.get("voucherId") != null && !map.get("voucherId").equals("")) {
                     Integer voucherId = Integer.valueOf(map.get("voucherId").toString());
-                    VoucherInst voucherInst = voucherInstRepository.findOne(voucherId);
+                    VoucherInst voucherInst = voucherInstRepository.getOne(voucherId);
                     if (voucherInst.getType().equals("M")) {
                         activityOrder.setTotalPrice(activity.getEnrollPrice().multiply(new BigDecimal(quantity)).subtract(voucherInst.getMoney()));
                     }
@@ -473,7 +473,7 @@ public class ActivityService {
                 activityDTO.setPhone(phone);
                 ActivityOrderVoucher activityOrderVoucher = activityOrderVoucherRepository.findByActivityOrderId(activityOrderSave.getId());
                 if (activityOrderVoucher != null) {
-                    VoucherInst voucherInst = voucherInstRepository.findOne(activityOrderVoucher.getVoucherInstId());
+                    VoucherInst voucherInst = voucherInstRepository.getOne(activityOrderVoucher.getVoucherInstId());
                     if (voucherInst != null) {
                         if (voucherInst.getType().equals("M")) {
                             activityDTO.setMinus(voucherInst.getMoney());
@@ -531,21 +531,21 @@ public class ActivityService {
         if (activitytDTO.getProvince() != null) {
             if (activitytDTO.getProvince().get(0) != null) {
                 activity.setProvince(Integer.valueOf(activitytDTO.getProvince().get(0)));
-                Area area = areaRepository.findOne(activity.getProvince());
+                Area area = areaRepository.getOne(activity.getProvince());
                 if (area != null) {
                     add += area.getName();
                 }
             }
             if (activitytDTO.getProvince().get(1) != null) {
                 activity.setCity(Integer.valueOf(activitytDTO.getProvince().get(1)));
-                Area area = areaRepository.findOne(activity.getCity());
+                Area area = areaRepository.getOne(activity.getCity());
                 if (area != null) {
                     add += area.getName();
                 }
             }
             if (activitytDTO.getProvince().get(2) != null) {
                 activity.setCounty(Integer.valueOf(activitytDTO.getProvince().get(2)));
-                Area area = areaRepository.findOne(activity.getCounty());
+                Area area = areaRepository.getOne(activity.getCounty());
                 if (area != null) {
                     add += area.getName();
                 }
@@ -589,7 +589,7 @@ public class ActivityService {
                 activityLogos.add(activityLogo);
             }
         }
-        activityLogoRepository.save(activityLogos);
+        activityLogoRepository.saveAll(activityLogos);
         if (activitytDTO.getBanner() != null) {
             ActivityLogo activityLogo = new ActivityLogo();
             activityLogo.setActivityId(activity.getId());
@@ -609,7 +609,7 @@ public class ActivityService {
                 acitivityRanges.add(range);
             }
         }
-        activityRangeRepository.save(acitivityRanges);
+        activityRangeRepository.saveAll(acitivityRanges);
         List<AcitivitySendVoucher> acitivitySendVouchers = new ArrayList<>();
         for (Map<String, Integer> map : activitytDTO.getVoucherId()) {
             AcitivitySendVoucher voucher = new AcitivitySendVoucher();
@@ -619,7 +619,7 @@ public class ActivityService {
             }
             acitivitySendVouchers.add(voucher);
         }
-        activitySendVoucherRepository.save(acitivitySendVouchers);
+        activitySendVoucherRepository.saveAll(acitivitySendVouchers);
     }
 
     /* *
@@ -635,7 +635,7 @@ public class ActivityService {
             List<ActivityDTO> activityDTOList = new ArrayList<>();
             for (UserActivityTicket userActivityTicket : userActivityTicketList) {
                 ActivityDTO activityDTO = new ActivityDTO();
-                Activity activity = activityRepository.findOne(userActivityTicket.getActivityId());
+                Activity activity = activityRepository.getOne(userActivityTicket.getActivityId());
                 if (activity != null) {
                     if (activity.getEndTime().after(new Date())) {
                         activityDTO.setName(activity.getName());
@@ -697,7 +697,7 @@ public class ActivityService {
     }
 
     public Activity findActivityById(Integer id) {
-        return activityRepository.findOne(id);
+        return activityRepository.getOne(id);
     }
 
     @Transactional
@@ -761,7 +761,7 @@ public class ActivityService {
                     activityLogos.add(activityLogo);
                 }
             }
-            activityLogoRepository.save(activityLogos);
+            activityLogoRepository.saveAll(activityLogos);
         }
         if (activitytDTO.getBanner() != null && !activitytDTO.getBanner().equals("")) {
             ActivityLogo activityLogo = activityLogoRepository.findByActivityIdAndIsDefault(activity.getId(), "Y");
@@ -787,7 +787,7 @@ public class ActivityService {
                     acitivityRanges.add(range);
                 }
             }
-            activityRangeRepository.save(acitivityRanges);
+            activityRangeRepository.saveAll(acitivityRanges);
         }
         if (activitytDTO.getVoucherId() != null) {
             activitySendVoucherRepository.deleteByActivityId(activity.getId());
@@ -800,12 +800,12 @@ public class ActivityService {
                 }
                 acitivitySendVouchers.add(voucher);
             }
-            activitySendVoucherRepository.save(acitivitySendVouchers);
+            activitySendVoucherRepository.saveAll(acitivitySendVouchers);
         }
     }
 
     public void deleteActivity(Activity activity) {
-        activityRepository.delete(activity.getId());
+        activityRepository.deleteById(activity.getId());
         activityRangeRepository.deleteByActivityId(activity.getId());
         activitySendVoucherRepository.deleteByActivityId(activity.getId());
         activityLogoRepository.deleteByActivityId(activity.getId());
@@ -839,7 +839,7 @@ public class ActivityService {
             }
             /*MemberUser memberUser = memberUserRepository.findByUserId(order.getUserId());*/
             activityOrderList.setUserName(order.getContacts());
-            Activity activity = activityRepository.findOne(order.getActivityId());
+            Activity activity = activityRepository.getOne(order.getActivityId());
             if (activity != null) {
                 activityOrderList.setName(activity.getName());
                 activityOrderList.setBeginTime(activity.getBeginTime());
@@ -851,7 +851,7 @@ public class ActivityService {
     }
 
     public ActivitytDTO activityDetail(String id) {
-        Activity activity = activityRepository.findOne(Integer.valueOf(id));
+        Activity activity = activityRepository.getOne(Integer.valueOf(id));
         ActivitytDTO activitytDTO = new ActivitytDTO();
         activitytDTO.setId(activity.getId());
         activitytDTO.setEventName(activity.getName());
@@ -882,7 +882,7 @@ public class ActivityService {
         if (list1 != null && list1.size() != 0) {
             for (AcitivitySendVoucher voucher1 : list1) {
                 if (voucher1.getVoucherId() != null) {
-                    Voucher inst = voucherRepository.findOne(voucher1.getVoucherId());
+                    Voucher inst = voucherRepository.getOne(voucher1.getVoucherId());
                     if (inst != null) {
                         Map<String, Integer> map2 = new HashMap<>();
                         map2.put("id", inst.getId());
@@ -909,7 +909,7 @@ public class ActivityService {
         for (AcitivityRange range : list) {
             if (range.getMemberLevelId() != null) {
                 levelId.add(range.getMemberLevelId());
-                MemberLevel level1 = memberLevelRepository.findOne(range.getMemberLevelId());
+                MemberLevel level1 = memberLevelRepository.getOne(range.getMemberLevelId());
                 if (level1 != null) {
                     level.add(String.valueOf(level1.getName()));
                 }
@@ -930,17 +930,17 @@ public class ActivityService {
         List<String> province = new ArrayList<>();
         List<String> provinceName = new ArrayList<>();
         province.add(String.valueOf(activity.getProvince()));
-        Area area = areaRepository.findOne(activity.getProvince());
+        Area area = areaRepository.getOne(activity.getProvince());
         if (area != null) {
             provinceName.add(area.getName());
         }
         province.add(String.valueOf(activity.getCity()));
-        Area area2 = areaRepository.findOne(activity.getCity());
+        Area area2 = areaRepository.getOne(activity.getCity());
         if (area2 != null) {
             provinceName.add(area2.getName());
         }
         province.add(String.valueOf(activity.getCounty()));
-        Area area3 = areaRepository.findOne(activity.getCounty());
+        Area area3 = areaRepository.getOne(activity.getCounty());
         if (area3 != null) {
             provinceName.add(area3.getName());
         }
@@ -958,7 +958,7 @@ public class ActivityService {
      * */
     public void paySuccess(String orderNo, String type, Map<String, String> map) throws ClientException {
         ActivityOrder activityOrder = activityOrderRepository.findByOrderNo(orderNo);
-        User user = userRepository.findOne(activityOrder.getUserId());
+        User user = userRepository.getOne(activityOrder.getUserId());
         OrderPay orderPay = new OrderPay();
         //使用余额支付不够的用微信
         if (type.equals("B")) {
@@ -1002,7 +1002,7 @@ public class ActivityService {
         //将订单使用的券作废
         ActivityOrderVoucher activityOrderVoucher = activityOrderVoucherRepository.findByActivityOrderId(activityOrder.getId());
         if (activityOrderVoucher != null) {
-            VoucherInst voucherInst = voucherInstRepository.findOne(activityOrderVoucher.getVoucherInstId());
+            VoucherInst voucherInst = voucherInstRepository.getOne(activityOrderVoucher.getVoucherInstId());
             voucherInst.setStatus("U");
             voucherInst.setStatusTime(new Date());
             voucherInstRepository.saveAndFlush(voucherInst);
@@ -1075,7 +1075,7 @@ public class ActivityService {
         orderPayRepository.saveAndFlush(orderPay);
         ActivityOrderVoucher activityOrderVoucher = activityOrderVoucherRepository.findByActivityOrderId(activityOrder.getId());
         if (activityOrderVoucher != null) {
-            VoucherInst voucherInst = voucherInstRepository.findOne(activityOrderVoucher.getVoucherInstId());
+            VoucherInst voucherInst = voucherInstRepository.getOne(activityOrderVoucher.getVoucherInstId());
             voucherInst.setStatus("U");
             voucherInst.setStatusTime(new Date());
             voucherInstRepository.saveAndFlush(voucherInst);
@@ -1119,7 +1119,7 @@ public class ActivityService {
         orderPayRepository.saveAndFlush(orderPay);
         ActivityOrderVoucher activityOrderVoucher = activityOrderVoucherRepository.findByActivityOrderId(activityOrder.getId());
         if (activityOrderVoucher != null) {
-            VoucherInst voucherInst = voucherInstRepository.findOne(activityOrderVoucher.getVoucherInstId());
+            VoucherInst voucherInst = voucherInstRepository.getOne(activityOrderVoucher.getVoucherInstId());
             voucherInst.setStatus("U");
             voucherInst.setStatusTime(new Date());
             voucherInstRepository.saveAndFlush(voucherInst);
@@ -1149,7 +1149,7 @@ public class ActivityService {
         if (activitySendVoucherList != null) {
             for (AcitivitySendVoucher acitivitySendVoucher : activitySendVoucherList) {
                 if (acitivitySendVoucher.getVoucherId() != null) {
-                    Voucher voucher = voucherRepository.findOne(acitivitySendVoucher.getVoucherId());
+                    Voucher voucher = voucherRepository.getOne(acitivitySendVoucher.getVoucherId());
                     if (voucher != null) {
                         //流水号
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -1247,7 +1247,7 @@ public class ActivityService {
      * @Description
      * */
     public Map<String, Object> getOrderDetail(Integer orderId) {
-        ActivityOrder activityOrder = activityOrderRepository.findOne(orderId);
+        ActivityOrder activityOrder = activityOrderRepository.getOne(orderId);
         Map<String, Object> map = new HashMap<>();
         map.put("orderNo", activityOrder.getOrderNo());
         String status = dictService.findStatusName("activity_order", "status", activityOrder.getStatus());
@@ -1259,7 +1259,7 @@ public class ActivityService {
     }
 
     public Boolean updateOrderStatus(ActivityOrder activityOrder, String status) throws ClientException {
-        Activity activity = activityRepository.findOne(activityOrder.getActivityId());
+        Activity activity = activityRepository.getOne(activityOrder.getActivityId());
         activityOrder.setCreateUserId(activityOrder.getUserId());
         activityOrder.setStatus(status);
         activityOrder.setStatusTime(new Date());
@@ -1278,7 +1278,7 @@ public class ActivityService {
                     return false;
                 }
             }
-            User user = userRepository.findOne(activityOrder.getUserId());
+            User user = userRepository.getOne(activityOrder.getUserId());
             OrderPay orderPay = null;
             OrderPay orderPaySelect = orderPayRepository.findByOrderId(activityOrder.getId(), "A");
             if (orderPaySelect != null) {
@@ -1302,7 +1302,7 @@ public class ActivityService {
             //将订单使用的券作废
             ActivityOrderVoucher activityOrderVoucher = activityOrderVoucherRepository.findByActivityOrderId(activityOrder.getId());
             if (activityOrderVoucher != null) {
-                VoucherInst voucherInst = voucherInstRepository.findOne(activityOrderVoucher.getVoucherInstId());
+                VoucherInst voucherInst = voucherInstRepository.getOne(activityOrderVoucher.getVoucherInstId());
                 voucherInst.setStatus("U");
                 voucherInst.setStatusTime(new Date());
                 voucherInstRepository.saveAndFlush(voucherInst);
@@ -1329,7 +1329,7 @@ public class ActivityService {
      * @Description
      * */
     public Boolean isBuy(Integer activityId, Integer quantity) {
-        Activity activity = activityRepository.findOne(activityId);
+        Activity activity = activityRepository.getOne(activityId);
         Integer sum = (activityOrderRepository.findSumByActivityAndStatus(activity.getId())) == null ? 0 : (activityOrderRepository.findSumByActivityAndStatus(activity.getId()));
         if (activity.getEndTime().before(new Date())) {
             return false;

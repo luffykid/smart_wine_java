@@ -49,9 +49,9 @@ public class VoucherService {
 
     //券详情
     public Voucher findVoucherById(Integer id){
-        Voucher voucher = voucherRepository.findOne(id);
+        Voucher voucher = voucherRepository.getOne(id);
         if(voucher!=null&&voucher.getType().equals("G")){
-            Prod prod = prodRepository.findOne(voucher.getExchangeProdId());
+            Prod prod = prodRepository.getOne(voucher.getExchangeProdId());
             if(prod!=null){
                 voucher.setExchangeProdName(prod.getName());
             }
@@ -177,7 +177,7 @@ public class VoucherService {
     }
 
     public void updateVoucher(AdminUser adminUser, String id, String name, String type, String money, String enableType, String enableMoeny, String quantityLimit, String enableDay, String usefulTime, String[] effectiveTime, String scope, String canPresent) throws ParseException {
-        Voucher voucher = voucherRepository.findOne(Integer.valueOf(id));
+        Voucher voucher = voucherRepository.getOne(Integer.valueOf(id));
         if(voucher==null){
             voucher = new Voucher();
         }
@@ -240,7 +240,7 @@ public class VoucherService {
         voucherRepository.saveAndFlush(voucher);
         List<PointExchangeVoucher> pointExchangeVoucher = pointExchangeVoucherRepository.findByVoucherId(voucher.getId());
         if (pointExchangeVoucher!=null && pointExchangeVoucher.size()>0){
-            pointExchangeVoucherRepository.delete(pointExchangeVoucher);
+            pointExchangeVoucherRepository.deleteAll(pointExchangeVoucher);
         }
     }
 
@@ -254,7 +254,7 @@ public class VoucherService {
             voucherList.setId(voucher.getId());
             voucherList.setName(voucher.getName());
             voucherList.setIneffective(sd.format(voucher.getStatusTime()));
-            AdminUser user = adminUserRepository.findOne(voucher.getCreateUserId());
+            AdminUser user = adminUserRepository.getOne(voucher.getCreateUserId());
             if(user!=null){
                 voucherList.setIneffectiveUserName(user.getUserName());
             }

@@ -105,7 +105,7 @@ public class RoleService {
         for (Role role : roleList) {
             RoleListDTO roleListDTO = new RoleListDTO();
             roleListDTO.setId(role.getId());
-            Winery winery = wineryRepository.findOne(role.getWineryId());
+            Winery winery = wineryRepository.getOne(role.getWineryId());
             if(null != winery){
                 roleListDTO.setWineryName(winery.getName());
             }
@@ -126,10 +126,10 @@ public class RoleService {
      */
     public RoleDetailDTO roleDetail(Integer roleId) {
         RoleDetailDTO roleDetailDTO = new RoleDetailDTO();
-        Role role = roleRepository.findOne(roleId);
+        Role role = roleRepository.getOne(roleId);
         if (role != null) {
             roleDetailDTO.setId(role.getId());
-            Winery winery = wineryRepository.findOne(role.getWineryId());
+            Winery winery = wineryRepository.getOne(role.getWineryId());
             if(null != winery){
                 roleDetailDTO.setWineryName(winery.getName());
             }
@@ -154,7 +154,7 @@ public class RoleService {
 
     //停用启用状态
     public void updateStatus(Integer roleId, String status) {
-        Role role = roleRepository.findOne(roleId);
+        Role role = roleRepository.getOne(roleId);
         if (role != null) {
             role.setStatus(status);
             roleRepository.save(role);
@@ -163,7 +163,7 @@ public class RoleService {
 
     //删除角色
     public void delRole(Integer roleId) {
-        Role role = roleRepository.findOne(roleId);
+        Role role = roleRepository.getOne(roleId);
         if (role != null) {
             roleMenuRepository.deleteByRoleId(roleId);
             roleRepository.delete(role);

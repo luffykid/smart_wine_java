@@ -69,7 +69,7 @@ public class DepositRuleService {
                             DepositRuleDTO depositRuleDTO = new DepositRuleDTO();
                             depositRuleDTO.setMoney(marketActivitySpecDetail.getDepositMoney());
                             depositRuleDTO.setSendMoney(marketActivitySpecDetail.getPresentMoney());
-                            Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                            Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                             String voucherName = null;
                             if (voucher.getType().equals("M")) {
                                 voucherName = voucher.getName() + "(" + voucher.getMoney() + "元)";
@@ -94,7 +94,7 @@ public class DepositRuleService {
                                 depositRuleDTO.setMoney(depositRuleSpecDetail.getDepositMoney());
                                 depositRuleDTO.setSendMoney(depositRuleSpecDetail.getPresentMoney());
                                 if (depositRuleSpecDetail.getPresentVoucherId() != null) {
-                                    Voucher voucher = voucherRepository.findOne(depositRuleSpecDetail.getPresentVoucherId());
+                                    Voucher voucher = voucherRepository.getOne(depositRuleSpecDetail.getPresentVoucherId());
                                     String voucherName = null;
                                     if (voucher.getType().equals("M")) {
                                         voucherName = voucher.getName() + "(" + voucher.getMoney() + "元)";
@@ -120,7 +120,7 @@ public class DepositRuleService {
                         depositRuleDTO.setMoney(marketActivitySpecDetail.getDepositMoney());
                         depositRuleDTO.setSendMoney(marketActivitySpecDetail.getPresentMoney());
                         if (marketActivitySpecDetail.getPresentVoucherId() != null) {
-                            Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                            Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                             String voucherName = null;
                             if (voucher.getType().equals("M")) {
                                 voucherName = voucher.getName() + "(" + voucher.getMoney() + "元)";
@@ -149,7 +149,7 @@ public class DepositRuleService {
                         depositRuleDTO.setMoney(depositRuleSpecDetail.getDepositMoney());
                         depositRuleDTO.setSendMoney(depositRuleSpecDetail.getPresentMoney());
                         if (depositRuleSpecDetail.getPresentVoucherId() != null) {
-                            Voucher voucher = voucherRepository.findOne(depositRuleSpecDetail.getPresentVoucherId());
+                            Voucher voucher = voucherRepository.getOne(depositRuleSpecDetail.getPresentVoucherId());
                             String voucherName = null;
                             if (voucher.getType().equals("M")) {
                                 voucherName = voucher.getName() + "(" + voucher.getMoney() + "元)";
@@ -231,7 +231,7 @@ public class DepositRuleService {
                         str.append("。送" + detail.getPresentMoney() + "通宝。");
                     }
                     if (detail.getPresentVoucherId() != null) {
-                        Voucher voucher = voucherRepository.findOne(detail.getPresentVoucherId());
+                        Voucher voucher = voucherRepository.getOne(detail.getPresentVoucherId());
                         if (voucher != null) {
                             str.append(",送" + voucher.getName() + "券|");
                         }
@@ -246,7 +246,7 @@ public class DepositRuleService {
                         str.append("送" + marketActivitySpecDetail.getPresentMoney() + "元");
                     }
                     if (marketActivitySpecDetail.getPresentVoucherId() != null) {
-                        Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                        Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                         if (voucher != null) {
                             str.append("、送" + voucher.getName() + "券");
                         }
@@ -260,7 +260,7 @@ public class DepositRuleService {
     }
 
     public DepositRule findDepositRuleById(Integer id) {
-        return depositRuleRepository.findOne(id);
+        return depositRuleRepository.getOne(id);
     }
 
     public void updateDepositRule(AdminUser adminUser, com.changfa.frame.data.dto.saas.DepositRuleDTO depositRuleDTO, DepositRule depositRule) {
@@ -293,32 +293,32 @@ public class DepositRuleService {
     }
 
     public int delRule(Integer id) {
-        DepositRule rule = depositRuleRepository.findOne(id);
+        DepositRule rule = depositRuleRepository.getOne(id);
         if (rule == null) {
             return 1;
         } else if (rule.getStatus().equals("A")) {
             return 1;
         } else {
-            depositRuleRepository.delete(id);
+            depositRuleRepository.deleteById(id);
             return 0;
         }
     }
 
     public void openRule(Integer id) {
-        DepositRule rule = depositRuleRepository.findOne(id);
+        DepositRule rule = depositRuleRepository.getOne(id);
         rule.setStatus("A");
         depositRuleRepository.saveAndFlush(rule);
     }
 
     public void closeRule(Integer id) {
-        DepositRule rule = depositRuleRepository.findOne(id);
+        DepositRule rule = depositRuleRepository.getOne(id);
         rule.setStatus("P");
         depositRuleRepository.saveAndFlush(rule);
     }
 
     public com.changfa.frame.data.dto.saas.DepositRuleDTO detail(Integer id) {
         com.changfa.frame.data.dto.saas.DepositRuleDTO depositRule = new com.changfa.frame.data.dto.saas.DepositRuleDTO();
-        DepositRule rule = depositRuleRepository.findOne(id);
+        DepositRule rule = depositRuleRepository.getOne(id);
         if (rule != null) {
             depositRule.setRuleName(rule.getName());
             depositRule.setDescri("（当本规则与活动充值规则冲突时，按照活动储值规则为准）");
@@ -340,7 +340,7 @@ public class DepositRuleService {
                 }
                 if (depositRuleSpecDetail.getPresentVoucherId() != null && !depositRuleSpecDetail.getPresentVoucherId().equals("")) {
                     depositRuleItemDTO.setPresentVoucherId(String.valueOf(depositRuleSpecDetail.getPresentVoucherId()));
-                    Voucher voucher = voucherRepository.findOne(depositRuleSpecDetail.getPresentVoucherId());
+                    Voucher voucher = voucherRepository.getOne(depositRuleSpecDetail.getPresentVoucherId());
                     if (voucher != null) {
                         depositRuleItemDTO.setMes(voucher.getName());
                     }

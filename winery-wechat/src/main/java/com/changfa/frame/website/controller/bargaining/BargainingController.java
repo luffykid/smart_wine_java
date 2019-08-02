@@ -118,7 +118,7 @@ public class BargainingController {
             }else{
                 return JsonReturnUtil.getJsonReturn(37003, "商品信息有误");
             }
-            BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingId);
+            BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
             if(null == bargainingCommodity ){
                 return JsonReturnUtil.getJsonReturn(37003, "商品信息有误");
             }
@@ -307,9 +307,9 @@ public class BargainingController {
             }else{
                 return JsonReturnUtil.getJsonReturn(37003, "购买价格有误");
             }
-            BargainingUser bargainingUser = bargainingUserRepository.findOne(bargainingUserId);
+            BargainingUser bargainingUser = bargainingUserRepository.getOne(bargainingUserId);
             if(null != bargainingUser){
-                BargainingCommodity bargainingCommodity = bargainingCommodityRepository.findOne(bargainingUser.getBargainingCommodity());
+                BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingUser.getBargainingCommodity());
                 if(null != bargainingCommodity){
                     //检查库存
                     Integer stock = bargainingService.checkStockOne(bargainingCommodity);

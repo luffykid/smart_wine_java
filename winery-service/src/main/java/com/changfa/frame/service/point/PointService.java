@@ -44,7 +44,7 @@ public class PointService {
 
     public PointRewardRuleDTO pointRewardRule(String id) {
         PointRewardRuleDTO pointRewardRuleDTO = new PointRewardRuleDTO();
-        PointRewardRule rule = pointRewardRuleRepository.findOne(Integer.valueOf(id));
+        PointRewardRule rule = pointRewardRuleRepository.getOne(Integer.valueOf(id));
         if(rule!=null){
             pointRewardRuleDTO.setName(rule.getName());
             pointRewardRuleDTO.setDepositMoney(String.valueOf(rule.getDepositMoneyPoint()));
@@ -118,7 +118,7 @@ public class PointService {
                     pointRewardRuleItemDTO.setVoucherId(integers);
                     List<Map<String,Object>> meslist = new ArrayList<>();
                     for (Integer integer1:integers) {
-                        Voucher voucher = voucherRepository.findOne(integer1);
+                        Voucher voucher = voucherRepository.getOne(integer1);
                         int index = 2;
                         if(voucher!=null){
                             if(voucher.getType().equals("M")){
@@ -145,7 +145,7 @@ public class PointService {
 
     @Transactional
     public void addPointRewardRule(PointRewardRuleDTO pointRewardRuleDTO, AdminUser adminUser) throws ParseException {
-        PointRewardRule pointRewardRule = pointRewardRuleRepository.findOne(pointRewardRuleDTO.getId());
+        PointRewardRule pointRewardRule = pointRewardRuleRepository.getOne(pointRewardRuleDTO.getId());
         if(pointRewardRule == null){
             pointRewardRule = new PointRewardRule();
         }
@@ -272,7 +272,7 @@ public class PointService {
                     sb.append(integer+"积分，兑换");
                     for (PointExchangeVoucher pointExchangeVoucher : voucherList) {
                         if (pointExchangeVoucher.getPoint().equals(integer)) {
-                            Voucher voucher = voucherRepository.findOne(pointExchangeVoucher.getVoucherId());
+                            Voucher voucher = voucherRepository.getOne(pointExchangeVoucher.getVoucherId());
                             if(voucher!=null){
                                 sb.append(voucher.getName()+",");
                             }
@@ -304,7 +304,7 @@ public class PointService {
     }
 
     public void addPointLoginRule(AdminUser adminUser, String isLongTime, List<String> time, String status,Integer point1,Integer point2,Integer point3,Integer point4,Integer point5,Integer point6,Integer point7,Integer id) throws ParseException {
-        PointLoginRule pointLoginRule = pointLoginRuleRepository.findOne(id);
+        PointLoginRule pointLoginRule = pointLoginRuleRepository.getOne(id);
         if(pointLoginRule==null){
             pointLoginRule = new PointLoginRule();
         }
@@ -356,13 +356,13 @@ public class PointService {
 
     public void openPoint(AdminUser adminUser, String id, String type) {
         if(type.equals("1")){
-            PointRewardRule rule = pointRewardRuleRepository.findOne(Integer.valueOf(id));
+            PointRewardRule rule = pointRewardRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("A");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
             rule.setCreateUserId(adminUser.getId());
             pointRewardRuleRepository.saveAndFlush(rule);
         }else{
-            PointLoginRule rule = pointLoginRuleRepository.findOne(Integer.valueOf(id));
+            PointLoginRule rule = pointLoginRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("A");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
             rule.setCreateUserId(adminUser.getId());
@@ -372,13 +372,13 @@ public class PointService {
 
     public void closePoint(AdminUser adminUser, String id, String type) {
         if(type.equals("1")){
-            PointRewardRule rule = pointRewardRuleRepository.findOne(Integer.valueOf(id));
+            PointRewardRule rule = pointRewardRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("P");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
             rule.setCreateUserId(adminUser.getId());
             pointRewardRuleRepository.saveAndFlush(rule);
         }else{
-            PointLoginRule rule = pointLoginRuleRepository.findOne(Integer.valueOf(id));
+            PointLoginRule rule = pointLoginRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("P");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
             rule.setCreateUserId(adminUser.getId());
@@ -386,8 +386,8 @@ public class PointService {
         }
     }
     public PointDetailDTO pointLoginRule(String id) {
-        PointLoginRule rule1 = pointLoginRuleRepository.findOne(Integer.valueOf(id));
-        PointLoginRule rule = pointLoginRuleRepository.findOne(Integer.valueOf(id));
+        PointLoginRule rule1 = pointLoginRuleRepository.getOne(Integer.valueOf(id));
+        PointLoginRule rule = pointLoginRuleRepository.getOne(Integer.valueOf(id));
         PointDetailDTO pointDetail = new PointDetailDTO();
         List<String> time = new ArrayList<>();
         if(rule1!=null){

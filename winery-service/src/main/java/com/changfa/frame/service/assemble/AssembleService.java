@@ -128,7 +128,7 @@ public class AssembleService {
 			}
 			ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 			if (prodSpec != null) {
-				ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+				ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 				if (spec != null) {
 					prodListDTO.setProdSpecName(spec.getSpecValue());
 				}
@@ -175,7 +175,7 @@ public class AssembleService {
 		for (AssembleCommodity ac : assembleList) {
 			AssembleCommodityListDTO acListDTO = new AssembleCommodityListDTO();
 			acListDTO.setId(ac.getId());
-			Prod prod = prodRepository.findOne(ac.getProdId());
+			Prod prod = prodRepository.getOne(ac.getProdId());
 			if(null != prod){
 				acListDTO.setProdName(prod.getName());
 			}
@@ -201,10 +201,10 @@ public class AssembleService {
 	 */
 	public AssembleCommodityDTO assembleDetail(Integer assembleId) {
 		AssembleCommodityDTO acDTO = new AssembleCommodityDTO();
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
 		if (assembleCommodity != null) {
 			acDTO.setId(assembleCommodity.getId());
-			Prod prod = prodRepository.findOne(assembleCommodity.getProdId());
+			Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 			if(null != prod){
 				acDTO.setProd(prod);
 			}
@@ -222,7 +222,7 @@ public class AssembleService {
 	//检查是否可以编辑(在活动时间内，不允许编辑。)
 	public Boolean checkisUpdate(Integer assembleId) {
 		Boolean ret = false;
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
 		if(null != assembleCommodity ){
 			if(assembleCommodity.getStartTime().getTime() <= System.currentTimeMillis()  &&
 				System.currentTimeMillis() <= assembleCommodity.getEndTime().getTime() ){
@@ -237,7 +237,7 @@ public class AssembleService {
 
 	//修改拼团
 	public void updateAssemble(AdminUser adminUser, AssembleCommodityDTO assembleCommodityDTO) {
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleCommodityDTO.getId());
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleCommodityDTO.getId());
 		if (assembleCommodity == null) {
 			assembleCommodity = new AssembleCommodity();
 			assembleCommodity.setCreateTime(new Date());
@@ -257,7 +257,7 @@ public class AssembleService {
 
 	//拼团商品置顶
 	public void topAssemble(Integer assembleId) {
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
 		if (assembleCommodity != null) {
 			assembleCommodity.setTopTime(new Date());
 			assembleCommodityRepository.saveAndFlush(assembleCommodity);
@@ -266,7 +266,7 @@ public class AssembleService {
 
 	//拼团商品取消置顶
 	public void untopAssemble(Integer assembleId) {
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
 		if (assembleCommodity != null) {
 			assembleCommodity.setTopTime(assembleCommodity.getCreateTime());
 			assembleCommodityRepository.saveAndFlush(assembleCommodity);
@@ -275,7 +275,7 @@ public class AssembleService {
 
 	//删除拼团商品
 	public void delAssemble(Integer assembleId) {
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
 		if (assembleCommodity != null) {
 			assembleCommodity.setIsDelete(0);
 			assembleCommodityRepository.saveAndFlush(assembleCommodity);
@@ -297,13 +297,13 @@ public class AssembleService {
 			AssembleListListDTO acListDTO = new AssembleListListDTO();
 			acListDTO.setId(aList.getId());
 			acListDTO.setAssembleNo(aList.getAssembleNo());
-			User user = userRepository.findOne(aList.getMaster());
+			User user = userRepository.getOne(aList.getMaster());
 			if(null != user){
 				acListDTO.setMasterName(user.getName());
 			}
-			AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(aList.getAssembleCommodity());
+			AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(aList.getAssembleCommodity());
 			if(null != assembleCommodity){
-				Prod prod = prodRepository.findOne(assembleCommodity.getProdId());
+				Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 				if(null != prod){
 					acListDTO.setProdName(prod.getName());
 				}
@@ -322,7 +322,7 @@ public class AssembleService {
 
 	//删除拼团列表
 	public void delAssembleList(Integer assembleListId) {
-		AssembleList assembleList = assembleListRepository.findOne(assembleListId);
+		AssembleList assembleList = assembleListRepository.getOne(assembleListId);
 		if (assembleList != null) {
 			assembleList.setIsDelete(0);
 			assembleListRepository.saveAndFlush(assembleList);
@@ -343,7 +343,7 @@ public class AssembleService {
 			for(AssembleUser asUser : assembleUserList){
 				AssembleUserListDTO auwld = new AssembleUserListDTO();
 				auwld.setId(asUser.getId());
-				User user = userRepository.findOne(asUser.getUserId());
+				User user = userRepository.getOne(asUser.getUserId());
 				if(null != user){
 					auwld.setUserID(user.getId());
 					auwld.setIcon(user.getUserIcon());
@@ -370,21 +370,21 @@ public class AssembleService {
 	 * @return
 	 */
 	public AssembleListDetailDTO assemblelistDetail(Integer assembleListId) {
-		AssembleList assembleList = assembleListRepository.findOne(assembleListId);
+		AssembleList assembleList = assembleListRepository.getOne(assembleListId);
 		if(null != assembleList){
-			AssembleCommodity ac = assembleCommodityRepository.findOne(assembleList.getAssembleCommodity());
+			AssembleCommodity ac = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
 			if(null != ac){
 				AssembleListDetailDTO acListDTO = new AssembleListDetailDTO();
 				acListDTO.setId(assembleList.getId());
 				acListDTO.setAssembleNo(assembleList.getAssembleNo());
 				acListDTO.setAssembleStatus(assembleList.getAssembleStatus());
-				User user = userRepository.findOne(assembleList.getMaster());
+				User user = userRepository.getOne(assembleList.getMaster());
 				if(null != user){
 					acListDTO.setMasterName(user.getName());
 				}
 				acListDTO.setCreateTime(assembleList.getCreateTime());
 
-				Prod prod = prodRepository.findOne(ac.getProdId());
+				Prod prod = prodRepository.getOne(ac.getProdId());
 				if(null != prod){
 					acListDTO.setProdName(prod.getName());
 				}
@@ -421,7 +421,7 @@ public class AssembleService {
 		for (AssembleCommodity ac : assembleList) {
 			AssembleWeichatListDTO acListDTO = new AssembleWeichatListDTO();
 			acListDTO.setId(ac.getId());
-			Prod prod = prodRepository.findOne(ac.getProdId());
+			Prod prod = prodRepository.getOne(ac.getProdId());
 			if(null != prod){
 				ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
 				if (prodLogo != null) {
@@ -435,7 +435,7 @@ public class AssembleService {
 				}
 				ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 				if (prodSpec != null) {
-					ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+					ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 					if (spec != null) {
 						acListDTO.setProdSpecName(spec.getSpecValue());
 					}
@@ -452,12 +452,12 @@ public class AssembleService {
 
 	//去开团按钮
 	public AssembleWeichatDTO assembleButton(User user,Integer assembleId) {
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleId);
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
 		if(null != assembleCommodity){
 			AssembleWeichatDTO assembleWeichatDTO = new AssembleWeichatDTO();
 			assembleWeichatDTO.setId(assembleCommodity.getId());
 			assembleWeichatDTO.setUserLogo(user.getUserIcon());
-			Prod prod = prodRepository.findOne(assembleCommodity.getProdId());
+			Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 			if(null != prod){
 				ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
 				if (prodLogo != null) {
@@ -466,7 +466,7 @@ public class AssembleService {
 				assembleWeichatDTO.setProdTitle(prod.getTitle());
 				ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 				if (prodSpec != null) {
-					ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+					ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 					if (spec != null) {
 						assembleWeichatDTO.setProdSpecName(spec.getSpecValue());
 					}
@@ -567,7 +567,7 @@ public class AssembleService {
 		orderProdRepository.saveAndFlush(orderProd);
 		ProdPrice prodPrice = prodPriceRepository.findProdPriceByProdId(assembleCommodity.getProdId());
 		if (prodPrice != null) {
-			Prod prod = prodRepository.findOne(prodPrice.getProdId());
+			Prod prod = prodRepository.getOne(prodPrice.getProdId());
 			double oneprice = 0;
 			if (prod.getMemberDiscount().equals("Y")) {
 				MemberUser user1 = memberUserRepository.findByUserId(user.getId());
@@ -619,7 +619,7 @@ public class AssembleService {
 
 			orderSettle.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			orderSettleRepository.saveAndFlush(orderSettle);
-			VoucherInst inst = voucherInstRepository.findOne(userVoucher.getVoucherInstId());
+			VoucherInst inst = voucherInstRepository.getOne(userVoucher.getVoucherInstId());
 			if (inst != null && inst.getType().equals("M")) {
 				totalPrice -= inst.getMoney().doubleValue();
 			} else if (inst != null && inst.getType().equals("D")) {
@@ -631,7 +631,7 @@ public class AssembleService {
 					if (prodPrice != null) {
 						price1 = prodPrice.getFinalPrice().doubleValue();
 					}
-					Prod prod = prodRepository.findOne(assembleCommodity.getProdId());
+					Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 					if (prod != null && prod.getMemberDiscount().equals("Y")) {
 						MemberUser user1 = memberUserRepository.findByUserId(user.getId());
 						if (user1 != null) {
@@ -708,14 +708,14 @@ public class AssembleService {
 	 * @return
 	 */
 	public AssembleWeichatListDTO assembleDetailWechat(Integer assembleListId) {
-		AssembleList assembleList = assembleListRepository.findOne(assembleListId);
+		AssembleList assembleList = assembleListRepository.getOne(assembleListId);
 		if(null != assembleList){
-			AssembleCommodity ac = assembleCommodityRepository.findOne(assembleList.getAssembleCommodity());
+			AssembleCommodity ac = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
 			if(null != ac){
 				AssembleWeichatListDTO acListDTO = new AssembleWeichatListDTO();
 				acListDTO.setId(ac.getId());
 				acListDTO.setAssembleListId(assembleList.getId());
-				Prod prod = prodRepository.findOne(ac.getProdId());
+				Prod prod = prodRepository.getOne(ac.getProdId());
 				if(null != prod){
 					ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
 					if (prodLogo != null) {
@@ -729,7 +729,7 @@ public class AssembleService {
 					}
 					ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 					if (prodSpec != null) {
-						ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+						ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 						if (spec != null) {
 							acListDTO.setProdSpecName(spec.getSpecValue());
 						}
@@ -769,7 +769,7 @@ public class AssembleService {
 			for(AssembleUser asUser : assembleUserList){
 				AssembleUserWeichatListDTO auwld = new AssembleUserWeichatListDTO();
 				auwld.setId(asUser.getId());
-				User user = userRepository.findOne(asUser.getUserId());
+				User user = userRepository.getOne(asUser.getUserId());
 				if(null != user){
 					auwld.setUserID(user.getId());
 					auwld.setIcon(user.getUserIcon());
@@ -794,15 +794,15 @@ public class AssembleService {
 	 */
 	public List<AssembleWeichatListDTO> assembleListWechat(User user, Integer assembleListId) {
 
-		AssembleList assembleList = assembleListRepository.findOne(assembleListId);
+		AssembleList assembleList = assembleListRepository.getOne(assembleListId);
 		List<AssembleWeichatListDTO> acListDTOS = new ArrayList<>();
 		if(null != assembleList){
-			AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleList.getAssembleCommodity());
+			AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
 			List<AssembleCommodity> assembleCommodityList  = assembleCommodityRepository.findByWineryIdAndId(user.getWineryId(), assembleCommodity.getId());
 			for (AssembleCommodity ac : assembleCommodityList) {
 				AssembleWeichatListDTO acListDTO = new AssembleWeichatListDTO();
 				acListDTO.setId(ac.getId());
-				Prod prod = prodRepository.findOne(ac.getProdId());
+				Prod prod = prodRepository.getOne(ac.getProdId());
 				if(null != prod){
 					ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
 					if (prodLogo != null) {
@@ -816,7 +816,7 @@ public class AssembleService {
 					}
 					ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 					if (prodSpec != null) {
-						ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+						ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 						if (spec != null) {
 							acListDTO.setProdSpecName(spec.getSpecValue());
 						}
@@ -847,9 +847,9 @@ public class AssembleService {
 		AssemblePordDetailWeichatDTO acListDTO = new AssemblePordDetailWeichatDTO();
 		if(null != assembleId){
 
-			AssembleCommodity ac = assembleCommodityRepository.findOne(assembleId);
+			AssembleCommodity ac = assembleCommodityRepository.getOne(assembleId);
 			acListDTO.setId(ac.getId());
-			Prod prod = prodRepository.findOne(ac.getProdId());
+			Prod prod = prodRepository.getOne(ac.getProdId());
 			if(null != prod){
 				ProdPrice price = prodPriceRepository.findProdPriceByProdId(prod.getId());
 				if (price != null) {
@@ -857,7 +857,7 @@ public class AssembleService {
 				}
 				ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 				if (prodSpec != null) {
-					ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+					ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 					if (spec != null) {
 						acListDTO.setProdSpecName(spec.getSpecValue());
 					}
@@ -914,14 +914,14 @@ public class AssembleService {
 	public AssembleWeichatDTO joinAssembleButton(User user,Integer assembleListId) {
 //
 		if(null != assembleListId){
-			AssembleList assembleList = assembleListRepository.findOne(assembleListId);
+			AssembleList assembleList = assembleListRepository.getOne(assembleListId);
 			if(null != assembleList){
-				AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleList.getAssembleCommodity());
+				AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
 				if(null != assembleCommodity){
 					AssembleWeichatDTO assembleWeichatDTO = new AssembleWeichatDTO();
 					assembleWeichatDTO.setId(assembleCommodity.getId());
 					assembleWeichatDTO.setUserLogo(user.getUserIcon());
-					Prod prod = prodRepository.findOne(assembleCommodity.getProdId());
+					Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 					if(null != prod){
 						ProdLogo prodLogo = prodLogoRepository.findDefaultLogo(prod.getId());
 						if (prodLogo != null) {
@@ -930,7 +930,7 @@ public class AssembleService {
 						assembleWeichatDTO.setProdTitle(prod.getTitle());
 						ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
 						if (prodSpec != null) {
-							ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+							ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
 							if (spec != null) {
 								assembleWeichatDTO.setProdSpecName(spec.getSpecValue());
 							}
@@ -961,7 +961,7 @@ public class AssembleService {
 	 * @return
 	 */
 	public void joinAssemble(User user, UserAddress userAddress, UserVoucher userVoucher, String descri, AssembleList assembleList) {
-		AssembleCommodity assembleCommodity = assembleCommodityRepository.findOne(assembleList.getAssembleCommodity());
+		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
 		//拼团订单
 		Order order = new Order();
 		order.setWineryId(user.getWineryId());
@@ -997,7 +997,7 @@ public class AssembleService {
 		orderProdRepository.saveAndFlush(orderProd);
 		ProdPrice prodPrice = prodPriceRepository.findProdPriceByProdId(assembleCommodity.getProdId());
 		if (prodPrice != null) {
-			Prod prod = prodRepository.findOne(prodPrice.getProdId());
+			Prod prod = prodRepository.getOne(prodPrice.getProdId());
 			double oneprice = 0;
 			if (prod.getMemberDiscount().equals("Y")) {
 				MemberUser user1 = memberUserRepository.findByUserId(user.getId());
@@ -1049,7 +1049,7 @@ public class AssembleService {
 
 			orderSettle.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			orderSettleRepository.saveAndFlush(orderSettle);
-			VoucherInst inst = voucherInstRepository.findOne(userVoucher.getVoucherInstId());
+			VoucherInst inst = voucherInstRepository.getOne(userVoucher.getVoucherInstId());
 			if (inst != null && inst.getType().equals("M")) {
 				totalPrice -= inst.getMoney().doubleValue();
 			} else if (inst != null && inst.getType().equals("D")) {
@@ -1061,7 +1061,7 @@ public class AssembleService {
 					if (prodPrice != null) {
 						price1 = prodPrice.getFinalPrice().doubleValue();
 					}
-					Prod prod = prodRepository.findOne(assembleCommodity.getProdId());
+					Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 					if (prod != null && prod.getMemberDiscount().equals("Y")) {
 						MemberUser user1 = memberUserRepository.findByUserId(user.getId());
 						if (user1 != null) {

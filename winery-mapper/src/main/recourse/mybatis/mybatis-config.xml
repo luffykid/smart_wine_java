@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<settings>
+	<setting name="callSettersOnNulls" value="true"/>
+	<!--<setting name="proxyFactory" value="CGLIB"/>-->
+	<setting name="lazyLoadingEnabled" value="true"/>
+</settings>
+<typeHandlers>
+	<typeHandler handler="com.changfa.frame.core.util.DecimalHandler" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+</typeHandlers>
+</configuration>

@@ -86,7 +86,7 @@ public class MessageService {
      * @Description
      * */
     public void addMessage(AdminUser adminUser, MessageDTO messageDTO) throws ClientException {
-        SmsTemp smsTemp = smsTempRepository.findOne(messageDTO.getSmsTempId());
+        SmsTemp smsTemp = smsTempRepository.getOne(messageDTO.getSmsTempId());
         List<SmsTempPara> smsTempParaList = smsTempParaRepository.findBySmsTempId(messageDTO.getSmsTempId());
         SmsTempContent smsTempContent = smsTempContentRepository.findBySmsTempId(messageDTO.getSmsTempId());
         //添加消息
@@ -130,7 +130,7 @@ public class MessageService {
                     messageRange.setMessageId(messageSave.getId());
                     messageRangeList.add(messageRange);
                 }
-                messageRangeRepository.save(messageRangeList);
+                messageRangeRepository.saveAll(messageRangeList);
             }
         } else {
             List<MessageRange> messageRangeList = new ArrayList<>();
@@ -143,7 +143,7 @@ public class MessageService {
                     messageRange.setMessageId(messageSave.getId());
                     messageRangeList.add(messageRange);
                 }
-                messageRangeRepository.save(messageRangeList);
+                messageRangeRepository.saveAll(messageRangeList);
             }
         }
         if (messageDTO.getStatus().equals("A")) {
@@ -222,19 +222,19 @@ public class MessageService {
      * @Description
      * */
     public void updateMessage(AdminUser adminUser, MessageDTO messageDTO) throws ClientException {
-        Message message = messageRepository.findOne(messageDTO.getId());
+        Message message = messageRepository.getOne(messageDTO.getId());
         SmsTemp smsTemp = null;
         List<SmsTempPara> smsTempParaList = null;
         SmsTempContent smsTempContent = null;
         if (messageDTO.getSmsTempId() != null) {
-            smsTemp = smsTempRepository.findOne(messageDTO.getSmsTempId());
+            smsTemp = smsTempRepository.getOne(messageDTO.getSmsTempId());
             smsTempParaList = smsTempParaRepository.findBySmsTempId(messageDTO.getSmsTempId());
             smsTempContent = smsTempContentRepository.findBySmsTempId(messageDTO.getSmsTempId());
             message.setSmsTempId(messageDTO.getSmsTempId());
             message.setContent(smsTempContent.getContent());
             message.setTitle(smsTemp.getName());
         } else {
-            smsTemp = smsTempRepository.findOne(message.getSmsTempId());
+            smsTemp = smsTempRepository.getOne(message.getSmsTempId());
             smsTempParaList = smsTempParaRepository.findBySmsTempId(message.getSmsTempId());
             smsTempContent = smsTempContentRepository.findBySmsTempId(message.getSmsTempId());
         }
@@ -283,7 +283,7 @@ public class MessageService {
                         messageRange.setMessageId(messageSave.getId());
                         messageRangeList.add(messageRange);
                     }
-                    messageRangeRepository.save(messageRangeList);
+                    messageRangeRepository.saveAll(messageRangeList);
                 }
             }
         }
@@ -299,7 +299,7 @@ public class MessageService {
                     messageRange.setMessageId(messageSave.getId());
                     messageRangeList.add(messageRange);
                 }
-                messageRangeRepository.save(messageRangeList);
+                messageRangeRepository.saveAll(messageRangeList);
             }
         }
         if (messageDTO.getStatus().equals("A")) {
@@ -327,11 +327,11 @@ public class MessageService {
         List<MessageDTO> messageDTOList = new ArrayList<>();
         if (messagesList != null && messagesList.size() > 0) {
             for (Message message : messagesList) {
-                SmsTemp smsTemp = smsTempRepository.findOne(message.getSmsTempId());
+                SmsTemp smsTemp = smsTempRepository.getOne(message.getSmsTempId());
                 MessageDTO messageDTO = new MessageDTO();
                 messageDTO.setId(message.getId());
                 messageDTO.setAdminUserId(message.getAdminUserId());
-                AdminUser adminUser = adminUserRepository.findOne(message.getAdminUserId());
+                AdminUser adminUser = adminUserRepository.getOne(message.getAdminUserId());
                 messageDTO.setCreateUserName(adminUser.getUserName());
                 messageDTO.setTitle(smsTemp.getName());
                 messageDTO.setSendType(message.getSendType());
@@ -381,13 +381,13 @@ public class MessageService {
     }
 
     public MessageDTO findMessageDetail(Integer messageId) {
-        Message message = messageRepository.findOne(messageId);
-        SmsTemp smsTemp = smsTempRepository.findOne(message.getSmsTempId());
+        Message message = messageRepository.getOne(messageId);
+        SmsTemp smsTemp = smsTempRepository.getOne(message.getSmsTempId());
         if (message != null) {
             MessageDTO messageDTO = new MessageDTO();
             messageDTO.setId(message.getId());
             messageDTO.setAdminUserId(message.getAdminUserId());
-            AdminUser adminUser = adminUserRepository.findOne(message.getAdminUserId());
+            AdminUser adminUser = adminUserRepository.getOne(message.getAdminUserId());
             messageDTO.setCreateUserName(adminUser.getUserName());
             messageDTO.setTitle(smsTemp.getName());
             messageDTO.setSendType(message.getSendType());
@@ -404,15 +404,15 @@ public class MessageService {
     }
 
     public void deleteMessage(Integer messageId) {
-        messageRepository.delete(messageId);
+        messageRepository.deleteById(messageId);
         messageRangeRepository.deleteByMessageId(messageId);
     }
 
     public void enableMessage(Integer messageId, AdminUser adminUser) throws ClientException {
-        Message message = messageRepository.findOne(messageId);
+        Message message = messageRepository.getOne(messageId);
         SmsTempContent smsTempContent = smsTempContentRepository.findBySmsTempId(message.getSmsTempId());
         List<SmsTempPara> smsTempParaList = smsTempParaRepository.findBySmsTempId(message.getSmsTempId());
-        SmsTemp smsTemp = smsTempRepository.findOne(message.getSmsTempId());
+        SmsTemp smsTemp = smsTempRepository.getOne(message.getSmsTempId());
         Map<String, Object> smsTempParaDetail = new HashMap<>();
         if (smsTempParaList != null && smsTempParaList.size() > 0) {
             for (SmsTempPara smsTempPara : smsTempParaList) {

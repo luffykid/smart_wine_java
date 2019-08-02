@@ -106,7 +106,7 @@ public class MarketActivityService {
                 marketActivityList.setCreateTime(sd.format(marketActivity.getCreateTime()));
             }
             marketActivityList.setName(marketActivity.getName());
-            MarketActivityType type = marketActivityTypeRepository.findOne(marketActivity.getMarketActivityTypeId());
+            MarketActivityType type = marketActivityTypeRepository.getOne(marketActivity.getMarketActivityTypeId());
             if (type != null) {
                 marketActivityList.setTypeId(marketActivity.getMarketActivityTypeId());
                 marketActivityList.setTypeSubject(type.getSubject());
@@ -223,7 +223,7 @@ public class MarketActivityService {
                 }
                 marketActivitySpecDetails.add(detail);
             }
-            marketActivitySpecDetailRepository.save(marketActivitySpecDetails);
+            marketActivitySpecDetailRepository.saveAll(marketActivitySpecDetails);
         }
         if (giveVoucherDTO.getLevel() != null) {
             List<MarketActivityRange> marketActivityRanges = new ArrayList<>();
@@ -234,7 +234,7 @@ public class MarketActivityService {
                 range.setMemberLevelId(str);
                 marketActivityRanges.add(range);
             }
-            marketActivityRangeRepository.save(marketActivityRanges);
+            marketActivityRangeRepository.saveAll(marketActivityRanges);
         }
         if (giveVoucherDTO.getPicurl() != null) {
             List<MarketActivityLogo> marketActivityLogos = new ArrayList<>();
@@ -246,7 +246,7 @@ public class MarketActivityService {
                 logo.setIsDefault("N");
                 marketActivityLogos.add(logo);
             }
-            marketActivityLogoRepository.save(marketActivityLogos);
+            marketActivityLogoRepository.saveAll(marketActivityLogos);
         }
         if (giveVoucherDTO.getBanner() != null) {
             MarketActivityLogo logo = new MarketActivityLogo();
@@ -265,8 +265,8 @@ public class MarketActivityService {
     }
 
     public Boolean enable(Integer id, AdminUser adminUser) {
-        MarketActivity activity = marketActivityRepository.findOne(id);
-        MarketActivityType type = marketActivityTypeRepository.findOne(activity.getMarketActivityTypeId());
+        MarketActivity activity = marketActivityRepository.getOne(id);
+        MarketActivityType type = marketActivityTypeRepository.getOne(activity.getMarketActivityTypeId());
         if (type != null) {
             MarketActivity marketActivity = marketActivityRepository.findByTimeAndType(type.getId(), activity.getBeginTime(), adminUser.getWineryId());
             if (marketActivity != null) {
@@ -281,7 +281,7 @@ public class MarketActivityService {
     }
 
     public void disable(Integer id) {
-        MarketActivity activity = marketActivityRepository.findOne(id);
+        MarketActivity activity = marketActivityRepository.getOne(id);
         activity.setStatus("P");
         activity.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         activity.setStatusTime(new Timestamp(System.currentTimeMillis()));
@@ -289,14 +289,14 @@ public class MarketActivityService {
     }
 
     public void delete(Integer id) {
-        marketActivityRepository.delete(id);
+        marketActivityRepository.deleteById(id);
         marketActivitySpecDetailRepository.deleteByMarketActivityId(id);
         marketActivityLogoRepository.deleteByMarketActivityId(id);
         marketActivityRangeRepository.deleteAllByMarketActivityId(id);
     }
 
     public MarketActivity findOne(Integer id) {
-        return marketActivityRepository.findOne(id);
+        return marketActivityRepository.getOne(id);
     }
 
     @Transactional
@@ -359,7 +359,7 @@ public class MarketActivityService {
                 }
                 marketActivitySpecDetails.add(detail);
             }
-            marketActivitySpecDetailRepository.save(marketActivitySpecDetails);
+            marketActivitySpecDetailRepository.saveAll(marketActivitySpecDetails);
         }
         if (giveVoucherDTO.getLevel() != null) {
             marketActivityRangeRepository.deleteAllByMarketActivityId(marketActivity.getId());
@@ -371,7 +371,7 @@ public class MarketActivityService {
                 range.setMemberLevelId(str);
                 marketActivityRanges.add(range);
             }
-            marketActivityRangeRepository.save(marketActivityRanges);
+            marketActivityRangeRepository.saveAll(marketActivityRanges);
         }
         if (giveVoucherDTO.getPicurl() != null) {
             marketActivityLogoRepository.deleteByMarketActivityId(marketActivity.getId());
@@ -384,7 +384,7 @@ public class MarketActivityService {
                 logo.setIsDefault("N");
                 marketActivityLogos.add(logo);
             }
-            marketActivityLogoRepository.save(marketActivityLogos);
+            marketActivityLogoRepository.saveAll(marketActivityLogos);
         }
         if (giveVoucherDTO.getBanner() != null && !giveVoucherDTO.getBanner().equals("")) {
             MarketActivityLogo logo = marketActivityLogoRepository.findByMarketActivityIdAndIsDefault(marketActivity.getId(), "Y");
@@ -441,7 +441,7 @@ public class MarketActivityService {
                 GiveVoucherItemDTO giveVoucherItem = new GiveVoucherItemDTO();
                 giveVoucherItem.setPresentVoucherId(marketActivitySpecDetail.getPresentVoucherId());
                 if (marketActivitySpecDetail.getPresentVoucherId() != null) {
-                    Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                    Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                     if (voucher != null) {
                         giveVoucherItem.setValue(voucher.getName());
                     }
@@ -467,7 +467,7 @@ public class MarketActivityService {
                 GiveVoucherItemDTO giveVoucherItem2 = new GiveVoucherItemDTO();
                 giveVoucherItem2.setPresentVoucherId(marketActivitySpecDetail.getPresentVoucherId());
                 if (marketActivitySpecDetail.getPresentVoucherId() != null) {
-                    Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                    Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                     if (voucher != null) {
                         giveVoucherItem2.setValue(voucher.getName());
                     }
@@ -584,7 +584,7 @@ public class MarketActivityService {
      * @Description
      * */
     public MarketDTO getMarketDetail(User user, Integer marketActivityId) {
-        MarketActivity marketActivity = marketActivityRepository.findOne(marketActivityId);
+        MarketActivity marketActivity = marketActivityRepository.getOne(marketActivityId);
         MemberUser memberUser = null;
         if (user != null) {
             memberUser = memberUserRepository.findByUserId(user.getId());
@@ -604,7 +604,7 @@ public class MarketActivityService {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (MarketActivitySpecDetail marketActivitySpecDetail : marketActivitySpecDetailList) {
                 if (marketActivitySpecDetail.getPresentVoucherId() != null) {
-                    Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                    Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                     if (voucher != null) {
                         VoucherInstDTO voucherInstDTO = new VoucherInstDTO();
                         voucherInstDTO.setName(voucher.getName());
@@ -725,7 +725,7 @@ public class MarketActivityService {
         if (marketActivityRangeList != null) {
             for (MarketActivityRange marketActivityRange : marketActivityRangeList) {
 
-                MarketActivity marketActivity = marketActivityRepository.findOne(marketActivityRange.getMarketActivityId());
+                MarketActivity marketActivity = marketActivityRepository.getOne(marketActivityRange.getMarketActivityId());
                 if (marketActivity != null) {
                     if (marketActivity.getMarketActivityTypeId() == type && marketActivity.getSendType().equals("C") && marketActivity.getStatus().equals("A") && new Date().after(marketActivity.getBeginTime()) && new Date().before(marketActivity.getEndTime())) {
                         return marketActivity;
@@ -755,7 +755,7 @@ public class MarketActivityService {
                 List<MarketActivitySpecDetail> marketActivitySpecDetailList = marketActivitySpecDetailRepository.findByMarketActivityId(marketActivity.getId());
                 if (marketActivitySpecDetailList != null) {
                     for (MarketActivitySpecDetail marketActivitySpecDetail : marketActivitySpecDetailList) {
-                        Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                        Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                         if (voucher != null && marketActivitySpecDetail.getPresentVoucherQuantity() != null) {
                             for (int i = 0; i < marketActivitySpecDetail.getPresentVoucherQuantity(); i++) {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -829,7 +829,7 @@ public class MarketActivityService {
                     List<MarketActivitySpecDetail> marketActivitySpecDetailList = marketActivitySpecDetailRepository.findByMarketActivityId(marketActivity.getId());
                     if (marketActivitySpecDetailList != null) {
                         for (MarketActivitySpecDetail marketActivitySpecDetail : marketActivitySpecDetailList) {
-                            Voucher voucher = voucherRepository.findOne(marketActivitySpecDetail.getPresentVoucherId());
+                            Voucher voucher = voucherRepository.getOne(marketActivitySpecDetail.getPresentVoucherId());
                             if (voucher != null && marketActivitySpecDetail.getPresentVoucherQuantity() != null) {
                                 for (int i = 0; i < marketActivitySpecDetail.getPresentVoucherQuantity(); i++) {
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -904,9 +904,9 @@ public class MarketActivityService {
 
 
     public void getVoucher(User user, Integer voucherId, Integer marketActivityId) throws ClientException {
-        MarketActivity marketActivity = marketActivityRepository.findOne(marketActivityId);
+        MarketActivity marketActivity = marketActivityRepository.getOne(marketActivityId);
         if (marketActivity != null) {
-            Voucher voucher = voucherRepository.findOne(voucherId);
+            Voucher voucher = voucherRepository.getOne(voucherId);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
             Date date = new Date();
             Random random = new Random();
@@ -972,9 +972,9 @@ public class MarketActivityService {
     }
 
     public Integer delCustomTemplate(Integer typeId) {
-        MarketActivityType type = marketActivityTypeRepository.findOne(typeId);
+        MarketActivityType type = marketActivityTypeRepository.getOne(typeId);
         if (type != null && type.getId() != 4 && type.getSubject().equals("F")) {
-            marketActivityTypeRepository.delete(typeId);
+            marketActivityTypeRepository.deleteById(typeId);
             return 0;
         } else {
             return 1;
@@ -996,7 +996,7 @@ public class MarketActivityService {
             }
         }
         if (date != null) {
-            MarketActivityType type = marketActivityTypeRepository.findOne(giveVoucherDTO.getMarketActivityTypeId());
+            MarketActivityType type = marketActivityTypeRepository.getOne(giveVoucherDTO.getMarketActivityTypeId());
             if (type != null) {
                 return marketActivityRepository.findByTimeAndType(type.getId(), date, adminUser.getWineryId());
             } else {
@@ -1008,7 +1008,7 @@ public class MarketActivityService {
     }
 
     public MarketActivityType checkMarketactivityType(Integer marketActivityTypeId) {
-        return marketActivityTypeRepository.findOne(marketActivityTypeId);
+        return marketActivityTypeRepository.getOne(marketActivityTypeId);
     }
 }
 

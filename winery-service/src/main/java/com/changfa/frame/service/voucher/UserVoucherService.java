@@ -37,7 +37,7 @@ public class UserVoucherService {
         if (userVoucherList!=null && userVoucherList.size()>0){
             List<VoucherInst> voucherInstList = new ArrayList<>();
             for (UserVoucher userVoucher:userVoucherList){
-               VoucherInst voucherInst =  voucherInstRepository.findOne(userVoucher.getVoucherInstId());
+               VoucherInst voucherInst =  voucherInstRepository.getOne(userVoucher.getVoucherInstId());
                if (voucherInst.getEffectiveTime().before(new Date())){
                    voucherInstList.add(voucherInst);
                }
@@ -99,6 +99,6 @@ public class UserVoucherService {
       }
 
     public UserVoucher checkVoucherId(Integer voucherId) {
-          return userVoucherRepository.findOne(voucherId);
+          return userVoucherRepository.getOne(voucherId);
     }
 }

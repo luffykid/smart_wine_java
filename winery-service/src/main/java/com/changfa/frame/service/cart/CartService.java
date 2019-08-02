@@ -116,7 +116,7 @@ public class CartService {
         NewProdListDTO cartItem = new NewProdListDTO();
         cartItem.setId(cart.getId());
         cartItem.setProdId(cart.getProdId());
-        Prod prod = prodRepository.findOne(cart.getProdId());
+        Prod prod = prodRepository.getOne(cart.getProdId());
         if (prod != null) {
             cartItem.setName(prod.getTitle());
             ProdPrice price = prodPriceRepository.findProdPriceByProdId(prod.getId());
@@ -156,7 +156,7 @@ public class CartService {
             }
             ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
             if (prodSpec != null) {
-                ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+                ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
                 if (spec != null) {
                     cartItem.setProdSpec(spec.getSpecValue());
                 }
@@ -182,7 +182,7 @@ public class CartService {
         Integer point = 0;
         List<Integer> integers = new ArrayList<>();
         for (Integer id : cartId) {
-            Cart cart = cartRepository.findOne(id);
+            Cart cart = cartRepository.getOne(id);
             if (cart != null) {
                 integers.add(cart.getProdId());
                 List<NewProdListDTO> listList = getNewProdList(cart);
@@ -228,7 +228,7 @@ public class CartService {
             cartSettlement.setAddress(address.getFullAddress());
         }
         NewProdListDTO cartItem = new NewProdListDTO();
-        Prod prod = prodRepository.findOne(prodId);
+        Prod prod = prodRepository.getOne(prodId);
         ProdPrice price = prodPriceRepository.findProdPriceByProdId(prod.getId());
         if (prod != null) {
             cartItem.setName(prod.getTitle());
@@ -272,7 +272,7 @@ public class CartService {
         }
         ProdProdSpec prodSpec = prodProdSpecRepository.findByProdId(prod.getId());
         if (prodSpec != null) {
-            ProdSpec spec = prodSpecRepository.findOne(prodSpec.getProdSpecId());
+            ProdSpec spec = prodSpecRepository.getOne(prodSpec.getProdSpecId());
             if (spec != null) {
                 cartItem.setProdSpec(spec.getSpecValue());
             }
@@ -317,7 +317,7 @@ public class CartService {
         ProdPrice price = prodPriceRepository.findProdPriceByProdId(voucherInst.getExchangeProdId());
         if (price != null) {
             Double price1 = price.getFinalPrice().doubleValue();
-            Prod prod = prodRepository.findOne(voucherInst.getExchangeProdId());
+            Prod prod = prodRepository.getOne(voucherInst.getExchangeProdId());
             if (prod != null && prod.getMemberDiscount().equals("Y")) {
                 MemberUser user1 = memberUserRepository.findByUserId(user.getId());
                 if (user1 != null) {
@@ -353,7 +353,7 @@ public class CartService {
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (UserVoucher userVoucher : userVoucherList) {
-                VoucherInst voucherInst = voucherInstRepository.findOne(userVoucher.getVoucherInstId());
+                VoucherInst voucherInst = voucherInstRepository.getOne(userVoucher.getVoucherInstId());
                 if (voucherInst.getScope().equals("B") || voucherInst.getScope().equals("C")) {
                     if (voucherInst.getType().equals("G")) {
                         if (prodIds.size() != 0) {
@@ -409,12 +409,12 @@ public class CartService {
     }
 
     public void updateCartSum(Integer quantity, Integer cartId) {
-        Cart cart = cartRepository.findOne(cartId);
+        Cart cart = cartRepository.getOne(cartId);
         cart.setAmount(quantity);
         cartRepository.saveAndFlush(cart);
     }
 
     public void deleteCart(Integer cartId) {
-        cartRepository.delete(cartId);
+        cartRepository.deleteById(cartId);
     }
 }

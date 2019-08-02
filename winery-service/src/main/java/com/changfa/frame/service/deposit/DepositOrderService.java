@@ -138,7 +138,7 @@ public class DepositOrderService {
     public void paySuccess(String orderNo, Map<String, String> map) {
         //添加支付信息
         DepositOrder depositOrder = depositOrderRepository.findByOrderNo(orderNo);
-        User user = userRepository.findOne(depositOrder.getUserId());
+        User user = userRepository.getOne(depositOrder.getUserId());
         OrderPay orderPay = new OrderPay();
         orderPay.setOrderNo(orderNo);
         orderPay.setOrderId(depositOrder.getId());
@@ -253,7 +253,7 @@ public class DepositOrderService {
         userDepositDetailRepository.saveAndFlush(userDepositDetail);
         //赠送券
         if (sendVoucherId != null && sendVoucherQuantity != null) {
-            Voucher voucher = voucherRepository.findOne(sendVoucherId);
+            Voucher voucher = voucherRepository.getOne(sendVoucherId);
             if (voucher != null) {
                 //流水号
                 for (int i = 0; i < sendVoucherQuantity; i++) {
@@ -354,7 +354,7 @@ public class DepositOrderService {
         depositOrder.setDescri(descri);
         DepositOrder depositOrderSave = depositOrderRepository.saveAndFlush(depositOrder);
         //添加支付信息
-        User user = userRepository.findOne(depositOrderSave.getUserId());
+        User user = userRepository.getOne(depositOrderSave.getUserId());
         OrderPay orderPay = new OrderPay();
         orderPay.setOrderNo(depositOrderSave.getOrderNo());
         orderPay.setOrderId(depositOrderSave.getId());
@@ -433,7 +433,7 @@ public class DepositOrderService {
         userDepositDetailRepository.saveAndFlush(userDepositDetail);
         //赠送券
         if (sendVoucherId != null && sendVoucherQuantity != null) {
-            Voucher voucher = voucherRepository.findOne(sendVoucherId);
+            Voucher voucher = voucherRepository.getOne(sendVoucherId);
             if (voucher != null) {
                 //流水号
                 for (int i = 0; i < sendVoucherQuantity; i++) {
@@ -579,7 +579,7 @@ public class DepositOrderService {
         userDepositDetail.setOrderNo(offlineOrderSave.getOrderNo());
         userDepositDetail.setCreateTime(new Date());
         userDepositDetailRepository.saveAndFlush(userDepositDetail);
-        User user = userRepository.findOne(userId);
+        User user = userRepository.getOne(userId);
         pointRewardRuleService.updateUserPoint(user, offlineOrderSave.getTotalPrice(), "W", offlineOrderSave.getOrderNo(), offlineOrderSave.getId());
         MemberUser memberUser = memberUserRepository.findByUserId(userId);
         //满额赠券

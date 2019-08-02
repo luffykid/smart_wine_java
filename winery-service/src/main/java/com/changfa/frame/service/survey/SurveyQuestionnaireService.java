@@ -46,7 +46,7 @@ public class SurveyQuestionnaireService {
     // 问卷详情
     public SurveyQuestionnaireDTO surveyQuestionnaireDetail(Integer surveyQuestionnaireId) {
         // 问卷基本信息
-        SurveyQuestionnaire surveyQuestionnaire = this.surveyQuestionnaireRepository.findOne(surveyQuestionnaireId);
+        SurveyQuestionnaire surveyQuestionnaire = this.surveyQuestionnaireRepository.getOne(surveyQuestionnaireId);
         SurveyQuestionnaireDTO surveyQuestionnaireDTO = new SurveyQuestionnaireDTO();
         surveyQuestionnaireDTO.setId(surveyQuestionnaire.getId());
         surveyQuestionnaireDTO.setSurveyName(surveyQuestionnaire.getSurveyName());
@@ -139,7 +139,7 @@ public class SurveyQuestionnaireService {
     // 答卷详情
     public AnswerDTO answerDetail(Integer answerId) {
         // 答卷基本信息
-        SurveyAnswer surveyAnswer = this.surveyAnswerRepository.findOne(answerId);
+        SurveyAnswer surveyAnswer = this.surveyAnswerRepository.getOne(answerId);
         Integer score = this.surveyAnswerRepository.sumScoreBySurvey(answerId);
         AnswerDTO answerDTO = new AnswerDTO();
         answerDTO.setAnswererId(surveyAnswer.getId());
@@ -203,7 +203,7 @@ public class SurveyQuestionnaireService {
         // 删除答案选项保存表
         this.surveyAnOptionRepository.deleteByBelongAnswerId(answerId);
         // 删除答题者信息表
-        this.surveyAnswerRepository.delete(answerId);
+        this.surveyAnswerRepository.deleteById(answerId);
     }
 
 
@@ -222,7 +222,7 @@ public class SurveyQuestionnaireService {
             surveyQuestionnaire.setModifier(null);
             surveyQuestionnaire.setIsDelete(1);
         }else{
-            surveyQuestionnaire = surveyQuestionnaireRepository.findOne(surveyQuestionnaireDTO.getId());
+            surveyQuestionnaire = surveyQuestionnaireRepository.getOne(surveyQuestionnaireDTO.getId());
             surveyQuestionnaire.setUpdateTime(new Date());
             surveyQuestionnaire.setModifier(adminUser.getId());
         }
@@ -247,7 +247,7 @@ public class SurveyQuestionnaireService {
                     surveyQuestionType.setCreateTime(surveyQuestionnaire.getCreateTime());
                     surveyQuestionType.setUpdateTime(surveyQuestionType.getCreateTime());
                 }else{
-                    surveyQuestionType = surveyQuestionTypeRepository.findOne(surveyQuestionTypeDTO.getId());
+                    surveyQuestionType = surveyQuestionTypeRepository.getOne(surveyQuestionTypeDTO.getId());
                     surveyQuestionType.setUpdateTime(new Date());
                 }
                 surveyQuestionType.setTypeName(surveyQuestionTypeDTO.getTypeName());
@@ -270,7 +270,7 @@ public class SurveyQuestionnaireService {
                             surveyQuestion.setSort(j+1);
                             surveyQuestion.setCreateTime(surveyQuestionType.getCreateTime());
                         }else{
-                            surveyQuestion = surveyQuestionRepository.findOne(surveyQuestionDTO.getId());
+                            surveyQuestion = surveyQuestionRepository.getOne(surveyQuestionDTO.getId());
                         }
                         surveyQuestion.setQuTitle(surveyQuestionDTO.getQuTitle());
                         surveyQuestionRepository.saveAndFlush(surveyQuestion);
@@ -327,7 +327,7 @@ public class SurveyQuestionnaireService {
 
     // 删除问卷
     public void deleteQuestionnaire(Integer questionnaireId) {
-        SurveyQuestionnaire surveyQuestionnaire = surveyQuestionnaireRepository.findOne(questionnaireId);
+        SurveyQuestionnaire surveyQuestionnaire = surveyQuestionnaireRepository.getOne(questionnaireId);
         if(null != surveyQuestionnaire){
             surveyQuestionnaire.setIsDelete(0);
             surveyQuestionnaireRepository.saveAndFlush(surveyQuestionnaire);

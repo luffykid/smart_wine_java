@@ -146,7 +146,7 @@ public class WineryController {
             if(wineryDTO.getId().equals(null) || wineryDTO.getId() == null){
                 return JsonReturnUtil.getJsonIntReturn(1, "酒庄信息有误");
             }
-            Winery wineryOld = wineryRepository.findOne(wineryDTO.getId());
+            Winery wineryOld = wineryRepository.getOne(wineryDTO.getId());
 	        if (wineryOld == null) {
 		        return JsonReturnUtil.getJsonIntReturn(4, "找不到酒庄id" + wineryDTO.getId());
 	        }

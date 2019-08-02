@@ -111,7 +111,7 @@ public class WineService {
                 }
             }
         }
-        Wine wine = wineRepository.findOne(wineId);
+        Wine wine = wineRepository.getOne(wineId);
         //酒订单
         WineOrder wineOrder = new WineOrder();
         wineOrder.setWineryId(adminUser.getWineryId());
@@ -230,7 +230,7 @@ public class WineService {
         }
 
         // 发送短信提醒(储酒)
-        User user = userRepository.findOne(userId);
+        User user = userRepository.getOne(userId);
         if (user.getPhone() != null && !user.getPhone().equals("")) {
             SmsTemp smsTemp = smsTempRepository.findByWineryIdAndContentLike(user.getWineryId(), "存取酒");
             if (type.equals("C")) {
@@ -265,7 +265,7 @@ public class WineService {
             List<UserWine> userWineList = userWineRepository.findByUserId(userId);
             if (userWineList != null && userWineList.size() > 0) {
                 for (UserWine userWine : userWineList) {
-                    Wine wine = wineRepository.findOne(userWine.getWineId());
+                    Wine wine = wineRepository.getOne(userWine.getWineId());
                     Map<String, Object> map = new HashMap<>();
                     map.put("price", wine.getPrice());
                     map.put("name", wine.getWineName());
@@ -294,7 +294,7 @@ public class WineService {
                 }
                 map.put("lastQuantity", objects[3]);
                 if (objects[4]!=null) {
-                    AdminUser adminUser = adminUserRepository.findOne(Integer.valueOf(objects[4].toString()));
+                    AdminUser adminUser = adminUserRepository.getOne(Integer.valueOf(objects[4].toString()));
                     map.put("createName", adminUser.getUserName());
                 }else{
                     MemberUser memberUser = memberUserRepository.findByUserId(userId);
@@ -321,7 +321,7 @@ public class WineService {
         if (userWineList != null && userWineList.size() > 0) {
             for (UserWine userWine : userWineList) {
                 quantity += userWine.getQuantity();
-                Wine wine = wineRepository.findOne(userWine.getWineId());
+                Wine wine = wineRepository.getOne(userWine.getWineId());
                 if (userWine.getQuantity() != null && userWine.getQuantity() != 0) {
                     price = price.add(wine.getPrice().multiply(new BigDecimal(userWine.getQuantity())));
                 }

@@ -1,12 +1,13 @@
 package com.changfa.frame;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -23,6 +24,7 @@ import java.util.TimeZone;
 @ServletComponentScan
 @EnableAsync
 @Configuration
+@MapperScan("com.changfa.frame.mapper")
 public class Application extends SpringBootServletInitializer {
 
 

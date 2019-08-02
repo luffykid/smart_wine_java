@@ -143,7 +143,7 @@ public class WineryService {
      */
     public WineryDetailDTO wineryDetail(Integer wineryId) {
         WineryDetailDTO wineryDetailDTO = new WineryDetailDTO();
-        Winery winery = wineryRepository.findOne(wineryId);
+        Winery winery = wineryRepository.getOne(wineryId);
         if (winery != null) {
             wineryDetailDTO.setId(winery.getId());
             wineryDetailDTO.setWineryName(winery.getName());
@@ -235,7 +235,7 @@ public class WineryService {
 
     //停用启用状态
     public void updateStatus(Integer wineryId, String status) {
-        Winery winery = wineryRepository.findOne(wineryId);
+        Winery winery = wineryRepository.getOne(wineryId);
         if (winery != null) {
             winery.setStatus(status);
             wineryRepository.save(winery);
@@ -244,7 +244,7 @@ public class WineryService {
 
     //删除酒庄
     public void delWinery(Integer wineryId) {
-        Winery winery = wineryRepository.findOne(wineryId);
+        Winery winery = wineryRepository.getOne(wineryId);
         if (winery != null) {
             winery.setIsDelete(0);
             wineryRepository.save(winery);
