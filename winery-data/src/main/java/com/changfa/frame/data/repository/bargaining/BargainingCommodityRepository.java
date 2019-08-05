@@ -20,7 +20,7 @@ public interface BargainingCommodityRepository extends AdvancedJpaRepository<Bar
 			"WHERE\n" +
 			"\tbc.is_delete = 1\n" +
 			"AND bc.winery_id = ?1\n" +
-			"AND p. NAME LIKE CONCAT('%' ,? 2, '%')\n" +
+			"AND p. NAME LIKE CONCAT('%' ,?2, '%')\n" +
 			"ORDER BY\n" +
 			"\tbc.top_time DESC",nativeQuery = true)
 	List<BargainingCommodity> findByWineryIdLikeName(Integer wineryId, String input);
