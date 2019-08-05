@@ -3,7 +3,7 @@ package com.changfa.frame.service.point;
 import com.changfa.frame.data.dto.wechat.PointDetailDTO;
 import com.changfa.frame.data.entity.point.UserPoint;
 import com.changfa.frame.data.entity.point.UserPointDetail;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.repository.point.UserPointDetailRepository;
 import com.changfa.frame.data.repository.point.UserPointRepository;
 import org.slf4j.Logger;
@@ -36,12 +36,12 @@ public class PointDetailService {
      * @Date          2018/10/16 13:40
      * @Description
      * */
-    public Map<String, Object> pointDetailList(User user) {
+    public Map<String, Object> pointDetailList(Member user) {
         //当前积分
-        UserPoint userPoint = userPointRepository.findByUserId(user.getId());
+        UserPoint userPoint = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
 
         //积分流水
-        List<UserPointDetail> userPointDetailList = userPointDetailRepository.findByUserIdOrderByCreateTimeDesc(user.getId());
+        List<UserPointDetail> userPointDetailList = userPointDetailRepository.findByUserIdOrderByCreateTimeDesc(Integer.valueOf(user.getId().toString()));
         if (userPointDetailList != null) {
             List<PointDetailDTO> pointDetailDTOList = new ArrayList<>();
             for (UserPointDetail userPointDetail : userPointDetailList) {

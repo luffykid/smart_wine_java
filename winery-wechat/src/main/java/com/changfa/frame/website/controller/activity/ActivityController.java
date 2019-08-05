@@ -2,18 +2,14 @@ package com.changfa.frame.website.controller.activity;
 
 import com.changfa.frame.data.dto.wechat.ActivityDTO;
 import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
-import com.changfa.frame.data.entity.activity.Activity;
 import com.changfa.frame.data.entity.activity.ActivityOrder;
-import com.changfa.frame.data.entity.order.Order;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.winery.WineryConfigure;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.data.repository.winery.WineryConfigureRepository;
-import com.changfa.frame.service.deposit.UserBalanceService;
 import com.changfa.frame.service.activity.ActivityService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.wechat.*;
-import com.changfa.frame.service.wechat.conf.WxPayConfig;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +34,13 @@ public class ActivityController {
     private ActivityService activityService;
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private PayService payService;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private WineryConfigureRepository wineryConfigureRepository;
@@ -61,7 +57,7 @@ public class ActivityController {
         try {
             log.info("获取所有活动列表：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -92,7 +88,7 @@ public class ActivityController {
             Integer activityId = Integer.valueOf(map.get("activityId").toString());
             if (map.get("token") != null && !map.get("token").equals("")) {
                 String token = map.get("token").toString();
-                User user = userService.checkToken(token);
+                Member user = memberService.checkToken(token);
                 if (user == null) {
                     return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
                 }
@@ -121,7 +117,7 @@ public class ActivityController {
             log.info("立即报名：" + map);
             String token = map.get("token").toString();
             Integer activityId = Integer.valueOf(map.get("activityId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -143,7 +139,7 @@ public class ActivityController {
         try {
             log.info("生成线下门票订单：" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -169,7 +165,7 @@ public class ActivityController {
         try {
             log.info("获取门票：" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -201,12 +197,12 @@ public class ActivityController {
             String token = map.get("token").toString();
             Integer activityId = Integer.valueOf(map.get("activityId").toString());
             Integer quantity = Integer.valueOf(map.get("quantity").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
 
-            List<VoucherInstDTO> voucherInstDTOList = activityService.getAllVoucherDTO(user.getId(), activityId, quantity);
+            List<VoucherInstDTO> voucherInstDTOList = activityService.getAllVoucherDTO(Integer.valueOf(user.getId().toString()), activityId, quantity);
             if (voucherInstDTOList != null && voucherInstDTOList.size() > 0) {
                 return JsonReturnUtil.getJsonObjectReturn(0, "200", "查询成功", voucherInstDTOList).toString();
             } else {
@@ -226,12 +222,12 @@ public class ActivityController {
             String token = map.get("token").toString();
             Integer activityId = Integer.valueOf(map.get("activityId").toString());
             Integer quantity = Integer.valueOf(map.get("quantity").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
 
-            VoucherInstDTO voucherInstDTO = activityService.MaxVoucher(user.getId(), activityId, quantity);
+            VoucherInstDTO voucherInstDTO = activityService.MaxVoucher(Integer.valueOf(user.getId().toString()), activityId, quantity);
             if (voucherInstDTO != null) {
                 return JsonReturnUtil.getJsonObjectReturn(0, "200", "查询成功", voucherInstDTO).toString();
             } else {
@@ -249,7 +245,7 @@ public class ActivityController {
             log.info("余额支付：" + map);
             String token = map.get("token").toString();
             String orderNo = map.get("orderNo").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -270,7 +266,7 @@ public class ActivityController {
             log.info("零元支付：" + map);
             String token = map.get("token").toString();
             String orderNo = map.get("orderNo").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -293,10 +289,10 @@ public class ActivityController {
         log.info("线下活动余额或微信支付：" + map);
 
         String openId = map.get("openId").toString();
-        User user = userRepository.findByOpenId(openId);
+        Member user = memberRepository.findByOpenId(openId);
         String orderNo = map.get("orderNo").toString();
         String ip = WechatService.getIpAddr(request);
-        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(user.getWineryId());
+        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(Integer.valueOf(user.getWineryId().toString()));
         BigDecimal totalPrice = BigDecimal.valueOf(Double.valueOf(map.get("price").toString()));
         String requestParam = payService.getPayParam(openId, String.valueOf(totalPrice.multiply(new BigDecimal(100)).intValue()), ip, "线下活动", orderNo, "B");
         Map<String, String> result = payService.requestWechatPayServer(requestParam);
@@ -342,7 +338,7 @@ public class ActivityController {
             String token = map.get("token").toString();
             log.info("订单线下支付：" + "token:" + token);
             String orderNo = map.get("orderNo").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -362,7 +358,7 @@ public class ActivityController {
             log.info("订单线下支付：" + "token:" + token);
             Integer quantity = Integer.valueOf(map.get("quantity").toString());
             Integer activityId = Integer.valueOf(map.get("activityId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }

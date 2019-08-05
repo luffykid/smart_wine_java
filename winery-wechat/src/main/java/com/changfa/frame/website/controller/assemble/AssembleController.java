@@ -1,27 +1,20 @@
 package com.changfa.frame.website.controller.assemble;
 
-import com.changfa.frame.data.dto.saas.AssembleCommodityDTO;
-import com.changfa.frame.data.dto.saas.AssembleCommodityListDTO;
-import com.changfa.frame.data.dto.saas.ProdAssembleDTO;
 import com.changfa.frame.data.dto.wechat.*;
 import com.changfa.frame.data.entity.assemble.AssembleCommodity;
 import com.changfa.frame.data.entity.assemble.AssembleList;
-import com.changfa.frame.data.entity.cart.Cart;
 import com.changfa.frame.data.entity.prod.Prod;
-import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.user.UserAddress;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.repository.assemble.AssembleCommodityRepository;
 import com.changfa.frame.data.repository.assemble.AssembleListRepository;
 import com.changfa.frame.data.repository.assemble.AssembleUserRepository;
 import com.changfa.frame.service.assemble.AssembleService;
-import com.changfa.frame.service.cart.CartService;
-import com.changfa.frame.service.order.OrderService;
 import com.changfa.frame.service.prod.ProdService;
 import com.changfa.frame.service.theme.ThemeService;
 import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.voucher.UserVoucherService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
@@ -53,7 +46,7 @@ public class AssembleController {
     private AssembleService assembleService;
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private AssembleCommodityRepository assembleCommodityRepository;
@@ -74,7 +67,7 @@ public class AssembleController {
         try {
             log.info("拼团商品列表:" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -98,7 +91,7 @@ public class AssembleController {
             log.info("拼团商品列表:" + "token:" + map);
             String token = map.get("token").toString();
             String input = map.get("input").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -122,7 +115,7 @@ public class AssembleController {
             log.info("去开团:token:" + map);
             String token = map.get("token").toString();
             String assembleId1 = map.get("assembleId").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -159,13 +152,13 @@ public class AssembleController {
             }
             String assembleId1 = map.get("assembleId").toString();
 
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
             UserAddress userAddress = null;
             if (userAddressId != -1) {
-                userAddress = userService.checkUserAddressId(userAddressId);
+                userAddress = memberService.checkUserAddressId(userAddressId);
                 if (userAddress == null) {
                     return JsonReturnUtil.getJsonReturn(37002, "地址[" + userAddressId + "]不存在");
                 }
@@ -221,7 +214,7 @@ public class AssembleController {
                 return JsonReturnUtil.getJsonReturn(37003, "团队信息有误");
             }
 
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -252,7 +245,7 @@ public class AssembleController {
             log.info("拼团商品详情:token:" + map);
             String token = map.get("token").toString();
             String assembleId1 = map.get("assembleId").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -297,7 +290,7 @@ public class AssembleController {
             log.info("去开团:token:" + map);
             String token = map.get("token").toString();
             String assembleListId1 = map.get("assembleListId").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -335,13 +328,13 @@ public class AssembleController {
             }
             String assembleListId1 = map.get("assembleListId").toString();
 
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
             UserAddress userAddress = null;
             if (userAddressId != -1) {
-                userAddress = userService.checkUserAddressId(userAddressId);
+                userAddress = memberService.checkUserAddressId(userAddressId);
                 if (userAddress == null) {
                     return JsonReturnUtil.getJsonReturn(37002, "地址[" + userAddressId + "]不存在");
                 }

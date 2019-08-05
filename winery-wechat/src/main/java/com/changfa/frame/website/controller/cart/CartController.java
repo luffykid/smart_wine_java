@@ -6,10 +6,10 @@ import com.changfa.frame.data.dto.wechat.NewProdListDTO;
 import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
 import com.changfa.frame.data.entity.prod.Prod;
 import com.changfa.frame.data.entity.prod.ProdProdSpec;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.service.cart.CartService;
 import com.changfa.frame.service.theme.ThemeService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @RequestMapping(value = "/addCart", method = RequestMethod.POST)
     public String addCart(@RequestBody Map<String, Object> map) {
@@ -45,7 +45,7 @@ public class CartController {
             String token = map.get("token").toString();
             Integer prodId = Integer.valueOf(map.get("prodId").toString());
             Integer amount = Integer.valueOf(map.get("amount").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -77,7 +77,7 @@ public class CartController {
         try {
             log.info("购物车列表：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "],请重新登录");
             }
@@ -98,7 +98,7 @@ public class CartController {
         try {
             log.info("我的购物车数量：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -122,7 +122,7 @@ public class CartController {
             log.info("购物车点击结算：" + "token:" + map);
             String token = map.get("token").toString();
             List<Integer> cartId = (List<Integer>) map.get("cartId");
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -145,7 +145,7 @@ public class CartController {
             String token = map.get("token").toString();
             Integer prodId = (Integer) map.get("prodId");
             Integer amount = (Integer) map.get("amount");
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -168,7 +168,7 @@ public class CartController {
             String token = map.get("token").toString();
             BigDecimal price = new BigDecimal(Double.valueOf(map.get("price").toString()));
             List<Integer> prodIds = (List<Integer>) map.get("prodIds");
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -191,7 +191,7 @@ public class CartController {
             String token = map.get("token").toString();
             BigDecimal price = new BigDecimal(Double.valueOf(map.get("price").toString()));
             List<Integer> prodIds = (List<Integer>) map.get("prodIds");
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -220,7 +220,7 @@ public class CartController {
             String token = map.get("token").toString();
             Integer quantity = Integer.valueOf(map.get("quantity").toString());
             Integer cartId = Integer.valueOf(map.get("cartId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -238,7 +238,7 @@ public class CartController {
             log.info("删除购物车：" + "token:" + map);
             String token = map.get("token").toString();
             Integer cartId = Integer.valueOf(map.get("cartId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }

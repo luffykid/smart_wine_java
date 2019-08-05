@@ -2,16 +2,11 @@ package com.changfa.frame.website.controller.user;
 
 import com.changfa.frame.data.dto.operate.DistributorDTO;
 import com.changfa.frame.data.dto.saas.AdminDTO;
-import com.changfa.frame.data.dto.saas.LevelDTO;
-import com.changfa.frame.data.dto.saas.MemberListDTO;
-import com.changfa.frame.data.dto.saas.OrderListDTO;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberLevel;
-import com.changfa.frame.data.entity.user.MemberUser;
 import com.changfa.frame.data.entity.user.Role;
 import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.user.MemberUserService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberWechatService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.wine.WineService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
@@ -19,12 +14,10 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -41,9 +34,9 @@ public class AdminUserController {
     @Autowired
     private AdminUserService adminUserService;
     @Autowired
-    private MemberUserService memberUserService;
+    private MemberWechatService memberWechatService;
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
     @Autowired
     private WineService wineService;
 
@@ -186,7 +179,7 @@ public class AdminUserController {
             if (adminUserByToken == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到token" + token);
             } else {
-                List<DistributorDTO> DistributorDTOs  = userService.distributorList(search);
+                List<DistributorDTO> DistributorDTOs  = memberService.distributorList(search);
                 return JsonReturnUtil.getJsonObjectReturn(0, "", "", DistributorDTOs).toString();
             }
         } catch (Exception e) {
@@ -205,7 +198,7 @@ public class AdminUserController {
             if (adminUserByToken == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到操作人token" + token);
             }else {
-                userService.examineDistributor(distributorId, status);
+                memberService.examineDistributor(distributorId, status);
                 if(status==1){
                     return JsonReturnUtil.getJsonIntReturn(0, "审核通过" );
                 }else{

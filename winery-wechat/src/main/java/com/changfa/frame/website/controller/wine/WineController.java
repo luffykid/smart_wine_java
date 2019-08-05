@@ -1,7 +1,7 @@
 package com.changfa.frame.website.controller.wine;
 
-import com.changfa.frame.data.entity.user.User;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.wine.WineService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class WineController {
     private static Logger log = LoggerFactory.getLogger(WineController.class);
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private WineService wineService;
@@ -28,11 +28,11 @@ public class WineController {
         try {
             log.info("酒流水：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
-            Map<String,Object> list = wineService.getWineDetailW(user.getId());
+            Map<String,Object> list = wineService.getWineDetailW(Integer.valueOf(user.getId().toString()));
             if (list!=null && list.size()>0) {
                 return JsonReturnUtil.getJsonObjectReturn(0, "200", "操作成功",list).toString();
             } else {

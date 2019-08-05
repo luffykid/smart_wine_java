@@ -8,8 +8,8 @@ import com.changfa.frame.data.entity.cart.Cart;
 import com.changfa.frame.data.entity.cart.CartPerform;
 import com.changfa.frame.data.entity.deposit.UserBalance;
 import com.changfa.frame.data.entity.prod.*;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.entity.user.UserAddress;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
@@ -17,13 +17,12 @@ import com.changfa.frame.data.repository.cart.CartPerformRepository;
 import com.changfa.frame.data.repository.cart.CartRepository;
 import com.changfa.frame.data.repository.deposit.UserBalanceRepository;
 import com.changfa.frame.data.repository.prod.*;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.data.repository.user.UserAddressRepository;
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
 import com.changfa.frame.service.PicturePathUntil;
 import com.changfa.frame.service.dict.DictService;
-import com.sun.xml.bind.v2.TODO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,7 @@ public class CartService {
     @Autowired
     private ProdPriceLevelRepository prodPriceLevelRepository;
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
     @Autowired
     private ProdStockRepository prodStockRepository;
     @Autowired
@@ -75,13 +74,13 @@ public class CartService {
     @Autowired
     private UserBalanceRepository userBalanceRepository;
 
-    public BigDecimal addCart(User user, Prod prod, ProdProdSpec prodSpec, Integer amount) {
+    public BigDecimal addCart(Member user, Prod prod, ProdProdSpec prodSpec, Integer amount) {
         //加入购物车
-        Cart cart = cartRepository.findByUserIdAndProdIdAndSpecId(user.getId(), prod.getId(), prodSpec.getProdSpecId());
+        Cart cart = cartRepository.findByUserIdAndProdIdAndSpecId(Integer.valueOf(user.getId().toString()), prod.getId(), prodSpec.getProdSpecId());
         if (cart == null) {
             cart = new Cart();
-            cart.setWineryId(user.getWineryId());
-            cart.setUserId(user.getId());
+            cart.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+            cart.setUserId(Integer.valueOf(user.getId().toString()));
             cart.setProdId(prod.getId());
             cart.setProdSpecId(prodSpec.getProdSpecId());
             cart.setAmount(amount);
@@ -102,8 +101,8 @@ public class CartService {
         return cartCount(user);
     }
 
-    public List<NewProdListDTO> cartList(User user) {
-        List<Cart> list = cartRepository.findByUserId(user.getId());
+    public List<NewProdListDTO> cartList(Member user) {
+        List<Cart> list = cartRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         List<NewProdListDTO> newProdLists = new ArrayList<>();
         for (Cart cart : list) {
             newProdLists.addAll(getNewProdList(cart));
@@ -128,9 +127,9 @@ public class CartService {
                 }
             } else {
                 if (prod.getMemberDiscount().equals("Y")) {
-                    MemberUser user1 = memberUserRepository.findByUserId(cart.getUserId());
+                    MemberWechat user1 = memberWechatRepository.findByMbrId(cart.getUserId());
                     if (user1 != null) {
-                        ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                        ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                         if (levelList != null) {
 //                            cartItem.setPrice(String.valueOf(Constant.decimalFormat(price.getFinalPrice().multiply(levelList.getDiscount()))));
                             //TODO 不计算了，直接取出客户输入优惠后的价格
@@ -167,10 +166,10 @@ public class CartService {
         return newProdLists;
     }
 
-    public CartSettlementDTO cartSettlement(User user, List<Integer> cartId) {
+    public CartSettlementDTO cartSettlement(Member user, List<Integer> cartId) {
         CartSettlementDTO cartSettlement = new CartSettlementDTO();
         List<NewProdListDTO> newProdLists = new ArrayList<>();
-        UserAddress address = userAddressRepository.findDefaultAddressByUserId(user.getId());
+        UserAddress address = userAddressRepository.findDefaultAddressByUserId(Integer.valueOf(user.getId().toString()));
         cartSettlement.setToken(user.getToken());
         if (address != null) {
             cartSettlement.setUserAddressId(address.getId());
@@ -203,7 +202,7 @@ public class CartService {
             cartSettlement.setVoucherName(map);
         }
         cartSettlement.setNewProdLists(newProdLists);
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         cartSettlement.setBalance(userBalance.getBalance());
         return cartSettlement;
     }
@@ -212,14 +211,14 @@ public class CartService {
         return cartRepository.findByCartIds(cartIds);
     }
 
-    public BigDecimal cartCount(User user) {
-        return cartRepository.findMyCartCount(user.getId());
+    public BigDecimal cartCount(Member user) {
+        return cartRepository.findMyCartCount(Integer.valueOf(user.getId().toString()));
     }
 
-    public CartSettlementDTO directBuy(User user, Integer prodId, Integer amount) {
+    public CartSettlementDTO directBuy(Member user, Integer prodId, Integer amount) {
         CartSettlementDTO cartSettlement = new CartSettlementDTO();
         List<NewProdListDTO> newProdLists = new ArrayList<>();
-        UserAddress address = userAddressRepository.findDefaultAddressByUserId(user.getId());
+        UserAddress address = userAddressRepository.findDefaultAddressByUserId(Integer.valueOf(user.getId().toString()));
         cartSettlement.setToken(user.getToken());
         if (address != null) {
             cartSettlement.setUserAddressId(address.getId());
@@ -244,9 +243,9 @@ public class CartService {
                     cartSettlement.setTotalPoint("0");
                 }
             } else if (prod.getMemberDiscount().equals("Y")) {
-                MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                 if (user1 != null) {
-                    ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                    ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                     if (levelList != null) {
 //                        cartItem.setPrice(String.valueOf(Constant.decimalFormat(price.getFinalPrice().multiply(levelList.getDiscount()))));
                         //TODO 不计算了，直接取出客户输入优惠后的价格
@@ -289,12 +288,12 @@ public class CartService {
         cartItem.setProdId(prodId);
         newProdLists.add(cartItem);
         cartSettlement.setNewProdLists(newProdLists);
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         cartSettlement.setBalance(userBalance.getBalance());
         return cartSettlement;
     }
 
-    public VoucherInstDTO getVoucherInstDTO(VoucherInst voucherInst, User user) {
+    public VoucherInstDTO getVoucherInstDTO(VoucherInst voucherInst, Member user) {
         VoucherInstDTO voucherInstDTO = new VoucherInstDTO();
         voucherInstDTO.setName(voucherInst.getName());
         if (voucherInst.getType().equals("G")) {
@@ -305,7 +304,7 @@ public class CartService {
         voucherInstDTO.setScope(voucherInst.getScope());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         voucherInstDTO.setUsefulTime(formatter.format(voucherInst.getIneffectiveTime()));
-        UserVoucher voucher = userVoucherRepository.findByVoucherInstIdAndUserId(voucherInst.getId(), user.getId());
+        UserVoucher voucher = userVoucherRepository.findByVoucherInstIdAndUserId(voucherInst.getId(), Integer.valueOf(user.getId().toString()));
         if (voucher != null) {
             voucherInstDTO.setVoucherInstId(voucher.getId());
         }
@@ -319,9 +318,9 @@ public class CartService {
             Double price1 = price.getFinalPrice().doubleValue();
             Prod prod = prodRepository.getOne(voucherInst.getExchangeProdId());
             if (prod != null && prod.getMemberDiscount().equals("Y")) {
-                MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                 if (user1 != null) {
-                    ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                    ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                     if (level != null) {
                         if (level != null) {
 //                            price1 = price.getFinalPrice().doubleValue() * level.getDiscount().doubleValue();
@@ -348,8 +347,8 @@ public class CartService {
      * @Date          2018/10/31 17:32
      * @Description
      * */
-    public List<VoucherInstDTO> findOfflineVoucherListCanUse(User user, BigDecimal price, List<Integer> prodIds) {
-        List<UserVoucher> userVoucherList = userVoucherRepository.findEffective(user.getId());
+    public List<VoucherInstDTO> findOfflineVoucherListCanUse(Member user, BigDecimal price, List<Integer> prodIds) {
+        List<UserVoucher> userVoucherList = userVoucherRepository.findEffective(Integer.valueOf(user.getId().toString()));
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (UserVoucher userVoucher : userVoucherList) {
@@ -375,7 +374,7 @@ public class CartService {
     }
 
     //最大券
-    public Map<String, Object> findOfflineMaxVoucherCanUse(User user, BigDecimal price, List<Integer> prodIds) {
+    public Map<String, Object> findOfflineMaxVoucherCanUse(Member user, BigDecimal price, List<Integer> prodIds) {
         Map<String, Object> map = new HashMap<>();
 //        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
 //        map.put("userBalance", userBalance.getBalance());

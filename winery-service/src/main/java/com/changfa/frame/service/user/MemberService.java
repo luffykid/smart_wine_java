@@ -3,7 +3,6 @@ package com.changfa.frame.service.user;
 import com.aliyuncs.exceptions.ClientException;
 import com.changfa.frame.core.util.Constant;
 import com.changfa.frame.data.dto.operate.DistributorDTO;
-import com.changfa.frame.data.dto.saas.AdminDTO;
 import com.changfa.frame.data.dto.wechat.UserDTO;
 import com.changfa.frame.data.entity.deposit.UserBalance;
 import com.changfa.frame.data.entity.market.MarketActivity;
@@ -42,14 +41,13 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,18 +62,18 @@ import java.util.*;
  * */
 
 @Service
-public class UserService {
+public class MemberService {
 
-    private static Logger log = LoggerFactory.getLogger(UserService.class);
-
-    @Autowired
-    private UserRepository userRepository;
+    private static Logger log = LoggerFactory.getLogger(MemberService.class);
 
     @Autowired
-    private MemberUserService memberUserService;
+    private MemberRepository memberRepository;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatService memberWechatService;
+
+    @Autowired
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
     private UserBalanceRepository userBalanceRepository;
@@ -150,8 +148,8 @@ public class UserService {
      * @Date          2018/10/15 9:24
      * @Description
      * */
-    public User checkToken(String token) {
-        return userRepository.findByToken(token);
+    public Member checkToken(String token) {
+        return memberRepository.findByToken(token);
     }
 
 
@@ -161,16 +159,16 @@ public class UserService {
      * @Date          2018/10/15 12:26
      * @Description
      * */
-    public UserDTO getUserInfo(User user) {
-        MemberUser memberUser = memberUserService.findByUserId(user.getId());
+    public UserDTO getUserInfo(Member user) {
+        MemberWechat memberUser = memberWechatService.findByUserId(Integer.valueOf(user.getId().toString()));
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getId());
+        userDTO.setUserId(Integer.valueOf(user.getId().toString()));
         if (user.getUserIcon() != null) {
             userDTO.setUserIcon((user.getUserIcon().startsWith("/")) ? (Constant.XINDEQI_ICON_PATH.concat(user.getUserIcon())) : user.getUserIcon());
         }
         userDTO.setNickName(EmojiParser.parseToUnicode(EmojiParser.parseToHtmlDecimal(memberUser.getNickName())));
         userDTO.setPhone(user.getPhone());
-        userDTO.setName(user.getName());
+        userDTO.setName(user.getNickName());
         if (memberUser != null) {
             userDTO.setAge(memberUser.getAge());
             userDTO.setSex(memberUser.getSex());
@@ -189,11 +187,11 @@ public class UserService {
      * @Date          2018/10/16 9:35
      * @Description
      * */
-    public Boolean updateUserInfo(User user, Map<String, Object> map) throws ParseException {
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+    public Boolean updateUserInfo(Member user, Map<String, Object> map) throws ParseException {
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         if (map.get("name") != null && !map.get("name").equals("")) {
             String name = map.get("name").toString();
-            user.setName(name);
+            user.setNickName(name);
         }
         if (map.get("sex") != null && !map.get("sex").equals("")) {
             String sex = map.get("sex").toString();
@@ -212,16 +210,16 @@ public class UserService {
             DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             memberUser.setBirthday(sdf.parse(birthday));
         }
-        memberUserRepository.saveAndFlush(memberUser);
-        userRepository.saveAndFlush(user);
+        memberWechatRepository.saveAndFlush(memberUser);
+        memberRepository.saveAndFlush(user);
         return true;
     }
 
-    public UserDTO memberInfo(User user) {
+    public UserDTO memberInfo(Member user) {
         Map<String, Object> mapResult = new HashMap<>();
         BigDecimal price = new BigDecimal(0);
         Integer quantity = 0;
-        List<UserWine> userWineList = userWineRepository.findByUserId(user.getId());
+        List<UserWine> userWineList = userWineRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         if (userWineList != null && userWineList.size() > 0) {
             for (UserWine userWine : userWineList) {
                 quantity += userWine.getQuantity();
@@ -231,21 +229,21 @@ public class UserService {
                 }
             }
         }
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         UserDTO userDTO = new UserDTO();
         userDTO.setWinePrice(price);
         userDTO.setWineQuantity(quantity);
         userDTO.setName(EmojiParser.parseToUnicode(EmojiParser.parseToHtmlDecimal(memberUser.getNickName())));
-        MemberLevel memberLevel = memberLevelRepository.findMemberLevelById(memberUser.getMemberLevelId());
+        MemberLevel memberLevel = memberLevelRepository.findMemberLevelById(memberUser.getMemberLevel());
         if (memberLevel != null) {
             userDTO.setLevel(memberLevel.getName());
         }
-        userDTO.setBalance(userBalanceRepository.findByUserId(user.getId()).getBalance());
+        userDTO.setBalance(userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString())).getBalance());
         if (user.getUserIcon() != null) {
             userDTO.setUserIcon((user.getUserIcon().startsWith("/")) ? (Constant.XINDEQI_ICON_PATH.concat(user.getUserIcon())) : user.getUserIcon());
         }
-        userDTO.setPoint(userPointRepository.findByUserId(user.getId()).getPoint());
-        userDTO.setVoucherNum(userVoucherRepository.findUserVoucherSum(user.getId()));
+        userDTO.setPoint(userPointRepository.findByUserId(Integer.valueOf(user.getId().toString())).getPoint());
+        userDTO.setVoucherNum(userVoucherRepository.findUserVoucherSum(Integer.valueOf(user.getId().toString())));
         return userDTO;
     }
 
@@ -271,10 +269,10 @@ public class UserService {
         System.out.print(openId);
         System.out.println(jsonObject);
         System.out.println(appId);
-        User user = userRepository.findByOpenId(openId);
+        Member user = memberRepository.findByOpenId(openId);
         if (user == null) {
-            User firstUser = new User();
-            MemberUser memberUser = new MemberUser();
+            Member firstUser = new Member();
+            MemberWechat memberUser = new MemberWechat();
             if (map.get("nickName") != null) {
                 memberUser.setNickName(EmojiParser.parseToAliases(map.get("nickName").toString()));
             }
@@ -290,35 +288,35 @@ public class UserService {
             firstUser.setStatus("A");
             firstUser.setStatusTime(new Date());
             firstUser.setCreateTime(new Date());
-            firstUser.setWineryId(wineryConfigure.getWineryId());
-            User userSave = userRepository.saveAndFlush(firstUser);
-            memberUser.setUserId(userSave.getId());
+            firstUser.setWineryId(wineryConfigure.getWineryId().longValue());
+            Member userSave = memberRepository.saveAndFlush(firstUser);
+            memberUser.setMbrId(Integer.valueOf(userSave.getId().toString()));
             List<MemberLevel> memberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(wineryConfigure.getWineryId(), "A");
-            memberUser.setMemberLevelId(memberLevelList.get(0).getId());
-            MemberUser memberUserSave = memberUserRepository.saveAndFlush(memberUser);
+            memberUser.setMemberLevel(memberLevelList.get(0).getId());
+            MemberWechat memberUserSave = memberWechatRepository.saveAndFlush(memberUser);
             //首次登录添加积分记录
             UserPoint userPoint = new UserPoint();
             userPoint.setPoint(0);
-            userPoint.setUserId(userSave.getId());
+            userPoint.setUserId(Integer.valueOf(userSave.getId().toString()));
             userPoint.setWineryId(wineryConfigure.getWineryId());
             userPoint.setUpdateTime(new Date());
             userPointRepository.save(userPoint);
             //添加经验值
             UserExperience userExperience = new UserExperience();
-            userExperience.setUserId(userSave.getId());
+            userExperience.setUserId(Integer.valueOf(userSave.getId().toString()));
             userExperience.setExperience(0);
             userExperience.setUpdateTime(new Date());
             userExperienceRepository.saveAndFlush(userExperience);
             //储值
             UserBalance userBalance = new UserBalance();
-            userBalance.setUserId(userSave.getId());
+            userBalance.setUserId(Integer.valueOf(userSave.getId().toString()));
             userBalance.setBalance(new BigDecimal(0));
             userBalance.setWineryId(wineryConfigure.getWineryId());
             userBalance.setUpdateTime(new Date());
             userBalanceRepository.saveAndFlush(userBalance);
             UserDTO userDTO = new UserDTO();
             userDTO.setToken(userSave.getToken());
-            userDTO.setWineryId(userSave.getWineryId());
+            userDTO.setWineryId(Integer.valueOf(userSave.getId().toString()));
             userDTO.setOpenId(openId);
             //添加用户登录日志
             log.info("营销活动新会员赠券");
@@ -339,7 +337,7 @@ public class UserService {
             return userDTO;
         } else {
             UserDTO userDTO = new UserDTO();
-            userDTO.setWineryId(user.getWineryId());
+            userDTO.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             userDTO.setToken(user.getToken());
             userDTO.setOpenId(user.getOpenId());
             return userDTO;
@@ -366,8 +364,8 @@ public class UserService {
      * @Date          2018/11/5 16:25
      * @Description
      * */
-    public Map<String, Object> userLogin(User user) {
-        PointLoginRule pointLoginRule = pointLoginRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+    public Map<String, Object> userLogin(Member user) {
+        PointLoginRule pointLoginRule = pointLoginRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
         if (pointLoginRule != null) {
             if (pointLoginRule.getIsLongTime().equals("Y")) {
                 Map map = login(user, pointLoginRule.getId());
@@ -382,8 +380,8 @@ public class UserService {
         return null;
     }
 
-    public Map<String, Object> getUserLogin(User user) {
-        PointLoginRule pointLoginRule = pointLoginRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+    public Map<String, Object> getUserLogin(Member user) {
+        PointLoginRule pointLoginRule = pointLoginRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Map<String, Object> map = new HashMap<>();
         if (pointLoginRule != null) {
@@ -397,7 +395,7 @@ public class UserService {
                         map.put("userLoginDetail", dataList);
                     }
                 }
-                List<UserLoginDetail> userLoginDetail = userLoginDetailRepository.findByUserIdAndCreateTime(user.getId());
+                List<UserLoginDetail> userLoginDetail = userLoginDetailRepository.findByUserIdAndCreateTime(Integer.valueOf(user.getId().toString()));
                 if (userLoginDetail == null || userLoginDetail.size() == 0) {
                     map.put("isLogin", "Y");
                 } else {
@@ -409,7 +407,7 @@ public class UserService {
                     if (dataList != null && dataList.size() > 0 && dataList.size() < 7) {
                         map.put("userLoginDetail", dataList);
                     }
-                    List<UserLoginDetail> userLoginDetail = userLoginDetailRepository.findByUserIdAndCreateTime(user.getId());
+                    List<UserLoginDetail> userLoginDetail = userLoginDetailRepository.findByUserIdAndCreateTime(Integer.valueOf(user.getId().toString()));
                     if (userLoginDetail == null || userLoginDetail.size() == 0) {
                         map.put("isLogin", "Y");
                     } else {
@@ -422,8 +420,8 @@ public class UserService {
     }
 
 
-    public List<Map<String, Object>> userLoginDetail(User user) {
-        List<UserLoginDetail> userLoginDetailList = userLoginDetailRepository.findByUserIdOrderByCreateTimeDesc(user.getId());
+    public List<Map<String, Object>> userLoginDetail(Member user) {
+        List<UserLoginDetail> userLoginDetailList = userLoginDetailRepository.findByUserIdOrderByCreateTimeDesc(Integer.valueOf(user.getId().toString()));
         if (userLoginDetailList != null) {
             List<Map<String, Object>> dateList = new ArrayList<>();
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -448,17 +446,17 @@ public class UserService {
      * @Date          2018/11/8 16:28
      * @Description
      * */
-    public Map<String, Object> login(User user, Integer pointLoginRuleId) {
+    public Map<String, Object> login(Member user, Integer pointLoginRuleId) {
         Map<String, Object> map = new HashMap<>();
-        UserLoginDetail userLoginDetail = userLoginDetailRepository.findByUserIdAndMaxTime(user.getId());
+        UserLoginDetail userLoginDetail = userLoginDetailRepository.findByUserIdAndMaxTime(Integer.valueOf(user.getId().toString()));
         if (userLoginDetail != null) {
             if (userLoginDetail.getDay() == 7) {
                 PointLoginRuleDetail pointLoginRuleDetail = pointLoginRuleDetailRepository.findByPointLoginRuleIdAndDay(pointLoginRuleId, 1);
                 if (pointLoginRuleDetail != null) {
                     UserLoginDetail userLoginDetailLogin = new UserLoginDetail();
                     userLoginDetailLogin.setDay(1);
-                    userLoginDetailLogin.setUserId(user.getId());
-                    userLoginDetailLogin.setWineryId(user.getWineryId());
+                    userLoginDetailLogin.setUserId(Integer.valueOf(user.getId().toString()));
+                    userLoginDetailLogin.setWineryId(Integer.valueOf(user.getWineryId().toString()));
                     userLoginDetailLogin.setCreateTime(new Date());
                     UserLoginDetail userLoginDetailSave = userLoginDetailRepository.saveAndFlush(userLoginDetailLogin);
                     map.put("day", userLoginDetailSave.getDay());
@@ -471,8 +469,8 @@ public class UserService {
                 if (pointLoginRuleDetail != null) {
                     UserLoginDetail userLoginDetailLogin = new UserLoginDetail();
                     userLoginDetailLogin.setDay(userLoginDetail.getDay() + 1);
-                    userLoginDetailLogin.setUserId(user.getId());
-                    userLoginDetailLogin.setWineryId(user.getWineryId());
+                    userLoginDetailLogin.setUserId(Integer.valueOf(user.getId().toString()));
+                    userLoginDetailLogin.setWineryId(Integer.valueOf(user.getWineryId().toString()));
                     userLoginDetailLogin.setCreateTime(new Date());
                     UserLoginDetail userLoginDetailSave = userLoginDetailRepository.saveAndFlush(userLoginDetailLogin);
                     map.put("day", userLoginDetailSave.getDay());
@@ -486,8 +484,8 @@ public class UserService {
             if (pointLoginRuleDetail != null) {
                 UserLoginDetail userLoginDetailLogin = new UserLoginDetail();
                 userLoginDetailLogin.setDay(1);
-                userLoginDetailLogin.setUserId(user.getId());
-                userLoginDetailLogin.setWineryId(user.getWineryId());
+                userLoginDetailLogin.setUserId(Integer.valueOf(user.getId().toString()));
+                userLoginDetailLogin.setWineryId(Integer.valueOf(user.getWineryId().toString()));
                 userLoginDetailLogin.setCreateTime(new Date());
                 UserLoginDetail userLoginDetailSave = userLoginDetailRepository.saveAndFlush(userLoginDetailLogin);
                 map.put("day", userLoginDetailSave.getDay());
@@ -505,11 +503,11 @@ public class UserService {
      * @Date          2018/12/7 15:06
      * @Description
      * */
-    public void userLoginLog(User user) {
+    public void userLoginLog(Member user) {
         UserLoginLog userLoginLog = new UserLoginLog();
         userLoginLog.setToken(user.getToken());
-        userLoginLog.setUserId(user.getId());
-        userLoginLog.setWineryId(user.getWineryId());
+        userLoginLog.setUserId(Integer.valueOf(user.getId().toString()));
+        userLoginLog.setWineryId(Integer.valueOf(user.getWineryId().toString()));
         userLoginLog.setLoginTime(new Date());
         userLoginLog.setStatus("A");
         userLoginLogRepository.saveAndFlush(userLoginLog);
@@ -567,10 +565,10 @@ public class UserService {
     }
 
     public Boolean findUserPhone(String phone, Integer wineryId, Integer userId) {
-        List<User> userList = userRepository.findUserByPhone(phone);
+        List<Member> userList = memberRepository.findUserByPhone(phone);
         if (userId != null) {
             if (userList != null && userList.size() > 0) {
-                for (User user : userList) {
+                for (Member user : userList) {
                     if (user.getId().equals(userId)) {
                         return true;
                     }
@@ -588,10 +586,10 @@ public class UserService {
     }
 
 
-    public Boolean findUserByPhoneW(User user, String phone) {
-        List<User> userList = userRepository.findUserByPhoneAndWinery(phone, user.getWineryId());
+    public Boolean findUserByPhoneW(Member user, String phone) {
+        List<Member> userList = memberRepository.findUserByPhoneAndWinery(phone, user.getWineryId());
         if (userList != null && userList.size() > 0) {
-            for (User userOne : userList) {
+            for (Member userOne : userList) {
                 if (userOne.getOpenId() != null) {
                     if (userOne.getOpenId().equals(user.getOpenId())) {
                         return true;
@@ -604,12 +602,12 @@ public class UserService {
     }
 
     public Map<String, Object> getUserDetail(Integer userId) {
-        User user = userRepository.getOne(userId);
+        Member user = memberRepository.getOne(userId);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        MemberUser memberUser = memberUserRepository.findByUserId(userId);
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(userId);
         Map<String, Object> map = new HashMap<>();
         map.put("id", user.getId());
-        map.put("name", user.getName());
+        map.put("name", user.getNickName());
         map.put("phone", user.getPhone());
         map.put("sex", memberUser.getSex());
         map.put("birthday", memberUser.getBirthday() == null ? null : format.format(memberUser.getBirthday()));
@@ -630,13 +628,13 @@ public class UserService {
             }
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        User user = userRepository.getOne(userId);
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+        Member user = memberRepository.getOne(userId);
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         if (phone != null && !phone.equals("")) {
             user.setPhone(phone);
         }
         if (name != null && !name.equals("")) {
-            user.setName(name);
+            user.setNickName(name);
         }
         if (user.getOpenId() == null) {
             memberUser.setNickName(name);
@@ -650,8 +648,8 @@ public class UserService {
         if (idNo != null && !idNo.equals("")) {
             memberUser.setIdNo(idNo);
         }
-        userRepository.saveAndFlush(user);
-        memberUserRepository.saveAndFlush(memberUser);
+        memberRepository.saveAndFlush(user);
+        memberWechatRepository.saveAndFlush(memberUser);
         if(activationCodeSMS!=null) {
             activationCodeSMS.setStatus("U");
             activationCodeRepository.saveAndFlush(activationCodeSMS);
@@ -659,7 +657,7 @@ public class UserService {
         return "成功";
     }
 
-    public String addPhone(String phone, String code, User user) {
+    public String addPhone(String phone, String code, Member user) {
         ActivationCodeSMS activationCodeSMS = activationCodeRepository.findByPhoneAndType(phone, "N");
         if (activationCodeSMS == null || !activationCodeSMS.getCode().equals(code)) {
             return "验证码错误";
@@ -669,23 +667,23 @@ public class UserService {
                 return "验证码失效";
             }
         }
-        User userPhone = userRepository.findOneByPhone(phone, user.getWineryId());
+        Member userPhone = memberRepository.findOneByPhone(phone, user.getWineryId());
         if (userPhone != null) {
             if (userPhone.getOpenId() == null || userPhone.getOpenId().equals("")) {
-                MemberUser memberUserW = memberUserRepository.findByUserId(user.getId());
-                UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
-                UserPoint userPoint = userPointRepository.findByUserId(user.getId());
-                UserExperience userExperience = userExperienceRepository.findByUserId(user.getId());
+                MemberWechat memberUserW = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
+                UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
+                UserPoint userPoint = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
+                UserExperience userExperience = userExperienceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
                 userPhone.setOpenId(user.getOpenId());
                 userPhone.setUserIcon(user.getUserIcon());
                 userPhone.setToken(user.getToken());
-                userRepository.saveAndFlush(userPhone);
-                MemberUser memberUser = memberUserRepository.findByUserId(userPhone.getId());
+                memberRepository.saveAndFlush(userPhone);
+                MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(userPhone.getId().toString()));
                 memberUser.setSex(memberUserW.getSex());
                 memberUser.setNickName(memberUserW.getNickName());
-                memberUserRepository.saveAndFlush(memberUser);
-                userRepository.delete(user);
-                memberUserRepository.delete(memberUserW);
+                memberWechatRepository.saveAndFlush(memberUser);
+                memberRepository.delete(user);
+                memberWechatRepository.delete(memberUserW);
                 userBalanceRepository.delete(userBalance);
                 userPointRepository.delete(userPoint);
                 userExperienceRepository.delete(userExperience);
@@ -696,14 +694,14 @@ public class UserService {
             if (user != null) {
                 activationCodeSMS.setStatus("U");
                 user.setPhone(phone);
-                userRepository.saveAndFlush(user);
+                memberRepository.saveAndFlush(user);
                 activationCodeRepository.saveAndFlush(activationCodeSMS);
             }
         }
         return "成功";
     }
 
-    public Boolean getIsLogin(User user) {
+    public Boolean getIsLogin(Member user) {
         if (user.getPhone() != null && !user.getPhone().equals("")) {
             return true;
         }
@@ -714,8 +712,8 @@ public class UserService {
 
 
 	//检测分销员身份
-	public Distributor checkDistributor(User user) {
-		Distributor distributor =  distributorRepository.findByWineryIdAndUserId(user.getWineryId(), user.getId());
+	public Distributor checkDistributor(Member user) {
+		Distributor distributor =  distributorRepository.findByWineryIdAndUserId(Integer.valueOf(user.getWineryId().toString()), Integer.valueOf(user.getId().toString()));
 		if(distributor != null){
 			return distributor;
 		}else{
@@ -758,8 +756,8 @@ public class UserService {
 
 
     //根据姓名校验分销员
-	public boolean checkName(User user, String name){
-		Distributor distributor =  distributorRepository.findByWineryIdAndName(user.getWineryId(), name);
+	public boolean checkName(Member user, String name){
+		Distributor distributor =  distributorRepository.findByWineryIdAndName(Integer.valueOf(user.getWineryId().toString()), name);
 		if (null != distributor && !org.apache.commons.lang.StringUtils.isNotBlank(distributor.getName())) {
 			return false;
 		} else {
@@ -769,13 +767,13 @@ public class UserService {
 
 
 	//申请分销员
-	public void applyDistributor(User user, String name, String idCard, List<String> photos){
+	public void applyDistributor(Member user, String name, String idCard, List<String> photos){
 		//分销员表
-		Distributor distributor =  distributorRepository.findByWineryIdAndUserId(user.getWineryId(), user.getId());
+		Distributor distributor =  distributorRepository.findByWineryIdAndUserId(Integer.valueOf(user.getWineryId().toString()), Integer.valueOf(user.getId().toString()));
 		if(distributor == null ){
 			distributor = new Distributor();
-			distributor.setWineryId(user.getWineryId());
-			distributor.setUserId(user.getId());
+			distributor.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+			distributor.setUserId(Integer.valueOf(user.getId().toString()));
 		}
 		distributor.setStatus(2);
 		distributor.setCreateTime(new Date());
@@ -784,7 +782,7 @@ public class UserService {
 		distributor.setIdCard(idCard);
 		distributorRepository.saveAndFlush(distributor);
 		//分销员认证资料表
-		distributorRepository.deleteByUserId(user.getId());
+		distributorRepository.deleteByUserId(Integer.valueOf(user.getId().toString()));
 		for(int i=0; i<photos.size(); i++){
 			DistributorData distributorData = new DistributorData();
 			distributorData.setDistributorId(distributor.getId());

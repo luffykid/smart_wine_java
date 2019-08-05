@@ -4,9 +4,9 @@ package com.changfa.frame.website.controller.theme;
 import com.changfa.frame.data.dto.wechat.*;
 import com.changfa.frame.data.entity.prod.Prod;
 import com.changfa.frame.data.entity.theme.Theme;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.service.theme.ThemeService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class ThemeController {
     private ThemeService themeService;
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     //获取当前商城活动主题轮播图
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -38,7 +38,7 @@ public class ThemeController {
         try {
             log.info("获取当前商城活动主题轮播图：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -60,10 +60,10 @@ public class ThemeController {
         try {
             log.info("点击主题轮播图跳详情：" + "token:" + map);
             Integer id = Integer.valueOf(map.get("id").toString());
-            User user = null;
+            Member user = null;
             if (map.get("token") != null && !map.get("token").equals("")) {
                 String token = map.get("token").toString();
-                user = userService.checkToken(token);
+                user = memberService.checkToken(token);
                 if (user == null) {
                     return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
                 }
@@ -90,10 +90,10 @@ public class ThemeController {
         try {
             log.info("商品详情页面：" + "token:" + map);
             Integer id = Integer.valueOf(map.get("id").toString());
-            User user = null;
+            Member user = null;
             if (map.get("token") != null && !map.get("token").equals("")) {
                 String token = map.get("token").toString();
-                user = userService.checkToken(token);
+                user = memberService.checkToken(token);
                 if (user == null) {
                     return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
                 }
@@ -120,7 +120,7 @@ public class ThemeController {
         try {
             log.info("推荐商品：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -142,7 +142,7 @@ public class ThemeController {
         try {
             log.info("推荐商品：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -164,7 +164,7 @@ public class ThemeController {
         try {
             log.info("热销商品：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -186,7 +186,7 @@ public class ThemeController {
         try {
             log.info("热销商品：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -211,7 +211,7 @@ public class ThemeController {
             String token = map.get("token").toString();
             String search = map.get("search").toString();
             String type = map.get("type").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -234,7 +234,7 @@ public class ThemeController {
             log.info("选择规格：" + "token:" + map);
             String token = map.get("token").toString();
             Integer prodId = Integer.valueOf(map.get("prodId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -256,7 +256,7 @@ public class ThemeController {
         try {
             log.info("酒旗星推荐商品：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }

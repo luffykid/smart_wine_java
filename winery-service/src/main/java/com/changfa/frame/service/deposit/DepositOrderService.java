@@ -10,12 +10,11 @@ import com.changfa.frame.data.entity.market.UserMarketActivity;
 import com.changfa.frame.data.entity.message.SmsTemp;
 import com.changfa.frame.data.entity.offline.OfflineOrder;
 import com.changfa.frame.data.entity.offline.OfflineOrderPrice;
-import com.changfa.frame.data.entity.offline.OfflineOrderVoucher;
 import com.changfa.frame.data.entity.order.OrderPay;
 import com.changfa.frame.data.entity.user.ActivationCodeSMS;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.entity.voucher.Voucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
@@ -28,19 +27,20 @@ import com.changfa.frame.data.repository.offline.OfflineOrderPriceRepository;
 import com.changfa.frame.data.repository.offline.OfflineOrderRepository;
 import com.changfa.frame.data.repository.order.OrderPayRepository;
 import com.changfa.frame.data.repository.user.ActivationCodeSMSRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
 import com.changfa.frame.data.repository.voucher.VoucherRepository;
 import com.changfa.frame.service.market.MarketActivityService;
 import com.changfa.frame.service.point.PointRewardRuleService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.util.SMSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -61,13 +61,13 @@ public class DepositOrderService {
     private UserBalanceRepository userBalanceRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private PointRewardRuleService pointRewardRuleService;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
     private MarketActivityService marketActivityService;
@@ -109,16 +109,16 @@ public class DepositOrderService {
     private SmsTempRepository smsTempRepository;
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
-    public DepositOrder addOrder(Map<String, Object> map, User user) {
+    public DepositOrder addOrder(Map<String, Object> map, Member user) {
         DepositOrder depositOrder = new DepositOrder();
-        depositOrder.setUserId(user.getId());
+        depositOrder.setUserId(Integer.valueOf(user.getId().toString()));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String tempUserId = String.format("%02d", user.getId());
         String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
         depositOrder.setOrderNo(format);
-        depositOrder.setWineryId(user.getWineryId());
+        depositOrder.setWineryId(Integer.valueOf(user.getWineryId().toString()));
         BigDecimal totalPrice = new BigDecimal(String.valueOf(map.get("price")));
         depositOrder.setTotalPrice(totalPrice);
         depositOrder.setFinalPrice(totalPrice);
@@ -138,7 +138,7 @@ public class DepositOrderService {
     public void paySuccess(String orderNo, Map<String, String> map) {
         //添加支付信息
         DepositOrder depositOrder = depositOrderRepository.findByOrderNo(orderNo);
-        User user = userRepository.getOne(depositOrder.getUserId());
+        Member user = memberRepository.getOne(depositOrder.getUserId());
         OrderPay orderPay = new OrderPay();
         orderPay.setOrderNo(orderNo);
         orderPay.setOrderId(depositOrder.getId());
@@ -177,7 +177,7 @@ public class DepositOrderService {
                         }
                     }
                 } else {
-                    DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+                    DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
                     if (depositRule != null) {
                         List<DepositRuleSpecDetail> depositRuleSpecDetailList = depositRuleSpecDetailRepository.findByDepositRuleId(depositRule.getId());
                         if (depositRuleSpecDetailList != null) {
@@ -212,7 +212,7 @@ public class DepositOrderService {
             }
         } else {
             //若没有自定义活动，则找储值活动
-            DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+            DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
             if (depositRule != null) {
                 List<DepositRuleSpecDetail> depositRuleSpecDetailList = depositRuleSpecDetailRepository.findByDepositRuleId(depositRule.getId());
                 if (depositRuleSpecDetailList != null) {
@@ -235,14 +235,14 @@ public class DepositOrderService {
         depositOrder.setStatusTime(new Date());
         depositOrderRepository.saveAndFlush(depositOrder);
         //修改用户储值
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         userBalance.setBalance(userBalance.getBalance().add(depositOrder.getTotalPrice()).add(sendMoney));
         userBalance.setUpdateTime(new Date());
         UserBalance updateUserBalance = userBalanceRepository.saveAndFlush(userBalance);
         //增加储值记录
         UserDepositDetail userDepositDetail = new UserDepositDetail();
-        userDepositDetail.setWineryId(user.getWineryId());
-        userDepositDetail.setUserId(user.getId());
+        userDepositDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        userDepositDetail.setUserId(Integer.valueOf(user.getId().toString()));
         userDepositDetail.setAction("D");
         userDepositDetail.setBalance(depositOrder.getTotalPrice());
         userDepositDetail.setBalanceType("A");
@@ -272,7 +272,7 @@ public class DepositOrderService {
                         ineffectiveTime = caIne.getTime();
                     }
                     //添加券实体
-                    VoucherInst voucherInst = new VoucherInst(user.getWineryId(), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
+                    VoucherInst voucherInst = new VoucherInst(Integer.valueOf(user.getWineryId().toString()), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
                     if (marketActivity != null) {
                         voucherInst.setComActivityType("M");
                         voucherInst.setComeActivityId(marketActivity.getId());
@@ -282,7 +282,7 @@ public class DepositOrderService {
                     VoucherInst voucherInstSave = voucherInstRepository.saveAndFlush(voucherInst);
                     //添加用户券记录
                     UserVoucher userVoucher = new UserVoucher();
-                    userVoucher.setUserId(user.getId());
+                    userVoucher.setUserId(Integer.valueOf(user.getId().toString()));
                     userVoucher.setCreateTime(new Date());
                     userVoucher.setVoucherInstId(voucherInstSave.getId());
                     userVoucher.setSendTime(new Date());
@@ -293,8 +293,8 @@ public class DepositOrderService {
                     //添加参加营销活动记录
                     if (marketActivity != null) {
                         UserMarketActivity userMarketActivity = new UserMarketActivity();
-                        userMarketActivity.setWineryId(user.getWineryId());
-                        userMarketActivity.setUserId(user.getId());
+                        userMarketActivity.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+                        userMarketActivity.setUserId(Integer.valueOf(user.getId().toString()));
                         userMarketActivity.setMarketActivityId(marketActivity.getId());
                         userMarketActivity.setSendMoney(sendMoney);
                         userMarketActivity.setSendVoucherId(voucherInstSave.getId());
@@ -318,12 +318,12 @@ public class DepositOrderService {
        /* TimeZone tz = TimeZone.getTimeZone("GMT+8");
         TimeZone.setDefault(tz);*/
         //校验手机号码在当前酒庄是否是会员 如果不是会员 提示“该手机号不是会员，请先添加会员”
-        List<User> userList = userRepository.findUserByPhoneAndWinery(phone, adminUser.getWineryId());
+        List<Member> userList = memberRepository.findUserByPhoneAndWinery(phone, adminUser.getWineryId().longValue());
         if(null == userList || userList.size()<=0){
             return "该手机号不是会员，请先添加会员";
         }
         if(null == userId && userList.size()>0){
-            userId = userList.get(0).getId();
+            userId = Integer.valueOf(userList.get(0).getId().toString());
         }
 
         Date date = new Date();
@@ -354,7 +354,7 @@ public class DepositOrderService {
         depositOrder.setDescri(descri);
         DepositOrder depositOrderSave = depositOrderRepository.saveAndFlush(depositOrder);
         //添加支付信息
-        User user = userRepository.getOne(depositOrderSave.getUserId());
+        Member user = memberRepository.getOne(depositOrderSave.getUserId());
         OrderPay orderPay = new OrderPay();
         orderPay.setOrderNo(depositOrderSave.getOrderNo());
         orderPay.setOrderId(depositOrderSave.getId());
@@ -389,7 +389,7 @@ public class DepositOrderService {
 
         } else {
             //若没有自定义活动，则找储值活动
-            DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+            DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
             if (depositRule != null) {
                 List<DepositRuleSpecDetail> depositRuleSpecDetailList = depositRuleSpecDetailRepository.findByDepositRuleId(depositRule.getId());
                 if (depositRuleSpecDetailList != null) {
@@ -421,8 +421,8 @@ public class DepositOrderService {
         UserBalance updateUserBalance = userBalanceRepository.saveAndFlush(userBalance);
         //增加储值记录
         UserDepositDetail userDepositDetail = new UserDepositDetail();
-        userDepositDetail.setWineryId(user.getWineryId());
-        userDepositDetail.setUserId(user.getId());
+        userDepositDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        userDepositDetail.setUserId(Integer.valueOf(user.getId().toString()));
         userDepositDetail.setAction("D");
         userDepositDetail.setBalance(depositOrderSave.getTotalPrice());
         userDepositDetail.setBalanceType("A");
@@ -452,7 +452,7 @@ public class DepositOrderService {
                         ineffectiveTime = caIne.getTime();
                     }
                     //添加券实体
-                    VoucherInst voucherInst = new VoucherInst(user.getWineryId(), voucher.getName(), voucher.getId(), formatt, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
+                    VoucherInst voucherInst = new VoucherInst(Integer.valueOf(user.getWineryId().toString()), voucher.getName(), voucher.getId(), formatt, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
                     if (marketActivity != null) {
                         voucherInst.setComActivityType("M");
                         voucherInst.setComeActivityId(marketActivity.getId());
@@ -462,7 +462,7 @@ public class DepositOrderService {
                     VoucherInst voucherInstSave = voucherInstRepository.saveAndFlush(voucherInst);
                     //添加用户券记录
                     UserVoucher userVoucher = new UserVoucher();
-                    userVoucher.setUserId(user.getId());
+                    userVoucher.setUserId(Integer.valueOf(user.getId().toString()));
                     userVoucher.setCreateTime(new Date());
                     userVoucher.setVoucherInstId(voucherInstSave.getId());
                     userVoucher.setSendTime(new Date());
@@ -473,8 +473,8 @@ public class DepositOrderService {
                     //添加参加营销活动记录
                     if (marketActivity != null) {
                         UserMarketActivity userMarketActivity = new UserMarketActivity();
-                        userMarketActivity.setWineryId(user.getWineryId());
-                        userMarketActivity.setUserId(user.getId());
+                        userMarketActivity.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+                        userMarketActivity.setUserId(Integer.valueOf(user.getId().toString()));
                         userMarketActivity.setMarketActivityId(marketActivity.getId());
                         userMarketActivity.setSendMoney(sendMoney);
                         userMarketActivity.setSendVoucherId(voucherInstSave.getId());
@@ -490,9 +490,9 @@ public class DepositOrderService {
 
         // 发送短信提醒
         if (user.getPhone() != null && !user.getPhone().equals("")) {
-            SmsTemp smsTemp = smsTempRepository.findByWineryIdAndContentLike(user.getWineryId(),"储值");
+            SmsTemp smsTemp = smsTempRepository.findByWineryIdAndContentLike(Integer.valueOf(user.getWineryId().toString()),"储值");
             try {
-                SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getName() + "','money':'" + money + "'}"));
+                SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getNickName() + "','money':'" + money + "'}"));
             } catch (ClientException e) {
                 e.printStackTrace();
             }
@@ -502,12 +502,12 @@ public class DepositOrderService {
 
 
     public String addConsumeOrder(Integer userId, AdminUser adminUser, BigDecimal money, BigDecimal totalMoney, String phone, String code, String consumeType, String descri) throws ClientException {
-        List<User> userList = userRepository.findUserByPhoneAndWinery(phone, adminUser.getWineryId());
+        List<Member> userList = memberRepository.findUserByPhoneAndWinery(phone, adminUser.getWineryId().longValue());
         if(null == userList || userList.size()<=0){
             return "该手机号不是会员，请先添加会员";
         }
         if(null == userId && userList.size()>0){
-            userId = userList.get(0).getId();
+            userId = Integer.valueOf(userList.get(0).getId().toString());
         }
         ActivationCodeSMS activationCodeSMS = activationCodeSMSRepository.findByPhoneAndType(phone, "S");
         if (activationCodeSMS == null || !activationCodeSMS.getCode().equals(code)) {
@@ -579,9 +579,9 @@ public class DepositOrderService {
         userDepositDetail.setOrderNo(offlineOrderSave.getOrderNo());
         userDepositDetail.setCreateTime(new Date());
         userDepositDetailRepository.saveAndFlush(userDepositDetail);
-        User user = userRepository.getOne(userId);
+        Member user = memberRepository.getOne(userId);
         pointRewardRuleService.updateUserPoint(user, offlineOrderSave.getTotalPrice(), "W", offlineOrderSave.getOrderNo(), offlineOrderSave.getId());
-        MemberUser memberUser = memberUserRepository.findByUserId(userId);
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(userId);
         //满额赠券
         List<MarketActivity> activityList = marketActivityRepository.findByStatusAndMarketActivityTypeLike("满额", offlineOrder.getWineryId());
         for (MarketActivity newUserActivity : activityList) {

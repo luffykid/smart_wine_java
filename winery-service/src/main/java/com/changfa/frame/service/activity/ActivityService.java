@@ -16,9 +16,9 @@ import com.changfa.frame.data.entity.market.MarketActivity;
 import com.changfa.frame.data.entity.market.MarketActivitySpecDetail;
 import com.changfa.frame.data.entity.order.OrderPay;
 import com.changfa.frame.data.entity.user.AdminUser;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.user.MemberLevel;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.entity.voucher.Voucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
@@ -30,8 +30,8 @@ import com.changfa.frame.data.repository.market.MarketActivityRepository;
 import com.changfa.frame.data.repository.market.MarketActivitySpecDetailRepository;
 import com.changfa.frame.data.repository.order.OrderPayRepository;
 import com.changfa.frame.data.repository.user.MemberLevelRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
 import com.changfa.frame.data.repository.voucher.VoucherRepository;
@@ -40,7 +40,7 @@ import com.changfa.frame.service.PicturePathUntil;
 import com.changfa.frame.service.dict.DictService;
 import com.changfa.frame.service.market.MarketActivityService;
 import com.changfa.frame.service.point.PointRewardRuleService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.util.QRcodeUtil2;
 import com.changfa.frame.service.voucher.UserVoucherService;
 import com.changfa.frame.service.wechat.conf.WeChatConts;
@@ -112,7 +112,7 @@ public class ActivityService {
     private ActivityOrderRepository activityOrderRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private MemberLevelRepository memberLevelRepository;
@@ -148,7 +148,7 @@ public class ActivityService {
     private WineryConfigureRepository wineryConfigureRepository;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
     private MarketActivityRepository marketActivityRepository;
@@ -164,13 +164,13 @@ public class ActivityService {
      * @Date          2018/10/12 18:05
      * @Description
      * */
-    public List<ActivityDTO> getActivityList(User user) {
-        List<Activity> activityList = activityRepository.findByWineryIdAndStatusOrderByBeginTimeDesc(user.getWineryId(), "A");
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+    public List<ActivityDTO> getActivityList(Member user) {
+        List<Activity> activityList = activityRepository.findByWineryIdAndStatusOrderByBeginTimeDesc(Integer.valueOf(user.getWineryId().toString()), "A");
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         if (activityList != null && activityList.size() > 0) {
             List<ActivityDTO> activityDTOList = new ArrayList<>();
             for (Activity activity : activityList) {
-                List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevelId());
+                List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevel());
                 if (acitivityRange != null && acitivityRange.size() > 0) {
                     ActivityDTO activityDTO = new ActivityDTO();
                     activityDTO.setActivityId(activity.getId());
@@ -209,12 +209,12 @@ public class ActivityService {
      * @Date          2018/10/15 11:08
      * @Description
      * */
-    public ActivityDTO getActivityDetail(User user, int activityId) {
+    public ActivityDTO getActivityDetail(Member user, int activityId) {
         ActivityDTO activityDTO = new ActivityDTO();
         Activity activity = activityRepository.getOne(activityId);
         if (user != null) {
-            MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
-            List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevelId());
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
+            List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevel());
             if (acitivityRange != null && acitivityRange.size() > 0) {
                 activityDTO.setIsJoin("Y");
             } else {
@@ -270,11 +270,11 @@ public class ActivityService {
      * @Date          2018/10/16 11:15
      * @Description
      * */
-    public ActivityDTO enroll(User user, Integer activityId) {
+    public ActivityDTO enroll(Member user, Integer activityId) {
         Activity activity = activityRepository.getOne(activityId);
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         if (activity != null) {
-            List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevelId());
+            List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(activity.getId(), memberUser.getMemberLevel());
             if (acitivityRange != null && acitivityRange.size() > 0) {
                 ActivityDTO activityDTO = new ActivityDTO();
                 activityDTO.setActivityId(activity.getId());
@@ -381,7 +381,7 @@ public class ActivityService {
      * @Date          2018/10/16 17:21
      * @Description
      * */
-    public ActivityDTO addOrder(User user, Map<String, Object> map) {
+    public ActivityDTO addOrder(Member user, Map<String, Object> map) {
         Integer activityId = Integer.valueOf(map.get("activityId").toString());
         String name = map.get("name").toString();
         String phone = map.get("phone").toString();
@@ -407,8 +407,8 @@ public class ActivityService {
                 activityOrder.setStatusTime(new Date());
                 activityOrder.setContacts(name);
                 activityOrder.setCreateTime(new Date());
-                activityOrder.setUserId(user.getId());
-                activityOrder.setWineryId(user.getWineryId());
+                activityOrder.setUserId(Integer.valueOf(user.getId().toString()));
+                activityOrder.setWineryId(Integer.valueOf(user.getWineryId().toString()));
                 ActivityOrder activityOrderSave = null;
                 if (map.get("voucherId") != null && !map.get("voucherId").equals("")) {
                     Integer voucherId = Integer.valueOf(map.get("voucherId").toString());
@@ -455,7 +455,7 @@ public class ActivityService {
                  * @Description
                  * */
                 ActivityDTO activityDTO = new ActivityDTO();
-                UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+                UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
                 activityDTO.setUserBalance(userBalance.getBalance());
                 if (userBalance.getBalance().compareTo(activityOrderSave.getTotalPrice()) >= 0) {
                     activityDTO.setBalancePayStatus("A");
@@ -628,9 +628,9 @@ public class ActivityService {
      * @Date          2018/10/18 15:27
      * @Description
      * */
-    public List<ActivityDTO> getActivityTicket(User user) {
+    public List<ActivityDTO> getActivityTicket(Member user) {
         //只显示可使用得门票
-        List<UserActivityTicket> userActivityTicketList = userActivityTicketRepository.findByUserIdAndStatus(user.getId(), "A");
+        List<UserActivityTicket> userActivityTicketList = userActivityTicketRepository.findByUserIdAndStatus(Integer.valueOf(user.getId().toString()), "A");
         if (userActivityTicketList != null) {
             List<ActivityDTO> activityDTOList = new ArrayList<>();
             for (UserActivityTicket userActivityTicket : userActivityTicketList) {
@@ -837,7 +837,7 @@ public class ActivityService {
                     activityOrderList.setStatus(dict.getStsWords());
                 }
             }
-            /*MemberUser memberUser = memberUserRepository.findByUserId(order.getUserId());*/
+            /*MemberWechat memberUser = memberWechatRepository.findByUserId(order.getUserId());*/
             activityOrderList.setUserName(order.getContacts());
             Activity activity = activityRepository.getOne(order.getActivityId());
             if (activity != null) {
@@ -958,19 +958,19 @@ public class ActivityService {
      * */
     public void paySuccess(String orderNo, String type, Map<String, String> map) throws ClientException {
         ActivityOrder activityOrder = activityOrderRepository.findByOrderNo(orderNo);
-        User user = userRepository.getOne(activityOrder.getUserId());
+        Member user = memberRepository.getOne(activityOrder.getUserId());
         OrderPay orderPay = new OrderPay();
         //使用余额支付不够的用微信
         if (type.equals("B")) {
             UserDepositDetail userDepositDetail = new UserDepositDetail();
-            UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+            UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
             orderPay.setTotalPrice(activityOrder.getTotalPrice().subtract(userBalance.getBalance()));
             userDepositDetail.setBalance(userBalance.getBalance());
             userBalance.setBalance(new BigDecimal(0));
             userBalance.setUpdateTime(new Date());
             userBalanceRepository.saveAndFlush(userBalance);
-            userDepositDetail.setWineryId(user.getWineryId());
-            userDepositDetail.setUserId(user.getId());
+            userDepositDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+            userDepositDetail.setUserId(Integer.valueOf(user.getId().toString()));
             userDepositDetail.setAction("A");
             userDepositDetail.setBalanceType("M");
             userDepositDetail.setLatestBalance(new BigDecimal(0));
@@ -1018,7 +1018,7 @@ public class ActivityService {
 
         userActivityTicketService.addUserActivityTicket(user, activityOrder, activityOrder.getActivityId());
 
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         //满额赠券
         List<MarketActivity> activityList = marketActivityRepository.findByStatusAndMarketActivityTypeLike("满额", activityOrder.getWineryId());
         for (MarketActivity newUserActivity : activityList) {
@@ -1057,9 +1057,9 @@ public class ActivityService {
     }
 
 
-    public void balancePay(User user, String orderNo) {
+    public void balancePay(Member user, String orderNo) {
         ActivityOrder activityOrder = activityOrderRepository.findByOrderNo(orderNo);
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         userBalance.setBalance(userBalance.getBalance().subtract(activityOrder.getTotalPrice()));
         userBalance.setUpdateTime(new Date());
         UserBalance userBalanceSave = userBalanceRepository.saveAndFlush(userBalance);
@@ -1086,8 +1086,8 @@ public class ActivityService {
 
 
         UserDepositDetail userDepositDetail = new UserDepositDetail();
-        userDepositDetail.setWineryId(user.getWineryId());
-        userDepositDetail.setUserId(user.getId());
+        userDepositDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        userDepositDetail.setUserId(Integer.valueOf(user.getId().toString()));
         userDepositDetail.setAction("A");
         userDepositDetail.setBalance(activityOrder.getTotalPrice());
         userDepositDetail.setBalanceType("M");
@@ -1105,7 +1105,7 @@ public class ActivityService {
         userActivityTicketService.addUserActivityTicket(user, activityOrder, activityOrder.getActivityId());
     }
 
-    public void zero(User user, String orderNo) {
+    public void zero(Member user, String orderNo) {
         ActivityOrder activityOrder = activityOrderRepository.findByOrderNo(orderNo);
         OrderPay orderPay = new OrderPay();
         orderPay.setOrderNo(orderNo);
@@ -1144,7 +1144,7 @@ public class ActivityService {
      * @Date          2018/10/29 15:23
      * @Description
      * */
-    public void sendActivityVoucher(User user, Integer activityId, Integer activityOrderId) {
+    public void sendActivityVoucher(Member user, Integer activityId, Integer activityOrderId) {
         List<AcitivitySendVoucher> activitySendVoucherList = activitySendVoucherRepository.findByActivityId(activityId);
         if (activitySendVoucherList != null) {
             for (AcitivitySendVoucher acitivitySendVoucher : activitySendVoucherList) {
@@ -1169,14 +1169,14 @@ public class ActivityService {
                             ineffectiveTime = caIne.getTime();
                         }
 
-                        VoucherInst voucherInst = new VoucherInst(user.getWineryId(), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
+                        VoucherInst voucherInst = new VoucherInst(Integer.valueOf(user.getWineryId().toString()), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
                         voucherInst.setComActivityType("A");
                         voucherInst.setComeActivityId(activityId);
                         voucherInst.setOrderType("A");
                         voucherInst.setOrderId(activityOrderId);
                         VoucherInst voucherInstSave = voucherInstRepository.saveAndFlush(voucherInst);
                         UserVoucher userVoucher = new UserVoucher();
-                        userVoucher.setUserId(user.getId());
+                        userVoucher.setUserId(Integer.valueOf(user.getId().toString()));
                         userVoucher.setCreateTime(new Date());
                         userVoucher.setVoucherInstId(voucherInstSave.getId());
                         userVoucher.setSendTime(new Date());
@@ -1212,13 +1212,13 @@ public class ActivityService {
         params.add("js_code", code);
         params.add("secret", wineryConfigure.getAppSecret());
 
-        String responseBody = UserService.sendPostRequest(WeChatConts.requestUrl, params);
+        String responseBody = MemberService.sendPostRequest(WeChatConts.requestUrl, params);
         JSONObject jsonObject = JSONObject.fromString(responseBody);
         String openId = jsonObject.getString("openid");
         System.out.print(openId);
 
-        User user = userRepository.findByOpenId(openId);
-        userActivityTicketRepository.updateByActivityIdAndUserId(activityId, user.getId());
+        Member user = memberRepository.findByOpenId(openId);
+        userActivityTicketRepository.updateByActivityIdAndUserId(activityId, Integer.valueOf(user.getId().toString()));
     }
 
     public Activity checkActivitytName(String eventName, AdminUser adminUser) {
@@ -1278,7 +1278,7 @@ public class ActivityService {
                     return false;
                 }
             }
-            User user = userRepository.getOne(activityOrder.getUserId());
+            Member user = memberRepository.getOne(activityOrder.getUserId());
             OrderPay orderPay = null;
             OrderPay orderPaySelect = orderPayRepository.findByOrderId(activityOrder.getId(), "A");
             if (orderPaySelect != null) {

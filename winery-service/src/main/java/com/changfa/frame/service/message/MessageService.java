@@ -5,19 +5,19 @@ import com.changfa.frame.data.dto.saas.MessageDTO;
 import com.changfa.frame.data.entity.message.*;
 import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.data.entity.user.MemberLevel;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.repository.message.*;
 import com.changfa.frame.data.repository.user.AdminUserRepository;
 import com.changfa.frame.data.repository.user.MemberLevelRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.service.util.SMSUtil;
-import org.omg.CORBA.ObjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -47,10 +47,10 @@ public class MessageService {
     private SmsTempParaRepository smsTempParaRepository;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private SmsTempContentRepository smsTempContentRepository;
@@ -137,9 +137,9 @@ public class MessageService {
             if (messageDTO.getPhoneList() != null && messageDTO.getPhoneList().length > 0) {
                 String[] phoneList = messageDTO.getPhoneList();
                 for (String phone : phoneList) {
-                    User user = userRepository.findByPhone(phone);
+                    Member user = memberRepository.findByPhone(phone);
                     MessageRange messageRange = new MessageRange();
-                    messageRange.setUserId(user.getId());
+                    messageRange.setUserId(Integer.valueOf(user.getId().toString()));
                     messageRange.setMessageId(messageSave.getId());
                     messageRangeList.add(messageRange);
                 }
@@ -149,7 +149,7 @@ public class MessageService {
         if (messageDTO.getStatus().equals("A")) {
             if (messageDTO.getRangeType().equals("L")) {
                 if (messageDTO.getLevelList() != null) {
-                    List<Object[]> userList = userRepository.findByLevel(messageDTO.getLevelList());
+                    List<Object[]> userList = memberRepository.findByLevel(messageDTO.getLevelList());
                     if (userList != null && userList.size() > 0) {
                         sendSMS(userList, smsTempContent, smsTempParaList, messageDTO.getSmsTempParaNameList(), smsTemp, adminUser, messageSave);
                     }
@@ -157,7 +157,7 @@ public class MessageService {
 
             } else {
                 if (messageDTO.getPhoneList() != null && messageDTO.getPhoneList().length > 0) {
-                    List<Object[]> userList = userRepository.findUserListByPhone(messageDTO.getPhoneList());
+                    List<Object[]> userList = memberRepository.findUserListByPhone(messageDTO.getPhoneList());
                     if (userList != null && userList.size() > 0) {
                         sendSMS(userList, smsTempContent, smsTempParaList, messageDTO.getSmsTempParaNameList(), smsTemp, adminUser, messageSave);
                     }
@@ -293,9 +293,9 @@ public class MessageService {
             if (messageDTO.getPhoneList() != null) {
                 String[] phoneList = messageDTO.getPhoneList();
                 for (String phone : phoneList) {
-                    User user = userRepository.findByPhone(phone);
+                    Member user = memberRepository.findByPhone(phone);
                     MessageRange messageRange = new MessageRange();
-                    messageRange.setUserId(user.getId());
+                    messageRange.setUserId(Integer.valueOf(user.getId().toString()));
                     messageRange.setMessageId(messageSave.getId());
                     messageRangeList.add(messageRange);
                 }
@@ -305,7 +305,7 @@ public class MessageService {
         if (messageDTO.getStatus().equals("A")) {
             if (messageDTO.getRangeType().equals("L")) {
                 if (messageDTO.getLevelList() != null) {
-                    List<Object[]> userList = userRepository.findByLevel(messageDTO.getLevelList());
+                    List<Object[]> userList = memberRepository.findByLevel(messageDTO.getLevelList());
                     if (userList != null && userList.size() > 0) {
                         sendSMS(userList, smsTempContent, smsTempParaList, messageDTO.getSmsTempParaNameList(), smsTemp, adminUser, messageSave);
                     }
@@ -313,7 +313,7 @@ public class MessageService {
 
             } else {
                 if (messageDTO.getPhoneList() != null && messageDTO.getPhoneList().length > 0) {
-                    List<Object[]> userList = userRepository.findUserListByPhone(messageDTO.getPhoneList());
+                    List<Object[]> userList = memberRepository.findUserListByPhone(messageDTO.getPhoneList());
                     if (userList != null && userList.size() > 0) {
                         sendSMS(userList, smsTempContent, smsTempParaList, messageDTO.getSmsTempParaNameList(), smsTemp, adminUser, messageSave);
                     }
@@ -425,7 +425,7 @@ public class MessageService {
         if (message.getRangType().equals("L")) {
             List<Integer> levelIdList = messageRangeRepository.findLevelByMessageId(messageId);
             if (levelIdList != null && levelIdList.size() > 0) {
-                List<Object[]> userList = userRepository.findByLevel(levelIdList);
+                List<Object[]> userList = memberRepository.findByLevel(levelIdList);
                 if (userList != null && userList.size() > 0) {
                     sendSMS(userList, smsTempContent, smsTempParaList, smsTempParaDetail, smsTemp, adminUser, message);
                 }
@@ -433,7 +433,7 @@ public class MessageService {
         } else {
             List<String> phoneList = messageRangeRepository.findPhoneByMessageId(messageId);
             if (phoneList != null && phoneList.size() > 0) {
-                List<Object[]> userList = userRepository.findUserListByPhone(phoneList);
+                List<Object[]> userList = memberRepository.findUserListByPhone(phoneList);
                 if (userList != null && userList.size() > 0) {
                     sendSMS(userList, smsTempContent, smsTempParaList, smsTempParaDetail, smsTemp, adminUser, message);
                 }
@@ -502,8 +502,8 @@ public class MessageService {
         List<Object[]> userList = new ArrayList<>();
         List<Map<String, Object>> mapList = new ArrayList<>();
         if (like != null && !like.equals("")) {
-            userList.addAll(memberUserRepository.findByNickNameLike(adminUser.getWineryId(), like));
-            userList.addAll(userRepository.findByWineryIdAndPhonelike(adminUser.getWineryId(), like));
+            userList.addAll(memberWechatRepository.findByNickNameLike(adminUser.getWineryId().longValue(), like));
+            userList.addAll(memberRepository.findByWineryIdAndPhonelike(adminUser.getWineryId(), like));
         }
         if (userList != null && userList.size() > 0) {
             for (Object[] objects : userList) {

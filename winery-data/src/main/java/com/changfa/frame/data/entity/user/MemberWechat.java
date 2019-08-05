@@ -3,45 +3,46 @@ package com.changfa.frame.data.entity.user;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
-import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "member_user")
+@Table(name = "m_member_wechat")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-public class MemberUser {
-    private Integer id;
+public class MemberWechat {
+    private Long id;
+    private Integer mbrId;
     private String nickName;
-    private Integer userId;
     private String idNo;
-    private Integer memberLevelId;
+    private Integer memberLevel;
     private Date birthday;
     private String sex;
     private Integer age;
+    private Long wineryId;
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Basic
-    @Column(name = "user_id")
-    public Integer getUserId() {
-        return userId;
+    @Column(name = "winery_id")
+    public Long getWineryId() {
+        return wineryId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setWineryId(Long wineryId) {
+        this.wineryId = wineryId;
     }
 
     @Basic
@@ -55,13 +56,13 @@ public class MemberUser {
     }
 
     @Basic
-    @Column(name = "member_level_id")
-    public Integer getMemberLevelId() {
-        return memberLevelId;
+    @Column(name = "member_level")
+    public Integer getMemberLevel() {
+        return memberLevel;
     }
 
-    public void setMemberLevelId(Integer memberLevelId) {
-        this.memberLevelId = memberLevelId;
+    public void setMemberLevel(Integer memberLevel) {
+        this.memberLevel = memberLevel;
     }
 
     @Basic
@@ -82,6 +83,16 @@ public class MemberUser {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    @Basic
+    @Column(name = "mbr_id")
+    public Integer getMbrId() {
+        return mbrId;
+    }
+
+    public void setMbrId(Integer mbrId) {
+        this.mbrId = mbrId;
     }
 
     @Basic
@@ -109,10 +120,11 @@ public class MemberUser {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MemberUser that = (MemberUser) o;
+        MemberWechat that = (MemberWechat) o;
         return id == that.id &&
-                userId == that.userId &&
-                memberLevelId == that.memberLevelId &&
+                mbrId == that.mbrId &&
+                wineryId == that.wineryId &&
+                memberLevel == that.memberLevel &&
                 Objects.equals(idNo, that.idNo) &&
                 Objects.equals(birthday, that.birthday) &&
                 Objects.equals(sex, that.sex);
@@ -121,6 +133,6 @@ public class MemberUser {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, userId, idNo, memberLevelId, birthday, sex);
+        return Objects.hash(id, wineryId, mbrId, idNo, memberLevel, birthday, sex);
     }
 }

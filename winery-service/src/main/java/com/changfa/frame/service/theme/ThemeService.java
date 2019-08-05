@@ -8,8 +8,8 @@ import com.changfa.frame.data.entity.theme.Theme;
 import com.changfa.frame.data.entity.theme.ThemeLogo;
 import com.changfa.frame.data.entity.theme.ThemeProd;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.repository.order.OrderProdRepository;
 import com.changfa.frame.data.repository.order.OrderRepository;
 import com.changfa.frame.data.repository.prod.*;
@@ -17,7 +17,7 @@ import com.changfa.frame.data.repository.theme.NewProdRepository;
 import com.changfa.frame.data.repository.theme.ThemeLogoRepository;
 import com.changfa.frame.data.repository.theme.ThemeProdRepository;
 import com.changfa.frame.data.repository.theme.ThemeRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.service.PicturePathUntil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class ThemeService {
     @Autowired
     private ProdPriceLevelRepository prodPriceLevelRepository;
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
     @Autowired
     private OrderProdRepository orderProdRepository;
     @Autowired
@@ -66,9 +66,9 @@ public class ThemeService {
     private  OrderRepository orderRepository;
 
 
-    public List<ThemeListDTO> getThemeList(User user) {
+    public List<ThemeListDTO> getThemeList(Member user) {
         List<ThemeListDTO> themeLists = new ArrayList<>();
-        List<Theme> list = themeRepository.findThemeByWineryId(user.getWineryId());
+        List<Theme> list = themeRepository.findThemeByWineryId(Integer.valueOf(user.getWineryId().toString()));
         for (Theme theme : list) {
             ThemeListDTO themeList = new ThemeListDTO();
             themeList.setId(theme.getId());
@@ -82,8 +82,8 @@ public class ThemeService {
     }
 
     //推荐商品
-    public List<DiscountListDTO> getDiscountList(User user) {
-        List<Prod> list = prodRepository.findByWineryIdAndIsTui(user.getWineryId());
+    public List<DiscountListDTO> getDiscountList(Member user) {
+        List<Prod> list = prodRepository.findByWineryIdAndIsTui(Integer.valueOf(user.getWineryId().toString()));
         List<DiscountListDTO> discountLists = new ArrayList<>();
         for (Prod prod : list) {
             if (prod.getStatus().equals("Y")) {
@@ -104,13 +104,13 @@ public class ThemeService {
         return discountLists;
     }
 
-    public DiscountListDTO getDiscountListByPrice(ProdPrice price, DiscountListDTO discountList, User user, Prod prod) {
+    public DiscountListDTO getDiscountListByPrice(ProdPrice price, DiscountListDTO discountList, Member user, Prod prod) {
         if (prod != null) {
             discountList.setOriginalPrice("￥" + String.valueOf(price.getOriginalPrice()));
             if (prod.getMemberDiscount().equals("Y")) {
-                MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                 if (user1 != null) {
-                    ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                    ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                     if (levelList != null) {
 //                        discountList.setFinalPrice("￥" + String.valueOf(Constant.decimalFormat(price.getOriginalPrice().multiply(levelList.getDiscount()))));
                         // TODO 不计算，直接输入优惠价格
@@ -138,8 +138,8 @@ public class ThemeService {
 
 
     //积分兑换
-    public List<DiscountListDTO> getProdChanged(User user) {
-        List<ProdChanged> list = prodChangedRepository.findByWineryId(user.getWineryId());
+    public List<DiscountListDTO> getProdChanged(Member user) {
+        List<ProdChanged> list = prodChangedRepository.findByWineryId(Integer.valueOf(user.getWineryId().toString()));
         List<DiscountListDTO> discountLists = new ArrayList<>();
         for (ProdChanged prodChanged : list) {
             Prod prod = prodRepository.getOne(prodChanged.getProdId());
@@ -165,8 +165,8 @@ public class ThemeService {
     }
 
     //热门商品
-    public List<DiscountListDTO> getPopularList(User user) {
-        List<Prod> list = prodRepository.findByWineryIdAndSellingOrPopular(user.getWineryId(), "", "Y");
+    public List<DiscountListDTO> getPopularList(Member user) {
+        List<Prod> list = prodRepository.findByWineryIdAndSellingOrPopular(Integer.valueOf(user.getWineryId().toString()), "", "Y");
         List<DiscountListDTO> newProds = new ArrayList<>();
         for (Prod prod : list) {
             if (prod != null) {
@@ -190,8 +190,8 @@ public class ThemeService {
     }
 
     //热销商品
-    public List<DiscountListDTO> getNewProdList(User user) {
-        List<Prod> list = prodRepository.findByWineryIdAndSellingOrPopular(user.getWineryId(), "Y", "");
+    public List<DiscountListDTO> getNewProdList(Member user) {
+        List<Prod> list = prodRepository.findByWineryIdAndSellingOrPopular(Integer.valueOf(user.getWineryId().toString()), "Y", "");
         List<DiscountListDTO> newProds = new ArrayList<>();
         for (Prod prod : list) {
             if (prod != null) {
@@ -218,7 +218,7 @@ public class ThemeService {
         return themeRepository.getOne(id);
     }
 
-    public ThemeDetailDTO themeDetail(Theme theme, User user) {
+    public ThemeDetailDTO themeDetail(Theme theme, Member user) {
         ThemeDetailDTO themeDetail = new ThemeDetailDTO();
         themeDetail.setId(theme.getId());
         themeDetail.setName(theme.getName());
@@ -247,9 +247,9 @@ public class ThemeService {
                     newProdList.setPrice(String.valueOf(price.getOriginalPrice()));
                     if (prod.getMemberDiscount().equals("Y")) {
                         if (user != null) {
-                            MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                            MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                             if (user1 != null) {
-                                ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                                ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                                 if (levelList != null) {
 //                                    newProdList.setPrice(String.valueOf(Constant.decimalFormat(price.getOriginalPrice().multiply(levelList.getDiscount()))));
                                     // TODO 不计算，直接输入优惠价格
@@ -287,7 +287,7 @@ public class ThemeService {
         return prodRepository.getOne(id);
     }
 
-    public ProdDetailDTO getProdDetail(User user, Prod prod) {
+    public ProdDetailDTO getProdDetail(Member user, Prod prod) {
         ProdContent prodContent = prodContentRepository.findByProdId(prod.getId());
         ProdDetailDTO prodDetail = new ProdDetailDTO();
         prodDetail.setId(prod.getId());
@@ -308,9 +308,9 @@ public class ThemeService {
             prodDetail.setPrice("￥" + String.valueOf(price.getOriginalPrice()));
             if (user != null) {
                 if (prod.getMemberDiscount().equals("Y")) {
-                    MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                    MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                     if (user1 != null) {
-                        ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                        ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                         if (levelList != null) {
 //                            prodDetail.setFinalPrice("￥" + String.valueOf(Constant.decimalFormat(price.getOriginalPrice().multiply(levelList.getDiscount()))));
                             // 默认为原价
@@ -366,12 +366,12 @@ public class ThemeService {
         return prodDetail;
     }
 
-    public List<DiscountListDTO> getSearchProds(User user, String search, String type) {
+    public List<DiscountListDTO> getSearchProds(Member user, String search, String type) {
         List<Prod> prodList;
         if (type.equals("all")) {
-            prodList = prodRepository.findByWineryIdAndName(user.getWineryId(), search);
+            prodList = prodRepository.findByWineryIdAndName(Integer.valueOf(user.getWineryId().toString()), search);
         } else {
-            prodList = prodRepository.findByWineryIdAndNameAndType(user.getWineryId(), search, type);
+            prodList = prodRepository.findByWineryIdAndNameAndType(Integer.valueOf(user.getWineryId().toString()), search, type);
         }
         List<DiscountListDTO> newProds = new ArrayList<>();
         for (Prod prod : prodList) {
@@ -617,8 +617,8 @@ public class ThemeService {
 
 
     //酒旗星推荐商品
-    public List<DiscountListDTO> operateProdList(User user) {
-        List<Prod> list = prodRepository.findByWineryIdOperate(user.getWineryId());
+    public List<DiscountListDTO> operateProdList(Member user) {
+        List<Prod> list = prodRepository.findByWineryIdOperate(Integer.valueOf(user.getWineryId().toString()));
         List<DiscountListDTO> operateProds = new ArrayList<>();
         for (Prod prod : list) {
             if (prod != null) {

@@ -1,8 +1,8 @@
 package com.changfa.frame.service.wechat;
 
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.winery.WineryConfigure;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.data.repository.winery.WineryConfigureRepository;
 import com.changfa.frame.service.wechat.conf.WxPayConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class PayService {
     private WineryConfigureRepository wineryConfigureRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     /**
      * 获得统一下单参数
@@ -36,8 +36,8 @@ public class PayService {
 
 
     public String getPayParam(String openId, String totalFee, String ip, String body, String orderNo, String type) {
-        User user = userRepository.findByOpenId(openId);
-        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(user.getWineryId());
+        Member user = memberRepository.findByOpenId(openId);
+        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(Integer.valueOf(user.getWineryId().toString()));
         Map<String, String> datas = new TreeMap<>();
         datas.put("appid", wineryConfigure.getAppId());
         datas.put("mch_id", wineryConfigure.getWxPayId());

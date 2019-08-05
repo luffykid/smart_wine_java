@@ -3,7 +3,6 @@ package com.changfa.frame.service.offline;
 
 import com.changfa.frame.data.dto.wechat.OfflineOrderDetailDTO;
 import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
-import com.changfa.frame.data.entity.activity.ActivityOrder;
 import com.changfa.frame.data.entity.deposit.UserBalance;
 import com.changfa.frame.data.entity.deposit.UserDepositDetail;
 import com.changfa.frame.data.entity.offline.OfflineOrder;
@@ -11,7 +10,7 @@ import com.changfa.frame.data.entity.offline.OfflineOrderPrice;
 import com.changfa.frame.data.entity.offline.OfflineOrderVoucher;
 import com.changfa.frame.data.entity.order.OrderPay;
 import com.changfa.frame.data.entity.prod.Prod;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
 import com.changfa.frame.data.repository.deposit.UserBalanceRepository;
@@ -21,7 +20,7 @@ import com.changfa.frame.data.repository.offline.OfflineOrderRepository;
 import com.changfa.frame.data.repository.offline.OfflineOrderVoucherRepository;
 import com.changfa.frame.data.repository.order.OrderPayRepository;
 import com.changfa.frame.data.repository.prod.ProdRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
 import com.changfa.frame.service.dict.DictService;
@@ -66,7 +65,7 @@ public class OfflineOrderService {
     private UserDepositDetailRepository userDepositDetailRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private OrderPayRepository orderPayRepository;
@@ -83,8 +82,8 @@ public class OfflineOrderService {
      * @Date          2018/10/31 16:56
      * @Description
      * */
-    public List<VoucherInstDTO> findOfflineVoucherList(User user) {
-        List<UserVoucher> userVoucherList = userVoucherRepository.findEffective(user.getId());
+    public List<VoucherInstDTO> findOfflineVoucherList(Member user) {
+        List<UserVoucher> userVoucherList = userVoucherRepository.findEffective(Integer.valueOf(user.getId().toString()));
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (UserVoucher userVoucher : userVoucherList) {
@@ -126,7 +125,7 @@ public class OfflineOrderService {
      * @Date          2018/10/31 17:28
      * @Description
      * */
-    public VoucherInstDTO findOfflineMaxVoucher(User user) {
+    public VoucherInstDTO findOfflineMaxVoucher(Member user) {
         List<VoucherInstDTO> voucherInstDTOList = findOfflineVoucherList(user);
         if (voucherInstDTOList != null && voucherInstDTOList.size() > 0) {
             for (int i = 0; i < voucherInstDTOList.size() - 1; i++) {
@@ -147,8 +146,8 @@ public class OfflineOrderService {
      * @Date          2018/10/31 17:32
      * @Description
      * */
-    public List<VoucherInstDTO> findOfflineVoucherListCanUse(User user, BigDecimal price) {
-        List<UserVoucher> userVoucherList = userVoucherRepository.findEffective(user.getId());
+    public List<VoucherInstDTO> findOfflineVoucherListCanUse(Member user, BigDecimal price) {
+        List<UserVoucher> userVoucherList = userVoucherRepository.findEffective(Integer.valueOf(user.getId().toString()));
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();
             for (UserVoucher userVoucher : userVoucherList) {
@@ -167,9 +166,9 @@ public class OfflineOrderService {
     }
 
 
-    public Map<String, Object> findOfflineMaxVoucherCanUse(User user, BigDecimal price) {
+    public Map<String, Object> findOfflineMaxVoucherCanUse(Member user, BigDecimal price) {
         Map<String, Object> map = new HashMap<>();
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         map.put("userBalance", userBalance.getBalance());
         List<VoucherInstDTO> voucherInstDTOList = findOfflineVoucherListCanUse(user, price);
         if (voucherInstDTOList != null && voucherInstDTOList.size() > 0) {
@@ -192,7 +191,7 @@ public class OfflineOrderService {
      * @Date          2018/11/1 10:01
      * @Description
      * */
-    public OfflineOrder addOrder(User user, Map<String, Object> map, String payTye) {
+    public OfflineOrder addOrder(Member user, Map<String, Object> map, String payTye) {
         BigDecimal price = new BigDecimal(Double.valueOf(map.get("price").toString()));
         VoucherInst voucherInst = null;
         if (map.get("voucherInstId") != null && !map.get("voucherInstId").equals("")) {
@@ -201,8 +200,8 @@ public class OfflineOrderService {
         }
         //生成订单
         OfflineOrder offlineOrder = new OfflineOrder();
-        offlineOrder.setWineryId(user.getWineryId());
-        offlineOrder.setUserId(user.getId());
+        offlineOrder.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        offlineOrder.setUserId(Integer.valueOf(user.getId().toString()));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String tempUserId = String.format("%02d", user.getId());
         String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
@@ -246,14 +245,14 @@ public class OfflineOrderService {
      * @Date          2018/11/1 10:59
      * @Description
      * */
-    public void balancePay(User user, Map<String, Object> map) {
+    public void balancePay(Member user, Map<String, Object> map) {
         OfflineOrder offlineOrder = addOrder(user, map, "D");
         //修改订单状态
         offlineOrder.setStatus("P");
         offlineOrder.setStatusTime(new Date());
         offlineOrderRepository.saveAndFlush(offlineOrder);
         //修改储值金额
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         userBalance.setBalance(userBalance.getBalance().subtract(offlineOrder.getTotalPrice()));
         userBalance.setUpdateTime(new Date());
         UserBalance userBalanceSave = userBalanceRepository.saveAndFlush(userBalance);
@@ -272,8 +271,8 @@ public class OfflineOrderService {
         orderPayRepository.saveAndFlush(orderPay);
         //添加储值流水
         UserDepositDetail userDepositDetail = new UserDepositDetail();
-        userDepositDetail.setWineryId(user.getWineryId());
-        userDepositDetail.setUserId(user.getId());
+        userDepositDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        userDepositDetail.setUserId(Integer.valueOf(user.getId().toString()));
         userDepositDetail.setAction("A");
         userDepositDetail.setBalance(offlineOrder.getTotalPrice());
         userDepositDetail.setBalanceType("M");
@@ -305,11 +304,11 @@ public class OfflineOrderService {
      * */
     public void paySuccess(String orderNo, Map<String, String> map, String type) {
         OfflineOrder offlineOrder = offlineOrderRepository.findByOrderNo(orderNo);
-        User user = userRepository.getOne(offlineOrder.getUserId());
+        Member user = memberRepository.getOne(offlineOrder.getUserId());
         OrderPay orderPay = new OrderPay();
         //使用余额支付不够的用微信
         if (type.equals("B")) {
-            UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+            UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
             UserDepositDetail userDepositDetail = new UserDepositDetail();
             userDepositDetail.setBalance(userBalance.getBalance());
             orderPay.setTotalPrice(offlineOrder.getTotalPrice().subtract(userBalance.getBalance()));
@@ -317,8 +316,8 @@ public class OfflineOrderService {
             userBalance.setBalance(new BigDecimal(0));
             userBalance.setUpdateTime(new Date());
             userBalanceRepository.saveAndFlush(userBalance);
-            userDepositDetail.setWineryId(user.getWineryId());
-            userDepositDetail.setUserId(user.getId());
+            userDepositDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+            userDepositDetail.setUserId(Integer.valueOf(user.getId().toString()));
             userDepositDetail.setAction("A");
             userDepositDetail.setBalanceType("M");
             userDepositDetail.setLatestBalance(new BigDecimal(0));
@@ -367,8 +366,8 @@ public class OfflineOrderService {
      * @Date          2018/11/1 15:06
      * @Description
      * */
-    public List<OfflineOrderDetailDTO> findOfflineList(User user) {
-        List<OfflineOrder> offlineOrderList = offlineOrderRepository.findByUserIdAndStatusOrderByCreateTimeDesc(user.getId(), "P");
+    public List<OfflineOrderDetailDTO> findOfflineList(Member user) {
+        List<OfflineOrder> offlineOrderList = offlineOrderRepository.findByUserIdAndStatusOrderByCreateTimeDesc(Integer.valueOf(user.getId().toString()), "P");
         if (offlineOrderList != null && offlineOrderList.size() > 0) {
             List<OfflineOrderDetailDTO> offlineOrderDetailDTOList = new ArrayList<>();
             for (OfflineOrder offlineOrder : offlineOrderList) {

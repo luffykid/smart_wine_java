@@ -1,30 +1,19 @@
 package com.changfa.frame.website.controller.bargaining;
 
 import com.changfa.frame.data.dto.wechat.*;
-import com.changfa.frame.data.entity.assemble.AssembleCommodity;
-import com.changfa.frame.data.entity.assemble.AssembleList;
 import com.changfa.frame.data.entity.bargaining.BargainingCommodity;
 import com.changfa.frame.data.entity.bargaining.BargainingUser;
 import com.changfa.frame.data.entity.prod.Prod;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.user.UserAddress;
-import com.changfa.frame.data.entity.voucher.UserVoucher;
-import com.changfa.frame.data.repository.assemble.AssembleCommodityRepository;
-import com.changfa.frame.data.repository.assemble.AssembleListRepository;
-import com.changfa.frame.data.repository.assemble.AssembleUserRepository;
 import com.changfa.frame.data.repository.bargaining.BargainingCommodityRepository;
 import com.changfa.frame.data.repository.bargaining.BargainingUserRepository;
-import com.changfa.frame.service.assemble.AssembleService;
 import com.changfa.frame.service.bargaining.BargainingService;
-import com.changfa.frame.service.prod.ProdService;
 import com.changfa.frame.service.theme.ThemeService;
-import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.user.UserService;
-import com.changfa.frame.service.voucher.UserVoucherService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +35,7 @@ public class BargainingController {
     private static Logger log = LoggerFactory.getLogger(BargainingController.class);
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
     @Autowired
     private ThemeService themeService;
     @Autowired
@@ -62,7 +51,7 @@ public class BargainingController {
         try {
             log.info("砍价商品列表:" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -85,7 +74,7 @@ public class BargainingController {
             log.info("砍价商品列表搜索:" + "token:" + map);
             String token = map.get("token").toString();
             String input = map.get("input").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -108,7 +97,7 @@ public class BargainingController {
             log.info("砍价商品详情:token:" + map);
             String token = map.get("token").toString();
             String bargainingId1 = map.get("bargainingId").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -151,7 +140,7 @@ public class BargainingController {
             log.info("去砍价:token:" + map);
             String token = map.get("token").toString();
             String bargainingId1 = map.get("bargainingId").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -185,7 +174,7 @@ public class BargainingController {
             log.info("砍价详情:token:" + map);
             String token = map.get("token").toString();
             String bargainingUserId1 = map.get("bargainingUserId").toString();//砍价用户表id
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -214,7 +203,7 @@ public class BargainingController {
             log.info("帮ta砍:token:" + map);
             String token = map.get("token").toString();
             String bargainingUserId1 = map.get("bargainingUserId").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -244,7 +233,7 @@ public class BargainingController {
             String token = map.get("token").toString();
             String bargainingUserId1 = map.get("bargainingUserId").toString();
             String nowPrice1 = map.get("nowPrice").toString();  //当前价格
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -284,13 +273,13 @@ public class BargainingController {
             Integer userAddressId = (Integer) map.get("userAddressId");
             String nowPrice1 = map.get("nowPrice").toString();  //当前价格
             String bargainingUserId1 = map.get("bargainingUserId").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
             UserAddress userAddress = null;
             if (userAddressId != -1) {
-                userAddress = userService.checkUserAddressId(userAddressId);
+                userAddress = memberService.checkUserAddressId(userAddressId);
                 if (userAddress == null) {
                     return JsonReturnUtil.getJsonReturn(37002, "地址[" + userAddressId + "]不存在");
                 }

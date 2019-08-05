@@ -1,11 +1,11 @@
 package com.changfa.frame.website.controller.deposit;
 
 import com.changfa.frame.data.dto.wechat.UserDepositDetailDTO;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.service.deposit.DepositRuleService;
 import com.changfa.frame.service.deposit.UserBalanceService;
 import com.changfa.frame.service.deposit.UserDepositDetailService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class DepositController {
     private static Logger log = LoggerFactory.getLogger(DepositController.class);
 
     @Autowired
-    public UserService userService;
+    public MemberService memberService;
 
     @Autowired
     public UserDepositDetailService userDepositDetailService;
@@ -42,7 +42,7 @@ public class DepositController {
         try {
             log.info("储值流水：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -71,14 +71,14 @@ public class DepositController {
         try {
             log.info("储值页面：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
 
             Map<String, Object> depositRuleMap = new Hashtable<>();
 
-            depositRuleMap.put("balance", userBalanceService.findByUserId(user.getId()).getBalance());
+            depositRuleMap.put("balance", userBalanceService.findByUserId(Integer.valueOf(user.getId().toString())).getBalance());
             depositRuleMap.put("depositRuleDetail", depositRuleService.getDepositRule(user));
             return JsonReturnUtil.getJsonObjectReturn(0, "200", "查询成功", depositRuleMap).toString();
         } catch (Exception e) {

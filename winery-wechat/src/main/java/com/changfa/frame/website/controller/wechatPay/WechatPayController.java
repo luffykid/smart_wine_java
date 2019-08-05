@@ -1,15 +1,14 @@
 package com.changfa.frame.website.controller.wechatPay;
 
 import com.changfa.frame.data.entity.deposit.DepositOrder;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.winery.WineryConfigure;
 import com.changfa.frame.data.repository.winery.WineryConfigureRepository;
 import com.changfa.frame.service.deposit.DepositOrderService;
 import com.changfa.frame.service.activity.ActivityService;
 import com.changfa.frame.service.offline.OfflineOrderService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.wechat.*;
-import com.changfa.frame.service.wechat.conf.WxPayConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class WechatPayController {
     private PayService payService;
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private ActivityService activityService;
@@ -61,9 +60,9 @@ public class WechatPayController {
         String token = map.get("token").toString();
         String openId = map.get("openId").toString();
         String orderNo = map.get("orderNo").toString();
-        User user = userService.checkToken(token);
+        Member user = memberService.checkToken(token);
         if (user != null) {
-            WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(user.getWineryId());
+            WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(Integer.valueOf(user.getWineryId().toString()));
             String ip = WechatService.getIpAddr(request);
             BigDecimal totalPrice = activityService.findByOrderNo(orderNo).getTotalPrice();
             String requestParam = payService.getPayParam(openId, String.valueOf(totalPrice.multiply(new BigDecimal(100)).intValue()), ip, "线下", orderNo, "A");
@@ -99,9 +98,9 @@ public class WechatPayController {
         log.info("充值微信支付：" + map);
         String token = map.get("token").toString();
         String openId = map.get("openId").toString();
-        User user = userService.checkToken(token);
+        Member user = memberService.checkToken(token);
         if (user != null) {
-            WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(user.getWineryId());
+            WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(Integer.valueOf(user.getWineryId().toString()));
             DepositOrder depositOrder = depositOrderService.addOrder(map, user);
             String ip = WechatService.getIpAddr(request);
             String requestParam = payService.getPayParam(openId, String.valueOf(depositOrder.getTotalPrice().multiply(new BigDecimal(100)).intValue()), ip, "充值", depositOrder.getOrderNo(), "D");

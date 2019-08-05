@@ -7,8 +7,8 @@ import com.changfa.frame.data.entity.point.PointRewardRule;
 import com.changfa.frame.data.entity.point.UserPoint;
 import com.changfa.frame.data.entity.user.ActivationCodeSMS;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.entity.wine.*;
 import com.changfa.frame.data.repository.deposit.UserBalanceRepository;
 import com.changfa.frame.data.repository.message.SmsTempRepository;
@@ -16,11 +16,10 @@ import com.changfa.frame.data.repository.point.PointRewardRuleRepository;
 import com.changfa.frame.data.repository.point.UserPointRepository;
 import com.changfa.frame.data.repository.user.ActivationCodeSMSRepository;
 import com.changfa.frame.data.repository.user.AdminUserRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.data.repository.wine.*;
 import com.changfa.frame.service.util.SMSUtil;
-import com.querydsl.core.util.MathUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -57,10 +55,10 @@ public class WineService {
     private AdminUserRepository adminUserRepository;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private SmsTempRepository smsTempRepository;
@@ -79,12 +77,12 @@ public class WineService {
 
     public String addWineOrder(AdminUser adminUser, Integer userId, Integer wineId, String type, Integer quantity,BigDecimal storageAmount,BigDecimal donationAmount,String descri, String phone, String code) throws ClientException {
         if(StringUtils.isNotBlank(phone)){
-            List<User> userList = userRepository.findUserByPhoneAndWinery(phone, adminUser.getWineryId());
+            List<Member> userList = memberRepository.findUserByPhoneAndWinery(phone, adminUser.getWineryId().longValue());
             if(null == userList || userList.size()<=0){
                 return "该手机号不是会员，请先添加会员";
             }
             if(null == userId && userList.size()>0){
-                userId = userList.get(0).getId();
+                userId = userList.get(0).getId().intValue();
             }
             wineId = adminUser.getWineryId();
 
@@ -230,13 +228,13 @@ public class WineService {
         }
 
         // 发送短信提醒(储酒)
-        User user = userRepository.getOne(userId);
+        Member user = memberRepository.getOne(userId);
         if (user.getPhone() != null && !user.getPhone().equals("")) {
-            SmsTemp smsTemp = smsTempRepository.findByWineryIdAndContentLike(user.getWineryId(), "存取酒");
+            SmsTemp smsTemp = smsTempRepository.findByWineryIdAndContentLike(user.getWineryId().intValue(), "存取酒");
             if (type.equals("C")) {
-                SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getName() + "','wine':'" + wine.getWineName() + "','type':'" + "消费" + "','quantity':'" + quantity + "'}"));
+                SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getNickName() + "','wine':'" + wine.getWineName() + "','type':'" + "消费" + "','quantity':'" + quantity + "'}"));
             } else if (type.equals("D")) {
-                SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getName() + "','wine':'" + wine.getWineName() + "','type':'" + "储存" + "','quantity':'" + quantity + "'}"));
+                SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getNickName() + "','wine':'" + wine.getWineName() + "','type':'" + "储存" + "','quantity':'" + quantity + "'}"));
             }
         }
         return "操作成功";
@@ -297,7 +295,7 @@ public class WineService {
                     AdminUser adminUser = adminUserRepository.getOne(Integer.valueOf(objects[4].toString()));
                     map.put("createName", adminUser.getUserName());
                 }else{
-                    MemberUser memberUser = memberUserRepository.findByUserId(userId);
+                    MemberWechat memberUser = memberWechatRepository.findByMbrId(userId);
                     map.put("createName",memberUser.getNickName());
                 }
                 map.put("createUserName", objects[5]);

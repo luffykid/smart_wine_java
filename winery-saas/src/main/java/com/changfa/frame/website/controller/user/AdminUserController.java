@@ -6,11 +6,11 @@ import com.changfa.frame.data.dto.saas.MemberListDTO;
 import com.changfa.frame.data.dto.saas.OrderListDTO;
 import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.data.entity.user.MemberLevel;
-import com.changfa.frame.data.entity.user.MemberUser;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.entity.user.Role;
 import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.user.MemberUserService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberWechatService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.wine.WineService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
@@ -36,9 +36,9 @@ public class AdminUserController {
     @Autowired
     private AdminUserService adminUserService;
     @Autowired
-    private MemberUserService memberUserService;
+    private MemberWechatService memberWechatService;
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
     @Autowired
     private WineService wineService;
 
@@ -258,7 +258,7 @@ public class AdminUserController {
                 return JsonReturnUtil.getJsonIntReturn(4, "不能添加大于200000的经验值会员等级");
             } else {
                 adminUserService.updateMemberLevel(memberLevel, adminUser, name, upgradeExperience, money, point, descri, isFreightFree);
-                memberUserService.updateMemberUserLevel(Integer.valueOf(id), adminUser.getWineryId());
+                memberWechatService.updateMemberUserLevel(Integer.valueOf(id), adminUser.getWineryId().longValue());
                 return JsonReturnUtil.getJsonIntReturn(0, "编辑会员等级规则成功");
             }
         } catch (Exception e) {
@@ -279,7 +279,7 @@ public class AdminUserController {
             if (adminUser == null) {
                 return JsonReturnUtil.getJsonIntReturn(2, "找不到token" + token);
             } else {
-                List<MemberUser> memberUsers = adminUserService.checkMemberLevel(Integer.valueOf(id), adminUser);
+                List<MemberWechat> memberUsers = adminUserService.checkMemberLevel(Integer.valueOf(id), adminUser);
                 if (memberLevel == null) {
                     return JsonReturnUtil.getJsonIntReturn(1, "找不到id" + id);
                 } else if (memberUsers != null && memberUsers.size() != 0) {
@@ -455,7 +455,7 @@ public class AdminUserController {
             if (adminUserByToken == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到操作人token" + token);
             } else {
-                userService.sendCodeSms(phone, type);
+                memberService.sendCodeSms(phone, type);
                 return JsonReturnUtil.getJsonIntReturn(0, "发送成功").toString();
             }
         } catch (Exception e) {
@@ -489,7 +489,7 @@ public class AdminUserController {
             if (adminUserByToken == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到操作人token" + token);
             } else {
-                Boolean result = userService.findUserPhone(phone, adminUserByToken.getWineryId(), userId);
+                Boolean result = memberService.findUserPhone(phone, adminUserByToken.getWineryId(), userId);
                 if (result) {
                     return JsonReturnUtil.getJsonIntReturn(0, "号码可注册").toString();
                 } else {
@@ -516,7 +516,7 @@ public class AdminUserController {
             if (adminUserByToken == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到操作人token" + token);
             } else {
-                Map<String, Object> result = userService.getUserDetail(userId);
+                Map<String, Object> result = memberService.getUserDetail(userId);
                 if (result != null && result.size() > 0) {
                     return JsonReturnUtil.getJsonObjectReturn(0, "200", "成功", result).toString();
                 } else {
@@ -538,7 +538,7 @@ public class AdminUserController {
             if (adminUserByToken == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到操作人token" + token);
             } else {
-                String result = userService.updateUser(userId, name, phone, sex, birthday, idNo, code);
+                String result = memberService.updateUser(userId, name, phone, sex, birthday, idNo, code);
                 if (result.equals("成功")) {
                     return JsonReturnUtil.getJsonReturn(0, "200", result);
                 } else {

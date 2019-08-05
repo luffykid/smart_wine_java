@@ -3,7 +3,7 @@ package com.changfa.frame.service.activity;
 
 import com.changfa.frame.data.entity.activity.ActivityOrder;
 import com.changfa.frame.data.entity.activity.UserActivityTicket;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.repository.activity.UserActivityTicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +20,12 @@ public class UserActivityTicketService {
     @Autowired
     private UserActivityTicketRepository userActivityTicketRepository;
 
-    public void addUserActivityTicket(User user, ActivityOrder activityOrder,Integer activityId){
+    public void addUserActivityTicket(Member user, ActivityOrder activityOrder, Integer activityId){
         UserActivityTicket userActivityTicket = new UserActivityTicket();
         userActivityTicket.setActivityId(activityId);
         userActivityTicket.setActivityOrderId(activityOrder.getId());
         userActivityTicket.setActivityOrderNo(activityOrder.getOrderNo());
-        userActivityTicket.setUserId(user.getId());
+        userActivityTicket.setUserId(Integer.valueOf(user.getId().toString()));
         userActivityTicket.setStatus("A");
         userActivityTicket.setQuantity(activityOrder.getQuantity());
         userActivityTicket.setStatusTime(new Date());

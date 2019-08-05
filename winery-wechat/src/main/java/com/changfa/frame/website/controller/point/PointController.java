@@ -2,11 +2,10 @@ package com.changfa.frame.website.controller.point;
 
 
 import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
-import com.changfa.frame.data.entity.user.User;
-import com.changfa.frame.data.repository.point.PointRewardRuleRepository;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.service.point.PointDetailService;
 import com.changfa.frame.service.point.PointRewardRuleService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,7 @@ public class PointController {
 
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private PointDetailService pointDetailService;
@@ -39,7 +38,7 @@ public class PointController {
         try {
             log.info("积分详情：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -58,7 +57,7 @@ public class PointController {
         try {
             log.info("获取积分可兑换的券列表：" + "token:" + map);
             String token = map.get("token").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -88,7 +87,7 @@ public class PointController {
             log.info("积分换券操作：" + "token:" + map);
             String token = map.get("token").toString();
             Integer voucherId = Integer.valueOf(map.get("voucherId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
@@ -117,7 +116,7 @@ public class PointController {
             log.info("赠券详情：" + "token:" + map);
             String token = map.get("token").toString();
             Integer voucherId = Integer.valueOf(map.get("voucherId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }

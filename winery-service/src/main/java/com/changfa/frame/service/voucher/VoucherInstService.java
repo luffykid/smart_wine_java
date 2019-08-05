@@ -2,7 +2,7 @@ package com.changfa.frame.service.voucher;
 
 import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
 import com.changfa.frame.data.entity.prod.Prod;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
 import com.changfa.frame.data.repository.prod.ProdRepository;
@@ -38,16 +38,16 @@ public class VoucherInstService {
     @Autowired
     private ProdRepository prodRepository;
 
-    public List<VoucherInstDTO> getVoucherInstList(User user, String status) {
+    public List<VoucherInstDTO> getVoucherInstList(Member user, String status) {
         List<UserVoucher> userVoucherList = null;
         if (status.equals("A")) {
-            userVoucherList = userVoucherRepository.findEffective(user.getId());
+            userVoucherList = userVoucherRepository.findEffective(user.getId().intValue());
         }
         if (status.equals("U")) {
-            userVoucherList = userVoucherRepository.findUseVoucher(user.getId());
+            userVoucherList = userVoucherRepository.findUseVoucher(user.getId().intValue());
         }
         if (status.equals("P")) {
-            userVoucherList = userVoucherRepository.findIneffective(user.getId());
+            userVoucherList = userVoucherRepository.findIneffective(user.getId().intValue());
         }
         if (userVoucherList != null) {
             List<VoucherInstDTO> voucherInstDTOList = new ArrayList<>();

@@ -41,7 +41,6 @@ import com.changfa.frame.service.PicturePathUntil;
 import com.changfa.frame.service.dict.DictService;
 import com.changfa.frame.service.market.MarketActivityService;
 import com.vdurmont.emoji.EmojiParser;
-import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,13 +70,13 @@ public class AdminUserService {
     @Autowired
     private MemberLevelRightRepository memberLevelRightRepository;
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
     @Autowired
     private UserBalanceRepository userBalanceRepository;
     @Autowired
@@ -259,39 +259,39 @@ public class AdminUserService {
 
     public List<MemberListDTO> memberllist(AdminUser adminUser, String search ,String memberLevelId) {
         List<MemberListDTO> memberLists = new ArrayList<>();
-        List<User> list;
+        List<Member> list;
         if ((search == null || "".equals(search)) && (memberLevelId == null || "".equals(memberLevelId))) {
-            list = userRepository.findByWineryIdOrderByCreateTimeDesc(adminUser.getWineryId());
+            list = memberRepository.findByWineryIdOrderByCreateTimeDesc(new BigInteger(String.valueOf(adminUser.getWineryId())));
         } else if ((search != null || !"".equals(search)) && (memberLevelId == null || "".equals(memberLevelId))) {
-            list = userRepository.findByWineryIdAndLikeAndLevelIdIsNull(adminUser.getWineryId(), search);
+            list = memberRepository.findByWineryIdAndLikeAndLevelIdIsNull(new BigInteger(String.valueOf(adminUser.getWineryId())), search);
         } else {
-            list = userRepository.findByWineryIdAndLike(adminUser.getWineryId(), search ,memberLevelId);
+            list = memberRepository.findByWineryIdAndLike(adminUser.getWineryId().intValue(), search ,memberLevelId);
         }
         SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd");
         List<Dict> dicts = CacheUtil.getDicts();
-        for (User user : list) {
+        for (Member user : list) {
             MemberListDTO memberList = new MemberListDTO();
-            memberList.setUserId(user.getId());
-            memberList.setName(user.getName());
+            memberList.setUserId(Integer.valueOf(user.getId().toString()));
+            memberList.setName(user.getNickName());
             memberList.setPhone(user.getPhone());
             memberList.setWechat(user.getWechat());
-            MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
             if (memberUser != null) {
                 memberList.setNickName(EmojiParser.parseToUnicode(EmojiParser.parseToHtmlDecimal(memberUser.getNickName())));
                 memberList.setGender(memberUser.getSex());
                 if (memberUser.getBirthday() != null) {
                     memberList.setBirth(sd.format(memberUser.getBirthday()));
                 }
-                MemberLevel level = memberLevelRepository.findMemberLevelById(memberUser.getMemberLevelId());
+                MemberLevel level = memberLevelRepository.findMemberLevelById(memberUser.getMemberLevel());
                 if (level != null) {
                     memberList.setLevelName(level.getName());
                 }
             }
-            UserBalance balance = userBalanceRepository.findByUserId(user.getId());
+            UserBalance balance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
             if (balance != null) {
                 memberList.setStorageValue(String.valueOf(balance.getBalance()));
             }
-            UserPoint point = userPointRepository.findByUserId(user.getId());
+            UserPoint point = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
             if (point != null) {
                 memberList.setPoint(String.valueOf(point.getPoint()));
             }
@@ -302,16 +302,16 @@ public class AdminUserService {
 
 
     public MemberListDTO memberlDetail(Integer userId) {
-        User user = userRepository.getOne(userId);
+        Member user = memberRepository.getOne(userId);
         SimpleDateFormat sd = new SimpleDateFormat("MM月dd日");
         List<Dict> dicts = CacheUtil.getDicts();
         MemberListDTO memberList = new MemberListDTO();
-        memberList.setUserId(user.getId());
-        memberList.setName(user.getName());
+        memberList.setUserId(Integer.valueOf(user.getId().toString()));
+        memberList.setName(user.getNickName());
         memberList.setPhone(user.getPhone());
         memberList.setWechat(user.getWechat());
         memberList.setUserIcon(user.getUserIcon());
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         if (memberUser != null) {
             memberList.setGender(memberUser.getSex());
             if (memberUser.getIdNo() != null) {
@@ -321,16 +321,16 @@ public class AdminUserService {
             if (memberUser.getBirthday() != null) {
                 memberList.setBirth(sd.format(memberUser.getBirthday()));
             }
-            MemberLevel level = memberLevelRepository.findMemberLevelById(memberUser.getMemberLevelId());
+            MemberLevel level = memberLevelRepository.findMemberLevelById(memberUser.getMemberLevel());
             if (level != null) {
                 memberList.setLevelName(level.getName());
             }
         }
-        UserBalance balance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance balance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         if (balance != null) {
             memberList.setStorageValue(balance.getBalance().intValue() + "元");
         }
-        UserPoint point = userPointRepository.findByUserId(user.getId());
+        UserPoint point = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         if (point != null) {
             memberList.setPoint(point.getPoint() + "分");
         }
@@ -378,7 +378,7 @@ public class AdminUserService {
         List<OrderListDTO> orderLists = new ArrayList<>();
         List<Order> list = orderRepository.findByUserIdAndStatus(userId);
         for (Order order : list) {
-            MemberUser memberUser = memberUserRepository.findByUserId(userId);
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(userId);
             OrderListDTO orderList = new OrderListDTO();
             if (order.getCreateUserId() != null) {
                 AdminUser createUser = adminUserRepository.getOne(order.getCreateUserId());
@@ -395,7 +395,7 @@ public class AdminUserService {
         }
         List<OfflineOrder> offlineOrderList = offlineOrderRepository.findByUserIdAndStatusOrderByCreateTimeDesc(userId, "P");
         for (OfflineOrder offlineOrder : offlineOrderList) {
-            MemberUser memberUser = memberUserRepository.findByUserId(userId);
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(userId);
             OrderListDTO orderList = new OrderListDTO();
             if (offlineOrder.getCreateUserId() != null) {
                 AdminUser createUser = adminUserRepository.getOne(offlineOrder.getCreateUserId());
@@ -421,7 +421,7 @@ public class AdminUserService {
         }
         List<ActivityOrder> activityOrderList = activityOrderRepository.findByUserIdAndStatus(userId, "P");
         for (ActivityOrder activityOrder : activityOrderList) {
-            MemberUser memberUser = memberUserRepository.findByUserId(userId);
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(userId);
             OrderListDTO orderList = new OrderListDTO();
             if (activityOrder.getCreateUserId() != null) {
                 AdminUser createUser = adminUserRepository.getOne(activityOrder.getCreateUserId());
@@ -572,8 +572,8 @@ public class AdminUserService {
         List<OrderListDTO> orderLists = new ArrayList<>();
         List<DepositOrder> list = depositOrderRepository.findByUserId(userId);
         for (DepositOrder order : list) {
-            User user = userRepository.getOne(userId);
-            MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+            Member user = memberRepository.getOne(userId);
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
             OrderListDTO orderList = new OrderListDTO();
             if (order.getCreateUserId() != null) {
                 AdminUser createUser = adminUserRepository.getOne(order.getCreateUserId());
@@ -583,7 +583,7 @@ public class AdminUserService {
             }
 
             if (user != null) {
-                orderList.setUserName(user.getName());
+                orderList.setUserName(user.getNickName());
             }
             orderList.setFinalPrice(order.getTotalPrice()==null?String.valueOf(order.getFinalPrice()):String.valueOf(order.getTotalPrice()));
             orderList.setTotalPrice(order.getFinalPrice()==null?String.valueOf(order.getTotalPrice()):String.valueOf(order.getFinalPrice()));
@@ -602,11 +602,11 @@ public class AdminUserService {
         for (UserPointDetail order : list) {
             if (order.getPoint()>0) {
                 OrderListDTO orderList = new OrderListDTO();
-                User user = userRepository.getOne(userId);
-                MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+                Member user = memberRepository.getOne(userId);
+                MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                 orderList.setCreateName(memberUser.getNickName());
                 if (user != null) {
-                    orderList.setUserName(user.getName());
+                    orderList.setUserName(user.getNickName());
                 }
                 orderList.setCreateName(memberUser.getNickName());
                 if (order.getPointType().equals("A")) {
@@ -638,9 +638,9 @@ public class AdminUserService {
                     VoucherInst inst = voucherInstRepository.getOne(order.getVoucherInstId());
                     if (inst != null) {
                         OrderListDTO orderList = new OrderListDTO();
-                        User user = userRepository.getOne(userId);
+                        Member user = memberRepository.getOne(userId);
                         if (user != null) {
-                            orderList.setUserName(user.getName());
+                            orderList.setUserName(user.getNickName());
                         }
                         if (inst.getType().equals("M")) {
                             orderList.setFinalPrice(String.valueOf(inst.getMoney()));
@@ -656,7 +656,7 @@ public class AdminUserService {
                         orderList.setOrderNo(inst.getVoucharNo());
                         orderList.setTime(new Timestamp(order.getUseTime().getTime()));
                         orderList.setType("消费");
-                        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+                        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                         orderList.setCreateName(memberUser.getNickName());
                         orderLists.add(orderList);
                     }
@@ -774,10 +774,10 @@ public class AdminUserService {
         return memberLevelRepository.findMemberLevelByName(name, adminUser.getWineryId());
     }
 
-    public List<MemberUser> checkMemberLevel(Integer integer, AdminUser adminUser) {
+    public List<MemberWechat> checkMemberLevel(Integer integer, AdminUser adminUser) {
         List<Integer> integers = new ArrayList<>();
         integers.add(integer);
-        return memberUserRepository.findByMemberLevelId(integers, adminUser.getWineryId());
+        return memberWechatRepository.findByMemberLevelId(integers, adminUser.getWineryId().longValue());
     }
 
     public void updatePwd(AdminUser adminUser, String newPwd) {
@@ -798,8 +798,8 @@ public class AdminUserService {
                 return "验证码失效";
             }
         }
-        User firstUser = new User();
-        MemberUser memberUser = new MemberUser();
+        Member firstUser = new Member();
+        MemberWechat memberUser = new MemberWechat();
         memberUser.setNickName(name);
         if (birthday != null && !birthday.equals("")) {
             memberUser.setBirthday(format.parse(birthday));
@@ -811,32 +811,32 @@ public class AdminUserService {
         String token = UUID.randomUUID() + "" + System.currentTimeMillis();
         firstUser.setToken(token);
         firstUser.setStatus("A");
-        firstUser.setName(name);
-        firstUser.setWineryId(adminUser.getWineryId());
+        firstUser.setNickName(name);
+        firstUser.setWineryId(adminUser.getWineryId().longValue());
         firstUser.setStatusTime(new Date());
         firstUser.setCreateTime(new Date());
         firstUser.setPhone(phone);
-        User userSave = userRepository.saveAndFlush(firstUser);
-        memberUser.setUserId(userSave.getId());
+        Member userSave = memberRepository.saveAndFlush(firstUser);
+        memberUser.setMbrId(Integer.valueOf(userSave.getId().toString()));
         List<MemberLevel> memberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId(), "A");
-        memberUser.setMemberLevelId(memberLevelList.get(0).getId());
-        MemberUser memberUserSave = memberUserRepository.saveAndFlush(memberUser);
+        memberUser.setMemberLevel(memberLevelList.get(0).getId());
+        MemberWechat memberUserSave = memberWechatRepository.saveAndFlush(memberUser);
         //首次登录添加积分记录
         UserPoint userPoint = new UserPoint();
         userPoint.setPoint(0);
-        userPoint.setUserId(userSave.getId());
+        userPoint.setUserId(Integer.valueOf(userSave.getId().toString()));
         userPoint.setWineryId(adminUser.getWineryId());
         userPoint.setUpdateTime(new Date());
         userPointRepository.save(userPoint);
         //添加经验值
         UserExperience userExperience = new UserExperience();
-        userExperience.setUserId(userSave.getId());
+        userExperience.setUserId(Integer.valueOf(userSave.getId().toString()));
         userExperience.setExperience(0);
         userExperience.setUpdateTime(new Date());
         userExperienceRepository.saveAndFlush(userExperience);
         //储值
         UserBalance userBalance = new UserBalance();
-        userBalance.setUserId(userSave.getId());
+        userBalance.setUserId(Integer.valueOf(userSave.getId().toString()));
         userBalance.setBalance(new BigDecimal(0));
         userBalance.setDonationAmount(new BigDecimal(0));
         userBalance.setWineryId(adminUser.getWineryId());
@@ -844,7 +844,7 @@ public class AdminUserService {
         userBalanceRepository.saveAndFlush(userBalance);
         UserDTO userDTO = new UserDTO();
         userDTO.setToken(userSave.getToken());
-        userDTO.setWineryId(userSave.getWineryId());
+        userDTO.setWineryId(Integer.valueOf(userSave.getWineryId().toString()));
         activationCode.setStatus("U");
         activationCodeRepository.saveAndFlush(activationCode);
         log.info("营销活动新会员赠券");

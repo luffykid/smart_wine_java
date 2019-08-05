@@ -2,42 +2,26 @@ package com.changfa.frame.service.bargaining;
 
 import com.changfa.frame.data.dto.saas.*;
 import com.changfa.frame.data.dto.wechat.*;
-import com.changfa.frame.data.entity.assemble.AssembleCommodity;
-import com.changfa.frame.data.entity.assemble.AssembleList;
-import com.changfa.frame.data.entity.assemble.AssembleUser;
 import com.changfa.frame.data.entity.bargaining.BargainingCommodity;
 import com.changfa.frame.data.entity.bargaining.BargainingHelp;
 import com.changfa.frame.data.entity.bargaining.BargainingUser;
 import com.changfa.frame.data.entity.order.*;
 import com.changfa.frame.data.entity.prod.*;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.user.UserAddress;
-import com.changfa.frame.data.entity.voucher.UserVoucher;
-import com.changfa.frame.data.entity.voucher.VoucherInst;
-import com.changfa.frame.data.repository.assemble.AssembleCommodityRepository;
-import com.changfa.frame.data.repository.assemble.AssembleListRepository;
-import com.changfa.frame.data.repository.assemble.AssembleUserRepository;
 import com.changfa.frame.data.repository.bargaining.BargainingCommodityRepository;
 import com.changfa.frame.data.repository.bargaining.BargainingHelpRepository;
 import com.changfa.frame.data.repository.bargaining.BargainingUserRepository;
 import com.changfa.frame.data.repository.order.*;
 import com.changfa.frame.data.repository.prod.*;
-import com.changfa.frame.data.repository.theme.ThemeProdRepository;
-import com.changfa.frame.data.repository.user.MemberLevelRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
-import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
-import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.service.PicturePathUntil;
-import com.changfa.frame.service.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,7 +48,7 @@ public class BargainingService {
 	@Autowired
 	private BargainingUserRepository bargainingUserRepository;
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository memberRepository;
 	@Autowired
 	private BargainingHelpRepository bargainingHelpRepository;
 	@Autowired
@@ -247,9 +231,9 @@ public class BargainingService {
 	 * @param input     商品名称
 	 * @return
 	 */
-	public List<BargainingWeichatListDTO> bargainingListWechat(User user, String input) {
+	public List<BargainingWeichatListDTO> bargainingListWechat(Member user, String input) {
 		List<BargainingCommodity> bargainingList = new ArrayList<>();
-		bargainingList = bargainingCommodityRepository.findByWineryIdLikeName(user.getWineryId(), input);
+		bargainingList = bargainingCommodityRepository.findByWineryIdLikeName(Integer.valueOf(user.getWineryId().toString()), input);
 		List<BargainingWeichatListDTO> bcListDTOS = new ArrayList<>();
 		for (BargainingCommodity bc : bargainingList) {
 			BargainingWeichatListDTO bcListDTO = new BargainingWeichatListDTO();
@@ -287,7 +271,7 @@ public class BargainingService {
 	 * @param bargainingId
 	 * @return
 	 */
-	public BargainingPordDetailWeichatDTO bargainingProdWchat(User user, Integer bargainingId) {
+	public BargainingPordDetailWeichatDTO bargainingProdWchat(Member user, Integer bargainingId) {
 		BargainingPordDetailWeichatDTO bcDetailDTO = new BargainingPordDetailWeichatDTO();
 		if(null != bargainingId){
 			BargainingCommodity bc = bargainingCommodityRepository.getOne(bargainingId);
@@ -310,7 +294,7 @@ public class BargainingService {
 			}
 			bcDetailDTO.setBargainingPrice(bc.getBargainingPrice());
 			bcDetailDTO.setEndTime(bc.getEndTime());
-			int bargainingNumEd = bargainingCommodityRepository.findByWineryIdAndIdUser(user.getWineryId(),bc.getId());//已经发起砍价的数量
+			int bargainingNumEd = bargainingCommodityRepository.findByWineryIdAndIdUser(Integer.valueOf(user.getWineryId().toString()),bc.getId());//已经发起砍价的数量
 			bcDetailDTO.setBargainingNumEd(bargainingNumEd);
 		}
 		return bcDetailDTO;
@@ -328,11 +312,11 @@ public class BargainingService {
 	 * @param bargainingId
 	 * @return
 	 */
-	public Integer bargainingButton(User user,Integer bargainingId) {
+	public Integer bargainingButton(Member user, Integer bargainingId) {
 		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingId);
 		if(null != bargainingCommodity){
 			BargainingUser bargainingUser = new BargainingUser();
-			bargainingUser.setUserId(user.getId());
+			bargainingUser.setUserId(Integer.valueOf(user.getId().toString()));
 			bargainingUser.setBargainingCommodity(bargainingCommodity.getId());
 			bargainingUser.setBuyPrice(null);
 			bargainingUser.setOrderId(null);
@@ -351,13 +335,13 @@ public class BargainingService {
 	 * @param bargainingUserId
 	 * @return
 	 */
-	public BargainingDetailWeichatDTO bargainingDetail(User user,Integer bargainingUserId) {
+	public BargainingDetailWeichatDTO bargainingDetail(Member user, Integer bargainingUserId) {
 		BargainingUser bargainingUser = bargainingUserRepository.getOne(bargainingUserId);
 		BargainingDetailWeichatDTO bdwd = new BargainingDetailWeichatDTO();
 		if(null != bargainingUser){
 			bdwd.setId(bargainingUser.getId());
 			bdwd.setUserId(bargainingUser.getUserId());
-			User startUser = userRepository.getOne(bargainingUser.getUserId());
+			Member startUser = memberRepository.getOne(bargainingUser.getUserId());
 			if(null != user){
 				bdwd.setUserLogo(startUser.getUserIcon());
 			}
@@ -386,9 +370,9 @@ public class BargainingService {
 				for(BargainingHelp bargainingHelp : bHelpList){
 					BargainingUserWeichatListDTO buwld = new BargainingUserWeichatListDTO();
 					buwld.setId(bargainingHelp.getId());
-					User helpUser = userRepository.getOne(bargainingHelp.getUserId());
+					Member helpUser = memberRepository.getOne(bargainingHelp.getUserId());
 					if(null != helpUser){
-						buwld.setUserID(helpUser.getId());
+						buwld.setUserID(Integer.valueOf(helpUser.getId().toString()));
 						buwld.setIcon(helpUser.getUserIcon());
 					}
 					buwld.setLessPrice(bargainingHelp.getLessPrice());
@@ -415,7 +399,7 @@ public class BargainingService {
 	 * @param bargainingUserId
 	 * @return
 	 */
-	public void bargainingHelp(User user,Integer bargainingUserId) {
+	public void bargainingHelp(Member user, Integer bargainingUserId) {
 		BargainingUser bargainingUser = bargainingUserRepository.getOne(bargainingUserId);
 		if(null != bargainingUser){
 			BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingUser.getBargainingCommodity());
@@ -461,7 +445,7 @@ public class BargainingService {
 
 			//帮砍表
 			BargainingHelp bargainingHelp = new BargainingHelp();
-			bargainingHelp.setUserId(user.getId());
+			bargainingHelp.setUserId(Integer.valueOf(user.getId().toString()));
 			bargainingHelp.setBargainingUser(bargainingUser.getId());
 			bargainingHelp.setLessPrice(cutPrice);  //帮砍掉的价格
 			bargainingHelp.setCreateTime(new Date());
@@ -481,7 +465,7 @@ public class BargainingService {
 	 *  @param nowPrice
 	 * @return
 	 */
-	public BargainingWeichatDTO buyNowPrice(User user,Integer bargainingUserId,BigDecimal nowPrice) {
+	public BargainingWeichatDTO buyNowPrice(Member user, Integer bargainingUserId, BigDecimal nowPrice) {
 		BargainingUser bargainingUser = bargainingUserRepository.getOne(bargainingUserId);
 		if(null != bargainingUser){
 			BargainingWeichatDTO bargainingWeichatDTO = new BargainingWeichatDTO();
@@ -531,7 +515,7 @@ public class BargainingService {
 	}
 
 	//生成团购编号
-	public String getOrderNoByMethod(User user) {
+	public String getOrderNoByMethod(Member user) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
 		String tempUserId = String.format("%02d", user.getId());
 		String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
@@ -545,12 +529,12 @@ public class BargainingService {
 	 * @param bargainingUser    发起砍价用户表
 	 * @return
 	 */
-	public void createBargaining(User user, UserAddress userAddress,  String descri, BargainingUser bargainingUser,BigDecimal nowPrice) {
+	public void createBargaining(Member user, UserAddress userAddress, String descri, BargainingUser bargainingUser, BigDecimal nowPrice) {
 		BargainingCommodity bargainingCommodity = bargainingCommodityRepository.getOne(bargainingUser.getBargainingCommodity());
 		//砍价订单
 		Order order = new Order();
-		order.setWineryId(user.getWineryId());
-		order.setUserId(user.getId());
+		order.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+		order.setUserId(Integer.valueOf(user.getId().toString()));
 		//订单号
 		String format = getOrderNoByMethod(user);
 		order.setOrderNo(format);
@@ -567,14 +551,14 @@ public class BargainingService {
 		orderRepository.saveAndFlush(order);
 		//订单价格
 		OrderPrice orderPrice = new OrderPrice();
-		orderPrice.setWineryId(user.getWineryId());
+		orderPrice.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 		orderPrice.setOrderId(order.getId());
 		orderPrice.setCarriageExpense(new BigDecimal(0));
 		orderPriceRepository.saveAndFlush(orderPrice);
 
 		//订单商品
 		OrderProd orderProd = new OrderProd();
-		orderProd.setWineryId(user.getWineryId());
+		orderProd.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 		orderProd.setOrderId(order.getId());
 		orderProd.setProdId(bargainingCommodity.getProdId());
 		orderProd.setQuantity(1);  //同一拼团订单中 每一个用户  拼团商品数量 只能是1
@@ -582,7 +566,7 @@ public class BargainingService {
 
 		//订单价格项
 		OrderPriceItem orderPriceItem = new OrderPriceItem();
-		orderPriceItem.setWineryId(user.getWineryId());
+		orderPriceItem.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 		orderPriceItem.setOrderPriceId(orderPrice.getId());
 		orderPriceItem.setOrderId(order.getId());
 		orderPriceItem.setProdId(bargainingCommodity.getProdId());

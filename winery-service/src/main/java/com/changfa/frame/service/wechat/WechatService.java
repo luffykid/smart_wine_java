@@ -3,11 +3,11 @@ package com.changfa.frame.service.wechat;
 
 import com.changfa.frame.data.entity.activity.ActivityOrder;
 import com.changfa.frame.data.entity.deposit.DepositOrder;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.winery.WineryConfigure;
 import com.changfa.frame.data.repository.activity.ActivityOrderRepository;
 import com.changfa.frame.data.repository.deposit.DepositOrderRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.data.repository.winery.WineryConfigureRepository;
 import com.changfa.frame.service.wechat.conf.WxPayConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class WechatService {
     private WineryConfigureRepository wineryConfigureRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     /**
      * @param request
@@ -58,8 +58,8 @@ public class WechatService {
             String spbill_create_ip = getIpAddr(request);
 
             //组装参数，用户生成统一下单接口的签名
-            User user = userRepository.findByOpenId(openId);
-            WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(user.getWineryId());
+            Member user = memberRepository.findByOpenId(openId);
+            WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(Integer.valueOf(user.getWineryId().toString()));
             Map<String, String> packageParams = new HashMap<String, String>();
             packageParams.put("appid", wineryConfigure.getAppId());
             packageParams.put("mch_id", wineryConfigure.getWxPayId());

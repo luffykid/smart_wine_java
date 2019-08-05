@@ -17,8 +17,7 @@ import com.changfa.frame.data.repository.offline.OfflineOrderRepository;
 import com.changfa.frame.data.repository.order.OrderRepository;
 import com.changfa.frame.data.repository.point.UserPointDetailRepository;
 import com.changfa.frame.data.repository.prod.ProdRepository;
-import com.changfa.frame.data.repository.user.UserLoginLogRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
@@ -33,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -45,7 +45,7 @@ public class StatisticalService {
     private static Logger log = LoggerFactory.getLogger(StatisticalService.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private DepositOrderRepository depositOrderRepository;
@@ -96,9 +96,9 @@ public class StatisticalService {
     public Map<String, Object> daily(AdminUser adminUser) {
         Map<String, Object> map = new HashMap<>();
         //昨日新增用户
-        map.put("newUser", userRepository.findNewUser(adminUser.getWineryId()));
+        map.put("newUser", memberRepository.findNewUser(new BigInteger(String.valueOf(adminUser.getWineryId()))));
         //会员存量
-        map.put("deposit", userRepository.findUserCountSum(adminUser.getWineryId()) == null ? 0 : userRepository.findUserCountSum(adminUser.getWineryId()));
+        map.put("deposit", memberRepository.findUserCountSum(adminUser.getWineryId().longValue())== null ? 0 : memberRepository.findUserCountSum(adminUser.getWineryId().longValue()));
         //昨日消费
         BigDecimal activityPriceSum = activityOrderRepository.findPriceByWineryId(adminUser.getWineryId());
         BigDecimal orderPriceSum = orderRepository.findPriceSUM(adminUser.getWineryId());
@@ -145,7 +145,7 @@ public class StatisticalService {
             instance.add(Calendar.DAY_OF_YEAR, -(int) (diffDay - i));//日期加10天
             StatisticDTO statisticDTO = new StatisticDTO();
             statisticDTO.setTime(formatter.format(instance.getTime()));
-            statisticDTO.setCount(userRepository.findUserCountByCreateTime(statisticDTO.getTime(),adminUser.getWineryId()));
+            statisticDTO.setCount(memberRepository.findUserCountByCreateTime(statisticDTO.getTime(),adminUser.getWineryId().longValue()));
             depositDetailList.add(statisticDTO);
             if (endTime != null) {
                 instance.setTime(formatter.parse(endTime));
@@ -156,7 +156,7 @@ public class StatisticalService {
                 if (endTime != null && !endTime.equals("")) {
                     StatisticDTO statisticDTOEnd = new StatisticDTO();
                     statisticDTOEnd.setTime(formatter.format(formatter.parse(endTime)));
-                    statisticDTOEnd.setCount(userRepository.findUserCountByCreateTime(statisticDTO.getTime(),adminUser.getWineryId()));
+                    statisticDTOEnd.setCount(memberRepository.findUserCountByCreateTime(statisticDTO.getTime(),adminUser.getWineryId().longValue()));
                     depositDetailList.add(statisticDTOEnd);
                 }
             }
@@ -178,9 +178,9 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (day != null && !day.equals("")) {
-            newUser = userRepository.findNewUserDay(day, adminUser.getWineryId());
+            newUser = memberRepository.findNewUserDay(day, new BigInteger(String.valueOf(adminUser.getWineryId())));
         } else {
-            newUser = userRepository.findNewUserTime(adminUser.getWineryId(),beginTime,endTimeFinal);
+            newUser = memberRepository.findNewUserTime(new BigInteger(String.valueOf(adminUser.getWineryId())),beginTime,endTimeFinal);
         }
         Map<String, Object> map = new HashMap<>();
         if (newUser != null && newUser.size() > 0) {
@@ -992,9 +992,9 @@ public class StatisticalService {
         map.put("consume", "0.00%");
         map.put("consumeCount", "0.00%");
         //上周新用户增长量
-        Integer lastWeekNU = (userRepository.findByWeek(1, adminUser.getWineryId())) == null ? 0 : (userRepository.findByWeek(1, adminUser.getWineryId()));
+        Integer lastWeekNU = (memberRepository.findByWeek(1, new BigInteger(String.valueOf(adminUser.getWineryId())))) == null ? 0 : (memberRepository.findByWeek(1, new BigInteger(String.valueOf(adminUser.getWineryId()))));
         //上上周新用户增长量
-        Integer beforeLastWeekNU = (userRepository.findByWeek(2, adminUser.getWineryId())) == null ? 0 : (userRepository.findByWeek(2, adminUser.getWineryId()));
+        Integer beforeLastWeekNU = (memberRepository.findByWeek(2, new BigInteger(String.valueOf(adminUser.getWineryId())))== null ? 0 : (memberRepository.findByWeek(2, new BigInteger(String.valueOf(adminUser.getWineryId())))));
         map.put("newUserDiffer", lastWeekNU - beforeLastWeekNU);
         if (lastWeekNU != null && lastWeekNU != 0) {
             if (beforeLastWeekNU != null && beforeLastWeekNU!=0) {
@@ -1046,8 +1046,8 @@ public class StatisticalService {
         BigDecimal beforeLastWeekD = (depositOrderRepository.findByWeek(2, adminUser.getWineryId())) == null ? new BigDecimal(0) : (depositOrderRepository.findByWeek(2, adminUser.getWineryId()));
         *//*lastWeekD.subtract(beforeLastWeekD)*/
         //会员存量
-        Integer userCount = (userRepository.findUserCountByTime(1, adminUser.getWineryId())) == null ? 0 : (userRepository.findUserCountByTime(1, adminUser.getWineryId()));
-        Integer beforeUserCount = (userRepository.findUserCountByTime(1, adminUser.getWineryId())) == null ? 0 : (userRepository.findUserCountByTime(2, adminUser.getWineryId()));
+        Integer userCount = (memberRepository.findUserCountByTime(1, adminUser.getWineryId().longValue()) == null ? 0 : (memberRepository.findUserCountByTime(1, adminUser.getWineryId().longValue())));
+        Integer beforeUserCount = (memberRepository.findUserCountByTime(1, adminUser.getWineryId().longValue()) == null ? 0 : (memberRepository.findUserCountByTime(2, adminUser.getWineryId().longValue())));
         map.put("depositDiffer", userCount - beforeUserCount);
         if (userCount != null && userCount != 0) {
             if (beforeUserCount != null && beforeUserCount != 0) {
@@ -1244,7 +1244,7 @@ public class StatisticalService {
     //运营端 统计排行  酒庄会员统计排行
     public List<StatisticDTO> countsUser() {
         List<StatisticDTO> orderList = new ArrayList<>();
-        List<Object[]> prod = userRepository.countsUser();
+        List<Object[]> prod = memberRepository.countsUser();
         if (prod != null && prod.size() > 0) {
             for (Object[] objects : prod) {
                 StatisticDTO statisticDTO = new StatisticDTO();
@@ -1258,7 +1258,7 @@ public class StatisticalService {
     //运营端 统计排行  酒庄会员统计排行(按月)
     public List<StatisticDTO> countsUserMonths(Integer wineryId)  {
         List<StatisticDTO> depositOrderList = new ArrayList<>();
-        List<Object[]> depositOrder = userRepository.countsUserMonths(wineryId);
+        List<Object[]> depositOrder = memberRepository.countsUserMonths(wineryId.longValue());
         if (depositOrder != null && depositOrder.size() > 0) {
             for (Object[] objects : depositOrder) {
                 StatisticDTO statisticDTO = new StatisticDTO();

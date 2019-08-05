@@ -1,9 +1,7 @@
 package com.changfa.frame.website.controller.wine;
 
 
-import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.User;
 import com.changfa.frame.service.user.AdminUserService;
 import com.changfa.frame.service.wine.WineService;
 import com.changfa.frame.website.common.JsonReturnUtil;

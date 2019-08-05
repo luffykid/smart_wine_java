@@ -2,8 +2,8 @@ package com.changfa.frame.website.controller.voucher;
 
 
 import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
-import com.changfa.frame.data.entity.user.User;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.service.user.MemberService;
 import com.changfa.frame.service.voucher.VoucherInstService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class VoucherInstController {
     private VoucherInstService voucherInstService;
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     public String voucherList(@RequestBody Map<String,Object> map){
@@ -35,7 +35,7 @@ public class VoucherInstController {
             log.info("获取当前用户所有优惠券：" + "token:" + map);
             String token = map.get("token").toString();
             String status = map.get("status").toString();
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }

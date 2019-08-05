@@ -13,8 +13,8 @@ import com.changfa.frame.data.entity.market.*;
 import com.changfa.frame.data.entity.message.SmsTemp;
 import com.changfa.frame.data.entity.point.UserPoint;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.entity.voucher.Voucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
@@ -24,8 +24,8 @@ import com.changfa.frame.data.repository.market.*;
 import com.changfa.frame.data.repository.message.SmsTempRepository;
 import com.changfa.frame.data.repository.point.UserPointRepository;
 import com.changfa.frame.data.repository.prod.ProdRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
 import com.changfa.frame.data.repository.voucher.VoucherRepository;
@@ -56,7 +56,7 @@ public class MarketActivityService {
 
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
     @Autowired
     private MarketActivityRepository marketActivityRepository;
     @Autowired
@@ -80,7 +80,7 @@ public class MarketActivityService {
     @Autowired
     private ProdRepository prodRepository;
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
     @Autowired
     private UserMarketActivityRepository userMarketActivityRepository;
     @Autowired
@@ -583,11 +583,11 @@ public class MarketActivityService {
      * @Date          2018/10/26 10:10
      * @Description
      * */
-    public MarketDTO getMarketDetail(User user, Integer marketActivityId) {
+    public MarketDTO getMarketDetail(Member user, Integer marketActivityId) {
         MarketActivity marketActivity = marketActivityRepository.getOne(marketActivityId);
-        MemberUser memberUser = null;
+        MemberWechat memberUser = null;
         if (user != null) {
-            memberUser = memberUserRepository.findByUserId(user.getId());
+            memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
         }
         MarketDTO marketDTO = new MarketDTO();
         marketDTO.setName(marketActivity.getName());
@@ -625,12 +625,12 @@ public class MarketActivityService {
                                 if (marketActivity.getIsLimit().equals("Y")) {
                                     Integer sendCount = voucherInstRepository.getMarketSendVoucher(marketActivityId);
                                     if (sendCount < marketActivity.getLimitUser()) {
-                                        MarketActivityRange marketActivityRange = marketActivityRangeRepository.findByWineryIdAndMarketActivityIdAndMemberLevelId(user.getWineryId(), marketActivityId, memberUser.getMemberLevelId());
+                                        MarketActivityRange marketActivityRange = marketActivityRangeRepository.findByWineryIdAndMarketActivityIdAndMemberLevelId(Integer.valueOf(user.getWineryId().toString()), marketActivityId, memberUser.getMemberLevel());
                                         if (marketActivityRange != null) {
                                             if (marketActivity.getSendType() != null) {
                                                 if (marketActivity.getSendType().equals("S")) {
                                                     if (marketActivity.getBeginTime().before(new Date()) && marketActivity.getEndTime().after(new Date())) {
-                                                        Integer userVoucher = userVoucherRepository.findByUserIdAndActivityId(user.getId(), marketActivityId);
+                                                        Integer userVoucher = userVoucherRepository.findByUserIdAndActivityId(Integer.valueOf(user.getId().toString()), marketActivityId);
                                                         if ((userVoucher == null ? 0 : userVoucher) > 0) {
                                                             voucherInstDTO.setSendType("S");
                                                         } else {
@@ -650,12 +650,12 @@ public class MarketActivityService {
                                         voucherInstDTO.setSendType("N");
                                     }
                                 } else {
-                                    MarketActivityRange marketActivityRange = marketActivityRangeRepository.findByWineryIdAndMarketActivityIdAndMemberLevelId(user.getWineryId(), marketActivityId, memberUser.getMemberLevelId());
+                                    MarketActivityRange marketActivityRange = marketActivityRangeRepository.findByWineryIdAndMarketActivityIdAndMemberLevelId(Integer.valueOf(user.getWineryId().toString()), marketActivityId, memberUser.getMemberLevel());
                                     if (marketActivityRange != null) {
                                         if (marketActivity.getSendType() != null) {
                                             if (marketActivity.getSendType().equals("S")) {
                                                 if (marketActivity.getBeginTime().before(new Date()) && marketActivity.getEndTime().after(new Date())) {
-                                                    Integer userVoucher = userVoucherRepository.findByUserIdAndActivityId(user.getId(), marketActivityId);
+                                                    Integer userVoucher = userVoucherRepository.findByUserIdAndActivityId(Integer.valueOf(user.getId().toString()), marketActivityId);
                                                     if ((userVoucher == null ? 0 : userVoucher) > 0) {
                                                         voucherInstDTO.setSendType("S");
                                                     } else {
@@ -673,12 +673,12 @@ public class MarketActivityService {
                                     }
                                 }
                             } else {
-                                MarketActivityRange marketActivityRange = marketActivityRangeRepository.findByWineryIdAndMarketActivityIdAndMemberLevelId(user.getWineryId(), marketActivityId, memberUser.getMemberLevelId());
+                                MarketActivityRange marketActivityRange = marketActivityRangeRepository.findByWineryIdAndMarketActivityIdAndMemberLevelId(Integer.valueOf(user.getWineryId().toString()), marketActivityId, memberUser.getMemberLevel());
                                 if (marketActivityRange != null) {
                                     if (marketActivity.getSendType() != null) {
                                         if (marketActivity.getSendType().equals("S")) {
                                             if (marketActivity.getBeginTime().before(new Date()) && marketActivity.getEndTime().after(new Date())) {
-                                                Integer userVoucher = userVoucherRepository.findByUserIdAndActivityId(user.getId(), marketActivityId);
+                                                Integer userVoucher = userVoucherRepository.findByUserIdAndActivityId(Integer.valueOf(user.getId().toString()), marketActivityId);
                                                 if ((userVoucher == null ? 0 : userVoucher) > 0) {
                                                     voucherInstDTO.setSendType("S");
                                                 } else {
@@ -719,9 +719,9 @@ public class MarketActivityService {
      * @Date          2018/10/30 17:13
      * @Description
      * */
-    public MarketActivity findActivity(User user, Integer type) {
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
-        List<MarketActivityRange> marketActivityRangeList = marketActivityRangeRepository.findByMemberLevelIdAndWineryId(memberUser.getMemberLevelId(), user.getWineryId());
+    public MarketActivity findActivity(Member user, Integer type) {
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
+        List<MarketActivityRange> marketActivityRangeList = marketActivityRangeRepository.findByMemberLevelIdAndWineryId(memberUser.getMemberLevel(),Integer.valueOf(user.getWineryId().toString()));
         if (marketActivityRangeList != null) {
             for (MarketActivityRange marketActivityRange : marketActivityRangeList) {
 
@@ -736,7 +736,7 @@ public class MarketActivityService {
         return null;
     }
 
-    public void birthdaySendVoucher(MemberUser memberUser, User user, MarketActivity marketActivity, String type) throws ClientException {
+    public void birthdaySendVoucher(MemberWechat memberUser, Member user, MarketActivity marketActivity, String type) throws ClientException {
 
 
         //获取赠券截至时间（七天之内登录才可赠券）
@@ -747,7 +747,7 @@ public class MarketActivityService {
         if (type != null && type.equals("M")) {
             if (marketActivity != null) {
                 if (marketActivity.getSendPoint() != null) {
-                    UserPoint userPoint = userPointRepository.findByUserId(user.getId());
+                    UserPoint userPoint = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
                     userPoint.setPoint(userPoint.getPoint() + marketActivity.getSendPoint());
                     userPoint.setUpdateTime(new Date());
                     userPointRepository.saveAndFlush(userPoint);
@@ -775,7 +775,7 @@ public class MarketActivityService {
                                     ineffectiveTime = caIne.getTime();
                                 }
                                 //添加券实体
-                                VoucherInst voucherInst = new VoucherInst(user.getWineryId(), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
+                                VoucherInst voucherInst = new VoucherInst(Integer.valueOf(user.getWineryId().toString()), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
                                 if (marketActivity != null) {
                                     voucherInst.setComActivityType("M");
                                     voucherInst.setComeActivityId(marketActivity.getId());
@@ -783,7 +783,7 @@ public class MarketActivityService {
                                 VoucherInst voucherInstSave = voucherInstRepository.saveAndFlush(voucherInst);
                                 //添加用户券记录
                                 UserVoucher userVoucher = new UserVoucher();
-                                userVoucher.setUserId(user.getId());
+                                userVoucher.setUserId(Integer.valueOf(user.getId().toString()));
                                 userVoucher.setCreateTime(new Date());
                                 userVoucher.setVoucherInstId(voucherInstSave.getId());
                                 userVoucher.setSendTime(new Date());
@@ -791,8 +791,8 @@ public class MarketActivityService {
                                 userVoucher.setIneffectiveTime(voucherInstSave.getIneffectiveTime());
                                 userVoucherRepository.saveAndFlush(userVoucher);
                                 UserMarketActivity userMarketActivity = new UserMarketActivity();
-                                userMarketActivity.setWineryId(user.getWineryId());
-                                userMarketActivity.setUserId(user.getId());
+                                userMarketActivity.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+                                userMarketActivity.setUserId(Integer.valueOf(user.getId().toString()));
                                 userMarketActivity.setMarketActivityId(marketActivity.getId());
                                 userMarketActivity.setSendVoucherId(voucherInstSave.getId());
                                 userMarketActivity.setCreateTime(new Date());
@@ -804,8 +804,8 @@ public class MarketActivityService {
                         if (user.getPhone() != null && !user.getPhone().equals("")) {
                             SmsTemp smsTemp = smsTempRepository.findByWineryIdAndNameLike(1);
                             if (smsTemp != null) {
-                                if (user.getName() != null && !user.getName().equals("")) {
-                                    SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getName() + "'}"));
+                                if (user.getNickName() != null && !user.getNickName().equals("")) {
+                                    SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getNickName() + "'}"));
                                 } else {
                                     SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + memberUser.getNickName() + "'}"));
                                 }
@@ -817,11 +817,11 @@ public class MarketActivityService {
             }
 
         } else {
-            List<UserMarketActivity> userMarketActivityList = userMarketActivityRepository.findByUserIdAndMarketActivityId(user.getId(), marketActivity.getId());
+            List<UserMarketActivity> userMarketActivityList = userMarketActivityRepository.findByUserIdAndMarketActivityId(Integer.valueOf(user.getId().toString()), marketActivity.getId());
             if (userMarketActivityList == null || userMarketActivityList.size() == 0) {
                 if (marketActivity != null) {
                     if (marketActivity.getSendPoint() != null) {
-                        UserPoint userPoint = userPointRepository.findByUserId(user.getId());
+                        UserPoint userPoint = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
                         userPoint.setPoint(userPoint.getPoint() + marketActivity.getSendPoint());
                         userPoint.setUpdateTime(new Date());
                         userPointRepository.saveAndFlush(userPoint);
@@ -849,7 +849,7 @@ public class MarketActivityService {
                                         ineffectiveTime = caIne.getTime();
                                     }
                                     //添加券实体
-                                    VoucherInst voucherInst = new VoucherInst(user.getWineryId(), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
+                                    VoucherInst voucherInst = new VoucherInst(Integer.valueOf(user.getWineryId().toString()), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
                                     if (marketActivity != null) {
                                         voucherInst.setComActivityType("M");
                                         voucherInst.setComeActivityId(marketActivity.getId());
@@ -857,7 +857,7 @@ public class MarketActivityService {
                                     VoucherInst voucherInstSave = voucherInstRepository.saveAndFlush(voucherInst);
                                     //添加用户券记录
                                     UserVoucher userVoucher = new UserVoucher();
-                                    userVoucher.setUserId(user.getId());
+                                    userVoucher.setUserId(Integer.valueOf(user.getId().toString()));
                                     userVoucher.setCreateTime(new Date());
                                     userVoucher.setVoucherInstId(voucherInstSave.getId());
                                     userVoucher.setSendTime(new Date());
@@ -865,8 +865,8 @@ public class MarketActivityService {
                                     userVoucher.setIneffectiveTime(voucherInstSave.getIneffectiveTime());
                                     userVoucherRepository.saveAndFlush(userVoucher);
                                     UserMarketActivity userMarketActivity = new UserMarketActivity();
-                                    userMarketActivity.setWineryId(user.getWineryId());
-                                    userMarketActivity.setUserId(user.getId());
+                                    userMarketActivity.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+                                    userMarketActivity.setUserId(Integer.valueOf(user.getId().toString()));
                                     userMarketActivity.setMarketActivityId(marketActivity.getId());
                                     userMarketActivity.setSendVoucherId(voucherInstSave.getId());
                                     userMarketActivity.setCreateTime(new Date());
@@ -878,8 +878,8 @@ public class MarketActivityService {
                             if (user.getPhone() != null && !user.getPhone().equals("")) {
                                 SmsTemp smsTemp = smsTempRepository.findByWineryIdAndNameLike(1);
                                 if (smsTemp != null) {
-                                    if (user.getName() != null && !user.getName().equals("")) {
-                                        SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getName() + "'}"));
+                                    if (user.getNickName() != null && !user.getNickName().equals("")) {
+                                        SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getNickName() + "'}"));
                                     } else {
                                         SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + memberUser.getNickName() + "'}"));
                                     }
@@ -903,7 +903,7 @@ public class MarketActivityService {
     }
 
 
-    public void getVoucher(User user, Integer voucherId, Integer marketActivityId) throws ClientException {
+    public void getVoucher(Member user, Integer voucherId, Integer marketActivityId) throws ClientException {
         MarketActivity marketActivity = marketActivityRepository.getOne(marketActivityId);
         if (marketActivity != null) {
             Voucher voucher = voucherRepository.getOne(voucherId);
@@ -924,7 +924,7 @@ public class MarketActivityService {
                 ineffectiveTime = caIne.getTime();
             }
             //添加券实体
-            VoucherInst voucherInst = new VoucherInst(user.getWineryId(), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
+            VoucherInst voucherInst = new VoucherInst(Integer.valueOf(user.getWineryId().toString()), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
             if (marketActivity != null) {
                 voucherInst.setComActivityType("M");
                 voucherInst.setComeActivityId(marketActivity.getId());
@@ -932,7 +932,7 @@ public class MarketActivityService {
             VoucherInst voucherInstSave = voucherInstRepository.saveAndFlush(voucherInst);
             //添加用户券记录
             UserVoucher userVoucher = new UserVoucher();
-            userVoucher.setUserId(user.getId());
+            userVoucher.setUserId(Integer.valueOf(user.getId().toString()));
             userVoucher.setCreateTime(new Date());
             userVoucher.setVoucherInstId(voucherInstSave.getId());
             userVoucher.setSendTime(new Date());
@@ -940,8 +940,8 @@ public class MarketActivityService {
             userVoucher.setIneffectiveTime(voucherInstSave.getIneffectiveTime());
             userVoucherRepository.saveAndFlush(userVoucher);
             UserMarketActivity userMarketActivity = new UserMarketActivity();
-            userMarketActivity.setWineryId(user.getWineryId());
-            userMarketActivity.setUserId(user.getId());
+            userMarketActivity.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+            userMarketActivity.setUserId(Integer.valueOf(user.getId().toString()));
             userMarketActivity.setMarketActivityId(marketActivity.getId());
             userMarketActivity.setSendVoucherId(voucherInstSave.getId());
             userMarketActivity.setCreateTime(new Date());
@@ -949,10 +949,10 @@ public class MarketActivityService {
             if (user.getPhone() != null && !user.getPhone().equals("")) {
                 SmsTemp smsTemp = smsTempRepository.findByWineryIdAndNameLike(1);
                 if (smsTemp != null) {
-                    if (user.getName() != null && !user.getName().equals("")) {
-                        SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getName() + "'}"));
+                    if (user.getNickName() != null && !user.getNickName().equals("")) {
+                        SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getNickName() + "'}"));
                     } else {
-                        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+                        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                         SMSUtil.sendRemindSMS(user.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + memberUser.getNickName() + "'}"));
                     }
                 }

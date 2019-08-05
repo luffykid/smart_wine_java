@@ -1,9 +1,9 @@
 package com.changfa.frame.website.controller.market;
 
 import com.changfa.frame.data.dto.wechat.MarketDTO;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.service.market.MarketActivityService;
-import com.changfa.frame.service.user.UserService;
+import com.changfa.frame.service.user.MemberService;
 
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class MarketController {
     private static final Logger log = LoggerFactory.getLogger(MarketController.class);
 
     @Autowired
-    private UserService userService;
+    private MemberService memberService;
 
     @Autowired
     private MarketActivityService marketActivityService;
@@ -40,11 +40,11 @@ public class MarketController {
     public String memberInfo(@RequestBody Map<String, Object> map) {
         try {
             log.info("线上活动详情：" + "token:" + map);
-            User user = null;
+            Member user = null;
             Integer activityId = Integer.valueOf(map.get("activityId").toString());
             if(map.get("token")!=null && !map.get("token").equals("")) {
                 String token = map.get("token").toString();
-                user = userService.checkToken(token);
+                user = memberService.checkToken(token);
                 if (user == null) {
                     return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
                 }
@@ -64,7 +64,7 @@ public class MarketController {
             String token = map.get("token").toString();
             Integer activityId = Integer.valueOf(map.get("activityId").toString());
             Integer voucherId = Integer.valueOf(map.get("voucherId").toString());
-            User user = userService.checkToken(token);
+            Member user = memberService.checkToken(token);
             if (user == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }

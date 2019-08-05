@@ -16,8 +16,8 @@ import com.changfa.frame.data.entity.order.*;
 import com.changfa.frame.data.entity.point.UserPoint;
 import com.changfa.frame.data.entity.prod.*;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.entity.user.UserAddress;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
@@ -33,9 +33,9 @@ import com.changfa.frame.data.repository.order.*;
 import com.changfa.frame.data.repository.point.UserPointRepository;
 import com.changfa.frame.data.repository.prod.*;
 import com.changfa.frame.data.repository.user.AdminUserRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.data.repository.user.UserAddressRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
 import com.changfa.frame.service.PicturePathUntil;
@@ -106,9 +106,9 @@ public class OrderService {
     @Autowired
     private MarketActivityRepository marketActivityRepository;
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
     @Autowired
     private MarketActivityService marketActivityService;
     @Autowired
@@ -139,10 +139,10 @@ public class OrderService {
 
 
     //添加订单(购物车)
-    public String addOrderByCart(User user, UserAddress userAddress, UserVoucher userVoucher, List<Cart> carts, String descri) {
+    public String addOrderByCart(Member user, UserAddress userAddress, UserVoucher userVoucher, List<Cart> carts, String descri) {
         Order order = new Order();
-        order.setWineryId(user.getWineryId());
-        order.setUserId(user.getId());
+        order.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        order.setUserId(Integer.valueOf(user.getId().toString()));
         //订单号
         String format = getOrderNoByMethod(user);
         order.setOrderNo(format);
@@ -159,7 +159,7 @@ public class OrderService {
         orderRepository.saveAndFlush(order);
         //订单价格
         OrderPrice orderPrice = new OrderPrice();
-        orderPrice.setWineryId(user.getWineryId());
+        orderPrice.setWineryId(Integer.valueOf(user.getWineryId().toString()));
         orderPrice.setOrderId(order.getId());
         orderPrice.setCarriageExpense(new BigDecimal(0));
         orderPriceRepository.saveAndFlush(orderPrice);
@@ -169,7 +169,7 @@ public class OrderService {
         for (Cart cart : carts) {
             //订单商品
             OrderProd orderProd = new OrderProd();
-            orderProd.setWineryId(user.getWineryId());
+            orderProd.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             orderProd.setOrderId(order.getId());
             orderProd.setProdId(cart.getProdId());
             orderProd.setQuantity(cart.getAmount());
@@ -179,9 +179,9 @@ public class OrderService {
                 Prod prod = prodRepository.getOne(prodPrice.getProdId());
                 double oneprice = 0;
                 if (prod.getMemberDiscount().equals("Y")) {
-                    MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                    MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                     if (user1 != null) {
-                        ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                        ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                         if (levelList != null) {
 //                            oneprice = prodPrice.getFinalPrice().doubleValue() * levelList.getDiscount().doubleValue();
                             // TODO 如果商品存在折扣，则价格为原价，否则为优惠价
@@ -205,7 +205,7 @@ public class OrderService {
                 }
                 //订单价格项
                 OrderPriceItem orderPriceItem = new OrderPriceItem();
-                orderPriceItem.setWineryId(user.getWineryId());
+                orderPriceItem.setWineryId(Integer.valueOf(user.getWineryId().toString()));
                 orderPriceItem.setOrderPriceId(orderPrice.getId());
                 orderPriceItem.setOrderId(order.getId());
                 orderPriceItem.setProdId(cart.getProdId());
@@ -229,7 +229,7 @@ public class OrderService {
             //订单结算
             OrderSettle orderSettle = new OrderSettle();
             orderSettle.setOrderId(order.getId());
-            orderSettle.setUserId(user.getId());
+            orderSettle.setUserId(Integer.valueOf(user.getId().toString()));
             orderSettle.setUseVoucherId(userVoucher.getId());
             if (totalPoint != 0) {
                 orderSettle.setUsePoint(totalPoint);
@@ -251,9 +251,9 @@ public class OrderService {
                         }
                         Prod prod = prodRepository.getOne(cart.getProdId());
                         if (prod != null && prod.getMemberDiscount().equals("Y")) {
-                            MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                            MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getWineryId().toString()));
                             if (user1 != null) {
-                                ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                                ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                                 if (level != null) {
                                     if (level != null) {
                                         // TODO 如果商品存在折扣，则价格为原价，否则为优惠价
@@ -301,17 +301,17 @@ public class OrderService {
         return order.getOrderNo();
     }
 
-    public String getOrderNoByMethod(User user) {
+    public String getOrderNoByMethod(Member user) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String tempUserId = String.format("%02d", user.getId());
         String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
         return format;
     }
 
-    public String addOrderByOne(User user, UserAddress userAddress, UserVoucher userVoucher, Integer prodId, Integer amount, String descri) {
+    public String addOrderByOne(Member user, UserAddress userAddress, UserVoucher userVoucher, Integer prodId, Integer amount, String descri) {
         Order order = new Order();
-        order.setWineryId(user.getWineryId());
-        order.setUserId(user.getId());
+        order.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        order.setUserId(Integer.valueOf(user.getId().toString()));
         //订单号
         String format = getOrderNoByMethod(user);
         order.setOrderNo(format);
@@ -333,9 +333,9 @@ public class OrderService {
         if (price != null) {
             Prod prod = prodRepository.getOne(prodId);
             if (prod.getMemberDiscount().equals("Y")) {
-                MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                 if (user1 != null) {
-                    ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                    ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                     if (levelList != null) {
                         // TODO 如果商品存在折扣，则价格为原价，否则为优惠价
                         if (levelList.getDiscount() != null && !levelList.getDiscount().equals("")) {
@@ -361,7 +361,7 @@ public class OrderService {
 
         OrderSettle orderSettle = new OrderSettle();
         orderSettle.setOrderId(order.getId());
-        orderSettle.setUserId(user.getId());
+        orderSettle.setUserId(Integer.valueOf(user.getId().toString()));
         if (totalPoint != 0) {
             orderSettle.setUsePoint(totalPoint);
         }
@@ -382,9 +382,9 @@ public class OrderService {
                     }
                     Prod prod = prodRepository.getOne(prodId);
                     if (prod != null && prod.getMemberDiscount().equals("Y")) {
-                        MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+                        MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
                         if (user1 != null) {
-                            ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+                            ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
                             if (level != null) {
                                 if (level != null) {
                                     // TODO 如果商品存在折扣，则价格为原价，否则为优惠价
@@ -415,7 +415,7 @@ public class OrderService {
         orderSettleRepository.saveAndFlush(orderSettle);
         order.setTotalPrice(totalPrice < 0 ? new BigDecimal(0) : new BigDecimal(totalPrice));
         OrderProd orderProd = new OrderProd();
-        orderProd.setWineryId(user.getWineryId());
+        orderProd.setWineryId(Integer.valueOf(user.getWineryId().toString()));
         orderProd.setOrderId(order.getId());
         orderProd.setProdId(prodId);
         orderProd.setQuantity(amount);
@@ -423,7 +423,7 @@ public class OrderService {
         ProdPrice prodPrice = prodPriceRepository.findProdPriceByProdId(prodId);
         if (prodPrice != null) {
             OrderPrice orderPrice = new OrderPrice();
-            orderPrice.setWineryId(user.getWineryId());
+            orderPrice.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             orderPrice.setOrderId(order.getId());
             orderPrice.setProdOrigPrice(prodPrice.getOriginalPrice().multiply(new BigDecimal(amount)));
             orderPrice.setProdFinalPrice(totalPrice < 0 ? new BigDecimal(0) : new BigDecimal(totalPrice));
@@ -432,7 +432,7 @@ public class OrderService {
             orderPriceRepository.saveAndFlush(orderPrice);
             OrderPriceItem orderPriceItem = new OrderPriceItem();
             orderPriceItem.setOrderPriceId(orderPrice.getId());
-            orderPriceItem.setWineryId(user.getWineryId());
+            orderPriceItem.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             orderPriceItem.setOrderId(order.getId());
             orderPriceItem.setProdId(prodId);
             orderPriceItem.setQuantity(amount);
@@ -476,7 +476,7 @@ public class OrderService {
         OrderSettle settle = orderSettleRepository.findByOrderId(order.getId());
         if (order.getTotalPrice().compareTo(new BigDecimal(0)) > 0) {
             //支付成功减用户积分
-            User userRepositoryOne = userRepository.getOne(order.getUserId());
+            Member userRepositoryOne = memberRepository.getOne(order.getUserId());
             if (userRepositoryOne != null && settle != null) {
                 pointRewardRuleService.addUserPoint(userRepositoryOne, settle.getUsePoint(), "S", order.getOrderNo(), order.getId());
             }
@@ -537,7 +537,7 @@ public class OrderService {
         orderPay.setPayStatus("A");
         orderPay.setPayTime(new Date());
         orderPayRepository.saveAndFlush(orderPay);
-        MemberUser memberUser = memberUserRepository.findByUserId(order.getUserId());
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(order.getUserId());
         //满额赠券
         List<MarketActivity> activityList = marketActivityRepository.findByStatusAndMarketActivityTypeLike("满额", order.getWineryId());
         for (MarketActivity newUserActivity : activityList) {
@@ -545,12 +545,12 @@ public class OrderService {
                 MarketActivitySpecDetail marketActivitySpecDetail = marketActivitySpecDetailRepository.findByMarketActivityIdLimit(newUserActivity.getId());
                 if (new Date().after(newUserActivity.getBeginTime()) && new Date().before(newUserActivity.getEndTime())) {
                     if (newUserActivity.getSendSetting() != null && newUserActivity.getSendSetting().equals("O")) {
-                        User user = userRepository.getOne(memberUser.getUserId());
+                        Member user = memberRepository.getOne(memberUser.getMbrId());
                         if (user != null && marketActivitySpecDetail.getDepositMoney() != null && order.getTotalPrice().compareTo(marketActivitySpecDetail.getDepositMoney()) >= 0) {
                             marketActivityService.birthdaySendVoucher(memberUser, user, newUserActivity, "M");
                         }
                     } else {
-                        User user = userRepository.getOne(memberUser.getUserId());
+                        Member user = memberRepository.getOne(memberUser.getMbrId());
                         if (user != null && marketActivitySpecDetail.getDepositMoney() != null && order.getTotalPrice().compareTo(marketActivitySpecDetail.getDepositMoney()) >= 0) {
                             Integer count = order.getTotalPrice().divide(marketActivitySpecDetail.getDepositMoney(), 0, BigDecimal.ROUND_HALF_DOWN).intValue();
                             for (int i = 0; i < count; i++) {
@@ -569,7 +569,7 @@ public class OrderService {
             if (newUserActivity != null) {
                 MarketActivitySpecDetail marketActivitySpecDetail = marketActivitySpecDetailRepository.findByMarketActivityIdLimit(newUserActivity.getId());
                 if (new Date().after(newUserActivity.getBeginTime()) && new Date().before(newUserActivity.getEndTime())) {
-                    User user = userRepository.getOne(memberUser.getUserId());
+                    Member user = memberRepository.getOne(memberUser.getMbrId());
                     if (user != null && marketActivitySpecDetail.getDepositMoney() != null && decimal.compareTo(marketActivitySpecDetail.getDepositMoney()) >= 0) {
                         marketActivityService.birthdaySendVoucher(memberUser, user, newUserActivity, "O");
                     }
@@ -607,12 +607,12 @@ public class OrderService {
         return result;
     }
 
-    public List<OrderListDTO> orderList(User user, String status) throws ParseException {
+    public List<OrderListDTO> orderList(Member user, String status) throws ParseException {
         List<Order> orderList;
         if (status.equals("all")) {
-            orderList = orderRepository.findByOrderUserId(user.getId());
+            orderList = orderRepository.findByOrderUserId(Integer.valueOf(user.getId().toString()));
         } else {
-            orderList = orderRepository.findByOrderUserIdAndStatus(user.getId(), status);
+            orderList = orderRepository.findByOrderUserIdAndStatus(Integer.valueOf(user.getId().toString()), status);
         }
         List<OrderListDTO> orderListDTOS = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -666,7 +666,7 @@ public class OrderService {
                     }
                     prodItem.add(newProdList);
                 }
-                UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+                UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
                 orderListDTO.setBalance(userBalance.getBalance());
                 orderListDTO.setProdItem(prodItem);
                 orderListDTOS.add(orderListDTO);
@@ -714,7 +714,7 @@ public class OrderService {
     }
 
     public OrdersDTO orderDetail(Order order) throws ParseException {
-        User user = userRepository.getOne(order.getUserId());
+        Member user = memberRepository.getOne(order.getUserId());
         OrdersDTO ordersDTO = new OrdersDTO();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (order.getStatus().equals("P")) {
@@ -751,7 +751,7 @@ public class OrderService {
             }
 
         } else {
-            MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
             ordersDTO.setUserName(memberUser.getNickName());
             ordersDTO.setPhone(user.getPhone());
             ordersDTO.setAddress("自提");
@@ -828,21 +828,21 @@ public class OrderService {
         ordersDTO.setTotalPrice(String.valueOf(order.getTotalPrice()));
         ordersDTO.setNewProdLists(newProdList);
         ordersDTO.setTotalPoint(pointSum);
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         ordersDTO.setBalance(userBalance.getBalance());
         return ordersDTO;
     }
 
-    public List<UserAddress> mineAddress(User user) {
-        List<UserAddress> address = userAddressRepository.findAddressByUserId(user.getId());
+    public List<UserAddress> mineAddress(Member user) {
+        List<UserAddress> address = userAddressRepository.findAddressByUserId(Integer.valueOf(user.getId().toString()));
         return address;
     }
 
-    public void addAddress(User user, String userName, String phone, String province, String city, String
+    public void addAddress(Member user, String userName, String phone, String province, String city, String
             country, String detailAddress) {
         UserAddress userAddress = new UserAddress();
-        userAddress.setUserId(user.getId());
-        userAddress.setWineryId(user.getWineryId());
+        userAddress.setUserId(Integer.valueOf(user.getId().toString()));
+        userAddress.setWineryId(Integer.valueOf(user.getWineryId().toString()));
         userAddress.setContact(userName);
         userAddress.setPhone(phone);
         StringBuffer add = new StringBuffer("");
@@ -869,7 +869,7 @@ public class OrderService {
         }
         userAddress.setDetailAddress(detailAddress);
         userAddress.setFullAddress(add.toString() + "" + detailAddress);
-        UserAddress address = userAddressRepository.findDefaultAddressByUserId(user.getId());
+        UserAddress address = userAddressRepository.findDefaultAddressByUserId(Integer.valueOf(user.getId().toString()));
         if (address == null) {
             userAddress.setIsDefault("Y");
         } else {
@@ -880,10 +880,10 @@ public class OrderService {
         userAddressRepository.save(userAddress);
     }
 
-    public String oneMoreOrder(User user, Order order) {
+    public String oneMoreOrder(Member user, Order order) {
         Order order1 = new Order();
-        order1.setWineryId(user.getWineryId());
-        order1.setUserId(user.getId());
+        order1.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        order1.setUserId(Integer.valueOf(user.getId().toString()));
         order1.setOrderNo(getOrderNoByMethod(user));
         order1.setProdNum(order.getProdNum());
         order1.setTotalPrice(order.getTotalPrice());
@@ -896,7 +896,7 @@ public class OrderService {
         OrderAddress address = orderAddressRepository.findByOrderId(order.getId());
         if (address != null) {
             OrderAddress address1 = new OrderAddress();
-            address1.setWineryId(user.getWineryId());
+            address1.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             address1.setOrderId(order1.getId());
             address1.setUserAddressId(address.getUserAddressId());
             address1.setCreateTime(new Date());
@@ -905,7 +905,7 @@ public class OrderService {
         OrderPrice price = orderPriceRepository.findByOrderId(order.getId());
         if (price != null) {
             OrderPrice price1 = new OrderPrice();
-            price1.setWineryId(user.getWineryId());
+            price1.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             price1.setOrderId(order1.getId());
             price1.setProdOrigPrice(price.getProdOrigPrice());
             price1.setProdFinalPrice(price.getProdFinalPrice());
@@ -919,7 +919,7 @@ public class OrderService {
         if (settle != null) {
             settle1.setUsePoint(settle.getUsePoint() == null ? 0 : settle.getUsePoint());
         }
-        settle1.setUserId(user.getId());
+        settle1.setUserId(Integer.valueOf(user.getId().toString()));
         settle1.setCreateTime(new Date());
         if (settle != null && settle.getUseVoucherId() != null) {
             UserVoucher voucher = userVoucherRepository.getOne(settle.getUseVoucherId());
@@ -944,7 +944,7 @@ public class OrderService {
         for (OrderProd orderProd : prodList) {
             OrderProd orderProd1 = new OrderProd();
             orderProd1.setOrderId(order1.getId());
-            orderProd1.setWineryId(user.getWineryId());
+            orderProd1.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             orderProd1.setProdId(orderProd.getProdId());
             orderProd1.setProdSpecId(orderProd.getProdSpecId());
             orderProd1.setQuantity(orderProd.getQuantity());
@@ -956,7 +956,7 @@ public class OrderService {
         for (OrderPriceItem orderPriceItem : itemList) {
             OrderPriceItem orderPriceItem1 = new OrderPriceItem();
             orderPriceItem1.setOrderId(order1.getId());
-            orderPriceItem1.setWineryId(user.getWineryId());
+            orderPriceItem1.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             orderPriceItem1.setOrderPriceId(orderPriceItem.getId());
             orderPriceItem1.setProdId(orderPriceItem.getProdId());
             orderPriceItem1.setQuantity(orderPriceItem.getQuantity());
@@ -982,11 +982,11 @@ public class OrderService {
         return address;
     }
 
-    public void updateAddress(User user, Integer addressId, String userName, String phone, String province, String
+    public void updateAddress(Member user, Integer addressId, String userName, String phone, String province, String
             city, String country, String detailAddress) {
         UserAddress userAddress = userAddressRepository.getOne(addressId);
-        userAddress.setUserId(user.getId());
-        userAddress.setWineryId(user.getWineryId());
+        userAddress.setUserId(Integer.valueOf(user.getId().toString()));
+        userAddress.setWineryId(Integer.valueOf(user.getWineryId().toString()));
         userAddress.setContact(userName);
         userAddress.setPhone(phone);
         StringBuffer add = new StringBuffer("");
@@ -1055,7 +1055,7 @@ public class OrderService {
         Map<String, Object> orderBaseInfo = new HashMap<>();
         orderBaseInfo.put("orderId", order.getId());
         orderBaseInfo.put("orderNo", order.getOrderNo());
-        MemberUser user = memberUserRepository.findByUserId(order.getUserId());
+        MemberWechat user = memberWechatRepository.findByMbrId(order.getUserId());
         if (user != null) {
             orderBaseInfo.put("orderUserName", EmojiParser.parseToUnicode(EmojiParser.parseToHtmlDecimal(user.getNickName())));
         }
@@ -1113,8 +1113,8 @@ public class OrderService {
                 orderBaseInfo.put("prodPrice", orderPriceItem.getOrigUnitPrice());
                 orderBaseInfo.put("prodNum", orderPriceItem.getQuantity());
                 orderBaseInfo.put("xiaoJi", orderPriceItem.getOrigTotalPrice());
-                MemberUser memberUser = memberUserRepository.findByUserId(user.getUserId());
-                prodPriceLevel = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), memberUser.getMemberLevelId());
+                MemberWechat memberUser = memberWechatRepository.findByMbrId(user.getMbrId());
+                prodPriceLevel = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), memberUser.getMemberLevel());
 
                 list.add(orderBaseInfo);
             }
@@ -1163,11 +1163,11 @@ public class OrderService {
         orderExpressRepository.save(orderExpress);
     }
 
-    public boolean checkHavePoint(User user, Prod prod, Integer amount) {
+    public boolean checkHavePoint(Member user, Prod prod, Integer amount) {
         ProdChanged changed = prodChangedRepository.findByProdId(prod.getId());
         if (changed != null) {
             Integer totalPoint = changed.getUsePoint() * amount;
-            UserPoint point = userPointRepository.findByUserId(user.getId());
+            UserPoint point = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
             if (point == null || point.getPoint() < totalPoint) {
                 return false;
             } else {
@@ -1178,7 +1178,7 @@ public class OrderService {
         }
     }
 
-    public boolean checkHavePointCarts(User user, List<Cart> carts) {
+    public boolean checkHavePointCarts(Member user, List<Cart> carts) {
         Integer totalPoint = 0;
         for (Cart cart : carts) {
             Prod prod = themeService.checkProdId(cart.getProdId());
@@ -1189,7 +1189,7 @@ public class OrderService {
                 }
             }
         }
-        UserPoint point = userPointRepository.findByUserId(user.getId());
+        UserPoint point = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         if (point == null || point.getPoint() < totalPoint) {
             return false;
         } else {
@@ -1197,7 +1197,7 @@ public class OrderService {
         }
     }
 
-    public boolean checkHavePointCartsMoreOrder(User user, Order order) {
+    public boolean checkHavePointCartsMoreOrder(Member user, Order order) {
         List<OrderProd> list = orderProdRepository.findByOrderId(order.getId());
         Integer totalPoint = 0;
         for (OrderProd orderProd : list) {
@@ -1209,7 +1209,7 @@ public class OrderService {
                 }
             }
         }
-        UserPoint point = userPointRepository.findByUserId(user.getId());
+        UserPoint point = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         if (point == null || point.getPoint() < totalPoint) {
             return false;
         } else {
@@ -1266,10 +1266,10 @@ public class OrderService {
         return "";
     }
 
-    public String buyNumCart(User user, List<Cart> carts) {
+    public String buyNumCart(Member user, List<Cart> carts) {
         for (Cart cart : carts) {
             Prod prod = prodRepository.getOne(cart.getProdId());
-            int buyNum = orderRepository.findByUserIdAndProdId(user.getId(), prod.getId(),user.getWineryId()) + cart.getAmount();
+            int buyNum = orderRepository.findByUserIdAndProdId(Integer.valueOf(user.getId().toString()), prod.getId(),Integer.valueOf(user.getWineryId().toString())) + cart.getAmount();
             if (prod != null && prod.getIsLimit().equals("N") && buyNum > prod.getLimitCount()) {
                 return "商品" + prod.getTitle() + "限购已达上限";
             }
@@ -1278,9 +1278,9 @@ public class OrderService {
         return "";
     }
 
-    public String buyNumOne(User user, Integer pordId,Integer amount) {
+    public String buyNumOne(Member user, Integer pordId, Integer amount) {
         Prod prod = prodRepository.getOne(pordId);
-        int buyNum = orderRepository.findByUserIdAndProdId(user.getId(), prod.getId(),user.getWineryId()) + amount;
+        int buyNum = orderRepository.findByUserIdAndProdId(Integer.valueOf(user.getId().toString()), prod.getId(),Integer.valueOf(user.getWineryId().toString())) + amount;
         if (prod != null && prod.getIsLimit().equals("N") && buyNum > prod.getLimitCount()) {
             return "商品" + prod.getTitle() + "限购已达上限";
         }
@@ -1351,7 +1351,7 @@ public class OrderService {
 
     public void balance(Integer userId, Order order, String type) throws ClientException {
         paySuccess(order.getOrderNo(), type, null);
-        User user = userRepository.getOne(userId);
+        Member user = memberRepository.getOne(userId);
         /*List<AdminUser> adminUsers = adminUserRepository.findAdminUserByWIdAndRoleName(user.getWineryId(), "管理员");
         for (AdminUser adminUser : adminUsers) {
             if (adminUser.getPhone() != null && !adminUser.getPhone().equals("")) {
@@ -1359,7 +1359,7 @@ public class OrderService {
                     SMSUtil.sendRemindSMS(adminUser.getPhone(), SMSUtil.signName, smsTemp.getCode(), new StringBuffer("{'name':'" + user.getName()  + "'}"));
             }
         }*/
-        UserBalance userBalance = userBalanceRepository.findByUserId(user.getId());
+        UserBalance userBalance = userBalanceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         UserDepositDetail userDepositDetail = new UserDepositDetail();
         if (type.equals("D")) {
             userDepositDetail.setBalance(order.getTotalPrice());
@@ -1370,8 +1370,8 @@ public class OrderService {
         }
         userBalance.setUpdateTime(new Date());
         UserBalance userBalanceSave = userBalanceRepository.saveAndFlush(userBalance);
-        userDepositDetail.setWineryId(user.getWineryId());
-        userDepositDetail.setUserId(user.getId());
+        userDepositDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        userDepositDetail.setUserId(Integer.valueOf(user.getId().toString()));
         userDepositDetail.setAction("O");
         userDepositDetail.setBalanceType("M");
         userDepositDetail.setLatestBalance(userBalanceSave.getBalance());
@@ -1421,7 +1421,7 @@ public class OrderService {
             OrderSettle settle = orderSettleRepository.findByOrderId(order.getId());
             if (order.getTotalPrice().compareTo(new BigDecimal(0)) != 0) {
                 //支付成功减用户积分
-                User userRepositoryOne = userRepository.getOne(order.getUserId());
+                Member userRepositoryOne = memberRepository.getOne(order.getUserId());
                 if (userRepositoryOne != null && settle != null) {
                     pointRewardRuleService.addUserPoint(userRepositoryOne, settle.getUsePoint(), "S", order.getOrderNo(), order.getId());
                 }
@@ -1463,7 +1463,7 @@ public class OrderService {
             orderPay.setPayStatus("A");
             orderPay.setPayTime(new Date());
             orderPayRepository.saveAndFlush(orderPay);
-            MemberUser memberUser = memberUserRepository.findByUserId(order.getUserId());
+            MemberWechat memberUser = memberWechatRepository.findByMbrId(order.getUserId());
             //满额赠券
             List<MarketActivity> activityList = marketActivityRepository.findByStatusAndMarketActivityTypeLike("满额", order.getWineryId());
             for (MarketActivity newUserActivity : activityList) {
@@ -1471,12 +1471,12 @@ public class OrderService {
                     MarketActivitySpecDetail marketActivitySpecDetail = marketActivitySpecDetailRepository.findByMarketActivityIdLimit(newUserActivity.getId());
                     if (new Date().after(newUserActivity.getBeginTime()) && new Date().before(newUserActivity.getEndTime())) {
                         if (newUserActivity.getSendSetting() != null && newUserActivity.getSendSetting().equals("O")) {
-                            User user = userRepository.getOne(memberUser.getUserId());
+                            Member user = memberRepository.getOne(memberUser.getMbrId());
                             if (user != null && marketActivitySpecDetail.getDepositMoney() != null && order.getTotalPrice().compareTo(marketActivitySpecDetail.getDepositMoney()) >= 0) {
                                 marketActivityService.birthdaySendVoucher(memberUser, user, newUserActivity, "M");
                             }
                         } else {
-                            User user = userRepository.getOne(memberUser.getUserId());
+                            Member user = memberRepository.getOne(memberUser.getMbrId());
                             if (user != null && marketActivitySpecDetail.getDepositMoney() != null && order.getTotalPrice().compareTo(marketActivitySpecDetail.getDepositMoney()) >= 0) {
                                 Integer count = order.getTotalPrice().divide(marketActivitySpecDetail.getDepositMoney(), 0, BigDecimal.ROUND_HALF_DOWN).intValue();
                                 for (int i = 0; i < count; i++) {
@@ -1495,7 +1495,7 @@ public class OrderService {
                 if (newUserActivity != null) {
                     MarketActivitySpecDetail marketActivitySpecDetail = marketActivitySpecDetailRepository.findByMarketActivityIdLimit(newUserActivity.getId());
                     if (new Date().after(newUserActivity.getBeginTime()) && new Date().before(newUserActivity.getEndTime())) {
-                        User user = userRepository.getOne(memberUser.getUserId());
+                        Member user = memberRepository.getOne(memberUser.getMbrId());
                         if (user != null && marketActivitySpecDetail.getDepositMoney() != null && decimal.compareTo(marketActivitySpecDetail.getDepositMoney()) >= 0) {
                             marketActivityService.birthdaySendVoucher(memberUser, user, newUserActivity, "O");
                         }

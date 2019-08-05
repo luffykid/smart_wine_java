@@ -18,7 +18,6 @@ import com.changfa.frame.data.repository.voucher.VoucherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,7 +45,7 @@ public class PointRewardRuleService {
     private MemberLevelRepository memberLevelRepository;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
     private MemberLevelRightRepository memberLevelRightRepository;
@@ -69,8 +68,8 @@ public class PointRewardRuleService {
     @Autowired
     private PointToVoucherRepository pointToVoucherRepository;
 
-    public void updateUserPoint(User user, BigDecimal payMoney, String action, String orderNo, Integer orderId) {
-        PointRewardRule pointRewardRule = pointRewardRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+    public void updateUserPoint(Member user, BigDecimal payMoney, String action, String orderNo, Integer orderId) {
+        PointRewardRule pointRewardRule = pointRewardRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
         if (pointRewardRule != null) {
             if (pointRewardRule.getIsLongTime().equals("Y")) {
                 if (pointRewardRule.getIsLimit().equals("Y")) {
@@ -78,12 +77,12 @@ public class PointRewardRuleService {
                 } else {
                     Integer pointSum = null;
                     if (action.equals("D")) {
-                        pointSum = userPointDetailRepository.findByUserIdAndAction(user.getId());
+                        pointSum = userPointDetailRepository.findByUserIdAndAction(Integer.valueOf(user.getId().toString()));
                         if (pointSum < pointRewardRule.getEveryDayLimit()) {
                             addPoint(action, payMoney, pointRewardRule, user, orderNo, orderId);
                         }
                     } else if (action.equals("W")) {
-                        pointSum = userPointDetailRepository.findByUserIdAndActionCon(user.getId());
+                        pointSum = userPointDetailRepository.findByUserIdAndActionCon(Integer.valueOf(user.getId().toString()));
                         if (pointSum < pointRewardRule.getEveryDayLimit()) {
                             addPoint(action, payMoney, pointRewardRule, user, orderNo, orderId);
                         }
@@ -99,12 +98,12 @@ public class PointRewardRuleService {
                     } else {
                         Integer pointSum = null;
                         if (action.equals("D")) {
-                            pointSum = userPointDetailRepository.findByUserIdAndAction(user.getId());
+                            pointSum = userPointDetailRepository.findByUserIdAndAction(Integer.valueOf(user.getId().toString()));
                             if (pointSum < pointRewardRule.getEveryDayLimit()) {
                                 addPoint(action, payMoney, pointRewardRule, user, orderNo, orderId);
                             }
                         } else if (action.equals("W")) {
-                            pointSum = userPointDetailRepository.findByUserIdAndActionCon(user.getId());
+                            pointSum = userPointDetailRepository.findByUserIdAndActionCon(Integer.valueOf(user.getId().toString()));
                             if (pointSum < pointRewardRule.getEveryDayLimit()) {
                                 addPoint(action, payMoney, pointRewardRule, user, orderNo, orderId);
                             }
@@ -116,7 +115,7 @@ public class PointRewardRuleService {
             }
         } /*else {
             if (action.equals("W")) {
-                MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+                MemberWechat memberUser = memberWechatRepository.findByUserId(user.getId());
                 if (memberUser != null) {
                     MemberLevelRight memberLevelRight = memberLevelRightRepository.findByMemberLevelId(memberUser.getMemberLevelId());
                     if (payMoney.compareTo(memberLevelRight.getConsumptionAmount()) >= 0) {
@@ -129,9 +128,9 @@ public class PointRewardRuleService {
 
     }
 
-    public void addUserPoint(User user, Integer point, String action, String orderNo, Integer orderId) {
+    public void addUserPoint(Member user, Integer point, String action, String orderNo, Integer orderId) {
         if (point != null) {
-            UserPoint userPoint = userPointRepository.findByUserId(user.getId());
+            UserPoint userPoint = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
             if (action.equals("D") || action.equals("W") || action.equals("L")) {
                 userPoint.setPoint(userPoint.getPoint() + point);
             } else {
@@ -141,8 +140,8 @@ public class PointRewardRuleService {
             UserPoint userPointSave = userPointRepository.saveAndFlush(userPoint);
 
             UserPointDetail userPointDetail = new UserPointDetail();
-            userPointDetail.setWineryId(user.getWineryId());
-            userPointDetail.setUserId(user.getId());
+            userPointDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+            userPointDetail.setUserId(Integer.valueOf(user.getWineryId().toString()));
             userPointDetail.setAction(action);
             userPointDetail.setPoint(point);
             if (action.equals("D") || action.equals("W") || action.equals("L")) {
@@ -165,21 +164,21 @@ public class PointRewardRuleService {
      * @Date          2018/10/26 11:41
      * @Description
      * */
-    public void addExperience(User user, Integer point, String action, Integer orderId) {
-        MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
-        UserExperience userExperience = userExperienceRepository.findByUserId(user.getId());
+    public void addExperience(Member user, Integer point, String action, Integer orderId) {
+        MemberWechat memberUser = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
+        UserExperience userExperience = userExperienceRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         userExperience.setExperience(userExperience.getExperience() + point);
         userExperience.setUpdateTime(new Date());
         UserExperience userExperienceSave = userExperienceRepository.saveAndFlush(userExperience);
         //判断是否需要升级
-        List<MemberLevel> upgradeMemberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(user.getWineryId(), "A");
+        List<MemberLevel> upgradeMemberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(Integer.valueOf(user.getWineryId().toString()), "A");
         if (upgradeMemberLevelList != null) {
             for (MemberLevel memberLevel : upgradeMemberLevelList) {
-                MemberLevel userMemberLevel = memberLevelRepository.getOne(memberUser.getMemberLevelId());
+                MemberLevel userMemberLevel = memberLevelRepository.getOne(memberUser.getMemberLevel());
                 if (userExperienceSave.getExperience() >= memberLevel.getUpgradeExperience()) {
                     if (memberLevel.getUpgradeExperience() > userMemberLevel.getUpgradeExperience()) {
-                        memberUser.setMemberLevelId(memberLevel.getId());
-                        memberUserRepository.saveAndFlush(memberUser);
+                        memberUser.setMemberLevel(memberLevel.getId());
+                        memberWechatRepository.saveAndFlush(memberUser);
                     }
                 }
             }
@@ -187,8 +186,8 @@ public class PointRewardRuleService {
 
         //经验验值明细
         UserExperienceDetail userExperienceDetail = new UserExperienceDetail();
-        userExperienceDetail.setWineryId(user.getWineryId());
-        userExperienceDetail.setUserId(user.getId());
+        userExperienceDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+        userExperienceDetail.setUserId(Integer.valueOf(user.getWineryId().toString()));
         userExperienceDetail.setAction(action);
         userExperienceDetail.setExperience(point);
         userExperienceDetail.setExperienceType("A");
@@ -199,7 +198,7 @@ public class PointRewardRuleService {
 
     }
 
-    public void addPoint(String action, BigDecimal payMoney, PointRewardRule pointRewardRule, User user, String orderNo, Integer orderId) {
+    public void addPoint(String action, BigDecimal payMoney, PointRewardRule pointRewardRule, Member user, String orderNo, Integer orderId) {
         if (action.equals("D")) {
             if (payMoney.compareTo(pointRewardRule.getDepositMoneyPoint()) >= 0) {
                 Integer point = payMoney.divide(pointRewardRule.getDepositMoneyPoint(), 0, BigDecimal.ROUND_HALF_UP).intValue();
@@ -222,8 +221,8 @@ public class PointRewardRuleService {
      * @Date          2018/11/22 17:01
      * @Description
      * */
-    public List<VoucherInstDTO> getPointToVoucher(User user) {
-        PointRewardRule pointRewardRule = pointRewardRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+    public List<VoucherInstDTO> getPointToVoucher(Member user) {
+        PointRewardRule pointRewardRule = pointRewardRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
         if (pointRewardRule != null) {
             if (pointRewardRule.getIsLongTime().equals("Y")) {
                 return getVoucherInstDTOList(pointRewardRule);
@@ -283,11 +282,11 @@ public class PointRewardRuleService {
      * @Date          2018/11/23 9:25
      * @Description
      * */
-    public Boolean pointToVoucher(User user, Integer voucherId) {
+    public Boolean pointToVoucher(Member user, Integer voucherId) {
         //积分奖励券记录规则
-        PointExchangeVoucher pointExchangeVoucher = pointExchangeVoucherRepository.findByWineryIdAndVoucherId(user.getWineryId(), voucherId);
+        PointExchangeVoucher pointExchangeVoucher = pointExchangeVoucherRepository.findByWineryIdAndVoucherId(Integer.valueOf(user.getWineryId().toString()), voucherId);
         //赠券模板
-        UserPoint userPoint = userPointRepository.findByUserId(user.getId());
+        UserPoint userPoint = userPointRepository.findByUserId(Integer.valueOf(user.getId().toString()));
         //判断用户积分是否可以兑换
         if (userPoint.getPoint() >= pointExchangeVoucher.getPoint()) {
             Voucher voucher = voucherRepository.getOne(voucherId);
@@ -305,11 +304,11 @@ public class PointRewardRuleService {
                 ineffectiveTime = caIne.getTime();
             }
             //添加实体券
-            VoucherInst voucherInst = new VoucherInst(user.getWineryId(), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
+            VoucherInst voucherInst = new VoucherInst(Integer.valueOf(user.getWineryId().toString()), voucher.getName(), voucher.getId(), format, voucher.getType(), voucher.getScope(), voucher.getCanPresent(), voucher.getMoney(), voucher.getDiscount(), voucher.getExchangeProdId(), voucher.getEnableType(), voucher.getEnableMoeny(), effectiveTime, ineffectiveTime, "A", new Date(), new Date());
             VoucherInst voucherInstSave = voucherInstRepository.saveAndFlush(voucherInst);
             //添加用户券记录
             UserVoucher userVoucher = new UserVoucher();
-            userVoucher.setUserId(user.getId());
+            userVoucher.setUserId(Integer.valueOf(user.getId().toString()));
             userVoucher.setCreateTime(new Date());
             userVoucher.setVoucherInstId(voucherInstSave.getId());
             userVoucher.setSendTime(new Date());
@@ -322,8 +321,8 @@ public class PointRewardRuleService {
             String orderNo = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
             pointToVoucher.setOrderNo(orderNo);
             pointToVoucher.setPoint(pointExchangeVoucher.getPoint());
-            pointToVoucher.setUserId(user.getId());
-            pointToVoucher.setWineryId(user.getWineryId());
+            pointToVoucher.setUserId(Integer.valueOf(user.getId().toString()));
+            pointToVoucher.setWineryId(Integer.valueOf(user.getWineryId().toString()));
             pointToVoucher.setVoucherInstId(voucherInstSave.getId());
             pointToVoucher.setCreateTime(new Date());
             PointToVoucher pointToVoucherSave = pointToVoucherRepository.saveAndFlush(pointToVoucher);
@@ -333,8 +332,8 @@ public class PointRewardRuleService {
             UserPoint userPointUpdate = userPointRepository.saveAndFlush(userPoint);
             //添加积分详情
             UserPointDetail userPointDetail = new UserPointDetail();
-            userPointDetail.setWineryId(user.getWineryId());
-            userPointDetail.setUserId(user.getId());
+            userPointDetail.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+            userPointDetail.setUserId(Integer.valueOf(user.getId().toString()));
             userPointDetail.setAction("G");
             userPointDetail.setPoint(pointExchangeVoucher.getPoint());
             userPointDetail.setPointType("M");
@@ -355,11 +354,11 @@ public class PointRewardRuleService {
      * @Date          2018/11/23 10:43
      * @Description
      * */
-    public Map<String, Object> getVoucherDetail(User user, Integer voucherId) {
+    public Map<String, Object> getVoucherDetail(Member user, Integer voucherId) {
         Map<String, Object> map = new HashMap<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Voucher voucher = voucherRepository.getOne(voucherId);
-        PointExchangeVoucher pointExchangeVoucher = pointExchangeVoucherRepository.findByWineryIdAndVoucherId(user.getWineryId(), voucherId);
+        PointExchangeVoucher pointExchangeVoucher = pointExchangeVoucherRepository.findByWineryIdAndVoucherId(Integer.valueOf(user.getWineryId().toString()), voucherId);
         VoucherInstDTO voucherInstDTO = new VoucherInstDTO();
         voucherInstDTO.setName(voucher.getName());
         voucherInstDTO.setVoucherInstId(voucher.getId());

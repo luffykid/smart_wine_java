@@ -7,9 +7,8 @@ import com.changfa.frame.data.entity.deposit.DepositRule;
 import com.changfa.frame.data.entity.deposit.DepositRuleSpecDetail;
 import com.changfa.frame.data.entity.market.MarketActivity;
 import com.changfa.frame.data.entity.market.MarketActivitySpecDetail;
-import com.changfa.frame.data.entity.market.MarketActivityType;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.data.entity.voucher.Voucher;
 import com.changfa.frame.data.repository.deposit.DepositOrderRepository;
 import com.changfa.frame.data.repository.deposit.DepositRuleRepository;
@@ -56,7 +55,7 @@ public class DepositRuleService {
     @Autowired
     private DepositOrderRepository depositOrderRepository;
 
-    public StringBuffer getDepositRule(User user) {
+    public StringBuffer getDepositRule(Member user) {
         List<DepositRuleDTO> depositRuleDTOList = new ArrayList<>();
         MarketActivity marketActivity = marketActivityService.findActivity(user, marketActivityRepository.findMtByWineryId("自定义", Constant.wineryId));
         if (marketActivity != null) {
@@ -85,7 +84,7 @@ public class DepositRuleService {
                         }
                     }
                 } else {
-                    DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+                    DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
                     if (depositRule != null) {
                         List<DepositRuleSpecDetail> depositRuleSpecDetailList = depositRuleSpecDetailRepository.findByDepositRuleId(depositRule.getId());
                         if (depositRuleSpecDetailList != null) {
@@ -140,7 +139,7 @@ public class DepositRuleService {
             }
         } else {
             //若没有自定义活动，则找储值活动
-            DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(user.getWineryId(), "A");
+            DepositRule depositRule = depositRuleRepository.findByWineryIdAndStatus(Integer.valueOf(user.getWineryId().toString()), "A");
             if (depositRule != null) {
                 List<DepositRuleSpecDetail> depositRuleSpecDetailList = depositRuleSpecDetailRepository.findByDepositRuleId(depositRule.getId());
                 if (depositRuleSpecDetailList != null) {

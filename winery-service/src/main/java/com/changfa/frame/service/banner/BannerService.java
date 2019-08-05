@@ -11,15 +11,15 @@ import com.changfa.frame.data.entity.market.MarketActivity;
 import com.changfa.frame.data.entity.market.MarketActivityRange;
 import com.changfa.frame.data.entity.market.MarketActivityType;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.repository.activity.ActivityRangeRepository;
 import com.changfa.frame.data.repository.activity.ActivityRepository;
 import com.changfa.frame.data.repository.banner.BannerRepository;
 import com.changfa.frame.data.repository.market.MarketActivityRangeRepository;
 import com.changfa.frame.data.repository.market.MarketActivityRepository;
 import com.changfa.frame.data.repository.market.MarketActivityTypeRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.data.repository.user.UserLoginLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class BannerService {
     private UserLoginLogRepository userLoginLogRepository;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
     private ActivityRangeRepository activityRangeRepository;
@@ -64,8 +64,8 @@ public class BannerService {
      * @Date          2018/10/19 10:15
      * @Description
      * */
-    public List<BannerDTO> getBanner(User user, String type) {
-        List<Banner> bannerList = bannerRepository.findByWineryIdAndTypeAndStatus(user.getWineryId(), type, "A");
+    public List<BannerDTO> getBanner(Member user, String type) {
+        List<Banner> bannerList = bannerRepository.findByWineryIdAndTypeAndStatus(user.getWineryId().intValue(), type, "A");
         if (bannerList != null) {
             List<BannerDTO> bannerDTOList = new ArrayList<>();
             for (Banner banner : bannerList) {
@@ -87,9 +87,9 @@ public class BannerService {
                     bannerDTO.setProdId(banner.getProdId());
                 }
                 if (user != null) {
-                    MemberUser memberUser = memberUserRepository.findByUserId(user.getId());
+                    MemberWechat memberUser = memberWechatRepository.findByMbrId(user.getId().intValue());
                     if (banner.getActivityId() != null) {
-                        List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(banner.getActivityId(), memberUser.getMemberLevelId());
+                        List<AcitivityRange> acitivityRange = activityRangeRepository.findByActivityIdAndMemberLevelId(banner.getActivityId(), memberUser.getMemberLevel());
                         if (acitivityRange != null && acitivityRange.size() > 0) {
                             bannerDTOList.add(bannerDTO);
                         }
@@ -101,7 +101,7 @@ public class BannerService {
                             if (marketActivityType!=null && marketActivityType.getName().equals("新会员赠券")){
                                 bannerDTOList.add(bannerDTO);
                             }
-                            List<MarketActivityRange> marketActivityRangeList = marketActivityRangeRepository.findByMarketActivityIdAndMemberLevelId(banner.getMarketActivityId(), memberUser.getMemberLevelId());
+                            List<MarketActivityRange> marketActivityRangeList = marketActivityRangeRepository.findByMarketActivityIdAndMemberLevelId(banner.getMarketActivityId(), memberUser.getMemberLevel());
                             if (marketActivityRangeList != null && marketActivityRangeList.size() > 0) {
                                 bannerDTOList.add(bannerDTO);
                             }

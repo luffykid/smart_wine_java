@@ -5,14 +5,10 @@ import com.changfa.frame.data.dto.wechat.*;
 import com.changfa.frame.data.entity.assemble.AssembleCommodity;
 import com.changfa.frame.data.entity.assemble.AssembleList;
 import com.changfa.frame.data.entity.assemble.AssembleUser;
-import com.changfa.frame.data.entity.banner.Banner;
-import com.changfa.frame.data.entity.cart.Cart;
 import com.changfa.frame.data.entity.order.*;
 import com.changfa.frame.data.entity.prod.*;
-import com.changfa.frame.data.entity.theme.ThemeProd;
 import com.changfa.frame.data.entity.user.*;
 import com.changfa.frame.data.entity.voucher.UserVoucher;
-import com.changfa.frame.data.entity.voucher.Voucher;
 import com.changfa.frame.data.entity.voucher.VoucherInst;
 import com.changfa.frame.data.repository.assemble.AssembleCommodityRepository;
 import com.changfa.frame.data.repository.assemble.AssembleListRepository;
@@ -21,19 +17,14 @@ import com.changfa.frame.data.repository.order.*;
 import com.changfa.frame.data.repository.prod.*;
 import com.changfa.frame.data.repository.theme.ThemeProdRepository;
 import com.changfa.frame.data.repository.user.MemberLevelRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
 import com.changfa.frame.data.repository.voucher.UserVoucherRepository;
 import com.changfa.frame.data.repository.voucher.VoucherInstRepository;
 import com.changfa.frame.service.PicturePathUntil;
 import com.changfa.frame.service.order.OrderService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -89,7 +80,7 @@ public class AssembleService {
 	@Autowired
 	private OrderProdRepository orderProdRepository;
 	@Autowired
-	private MemberUserRepository memberUserRepository;
+	private MemberWechatRepository memberWechatRepository;
 	@Autowired
 	private OrderPriceItemRepository orderPriceItemRepository;
 	@Autowired
@@ -103,7 +94,7 @@ public class AssembleService {
 	@Autowired
 	private OrderService orderService;
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository memberRepository;
 
 
 	/**
@@ -297,9 +288,9 @@ public class AssembleService {
 			AssembleListListDTO acListDTO = new AssembleListListDTO();
 			acListDTO.setId(aList.getId());
 			acListDTO.setAssembleNo(aList.getAssembleNo());
-			User user = userRepository.getOne(aList.getMaster());
+			Member user = memberRepository.getOne(aList.getMaster());
 			if(null != user){
-				acListDTO.setMasterName(user.getName());
+				acListDTO.setMasterName(user.getNickName());
 			}
 			AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(aList.getAssembleCommodity());
 			if(null != assembleCommodity){
@@ -343,11 +334,11 @@ public class AssembleService {
 			for(AssembleUser asUser : assembleUserList){
 				AssembleUserListDTO auwld = new AssembleUserListDTO();
 				auwld.setId(asUser.getId());
-				User user = userRepository.getOne(asUser.getUserId());
+				Member user = memberRepository.getOne(asUser.getUserId());
 				if(null != user){
-					auwld.setUserID(user.getId());
+					auwld.setUserID(Integer.valueOf(user.getId().toString()));
 					auwld.setIcon(user.getUserIcon());
-					auwld.setName(user.getName());
+					auwld.setName(user.getNickName());
 				}
 				auwld.setCreateTime(asUser.getCreateTime());
 				Order order = orderRepository.getOne(asUser.getOrderId());
@@ -378,9 +369,9 @@ public class AssembleService {
 				acListDTO.setId(assembleList.getId());
 				acListDTO.setAssembleNo(assembleList.getAssembleNo());
 				acListDTO.setAssembleStatus(assembleList.getAssembleStatus());
-				User user = userRepository.getOne(assembleList.getMaster());
+				Member user = memberRepository.getOne(assembleList.getMaster());
 				if(null != user){
-					acListDTO.setMasterName(user.getName());
+					acListDTO.setMasterName(user.getNickName());
 				}
 				acListDTO.setCreateTime(assembleList.getCreateTime());
 
@@ -414,9 +405,9 @@ public class AssembleService {
 	 * @param input     商品名称
 	 * @return
 	 */
-	public List<AssembleWeichatListDTO> assembleListWechat(User user, String input) {
+	public List<AssembleWeichatListDTO> assembleListWechat(Member user, String input) {
 		List<AssembleCommodity> assembleList = new ArrayList<>();
-		assembleList = assembleCommodityRepository.findByWineryIdLikeName(user.getWineryId(), input);
+		assembleList = assembleCommodityRepository.findByWineryIdLikeName(Integer.valueOf(user.getWineryId().toString()), input);
 		List<AssembleWeichatListDTO> acListDTOS = new ArrayList<>();
 		for (AssembleCommodity ac : assembleList) {
 			AssembleWeichatListDTO acListDTO = new AssembleWeichatListDTO();
@@ -451,7 +442,7 @@ public class AssembleService {
 
 
 	//去开团按钮
-	public AssembleWeichatDTO assembleButton(User user,Integer assembleId) {
+	public AssembleWeichatDTO assembleButton(Member user, Integer assembleId) {
 		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleId);
 		if(null != assembleCommodity){
 			AssembleWeichatDTO assembleWeichatDTO = new AssembleWeichatDTO();
@@ -495,7 +486,7 @@ public class AssembleService {
 
 
 	//生成团购编号
-	public String getOrderNoByMethod(User user) {
+	public String getOrderNoByMethod(Member user) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
 		String tempUserId = String.format("%02d", user.getId());
 		String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
@@ -530,11 +521,11 @@ public class AssembleService {
 	 * @param assembleCommodity     拼团商品
 	 * @return
 	 */
-	public void createAssemble(User user, UserAddress userAddress, UserVoucher userVoucher, String descri, AssembleCommodity assembleCommodity) {
+	public void createAssemble(Member user, UserAddress userAddress, UserVoucher userVoucher, String descri, AssembleCommodity assembleCommodity) {
 		//拼团订单
 		Order order = new Order();
-		order.setWineryId(user.getWineryId());
-		order.setUserId(user.getId());
+		order.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+		order.setUserId(Integer.valueOf(user.getId().toString()));
 		//订单号
 		String format = getOrderNoByMethod(user);
 		order.setOrderNo(format);
@@ -551,7 +542,7 @@ public class AssembleService {
 		orderRepository.saveAndFlush(order);
 		//订单价格
 		OrderPrice orderPrice = new OrderPrice();
-		orderPrice.setWineryId(user.getWineryId());
+		orderPrice.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 		orderPrice.setOrderId(order.getId());
 		orderPrice.setCarriageExpense(new BigDecimal(0));
 		orderPriceRepository.saveAndFlush(orderPrice);
@@ -560,7 +551,7 @@ public class AssembleService {
 		Integer prodNum = 0;
 		//订单商品
 		OrderProd orderProd = new OrderProd();
-		orderProd.setWineryId(user.getWineryId());
+		orderProd.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 		orderProd.setOrderId(order.getId());
 		orderProd.setProdId(assembleCommodity.getProdId());
 		orderProd.setQuantity(1);  //同一拼团订单中 每一个用户  拼团商品数量 只能是1
@@ -570,9 +561,9 @@ public class AssembleService {
 			Prod prod = prodRepository.getOne(prodPrice.getProdId());
 			double oneprice = 0;
 			if (prod.getMemberDiscount().equals("Y")) {
-				MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+				MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
 				if (user1 != null) {
-					ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+					ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
 					if (levelList != null) {
 //                            oneprice = prodPrice.getFinalPrice().doubleValue() * levelList.getDiscount().doubleValue();
 						// TODO 如果商品存在折扣，则价格为原价，否则为优惠价
@@ -590,7 +581,7 @@ public class AssembleService {
 			}
 			//订单价格项
 			OrderPriceItem orderPriceItem = new OrderPriceItem();
-			orderPriceItem.setWineryId(user.getWineryId());
+			orderPriceItem.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 			orderPriceItem.setOrderPriceId(orderPrice.getId());
 			orderPriceItem.setOrderId(order.getId());
 			orderPriceItem.setProdId(assembleCommodity.getProdId());
@@ -613,7 +604,7 @@ public class AssembleService {
 			//订单结算
 			OrderSettle orderSettle = new OrderSettle();
 			orderSettle.setOrderId(order.getId());
-			orderSettle.setUserId(user.getId());
+			orderSettle.setUserId(Integer.valueOf(user.getId().toString()));
 			orderSettle.setUseVoucherId(userVoucher.getId());
 			orderSettle.setUsePoint(0);
 
@@ -633,9 +624,9 @@ public class AssembleService {
 					}
 					Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 					if (prod != null && prod.getMemberDiscount().equals("Y")) {
-						MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+						MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
 						if (user1 != null) {
-							ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+							ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
 							if (level != null) {
 								if (level != null) {
 									// TODO 如果商品存在折扣，则价格为原价，否则为优惠价
@@ -682,7 +673,7 @@ public class AssembleService {
 		String format2 = getOrderNoByMethod(user);
 		assembleList.setAssembleNo(format2);//团购编号
 		assembleList.setAssembleCommodity(assembleCommodity.getId());
-		assembleList.setMaster(user.getId());
+		assembleList.setMaster(Integer.valueOf(user.getId().toString()));
 		assembleList.setAssembleStatus(1);//1拼团中，2拼团成功，3拼团失败（待退款），4 拼团失败（已退款）
 		assembleList.setCreateTime(new Date());
 		assembleList.setIsDelete(1);
@@ -690,7 +681,7 @@ public class AssembleService {
 
 		//拼团用户
 		AssembleUser assembleUser = new AssembleUser();
-		assembleUser.setUserId(user.getId());
+		assembleUser.setUserId(Integer.valueOf(user.getId().toString()));
 		assembleUser.setIsMaster(1);//是否为团长 0否，1是
 		assembleUser.setAssembleList(assembleList.getId());
 		assembleUser.setOrderId(order.getId());//生成订单的编号
@@ -769,9 +760,9 @@ public class AssembleService {
 			for(AssembleUser asUser : assembleUserList){
 				AssembleUserWeichatListDTO auwld = new AssembleUserWeichatListDTO();
 				auwld.setId(asUser.getId());
-				User user = userRepository.getOne(asUser.getUserId());
+				Member user = memberRepository.getOne(asUser.getUserId());
 				if(null != user){
-					auwld.setUserID(user.getId());
+					auwld.setUserID(Integer.valueOf(user.getId().toString()));
 					auwld.setIcon(user.getUserIcon());
 				}
 				auwld.setIsMaster(asUser.getIsMaster());
@@ -792,13 +783,13 @@ public class AssembleService {
 	 * @param assembleListId
 	 * @return
 	 */
-	public List<AssembleWeichatListDTO> assembleListWechat(User user, Integer assembleListId) {
+	public List<AssembleWeichatListDTO> assembleListWechat(Member user, Integer assembleListId) {
 
 		AssembleList assembleList = assembleListRepository.getOne(assembleListId);
 		List<AssembleWeichatListDTO> acListDTOS = new ArrayList<>();
 		if(null != assembleList){
 			AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
-			List<AssembleCommodity> assembleCommodityList  = assembleCommodityRepository.findByWineryIdAndId(user.getWineryId(), assembleCommodity.getId());
+			List<AssembleCommodity> assembleCommodityList  = assembleCommodityRepository.findByWineryIdAndId(Integer.valueOf(user.getWineryId().toString()), assembleCommodity.getId());
 			for (AssembleCommodity ac : assembleCommodityList) {
 				AssembleWeichatListDTO acListDTO = new AssembleWeichatListDTO();
 				acListDTO.setId(ac.getId());
@@ -843,7 +834,7 @@ public class AssembleService {
 	 * @param assembleId
 	 * @return
 	 */
-	public AssemblePordDetailWeichatDTO assembleProdWchat(User user, Integer assembleId) {
+	public AssemblePordDetailWeichatDTO assembleProdWchat(Member user, Integer assembleId) {
 		AssemblePordDetailWeichatDTO acListDTO = new AssemblePordDetailWeichatDTO();
 		if(null != assembleId){
 
@@ -911,7 +902,7 @@ public class AssembleService {
 
 
 	//我要参团按钮
-	public AssembleWeichatDTO joinAssembleButton(User user,Integer assembleListId) {
+	public AssembleWeichatDTO joinAssembleButton(Member user, Integer assembleListId) {
 //
 		if(null != assembleListId){
 			AssembleList assembleList = assembleListRepository.getOne(assembleListId);
@@ -960,12 +951,12 @@ public class AssembleService {
 	 * @param assembleList     拼团商品
 	 * @return
 	 */
-	public void joinAssemble(User user, UserAddress userAddress, UserVoucher userVoucher, String descri, AssembleList assembleList) {
+	public void joinAssemble(Member user, UserAddress userAddress, UserVoucher userVoucher, String descri, AssembleList assembleList) {
 		AssembleCommodity assembleCommodity = assembleCommodityRepository.getOne(assembleList.getAssembleCommodity());
 		//拼团订单
 		Order order = new Order();
-		order.setWineryId(user.getWineryId());
-		order.setUserId(user.getId());
+		order.setWineryId(Integer.valueOf(user.getWineryId().toString()));
+		order.setUserId(Integer.valueOf(user.getId().toString()));
 		//订单号
 		String format = getOrderNoByMethod(user);
 		order.setOrderNo(format);
@@ -981,7 +972,7 @@ public class AssembleService {
 		orderRepository.saveAndFlush(order);
 		//订单价格
 		OrderPrice orderPrice = new OrderPrice();
-		orderPrice.setWineryId(user.getWineryId());
+		orderPrice.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 		orderPrice.setOrderId(order.getId());
 		orderPrice.setCarriageExpense(new BigDecimal(0));
 		orderPriceRepository.saveAndFlush(orderPrice);
@@ -990,7 +981,7 @@ public class AssembleService {
 		Integer prodNum = 0;
 		//订单商品
 		OrderProd orderProd = new OrderProd();
-		orderProd.setWineryId(user.getWineryId());
+		orderProd.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 		orderProd.setOrderId(order.getId());
 		orderProd.setProdId(assembleCommodity.getProdId());
 		orderProd.setQuantity(1);  //同一拼团订单中 每一个用户  拼团商品数量 只能是1
@@ -1000,9 +991,9 @@ public class AssembleService {
 			Prod prod = prodRepository.getOne(prodPrice.getProdId());
 			double oneprice = 0;
 			if (prod.getMemberDiscount().equals("Y")) {
-				MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+				MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
 				if (user1 != null) {
-					ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+					ProdPriceLevel levelList = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
 					if (levelList != null) {
 //                            oneprice = prodPrice.getFinalPrice().doubleValue() * levelList.getDiscount().doubleValue();
 						// TODO 如果商品存在折扣，则价格为原价，否则为优惠价
@@ -1020,7 +1011,7 @@ public class AssembleService {
 			}
 			//订单价格项
 			OrderPriceItem orderPriceItem = new OrderPriceItem();
-			orderPriceItem.setWineryId(user.getWineryId());
+			orderPriceItem.setWineryId(Integer.valueOf(user.getWineryId().toString()));
 			orderPriceItem.setOrderPriceId(orderPrice.getId());
 			orderPriceItem.setOrderId(order.getId());
 			orderPriceItem.setProdId(assembleCommodity.getProdId());
@@ -1043,7 +1034,7 @@ public class AssembleService {
 			//订单结算
 			OrderSettle orderSettle = new OrderSettle();
 			orderSettle.setOrderId(order.getId());
-			orderSettle.setUserId(user.getId());
+			orderSettle.setUserId(Integer.valueOf(user.getId().toString()));
 			orderSettle.setUseVoucherId(userVoucher.getId());
 			orderSettle.setUsePoint(0);
 
@@ -1063,9 +1054,9 @@ public class AssembleService {
 					}
 					Prod prod = prodRepository.getOne(assembleCommodity.getProdId());
 					if (prod != null && prod.getMemberDiscount().equals("Y")) {
-						MemberUser user1 = memberUserRepository.findByUserId(user.getId());
+						MemberWechat user1 = memberWechatRepository.findByMbrId(Integer.valueOf(user.getId().toString()));
 						if (user1 != null) {
-							ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevelId());
+							ProdPriceLevel level = prodPriceLevelRepository.findByProdIdAndLevelId(prod.getId(), user1.getMemberLevel());
 							if (level != null) {
 								if (level != null) {
 									// TODO 如果商品存在折扣，则价格为原价，否则为优惠价
@@ -1109,7 +1100,7 @@ public class AssembleService {
 
 		//拼团用户
 		AssembleUser assembleUser = new AssembleUser();
-		assembleUser.setUserId(user.getId());
+		assembleUser.setUserId(Integer.valueOf(user.getId().toString()));
 		assembleUser.setIsMaster(0);//是否为团长 0否，1是
 		assembleUser.setAssembleList(assembleList.getId());
 		assembleUser.setOrderId(order.getId());//生成订单的编号

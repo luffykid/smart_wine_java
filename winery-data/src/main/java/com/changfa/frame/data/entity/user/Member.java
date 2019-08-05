@@ -5,34 +5,36 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.voodoodyne.jackson.jsog.JSOGGenerator;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table(name = "m_member")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = JSOGGenerator.class)
-public class User {
-    private Integer id;
-    private String token;
-    private String name;
-    private Integer wineryId;
-    private String phone;
-    private String wechat;
-    private String openId;
-    private String userIcon;
-    private String status;
-    private Date statusTime;
-    private Date createTime;
+public class Member {
+    private Long id;
+    private Long mbrLevelId;//会员等级ID
+    private Long wineryId;//酒庄ID
+    private String token;//令牌
+    private String nickName;//昵称
+    private String phone;//手机号
+    private String wechat;//微信号
+    private String openId;//微信openId
+    private String userIcon;//用户头像
+    private String status;//状态：0禁用；1正常
+    private Date statusTime;//状态时间
+    private Date createTime;//创建时间
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,22 +49,33 @@ public class User {
     }
 
     @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
+    @Column(name = "nick_name")
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+
+    @Basic
+    @Column(name = "mbr_level_id")
+    public Long getMbrLevelId() {
+        return mbrLevelId;
+    }
+
+    public void setMbrLevelId(Long mbrLevelId) {
+        this.mbrLevelId = mbrLevelId;
     }
 
     @Basic
     @Column(name = "winery_id")
-    public Integer getWineryId() {
+    public Long getWineryId() {
         return wineryId;
     }
 
-    public void setWineryId(Integer wineryId) {
+    public void setWineryId(Long wineryId) {
         this.wineryId = wineryId;
     }
 
@@ -140,11 +153,12 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        Member user = (Member) o;
         return Objects.equals(id, user.id) &&
                 Objects.equals(token, user.token) &&
-                Objects.equals(name, user.name) &&
+                Objects.equals(nickName, user.nickName) &&
                 Objects.equals(wineryId, user.wineryId) &&
+                Objects.equals(mbrLevelId, user.mbrLevelId) &&
                 Objects.equals(phone, user.phone) &&
                 Objects.equals(wechat, user.wechat) &&
                 Objects.equals(openId, user.openId) &&
@@ -157,6 +171,6 @@ public class User {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, token, name, wineryId, phone, wechat, openId, userIcon, status, statusTime, createTime);
+        return Objects.hash(id, token, nickName, wineryId, mbrLevelId ,phone, wechat, openId, userIcon, status, statusTime, createTime);
     }
 }

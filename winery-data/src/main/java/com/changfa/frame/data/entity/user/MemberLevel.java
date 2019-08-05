@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by Administrator on 2018/10/12 0012.
  */
 @Entity
-@Table(name = "member_level")
+@Table(name = "m_member_level")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class MemberLevel {

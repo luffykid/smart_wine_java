@@ -4,17 +4,16 @@ import com.aliyuncs.exceptions.ClientException;
 import com.changfa.frame.core.util.Constant;
 import com.changfa.frame.data.entity.market.MarketActivity;
 import com.changfa.frame.data.entity.order.Order;
-import com.changfa.frame.data.entity.user.MemberUser;
-import com.changfa.frame.data.entity.user.User;
+import com.changfa.frame.data.entity.user.Member;
+import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.repository.market.MarketActivityRangeRepository;
 import com.changfa.frame.data.repository.market.MarketActivityRepository;
 import com.changfa.frame.data.repository.order.OrderRepository;
-import com.changfa.frame.data.repository.user.MemberUserRepository;
-import com.changfa.frame.data.repository.user.UserRepository;
+import com.changfa.frame.data.repository.user.MemberRepository;
+import com.changfa.frame.data.repository.user.MemberWechatRepository;
 import com.changfa.frame.service.market.MarketActivityService;
 import com.changfa.frame.service.order.OrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +43,10 @@ public class ScheduledService {
     private MarketActivityRangeRepository marketActivityRangeRepository;
 
     @Autowired
-    private MemberUserRepository memberUserRepository;
+    private MemberWechatRepository memberWechatRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private OrderService orderService;
@@ -67,13 +66,13 @@ public class ScheduledService {
                 if (birthdayActivity != null) {
                     if (new Date().after(birthdayActivity.getBeginTime()) && new Date().before(birthdayActivity.getEndTime())) {
                         List<Integer> birthdayRange = marketActivityRangeRepository.findLevelIdByMarketActivityId(birthdayActivity.getId());
-                        List<MemberUser> memberUserList = memberUserRepository.findByMemberLevelId(birthdayRange, birthdayActivity.getWineryId());
+                        List<MemberWechat> memberUserList = memberWechatRepository.findByMemberLevelId(birthdayRange, birthdayActivity.getWineryId().longValue());
                         if (memberUserList != null) {
-                            for (MemberUser memberUser : memberUserList) {
+                            for (MemberWechat memberUser : memberUserList) {
                                 if (memberUser.getBirthday() != null) {
                                     int compare = compare_monuthAndDay(dateFormat.format(memberUser.getBirthday()), getPastDate(7));
                                     if (compare == 0) {
-                                        User user = userRepository.getOne(memberUser.getUserId());
+                                        Member user = memberRepository.getOne(memberUser.getMbrId());
                                         if (user != null) {
                                             try {
                                                 marketActivityService.birthdaySendVoucher(memberUser, user, birthdayActivity, "O");
@@ -100,10 +99,10 @@ public class ScheduledService {
             for (MarketActivity newUserActivity : activityList) {
                 if (newUserActivity != null) {
                     if (new Date().after(newUserActivity.getBeginTime()) && new Date().before(newUserActivity.getEndTime())) {
-                        List<MemberUser> memberUserList = memberUserRepository.findByWineryId(newUserActivity.getWineryId());
+                        List<MemberWechat> memberUserList = memberWechatRepository.findByWineryId(newUserActivity.getWineryId());
                         if (memberUserList != null) {
-                            for (MemberUser memberUser : memberUserList) {
-                                User user = userRepository.findOne(memberUser.getUserId());
+                            for (MemberWechat memberUser : memberUserList) {
+                                Member user = memberRepository.findOne(memberUser.getUserId());
                                 long time = new Date().getTime(); // 得到指定日期的毫秒数
                                 long day = 30 * 24 * 60 * 60 * 1000; // 要加上的天数转换成毫秒数
                                 Date timea = new Date(time - day); // 将毫秒数转换成日期
@@ -134,14 +133,14 @@ public class ScheduledService {
                 if (oldUserActivity != null) {
                     if (new Date().after(oldUserActivity.getBeginTime()) && new Date().before(oldUserActivity.getEndTime())) {
                         List<Integer> birthdayRange = marketActivityRangeRepository.findLevelIdByMarketActivityId(oldUserActivity.getId());
-                        List<MemberUser> memberUserList = memberUserRepository.findByMemberLevelId(birthdayRange, oldUserActivity.getWineryId());
+                        List<MemberWechat> memberUserList = memberWechatRepository.findByMemberLevelId(birthdayRange, oldUserActivity.getWineryId().longValue());
                         if (memberUserList != null) {
-                            for (MemberUser memberUser : memberUserList) {
-                                User user = userRepository.getOne(memberUser.getUserId());
+                            for (MemberWechat memberUser : memberUserList) {
+                                Member user = memberRepository.getOne(memberUser.getMbrId());
                                 String one = getAfterMonth(dateFormat.format(user.getCreateTime()),1);
                                 String two = getAfterMonth(dateFormat.format(user.getCreateTime()),2);
                                 if (user != null && new Date().after(dateFormat.parse(one)) && new Date().before(dateFormat.parse(two))) {
-                                    List<Order> orderList = orderRepository.findByUserIdAndStatus(user.getId());
+                                    List<Order> orderList = orderRepository.findByUserIdAndStatus(user.getId().intValue());
                                     if (orderList != null && orderList.size() == 1) {
                                         marketActivityService.birthdaySendVoucher(memberUser, user, oldUserActivity, "O");
                                     }
@@ -175,10 +174,10 @@ public class ScheduledService {
                         if (new Date().after(marketActivity.getBeginTime()) && new Date().before(marketActivity.getEndTime())) {
                             if (forrmat.format(new Date()).equals(caEff.getTime())) {
                                 List<Integer> birthdayRange = marketActivityRangeRepository.findLevelIdByMarketActivityId(marketActivity.getId());
-                                List<MemberUser> memberUserList = memberUserRepository.findByMemberLevelId(birthdayRange, marketActivity.getWineryId());
+                                List<MemberWechat> memberUserList = memberWechatRepository.findByMemberLevelId(birthdayRange, marketActivity.getWineryId().longValue());
                                 if (memberUserList != null) {
-                                    for (MemberUser memberUser : memberUserList) {
-                                        User user = userRepository.getOne(memberUser.getUserId());
+                                    for (MemberWechat memberUser : memberUserList) {
+                                        Member user = memberRepository.getOne(memberUser.getMbrId());
                                         if (user.getPhone() != null) {
                                             //SMSUtil.sendRemindSMS(user.getPhone(), "智慧酒旗星", smsTemp.getCode(), new StringBuffer("{'name':'" + memberUser.getNickName() + "'}"));
                                             log.info("发送成功");
