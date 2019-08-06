@@ -2,8 +2,8 @@ package com.changfa.frame.website.controller.market;
 
 import com.changfa.frame.data.dto.wechat.MarketDTO;
 import com.changfa.frame.data.entity.user.Member;
-import com.changfa.frame.service.market.MarketActivityService;
-import com.changfa.frame.service.user.MemberService;
+import com.changfa.frame.service.jpa.market.MarketActivityService;
+import com.changfa.frame.service.jpa.user.MemberService;
 
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;

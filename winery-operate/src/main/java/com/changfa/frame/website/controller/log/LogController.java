@@ -1,21 +1,17 @@
 package com.changfa.frame.website.controller.log;
 
-import com.changfa.frame.data.dto.operate.RoleDTO;
-import com.changfa.frame.data.dto.operate.RoleDetailDTO;
-import com.changfa.frame.data.dto.operate.RoleListDTO;
 import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.data.entity.user.Role;
 import com.changfa.frame.data.entity.user.SysLog;
 import com.changfa.frame.data.repository.user.RoleRepository;
 import com.changfa.frame.data.repository.winery.WineryRepository;
-import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.user.LogService;
-import com.changfa.frame.service.user.RoleService;
-import com.changfa.frame.service.winery.WineryService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
+import com.changfa.frame.service.jpa.user.LogService;
+import com.changfa.frame.service.jpa.user.RoleService;
+import com.changfa.frame.service.jpa.winery.WineryService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 @Api(value = "日志管理", tags = "日志管理")
 @RestController

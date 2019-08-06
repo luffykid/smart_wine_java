@@ -1,10 +1,9 @@
 package com.changfa.frame.website.controller.message;
 
 import com.changfa.frame.data.dto.saas.MessageDTO;
-import com.changfa.frame.data.entity.message.Message;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.service.message.MessageService;
-import com.changfa.frame.service.user.AdminUserService;
+import com.changfa.frame.service.jpa.message.MessageService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

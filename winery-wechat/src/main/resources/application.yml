@@ -33,7 +33,7 @@ spring:
     encoding: UTF-8
 
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://101.201.66.95:3306/winery?characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&testOnBorrow=true&validationQuery=select 1
 #    username: winery
 #    password: winery123

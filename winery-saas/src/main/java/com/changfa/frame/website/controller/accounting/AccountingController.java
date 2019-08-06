@@ -2,8 +2,8 @@ package com.changfa.frame.website.controller.accounting;
 
 import com.changfa.frame.data.dto.saas.AccountingDTO;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.service.accounting.AccountingService;
-import com.changfa.frame.service.user.AdminUserService;
+import com.changfa.frame.service.jpa.accounting.AccountingService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

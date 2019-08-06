@@ -2,10 +2,10 @@ package com.changfa.frame.website.controller.deposit;
 
 import com.changfa.frame.data.dto.wechat.UserDepositDetailDTO;
 import com.changfa.frame.data.entity.user.Member;
-import com.changfa.frame.service.deposit.DepositRuleService;
-import com.changfa.frame.service.deposit.UserBalanceService;
-import com.changfa.frame.service.deposit.UserDepositDetailService;
-import com.changfa.frame.service.user.MemberService;
+import com.changfa.frame.service.jpa.deposit.DepositRuleService;
+import com.changfa.frame.service.jpa.deposit.UserBalanceService;
+import com.changfa.frame.service.jpa.deposit.UserDepositDetailService;
+import com.changfa.frame.service.jpa.user.MemberService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

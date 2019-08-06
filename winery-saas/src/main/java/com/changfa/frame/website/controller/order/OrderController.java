@@ -1,10 +1,9 @@
 package com.changfa.frame.website.controller.order;
 
-import com.changfa.frame.data.entity.deposit.UserBalance;
 import com.changfa.frame.data.entity.order.Order;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.service.order.OrderService;
-import com.changfa.frame.service.user.AdminUserService;
+import com.changfa.frame.service.jpa.order.OrderService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

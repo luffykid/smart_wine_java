@@ -2,21 +2,15 @@ package com.changfa.frame.website.controller.banner;
 
 
 import com.changfa.frame.data.dto.saas.SBannerDTO;
-import com.changfa.frame.data.entity.banner.Banner;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.service.banner.BannerService;
-import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.util.excel.ExcelSheetSettingEnum;
-import com.changfa.frame.service.util.excel.ExcelView;
+import com.changfa.frame.service.jpa.banner.BannerService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

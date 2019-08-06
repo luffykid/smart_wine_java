@@ -2,23 +2,12 @@ package com.changfa.frame.website.controller.assemble;
 
 
 import com.changfa.frame.data.dto.saas.*;
-import com.changfa.frame.data.entity.banner.Banner;
-import com.changfa.frame.data.entity.prod.Prod;
-import com.changfa.frame.data.entity.prod.ProdBrand;
-import com.changfa.frame.data.entity.prod.ProdCategory;
-import com.changfa.frame.data.entity.prod.ProdSpecGroup;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.voucher.Voucher;
-import com.changfa.frame.data.repository.prod.ProdRepository;
-import com.changfa.frame.data.repository.voucher.VoucherRepository;
-import com.changfa.frame.service.assemble.AssembleService;
-import com.changfa.frame.service.banner.BannerService;
-import com.changfa.frame.service.prod.ProdService;
-import com.changfa.frame.service.user.AdminUserService;
+import com.changfa.frame.service.jpa.assemble.AssembleService;
+import com.changfa.frame.service.jpa.prod.ProdService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Api(value = "saas端 拼团管理", tags = "saas端 拼团管理")
 @RestController

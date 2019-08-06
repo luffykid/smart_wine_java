@@ -3,25 +3,11 @@ package com.changfa.frame.website.controller.winery;
 import com.changfa.frame.data.dto.operate.WineryDTO;
 import com.changfa.frame.data.dto.operate.WineryDetailDTO;
 import com.changfa.frame.data.dto.operate.WineryListDTO;
-import com.changfa.frame.data.dto.saas.AddProdDTO;
-import com.changfa.frame.data.dto.saas.AssembleCommodityDTO;
-import com.changfa.frame.data.dto.saas.ProdListDTO;
-import com.changfa.frame.data.entity.banner.Banner;
-import com.changfa.frame.data.entity.prod.Prod;
-import com.changfa.frame.data.entity.prod.ProdBrand;
-import com.changfa.frame.data.entity.prod.ProdCategory;
-import com.changfa.frame.data.entity.prod.ProdSpecGroup;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.data.entity.voucher.Voucher;
 import com.changfa.frame.data.entity.winery.Winery;
-import com.changfa.frame.data.entity.winery.WineryConfigure;
-import com.changfa.frame.data.repository.prod.ProdRepository;
-import com.changfa.frame.data.repository.voucher.VoucherRepository;
 import com.changfa.frame.data.repository.winery.WineryRepository;
-import com.changfa.frame.service.banner.BannerService;
-import com.changfa.frame.service.prod.ProdService;
-import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.winery.WineryService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
+import com.changfa.frame.service.jpa.winery.WineryService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Api(value = "酒庄管理", tags = "酒庄管理")
 @RestController

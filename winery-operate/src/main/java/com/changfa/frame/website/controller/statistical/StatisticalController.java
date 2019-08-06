@@ -1,14 +1,10 @@
 package com.changfa.frame.website.controller.statistical;
 
-import com.changfa.frame.data.dto.saas.DepositOrderDetailDTO;
-import com.changfa.frame.data.dto.saas.MarketDTO;
 import com.changfa.frame.data.dto.saas.StatisticDTO;
 import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.data.entity.winery.Winery;
-import com.changfa.frame.service.statistical.StatisticalService;
-import com.changfa.frame.service.user.AdminUserService;
-import com.changfa.frame.service.util.excel.ExcelSheetSettingEnum;
-import com.changfa.frame.service.util.excel.ExcelView;
+import com.changfa.frame.service.jpa.statistical.StatisticalService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

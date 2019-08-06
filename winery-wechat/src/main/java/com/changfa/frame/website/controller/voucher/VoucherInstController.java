@@ -3,8 +3,8 @@ package com.changfa.frame.website.controller.voucher;
 
 import com.changfa.frame.data.dto.wechat.VoucherInstDTO;
 import com.changfa.frame.data.entity.user.Member;
-import com.changfa.frame.service.user.MemberService;
-import com.changfa.frame.service.voucher.VoucherInstService;
+import com.changfa.frame.service.jpa.user.MemberService;
+import com.changfa.frame.service.jpa.voucher.VoucherInstService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

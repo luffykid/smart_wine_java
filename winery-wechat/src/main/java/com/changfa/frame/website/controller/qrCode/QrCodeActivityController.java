@@ -1,13 +1,11 @@
 package com.changfa.frame.website.controller.qrCode;
 
 
-import com.changfa.frame.service.activity.QrCodeActivityService;
+import com.changfa.frame.service.jpa.activity.QrCodeActivityService;
 import com.changfa.frame.website.common.JsonReturnUtil;
-import org.apache.xmlbeans.impl.jam.mutable.MAnnotatedElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

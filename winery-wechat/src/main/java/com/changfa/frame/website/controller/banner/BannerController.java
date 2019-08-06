@@ -3,8 +3,8 @@ package com.changfa.frame.website.controller.banner;
 
 import com.changfa.frame.data.dto.wechat.BannerDTO;
 import com.changfa.frame.data.entity.user.Member;
-import com.changfa.frame.service.banner.BannerService;
-import com.changfa.frame.service.user.MemberService;
+import com.changfa.frame.service.jpa.banner.BannerService;
+import com.changfa.frame.service.jpa.user.MemberService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

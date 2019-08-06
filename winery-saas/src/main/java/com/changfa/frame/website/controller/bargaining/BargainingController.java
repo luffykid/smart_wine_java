@@ -3,10 +3,9 @@ package com.changfa.frame.website.controller.bargaining;
 
 import com.changfa.frame.data.dto.saas.*;
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.service.assemble.AssembleService;
-import com.changfa.frame.service.bargaining.BargainingService;
-import com.changfa.frame.service.prod.ProdService;
-import com.changfa.frame.service.user.AdminUserService;
+import com.changfa.frame.service.jpa.bargaining.BargainingService;
+import com.changfa.frame.service.jpa.prod.ProdService;
+import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.website.common.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
