@@ -41,9 +41,9 @@ spring:
 #    username: root
 #    password: Wise_@123456
 
-    url: jdbc:mysql://localhost:3306/winery?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://39.106.184.86:3306/winery?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
-    password: root
+    password: 3Y4T8S#dl$d12*$@wyy
     # 可指定数据源，如果不指定则使用默认的数据源（com.zaxxer.hikari.HikariDataSource）
     type: com.alibaba.druid.pool.DruidDataSource
     # druid连接池的配置信息
