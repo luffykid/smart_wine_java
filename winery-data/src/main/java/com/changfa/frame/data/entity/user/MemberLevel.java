@@ -26,6 +26,8 @@ public class MemberLevel {
     private Date updateTime;
     private Date statusTime;
     private Date createTime;
+    private Date createDate;
+    private Date modifyDate;
     private String consumptionAmount;
     private String point;
     private String isFreightFree;
@@ -130,6 +132,25 @@ public class MemberLevel {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+    @Basic
+    @Column(name = "modify_date")
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    @Basic
+    @Column(name = "create_date")
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     @Transient
     public String getStatusName() {
@@ -183,7 +204,8 @@ public class MemberLevel {
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
         if (statusTime != null ? !statusTime.equals(that.statusTime) : that.statusTime != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-
+        if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
+        if (modifyDate != null ? !modifyDate.equals(that.modifyDate) : that.modifyDate != null) return false;
         return true;
     }
 
@@ -199,6 +221,8 @@ public class MemberLevel {
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         result = 31 * result + (statusTime != null ? statusTime.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
+        result = 31 * result + (modifyDate != null ? modifyDate.hashCode() : 0);
         return result;
     }
 }
