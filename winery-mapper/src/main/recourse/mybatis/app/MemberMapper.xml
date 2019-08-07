@@ -1,177 +1,75 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.changfa.frame.mapper.app.MemberMapper">
-  <resultMap id="BaseResultMap" type="com.changfa.frame.model.Member">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="mbr_level_id" jdbcType="BIGINT" property="mbrLevelId" />
-    <result column="winery_id" jdbcType="BIGINT" property="wineryId" />
-    <result column="token" jdbcType="VARCHAR" property="token" />
-    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
-    <result column="open_id" jdbcType="VARCHAR" property="openId" />
-    <result column="user_icon" jdbcType="VARCHAR" property="userIcon" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
-    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, mbr_level_id, winery_id, token, nick_name, phone, wechat, open_id, user_icon, 
-    status, status_time, create_date
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from m_member
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from m_member
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.changfa.frame.model.Member">
-    insert into m_member (id, mbr_level_id, winery_id, 
-      token, nick_name, phone, 
-      wechat, open_id, user_icon, 
-      status, status_time, create_date
-      )
-    values (#{id,jdbcType=BIGINT}, #{mbrLevelId,jdbcType=BIGINT}, #{wineryId,jdbcType=BIGINT}, 
-      #{token,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{wechat,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, #{userIcon,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{statusTime,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.changfa.frame.model.Member">
-    insert into m_member
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="mbrLevelId != null">
-        mbr_level_id,
-      </if>
-      <if test="wineryId != null">
-        winery_id,
-      </if>
-      <if test="token != null">
-        token,
-      </if>
-      <if test="nickName != null">
-        nick_name,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="wechat != null">
-        wechat,
-      </if>
-      <if test="openId != null">
-        open_id,
-      </if>
-      <if test="userIcon != null">
-        user_icon,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="statusTime != null">
-        status_time,
-      </if>
-      <if test="createDate != null">
-        create_date,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="mbrLevelId != null">
-        #{mbrLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="wineryId != null">
-        #{wineryId,jdbcType=BIGINT},
-      </if>
-      <if test="token != null">
-        #{token,jdbcType=VARCHAR},
-      </if>
-      <if test="nickName != null">
-        #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="wechat != null">
-        #{wechat,jdbcType=VARCHAR},
-      </if>
-      <if test="openId != null">
-        #{openId,jdbcType=VARCHAR},
-      </if>
-      <if test="userIcon != null">
-        #{userIcon,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="statusTime != null">
-        #{statusTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createDate != null">
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.changfa.frame.model.Member">
-    update m_member
-    <set>
-      <if test="mbrLevelId != null">
-        mbr_level_id = #{mbrLevelId,jdbcType=BIGINT},
-      </if>
-      <if test="wineryId != null">
-        winery_id = #{wineryId,jdbcType=BIGINT},
-      </if>
-      <if test="token != null">
-        token = #{token,jdbcType=VARCHAR},
-      </if>
-      <if test="nickName != null">
-        nick_name = #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="phone != null">
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="wechat != null">
-        wechat = #{wechat,jdbcType=VARCHAR},
-      </if>
-      <if test="openId != null">
-        open_id = #{openId,jdbcType=VARCHAR},
-      </if>
-      <if test="userIcon != null">
-        user_icon = #{userIcon,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="statusTime != null">
-        status_time = #{statusTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createDate != null">
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.changfa.frame.model.Member">
-    update m_member
-    set mbr_level_id = #{mbrLevelId,jdbcType=BIGINT},
-      winery_id = #{wineryId,jdbcType=BIGINT},
-      token = #{token,jdbcType=VARCHAR},
-      nick_name = #{nickName,jdbcType=VARCHAR},
-      phone = #{phone,jdbcType=VARCHAR},
-      wechat = #{wechat,jdbcType=VARCHAR},
-      open_id = #{openId,jdbcType=VARCHAR},
-      user_icon = #{userIcon,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      status_time = #{statusTime,jdbcType=TIMESTAMP},
-      create_date = #{createDate,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MemberMapper" >
+    <resultMap id="memberMap" type="com.changfa.frame.model.Member" >
+        <result column="id" property="id" jdbcType="BIGINT" />
+        <result column="mbr_level_id" property="mbrLevelId" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="token" property="token" jdbcType="VARCHAR" />
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="wechat" property="wechat" jdbcType="VARCHAR" />
+        <result column="open_id" property="openId" jdbcType="VARCHAR" />
+        <result column="user_icon" property="userIcon" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+      id,mbr_level_id,winery_id,token,nick_name,phone,wechat,open_id,
+      user_icon,status,status_time,create_date
+    </sql>
+
+    <insert id="save" parameterType="com.changfa.frame.model.Member" >
+        insert into m_member (id, mbr_level_id, winery_id, token, nick_name, phone, wechat, 
+            open_id, user_icon, status, status_time, create_date)
+        values (#{id}, #{mbrLevelId}, #{wineryId}, #{token}, #{nickName}, #{phone}, #{wechat}, 
+            #{openId}, #{userIcon}, #{status}, #{statusTime}, #{createDate})
+    </insert>
+
+    <select id="selectList" resultMap="memberMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from m_member
+        <where >
+            <if test="id != null" >
+                and null.id = #{id}
+            </if>
+            <if test="mbrLevelId != null" >
+                and null.mbr_level_id = #{mbrLevelId}
+            </if>
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="token != null and token != ''" >
+                and null.token = #{token}
+            </if>
+            <if test="nickName != null and nickName != ''" >
+                and null.nick_name = #{nickName}
+            </if>
+            <if test="phone != null and phone != ''" >
+                and null.phone = #{phone}
+            </if>
+            <if test="wechat != null and wechat != ''" >
+                and null.wechat = #{wechat}
+            </if>
+            <if test="openId != null and openId != ''" >
+                and null.open_id = #{openId}
+            </if>
+            <if test="userIcon != null and userIcon != ''" >
+                and null.user_icon = #{userIcon}
+            </if>
+            <if test="status != null" >
+                and null.status = #{status}
+            </if>
+            <if test="statusTime != null" >
+                and null.status_time = #{statusTime}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+        </where>
+    </select>
+
 </mapper>

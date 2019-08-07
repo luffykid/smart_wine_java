@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -18,11 +19,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 @SpringBootApplication
-//@ComponentScan({"com.changfa.frame"})
+//@ComponentScan("com.changfa.frame")
 @ServletComponentScan
 @EnableAsync
 @EnableScheduling
-@MapperScan("com.changfa.frame.mapper")
+//@MapperScan("com.changfa.frame.mapper.*")
 public class Application extends SpringBootServletInitializer {
 
 

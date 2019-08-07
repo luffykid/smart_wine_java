@@ -24,7 +24,7 @@ import java.util.TimeZone;
 @ServletComponentScan
 @EnableAsync
 @Configuration
-@MapperScan("com.changfa.frame.mapper")
+//@MapperScan("com.changfa.frame.mapper")
 public class Application extends SpringBootServletInitializer {
 
 

@@ -5,7 +5,6 @@ import com.changfa.frame.data.entity.user.MemberWechat;
 import com.changfa.frame.data.repository.AdvancedJpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.math.BigInteger;
 import java.util.List;
 
 

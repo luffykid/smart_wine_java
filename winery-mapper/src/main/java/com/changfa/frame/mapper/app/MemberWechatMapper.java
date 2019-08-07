@@ -1,18 +1,14 @@
+/*
+ * MemberWechatMapper.java
+ * Copyright(C) 北京畅发科技有限公司
+ * All rights reserved.
+ * -----------------------------------------------
+ * 2019-08-06 Created
+ */
 package com.changfa.frame.mapper.app;
 
-
+import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.MemberWechat;
 
-public interface MemberWechatMapper {
-    int deleteByPrimaryKey(Long id);
-
-    int insert(MemberWechat record);
-
-    int insertSelective(MemberWechat record);
-
-    MemberWechat selectByPrimaryKey(Long id);
-
-    int updateByPrimaryKeySelective(MemberWechat record);
-
-    int updateByPrimaryKey(MemberWechat record);
+public interface MemberWechatMapper extends BaseMapper<MemberWechat, Long> {
 }
