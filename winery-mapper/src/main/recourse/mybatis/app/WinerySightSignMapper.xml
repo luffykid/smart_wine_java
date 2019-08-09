@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WinerySightSignMapper" >
+    <resultMap id="winerySightSignMap" type="com.changfa.frame.model.WinerySightSign" >
+        <result column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_sight_id" property="winerySightId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="sign_date" property="signDate" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, winery_sight_id, mbr_id, sign_date, create_date, modify_date, is_sign
+    </sql>
+
+    <insert id="save" parameterType="com.changfa.frame.model.WinerySightSign" >
+        insert into m_member_sight_sign (id, winery_sight_id, mbr_id, sign_date, create_date, modify_date
+            )
+        values (#{id}, #{winerySightId}, #{mbrId}, #{signDate}, #{createDate}, #{modifyDate}
+            )
+    </insert>
+
+    <select id="selectList" resultMap="winerySightSignMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from m_member_sight_sign
+        <where >
+            <if test="id != null" >
+                and null.id = #{id}
+            </if>
+            <if test="winerySightId != null" >
+                and null.winery_sight_id = #{winerySightId}
+            </if>
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
+            <if test="signDate != null" >
+                and null.sign_date = #{signDate}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>
