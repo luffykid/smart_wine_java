@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.changfa.frame.mapper.app.MemberMapper" >
-    <resultMap id="memberMap" type="com.changfa.frame.model.Member" >
-        <result column="id" property="id" jdbcType="BIGINT" />
+    <resultMap id="memberMap" type="com.changfa.frame.model.app.Member" >
+        <id column="id" property="id" jdbcType="BIGINT" />
         <result column="mbr_level_id" property="mbrLevelId" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="token" property="token" jdbcType="VARCHAR" />
@@ -11,31 +11,109 @@
         <result column="wechat" property="wechat" jdbcType="VARCHAR" />
         <result column="open_id" property="openId" jdbcType="VARCHAR" />
         <result column="user_icon" property="userIcon" jdbcType="VARCHAR" />
-        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="STATUS" property="status" jdbcType="INTEGER" />
         <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
+        <result column="total_integral" property="totalIntegral" jdbcType="DECIMAL" />
+        <result column="total_store_remain" property="totalStoreRemain" jdbcType="DECIMAL" />
+        <result column="total_store_increment" property="totalStoreIncrement" jdbcType="DECIMAL" />
+        <result column="market_qr_code" property="marketQrCode" jdbcType="VARCHAR" />
+        <result column="market_pid" property="marketPid" jdbcType="BIGINT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
-    <sql id="Base_Column_List">
-      id,mbr_level_id,winery_id,token,nick_name,phone,wechat,open_id,
-      user_icon,status,status_time,create_date
+    <sql id="table_column" >
+        id, mbr_level_id, winery_id, token, nick_name, phone, wechat, open_id, user_icon,
+        STATUS, status_time, total_integral, total_store_remain, total_store_increment, market_qr_code,
+        market_pid, create_date, modify_date
     </sql>
 
-    <insert id="save" parameterType="com.changfa.frame.model.Member" >
-        insert into m_member (id, mbr_level_id, winery_id, token, nick_name, phone, wechat, 
-            open_id, user_icon, status, status_time, create_date)
-        values (#{id}, #{mbrLevelId}, #{wineryId}, #{token}, #{nickName}, #{phone}, #{wechat}, 
-            #{openId}, #{userIcon}, #{status}, #{statusTime}, #{createDate})
+    <select id="getById" resultMap="memberMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from m_member
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.Member" >
+        insert into m_member (id, mbr_level_id, winery_id, token, nick_name, phone, wechat,
+            open_id, user_icon, STATUS, status_time, total_integral, total_store_remain,
+            total_store_increment, market_qr_code, market_pid, create_date, modify_date
+            )
+        values (#{id}, #{mbrLevelId}, #{wineryId}, #{token}, #{nickName}, #{phone}, #{wechat},
+            #{openId}, #{userIcon}, #{status}, #{statusTime}, #{totalIntegral}, #{totalStoreRemain},
+            #{totalStoreIncrement}, #{marketQrCode}, #{marketPid}, #{createDate}, #{modifyDate}
+            )
     </insert>
 
+    <update id="update" parameterType="com.changfa.frame.model.app.Member" >
+        update m_member
+        <set >
+            <if test="mbrLevelId != null" >
+                mbr_level_id = #{mbrLevelId},
+            </if>
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="token != null and token != ''" >
+                token = #{token},
+            </if>
+            <if test="nickName != null and nickName != ''" >
+                nick_name = #{nickName},
+            </if>
+            <if test="phone != null and phone != ''" >
+                phone = #{phone},
+            </if>
+            <if test="wechat != null and wechat != ''" >
+                wechat = #{wechat},
+            </if>
+            <if test="openId != null and openId != ''" >
+                open_id = #{openId},
+            </if>
+            <if test="userIcon != null and userIcon != ''" >
+                user_icon = #{userIcon},
+            </if>
+            <if test="status != null" >
+                STATUS = #{status},
+            </if>
+            <if test="statusTime != null" >
+                status_time = #{statusTime},
+            </if>
+            <if test="totalIntegral != null" >
+                total_integral = #{totalIntegral},
+            </if>
+            <if test="totalStoreRemain != null" >
+                total_store_remain = #{totalStoreRemain},
+            </if>
+            <if test="totalStoreIncrement != null" >
+                total_store_increment = #{totalStoreIncrement},
+            </if>
+            <if test="marketQrCode != null and marketQrCode != ''" >
+                market_qr_code = #{marketQrCode},
+            </if>
+            <if test="marketPid != null" >
+                market_pid = #{marketPid},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_member
+        where id = #{id}
+    </delete>
+
     <select id="selectList" resultMap="memberMap" >
-        select 
-        <include refid="Base_Column_List" />
+        select
+        <include refid="table_column" />
         from m_member
         <where >
-            <if test="id != null" >
-                and null.id = #{id}
-            </if>
             <if test="mbrLevelId != null" >
                 and null.mbr_level_id = #{mbrLevelId}
             </if>
@@ -61,13 +139,31 @@
                 and null.user_icon = #{userIcon}
             </if>
             <if test="status != null" >
-                and null.status = #{status}
+                and null.STATUS = #{status}
             </if>
             <if test="statusTime != null" >
                 and null.status_time = #{statusTime}
             </if>
+            <if test="totalIntegral != null" >
+                and null.total_integral = #{totalIntegral}
+            </if>
+            <if test="totalStoreRemain != null" >
+                and null.total_store_remain = #{totalStoreRemain}
+            </if>
+            <if test="totalStoreIncrement != null" >
+                and null.total_store_increment = #{totalStoreIncrement}
+            </if>
+            <if test="marketQrCode != null and marketQrCode != ''" >
+                and null.market_qr_code = #{marketQrCode}
+            </if>
+            <if test="marketPid != null" >
+                and null.market_pid = #{marketPid}
+            </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

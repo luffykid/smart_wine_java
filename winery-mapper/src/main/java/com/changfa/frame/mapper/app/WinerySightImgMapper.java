@@ -8,9 +8,7 @@
 package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
-import com.changfa.frame.model.WinerySightImg;
-import org.apache.ibatis.annotations.Mapper;
+import com.changfa.frame.model.app.WinerySightImg;
 
-@Mapper
 public interface WinerySightImgMapper extends BaseMapper<WinerySightImg, Long> {
 }

@@ -1,14 +1,14 @@
 /*
- * MemberWechatMapper.java
+ * MbrWechatMapper.java
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-06 Created
+ * 2019-08-14 Created
  */
 package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
-import com.changfa.frame.model.MemberWechat;
+import com.changfa.frame.model.app.MbrWechat;
 
-public interface MemberWechatMapper extends BaseMapper<MemberWechat, Long> {
+public interface MbrWechatMapper extends BaseMapper<MbrWechat, Long> {
 }

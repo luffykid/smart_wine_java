@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 @SpringBootApplication
-//@ComponentScan("com.changfa.frame")
+@ComponentScan("com.changfa.frame.*")
 @ServletComponentScan
 @EnableAsync
 @EnableScheduling
-//@MapperScan("com.changfa.frame.mapper.*")
+@MapperScan("com.changfa.frame.mapper.*")
 public class Application extends SpringBootServletInitializer {
 
 

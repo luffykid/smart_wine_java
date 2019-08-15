@@ -1,26 +1,26 @@
 /*
- * MemberWechat.java
+ * MbrWechat.java
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-06 Created
+ * 2019-08-14 Created
  */
-package com.changfa.frame.model;
+package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.util.Date;
 
 /**
- * 
- * @version 1.0 2019-08-06
+ * 会员微信表
+ * @version 1.0 2019-08-14
  */
-public class MemberWechat extends BaseEntity {
+public class MbrWechat extends BaseEntity {
 
-    private static final long serialVersionUID = 438597579811323904L;
+    private static final long serialVersionUID = 441543498722705408L;
 
     /** 用户ID */
-    private Long mbrId;
+    private Integer mbrId;
 
     /** 会员昵称 */
     private String nickName;
@@ -47,14 +47,14 @@ public class MemberWechat extends BaseEntity {
     /**
      * 获取用户ID
     */
-    public Long getMbrId() {
+    public Integer getMbrId() {
         return mbrId;
     }
     
     /**
      * 设置用户ID
     */
-    public void setMbrId(Long mbrId) {
+    public void setMbrId(Integer mbrId) {
         this.mbrId = mbrId;
     }
     

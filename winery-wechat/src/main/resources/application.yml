@@ -42,15 +42,15 @@ spring:
 #    password: Wise_@123456
 
     url: jdbc:mysql://39.106.184.86:3306/winery?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password: 3Y4T8S#dl$d12*$@wyy
+    username: winery
+    password: winery123@Tw123876
     # 可指定数据源，如果不指定则使用默认的数据源（com.zaxxer.hikari.HikariDataSource）
     type: com.alibaba.druid.pool.DruidDataSource
     # druid连接池的配置信息
     # 初始化大小，最小，最大
-    initialSize: 3
-    minIdle: 5
-    maxActive: 20
+    initialSize: 20
+    minIdle: 50
+    maxActive: 200
     # 配置获取连接等待超时的时间
 
     maxWait: 30000

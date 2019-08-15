@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.changfa.frame.mapper.app.WinerySightMapper" >
-    <resultMap id="winerySightMap" type="com.changfa.frame.model.WinerySight" >
-        <result column="id" property="id" jdbcType="BIGINT" />
-        <result column="wireny_id" property="wirenyId" jdbcType="BIGINT" />
+    <resultMap id="winerySightMap" type="com.changfa.frame.model.app.WinerySight" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="sight_name" property="sightName" jdbcType="VARCHAR" />
         <result column="sight_icon" property="sightIcon" jdbcType="VARCHAR" />
         <result column="sight_detail" property="sightDetail" jdbcType="LONGVARCHAR" />
         <result column="cover_img" property="coverImg" jdbcType="VARCHAR" />
         <result column="latitude" property="latitude" jdbcType="DECIMAL" />
         <result column="longitude" property="longitude" jdbcType="DECIMAL" />
-        <result column="x_axis" property="xAxis" jdbcType="DECIMAL" />
-        <result column="y_axis" property="yAxis" jdbcType="DECIMAL" />
         <result column="like_total_cnt" property="likeTotalCnt" jdbcType="BIGINT" />
         <result column="share_total_cnt" property="shareTotalCnt" jdbcType="INTEGER" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
@@ -19,25 +17,83 @@
         <result column="is_sign" property="isSign" jdbcType="TINYINT" />
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id, wireny_id, sight_name, sight_icon, sight_detail, cover_img, latitude, longitude,
-        x_axis, y_axis, like_total_cnt, share_total_cnt, create_date, modify_date, is_sign
+    <sql id="table_column" >
+        id, winery_id, sight_name, sight_icon, sight_detail, cover_img, latitude, longitude,
+        like_total_cnt, share_total_cnt, create_date, modify_date, is_sign
     </sql>
 
-    <insert id="save" parameterType="com.changfa.frame.model.WinerySight" >
-        insert into b_winery_sight (id, wireny_id, sight_name, sight_icon, sight_detail, cover_img, 
-            latitude, longitude, x_axis, y_axis, like_total_cnt, share_total_cnt, 
-            create_date, modify_date, is_sign)
-        values (#{id}, #{wirenyId}, #{sightName}, #{sightIcon}, #{sightDetail}, #{coverImg}, 
-            #{latitude}, #{longitude}, #{xAxis}, #{yAxis}, #{likeTotalCnt}, #{shareTotalCnt}, 
-            #{createDate}, #{modifyDate}, #{isSign})
+    <select id="getById" resultMap="winerySightMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from b_winery_sight
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WinerySight" >
+        insert into b_winery_sight (id, winery_id, sight_name, sight_icon, sight_detail, cover_img,
+            latitude, longitude, like_total_cnt, share_total_cnt, create_date,
+            modify_date, is_sign)
+        values (#{id}, #{wineryId}, #{sightName}, #{sightIcon}, #{sightDetail}, #{coverImg},
+            #{latitude}, #{longitude}, #{likeTotalCnt}, #{shareTotalCnt}, #{createDate},
+            #{modifyDate}, #{isSign})
     </insert>
 
+    <update id="update" parameterType="com.changfa.frame.model.app.WinerySight" >
+        update b_winery_sight
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="sightName != null and sightName != ''" >
+                sight_name = #{sightName},
+            </if>
+            <if test="sightIcon != null and sightIcon != ''" >
+                sight_icon = #{sightIcon},
+            </if>
+            <if test="sightDetail != null" >
+                sight_detail = #{sightDetail},
+            </if>
+            <if test="coverImg != null and coverImg != ''" >
+                cover_img = #{coverImg},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude},
+            </if>
+            <if test="likeTotalCnt != null" >
+                like_total_cnt = #{likeTotalCnt},
+            </if>
+            <if test="shareTotalCnt != null" >
+                share_total_cnt = #{shareTotalCnt},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+            <if test="isSign != null" >
+                is_sign = #{isSign},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_winery_sight
+        where id = #{id}
+    </delete>
+
     <select id="selectList" resultMap="winerySightMap" >
-        select 
-        <include refid="Base_Column_List" />
+        select
+        <include refid="table_column" />
         from b_winery_sight
         <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
             <if test="sightName != null and sightName != ''" >
                 and null.sight_name = #{sightName}
             </if>
@@ -55,12 +111,6 @@
             </if>
             <if test="longitude != null" >
                 and null.longitude = #{longitude}
-            </if>
-            <if test="xAxis != null" >
-                and null.x_axis = #{xAxis}
-            </if>
-            <if test="yAxis != null" >
-                and null.y_axis = #{yAxis}
             </if>
             <if test="likeTotalCnt != null" >
                 and null.like_total_cnt = #{likeTotalCnt}
@@ -80,9 +130,4 @@
         </where>
     </select>
 
-    <select id="queryById" parameterType="java.lang.String" resultMap="winerySightMap">
-        select ws.*,wsi.img_addr,wsi.img_name from b_winery_sight ws, b_winery_sight_img wsi
-        where ws.id = wsi.winery_sight_id
-        and ws.id = #{id}
-    </select>
 </mapper>

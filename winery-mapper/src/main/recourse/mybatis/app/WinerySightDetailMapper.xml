@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.changfa.frame.mapper.app.WinerySightDetailMapper" >
-    <resultMap id="winerySightDetailMap" type="com.changfa.frame.model.WinerySightDetail" >
-        <result column="id" property="id" jdbcType="BIGINT" />
+    <resultMap id="winerySightDetailMap" type="com.changfa.frame.model.app.WinerySightDetail" >
+        <id column="id" property="id" jdbcType="BIGINT" />
         <result column="winery_sight_id" property="winerySightId" jdbcType="BIGINT" />
+        <result column="winery_activity_id" property="wineryActivityId" jdbcType="BIGINT" />
         <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
+        <result column="winery_voucher_id" property="wineryVoucherId" jdbcType="BIGINT" />
         <result column="detail_title" property="detailTitle" jdbcType="VARCHAR" />
         <result column="detail_brief" property="detailBrief" jdbcType="VARCHAR" />
         <result column="detail_img" property="detailImg" jdbcType="VARCHAR" />
@@ -14,30 +16,88 @@
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id, winery_sight_id, prod_sku_id, detail_title, detail_brief, detail_img, detail_status, sort, create_date, modify_date
+    <sql id="table_column" >
+        id, winery_sight_id, winery_activity_id, prod_sku_id, winery_voucher_id, detail_title,
+        detail_brief, detail_img, detail_status, sort, create_date, modify_date
     </sql>
 
-    <insert id="save" parameterType="com.changfa.frame.model.WinerySightDetail" >
-        insert into b_winery_sight_detail (id, winery_sight_id, prod_sku_id, detail_title, detail_brief, detail_img, detail_status,
-            sort, create_date, modify_date)
-        values (#{id}, #{winerySightId}, #{prodSkuId}, #{detailTitle}, #{detailBrief}, #{detailImg}, #{detailStatus},
-            #{sort}, #{createDate}, #{modifyDate})
+    <select id="getById" resultMap="winerySightDetailMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from b_winery_sight_detail
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WinerySightDetail" >
+        insert into b_winery_sight_detail (id, winery_sight_id, winery_activity_id, prod_sku_id, winery_voucher_id,
+            detail_title, detail_brief, detail_img, detail_status, sort, create_date,
+            modify_date)
+        values (#{id}, #{winerySightId}, #{wineryActivityId}, #{prodSkuId}, #{wineryVoucherId},
+            #{detailTitle}, #{detailBrief}, #{detailImg}, #{detailStatus}, #{sort}, #{createDate},
+            #{modifyDate})
     </insert>
 
+    <update id="update" parameterType="com.changfa.frame.model.app.WinerySightDetail" >
+        update b_winery_sight_detail
+        <set >
+            <if test="winerySightId != null" >
+                winery_sight_id = #{winerySightId},
+            </if>
+            <if test="wineryActivityId != null" >
+                winery_activity_id = #{wineryActivityId},
+            </if>
+            <if test="prodSkuId != null" >
+                prod_sku_id = #{prodSkuId},
+            </if>
+            <if test="wineryVoucherId != null" >
+                winery_voucher_id = #{wineryVoucherId},
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                detail_title = #{detailTitle},
+            </if>
+            <if test="detailBrief != null and detailBrief != ''" >
+                detail_brief = #{detailBrief},
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                detail_img = #{detailImg},
+            </if>
+            <if test="detailStatus != null" >
+                detail_status = #{detailStatus},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_winery_sight_detail
+        where id = #{id}
+    </delete>
+
     <select id="selectList" resultMap="winerySightDetailMap" >
-        select 
-        <include refid="Base_Column_List" />
+        select
+        <include refid="table_column" />
         from b_winery_sight_detail
         <where >
-            <if test="id != null" >
-                and null.id = #{id}
-            </if>
             <if test="winerySightId != null" >
                 and null.winery_sight_id = #{winerySightId}
             </if>
+            <if test="wineryActivityId != null" >
+                and null.winery_activity_id = #{wineryActivityId}
+            </if>
             <if test="prodSkuId != null" >
                 and null.prod_sku_id = #{prodSkuId}
+            </if>
+            <if test="wineryVoucherId != null" >
+                and null.winery_voucher_id = #{wineryVoucherId}
             </if>
             <if test="detailTitle != null and detailTitle != ''" >
                 and null.detail_title = #{detailTitle}

@@ -1,38 +1,110 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.changfa.frame.mapper.app.WineryMapper" >
-    <resultMap id="wineryMap" type="com.changfa.frame.model.Winery" >
-        <result column="id" property="id" jdbcType="BIGINT" />
-        <result column="name" property="name" jdbcType="VARCHAR" />
+    <resultMap id="wineryMap" type="com.changfa.frame.model.app.Winery" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="NAME" property="name" jdbcType="VARCHAR" />
         <result column="logo" property="logo" jdbcType="VARCHAR" />
         <result column="loading_img" property="loadingImg" jdbcType="VARCHAR" />
-        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="STATUS" property="status" jdbcType="INTEGER" />
         <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
+        <result column="a_latitude" property="aLatitude" jdbcType="DECIMAL" />
+        <result column="a_longitude" property="aLongitude" jdbcType="DECIMAL" />
+        <result column="b_latitude" property="bLatitude" jdbcType="DECIMAL" />
+        <result column="b_longitude" property="bLongitude" jdbcType="DECIMAL" />
+        <result column="c_latitude" property="cLatitude" jdbcType="DECIMAL" />
+        <result column="c_longitude" property="cLongitude" jdbcType="DECIMAL" />
+        <result column="d_latitude" property="dLatitude" jdbcType="BIGINT" />
+        <result column="d_longitude" property="dLongitude" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id, name, logo, loading_img, status, status_time, create_date, modify_date
+    <sql id="table_column" >
+        id, NAME, logo, loading_img, STATUS, status_time, a_latitude, a_longitude, b_latitude,
+        b_longitude, c_latitude, c_longitude, d_latitude, d_longitude, create_date, modify_date
     </sql>
 
-    <insert id="save" parameterType="com.changfa.frame.model.Winery" >
-        insert into b_winery (id, name, logo, loading_img, status, status_time, create_date, 
-            modify_date)
-        values (#{id}, #{name}, #{logo}, #{loadingImg}, #{status}, #{statusTime}, #{createDate}, 
-            #{modifyDate})
+    <select id="getById" resultMap="wineryMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from b_winery
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.Winery" >
+        insert into b_winery (id, NAME, logo, loading_img, STATUS, status_time, a_latitude,
+            a_longitude, b_latitude, b_longitude, c_latitude, c_longitude, d_latitude,
+            d_longitude, create_date, modify_date)
+        values (#{id}, #{name}, #{logo}, #{loadingImg}, #{status}, #{statusTime}, #{aLatitude},
+            #{aLongitude}, #{bLatitude}, #{bLongitude}, #{cLatitude}, #{cLongitude}, #{dLatitude},
+            #{dLongitude}, #{createDate}, #{modifyDate})
     </insert>
 
+    <update id="update" parameterType="com.changfa.frame.model.app.Winery" >
+        update b_winery
+        <set >
+            <if test="name != null and name != ''" >
+                NAME = #{name},
+            </if>
+            <if test="logo != null and logo != ''" >
+                logo = #{logo},
+            </if>
+            <if test="loadingImg != null and loadingImg != ''" >
+                loading_img = #{loadingImg},
+            </if>
+            <if test="status != null" >
+                STATUS = #{status},
+            </if>
+            <if test="statusTime != null" >
+                status_time = #{statusTime},
+            </if>
+            <if test="aLatitude != null" >
+                a_latitude = #{aLatitude},
+            </if>
+            <if test="aLongitude != null" >
+                a_longitude = #{aLongitude},
+            </if>
+            <if test="bLatitude != null" >
+                b_latitude = #{bLatitude},
+            </if>
+            <if test="bLongitude != null" >
+                b_longitude = #{bLongitude},
+            </if>
+            <if test="cLatitude != null" >
+                c_latitude = #{cLatitude},
+            </if>
+            <if test="cLongitude != null" >
+                c_longitude = #{cLongitude},
+            </if>
+            <if test="dLatitude != null" >
+                d_latitude = #{dLatitude},
+            </if>
+            <if test="dLongitude != null" >
+                d_longitude = #{dLongitude},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_winery
+        where id = #{id}
+    </delete>
+
     <select id="selectList" resultMap="wineryMap" >
-        select 
-        <include refid="Base_Column_List" />
+        select
+        <include refid="table_column" />
         from b_winery
         <where >
-            <if test="id != null" >
-                and null.id = #{id}
-            </if>
             <if test="name != null and name != ''" >
-                and null.name = #{name}
+                and null.NAME = #{name}
             </if>
             <if test="logo != null and logo != ''" >
                 and null.logo = #{logo}
@@ -41,10 +113,34 @@
                 and null.loading_img = #{loadingImg}
             </if>
             <if test="status != null" >
-                and null.status = #{status}
+                and null.STATUS = #{status}
             </if>
             <if test="statusTime != null" >
                 and null.status_time = #{statusTime}
+            </if>
+            <if test="aLatitude != null" >
+                and null.a_latitude = #{aLatitude}
+            </if>
+            <if test="aLongitude != null" >
+                and null.a_longitude = #{aLongitude}
+            </if>
+            <if test="bLatitude != null" >
+                and null.b_latitude = #{bLatitude}
+            </if>
+            <if test="bLongitude != null" >
+                and null.b_longitude = #{bLongitude}
+            </if>
+            <if test="cLatitude != null" >
+                and null.c_latitude = #{cLatitude}
+            </if>
+            <if test="cLongitude != null" >
+                and null.c_longitude = #{cLongitude}
+            </if>
+            <if test="dLatitude != null" >
+                and null.d_latitude = #{dLatitude}
+            </if>
+            <if test="dLongitude != null" >
+                and null.d_longitude = #{dLongitude}
             </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}

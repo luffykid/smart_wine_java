@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -20,11 +21,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 @SpringBootApplication
-//@ComponentScan({"com.changfa.frame"})
+@ComponentScan({"com.changfa.frame.*"})
 @ServletComponentScan
 @EnableAsync
 @Configuration
-//@MapperScan("com.changfa.frame.mapper")
+@MapperScan("com.changfa.frame.mapper.*")
 public class Application extends SpringBootServletInitializer {
 
 
