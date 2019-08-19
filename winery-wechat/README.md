@@ -1,19 +1,39 @@
-Changfa Framework
-========================
+# springBoot开发框
+### 技术框架
+ SpringBoot2.1.6 Mybatis3.5.2 Redis2.9.1 Shiro1.4
+### 标识关键字
+（1）admin：标识后台管理系统端
 
-Changfa Framework project.
+（2）wx：标识微信端
 
+### 接口返回规则
+（1）接口请求失败的返回
 
-使用的技术框架包括：
+    {
+        "result": "fail",
+        "errorCode": "1001",
+        "errorMsg": "账号不存在" 
+    }
 
-- [Spring MVC](http://spring.io/guides)（MVC框架）
-- Hibernate（数据库访问）
-- [Thymeleaf](http://www.thymeleaf.org/)（前端页面模板，替代JSP）
-- Spring Boot（Spring集成框架，用于简化配置、快速开发）
-- JPA（简化数据访问）
-- [QueryDsl](http://www.querydsl.com/)（类型安全的查询）
-- REST（REST风格的服务接口）
-- jQuery（前端JS框架）
-- [BootStrap](http://v3.bootcss.com/)（前端整体框架）
-- [DataTables](http://datatables.net/)（分页表格）
-- AngularJS（MVC风格的JS开发框架）
+（2）接口请求成功的返回；data中为返回JSON数据
+
+    {
+          "result": "success",
+          "data": { }
+    }
+
+### 接口JWT令牌【默认登录方式获取Token】
+
+（1）接口调用方获取公钥【/admin/common/getRsaPubKey】
+
+（2）接口调用方登录并返回Token【/admin/anon/login】
+
+（3）需要令牌的接口，将token放入请求头
+
+### 服务端接口规则
+
+（1）公共接口：/admin/common/*
+
+（2）访客身份接口：/admin/anon/*
+
+（3）需令牌接口：/admin/auth/*
