@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @Component
-@EnableScheduling
+//@EnableScheduling
 public class DictScheduled{
 
     private static Logger log = LoggerFactory.getLogger(DictScheduled.class);

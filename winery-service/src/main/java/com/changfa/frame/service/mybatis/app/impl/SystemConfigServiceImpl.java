@@ -11,6 +11,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.beans.IntrospectionException;
@@ -45,7 +46,7 @@ public class SystemConfigServiceImpl extends BaseServiceImpl<SystemConfig, Long>
      *
      * @return 系统设置
      */
-//    @Cacheable(value = "redisCache", key = "T(com.changfa.frame.core.redis.RedisConsts).SYSTEM_SETTING")
+    @Cacheable(value = "redisCache", key = "T(com.changfa.frame.core.redis.RedisConsts).SYSTEM_SETTING")
     public Setting get() {
         if (setting == null) {
             synchronized (this) {
@@ -62,12 +63,12 @@ public class SystemConfigServiceImpl extends BaseServiceImpl<SystemConfig, Long>
      *
      * @param settingTemp 系统设置
      */
-//    @CacheEvict(value = "redisCache", key = "T(com.changfa.frame.core.redis.RedisConsts).SYSTEM_SETTING")
+    @CacheEvict(value = "redisCache", key = "T(com.changfa.frame.core.redis.RedisConsts).SYSTEM_SETTING")
     public void set(Setting settingTemp) {
         Date now = new Date();
         try {
             Field[] fields = Setting.class.getDeclaredFields();//setting属性
-            List<SystemConfig> sysConfigs = new ArrayList<SystemConfig>();
+            List<SystemConfig> sysConfigs = new ArrayList<>();
             for (Field field : fields) {
                 SystemConfig sysConfig = new SystemConfig();
                 sysConfig.setConfigName(field.getName());

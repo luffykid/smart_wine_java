@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +23,10 @@ import java.util.List;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@MapperScan("com.changfa.frame.mapper.*")
-//@EnableAsync
-@Cacheable
+@MapperScan("com.changfa.frame.mapper")
+@EnableAsync
+@ServletComponentScan
+//@EnableCaching
 public class Application {
 
 
@@ -32,27 +34,27 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    public CommandLineRunner init(final ObjectProvider<List<HttpMessageConverter<?>>> convertersProvider) {
-        return new CommandLineRunner() {
-            @Override
-            public void run(String... args) throws Exception {
-                List<HttpMessageConverter<?>> converters = convertersProvider.getIfAvailable();
-                System.out.print(converters.size());
-            }
-        };
-    }
+//    @Bean
+//    public CommandLineRunner init(final ObjectProvider<List<HttpMessageConverter<?>>> convertersProvider) {
+//        return new CommandLineRunner() {
+//            @Override
+//            public void run(String... args) throws Exception {
+//                List<HttpMessageConverter<?>> converters = convertersProvider.getIfAvailable();
+//                System.out.print(converters.size());
+//            }
+//        };
+//    }
 
     //设置上传文件大小
-    @Bean
-    public MultipartConfigElement multipartConfigElement() {
-        MultipartConfigFactory factory = new MultipartConfigFactory();
-        //单个文件最大
-        factory.setMaxFileSize("5MB"); //KB,MB
-        /// 设置总上传数据总大小
-        factory.setMaxRequestSize("5MB");
-        return factory.createMultipartConfig();
-    }
+//    @Bean
+//    public MultipartConfigElement multipartConfigElement() {
+//        MultipartConfigFactory factory = new MultipartConfigFactory();
+//        //单个文件最大
+//        factory.setMaxFileSize("5MB"); //KB,MB
+//        /// 设置总上传数据总大小
+//        factory.setMaxRequestSize("5MB");
+//        return factory.createMultipartConfig();
+//    }
 
 
 //    @Bean

@@ -1,6 +1,5 @@
 package com.changfa.frame.website.interceptor;
 
-import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.website.utils.SettingUtils;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;

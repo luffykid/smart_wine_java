@@ -1,4 +1,4 @@
-package com.changfa.frame.website.config;
+package com.changfa.frame.website.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

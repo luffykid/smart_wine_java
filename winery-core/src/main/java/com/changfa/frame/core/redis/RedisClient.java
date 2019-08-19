@@ -30,7 +30,7 @@ public class RedisClient {
     private Logger logger = LoggerFactory.getLogger(RedisClient.class);
 
     @Autowired
-    private volatile JedisPool jedisPool;
+    private JedisPool jedisPool;
 
     @Autowired
     private JedisPoolConfig jedisPoolConfig;
@@ -56,42 +56,6 @@ public class RedisClient {
 
     private int resetNum = 3;
 
-    public void setJedisPool(JedisPool jedisPool) {
-        this.jedisPool = jedisPool;
-    }
-
-    public JedisPool getJedisPool() {
-        return jedisPool;
-    }
-
-    public void setJedisPoolConfig(JedisPoolConfig jedisPoolConfig) {
-        this.jedisPoolConfig = jedisPoolConfig;
-    }
-
-    public void setProductPassword(String productPassword) {
-        this.productPassword = productPassword;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-    public void setTimeout(int timeout) {
-        this.timeout = timeout;
-    }
-
-    public Integer getDbId() {
-        return dbId;
-    }
-
-    public void setDbId(Integer dbId) {
-        this.dbId = dbId;
-    }
-
     public Jedis getJedis() {
         return getJedis(dbId);
     }
@@ -114,6 +78,9 @@ public class RedisClient {
                 }
             } catch (Exception e) {
                 jedisPool = null;
+                if(jedis != null){
+                    jedis.resetState();
+                }
                 logger.error("获取Jedis对象失败" + ExceptionUtils.getFullStackTrace(e));
             }
         }

@@ -2,6 +2,7 @@ package com.changfa.frame.core.redis;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Callable;
 
@@ -52,7 +53,7 @@ public class RedisCache implements Cache {
      * 清空所有的缓存
      */
     public void clear() {
-        //cache.flushAll();
+        cache.flushAll();
     }
 
     @Override
