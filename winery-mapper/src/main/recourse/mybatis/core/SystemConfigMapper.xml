@@ -76,10 +76,10 @@
             <if test="item.configValue != null" >
                 update c_system_config
                 <set>
-                    config_name  = #{item.configName},
+                    config_value  = #{item.configValue},
                     modify_date = #{item.modifyDate}
                 </set>
-                where config_name = #{item.name}
+                where config_name = #{item.configName}
             </if>
         </foreach>
     </update>

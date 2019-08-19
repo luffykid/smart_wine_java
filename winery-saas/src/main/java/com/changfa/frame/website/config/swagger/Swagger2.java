@@ -42,7 +42,7 @@ public class Swagger2 {
                 //创建人
                 .contact(new Contact("CF","",""))
                 //版本号
-                .version("1.0")
+                .version("2.0")
                 //描述
                 .description("API 描述")
                 .build();

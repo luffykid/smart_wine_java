@@ -14,7 +14,6 @@ multipart:
 file-upload:
   root-path: /home/seeyou/upload/
   visa-path: visa/
-
 # ***************** spring配置 开始 ******************************** #
 spring:
   # ***************** 数据源配置 开始 ******************************** #
