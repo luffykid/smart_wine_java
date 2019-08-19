@@ -1,0 +1,134 @@
+package com.changfa.frame.website.config;
+
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.changfa.frame.website.interceptor.SettingInterceptor;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.config.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * MVC配置
+ *
+ * @author WYY
+ * @date 2019/4/18
+ */
+@Configuration
+public class MvcConfiguration implements WebMvcConfigurer {
+
+    /**
+     * 跨域支持
+     *
+     * @param registry
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .maxAge(3600 * 24);
+    }
+
+    /**
+     * 配置消息转换器--这里我用的是alibaba 开源的 fastjson
+     *
+     * @param converters
+     */
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // 先移除jackson转换器,springBoot1.x可以不排除
+        for (int i = converters.size() - 1; i >= 0; i--) {
+            if (converters.get(i) instanceof MappingJackson2HttpMessageConverter) {
+                converters.remove(i);
+            }
+        }
+
+        //1.需要定义一个convert转换消息的对象;
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter();
+        ByteArrayHttpMessageConverter byteArrayHttpMessageConverter = new ByteArrayHttpMessageConverter();
+
+        //2.添加fastJson的配置信息，比如：是否要格式化返回的json数据;
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,
+                SerializerFeature.WriteMapNullValue,
+                SerializerFeature.WriteNullStringAsEmpty,
+                SerializerFeature.DisableCircularReferenceDetect,
+                SerializerFeature.WriteNullListAsEmpty,
+                SerializerFeature.WriteDateUseDateFormat);
+
+        //3处理中文乱码问题
+        List<MediaType> fastMediaTypes = new ArrayList<>();
+        fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+
+        //4.在convert中添加配置信息.
+        fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
+        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
+
+        //5.将convert添加到converters当中.
+        converters.add(fastJsonHttpMessageConverter);
+        converters.add(stringHttpMessageConverter);
+        converters.add(byteArrayHttpMessageConverter);
+    }
+
+    /**
+     * 启用@EnableWebMvc后，properties文件中的静态路径失效，必须覆盖后重新制定
+     * 配置静态访问资源
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/")
+                .addResourceLocations("classpath:/");
+//                .addResourceLocations("classpath:/static/")
+//                .addResourceLocations("classpath:/public/");
+    }
+
+    /**
+     * 注册拦截器
+     *
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SettingInterceptor()).addPathPatterns("/**");
+
+    }
+
+    /**
+     * 开启路径后缀匹配
+     *
+     * @param configurer
+     */
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseRegisteredSuffixPatternMatch(true);
+    }
+
+    /**
+     * 设置匹配*.jhtml后缀请求
+     *
+     * @param dispatcherServlet
+     * @return
+     */
+    @Bean
+    public ServletRegistrationBean servletRegistrationBean(DispatcherServlet dispatcherServlet) {
+        ServletRegistrationBean<DispatcherServlet> servletServletRegistrationBean = new ServletRegistrationBean<>(dispatcherServlet);
+        servletServletRegistrationBean.addUrlMappings("/");
+        servletServletRegistrationBean.addUrlMappings("/**");
+        return servletServletRegistrationBean;
+    }
+}

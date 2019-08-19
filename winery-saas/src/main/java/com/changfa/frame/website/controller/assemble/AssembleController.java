@@ -6,7 +6,7 @@ import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.service.jpa.assemble.AssembleService;
 import com.changfa.frame.service.jpa.prod.ProdService;
 import com.changfa.frame.service.jpa.user.AdminUserService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

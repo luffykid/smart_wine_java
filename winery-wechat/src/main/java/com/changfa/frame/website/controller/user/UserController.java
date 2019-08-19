@@ -10,7 +10,7 @@ import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.service.jpa.user.MemberWechatService;
 import com.changfa.frame.service.jpa.user.MemberService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -8,7 +8,7 @@ import com.changfa.frame.data.entity.winery.Winery;
 import com.changfa.frame.data.repository.winery.WineryRepository;
 import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.service.jpa.winery.WineryService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;

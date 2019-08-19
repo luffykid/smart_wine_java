@@ -12,7 +12,7 @@ import com.changfa.frame.service.jpa.deposit.UserBalanceService;
 import com.changfa.frame.service.jpa.offline.OfflineOrderService;
 import com.changfa.frame.service.jpa.user.MemberService;
 import com.changfa.frame.service.jpa.wechat.*;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

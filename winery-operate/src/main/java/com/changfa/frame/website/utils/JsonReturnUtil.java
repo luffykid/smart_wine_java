@@ -1,4 +1,4 @@
-package com.changfa.frame.website.common;
+package com.changfa.frame.website.utils;
 
 
 import com.google.gson.Gson;

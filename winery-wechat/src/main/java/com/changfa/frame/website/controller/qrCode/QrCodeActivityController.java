@@ -2,7 +2,7 @@ package com.changfa.frame.website.controller.qrCode;
 
 
 import com.changfa.frame.service.jpa.activity.QrCodeActivityService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

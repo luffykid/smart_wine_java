@@ -1,4 +1,4 @@
-package com.changfa.frame.website.common;
+package com.changfa.frame.website.utils;
 
 import com.changfa.frame.data.entity.common.CacheUtil;
 import com.changfa.frame.data.entity.common.Dict;

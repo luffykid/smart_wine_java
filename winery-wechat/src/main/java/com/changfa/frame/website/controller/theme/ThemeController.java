@@ -7,7 +7,7 @@ import com.changfa.frame.data.entity.theme.Theme;
 import com.changfa.frame.data.entity.user.Member;
 import com.changfa.frame.service.jpa.theme.ThemeService;
 import com.changfa.frame.service.jpa.user.MemberService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

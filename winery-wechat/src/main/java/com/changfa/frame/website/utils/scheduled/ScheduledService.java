@@ -1,4 +1,4 @@
-package com.changfa.frame.website.common.scheduled;
+package com.changfa.frame.website.utils.scheduled;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.changfa.frame.core.util.Constant;

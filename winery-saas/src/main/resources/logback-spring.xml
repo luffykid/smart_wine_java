@@ -22,7 +22,7 @@
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-
+    <logger name="com.changfa.frame"/>
     <root level="info">
         <appender-ref ref="console"/>
         <!--<appender-ref ref="file" />-->
@@ -34,15 +34,4 @@
     <!--<logger name="com.dudu.controller.LearnController" level="WARN" additivity="true">-->
     <!--<appender-ref ref="console"/>-->
     <!--</logger>-->
-
-    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
-    <springProfile name="test,dev">
-        <logger name="com.changfa.frame.act" level="DEBUG"/>
-        <logger name="org.activiti.engine.impl.persistence" level="DEBUG"/>
-    </springProfile>
-    <!-- 生产环境. -->
-    <springProfile name="prod">
-        <logger name="com.changfa.frame" level="ERROR"/>
-    </springProfile>
-
 </configuration>

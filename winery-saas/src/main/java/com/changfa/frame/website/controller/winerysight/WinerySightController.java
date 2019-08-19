@@ -2,7 +2,7 @@ package com.changfa.frame.website.controller.winerysight;
 
 import com.changfa.frame.model.app.WinerySight;
 import com.changfa.frame.service.mybatis.app.WinerySightService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

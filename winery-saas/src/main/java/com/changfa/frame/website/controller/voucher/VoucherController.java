@@ -10,7 +10,7 @@ import com.changfa.frame.data.repository.deposit.DepositRuleRepository;
 import com.changfa.frame.data.repository.market.MarketActivityRepository;
 import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.service.jpa.voucher.VoucherService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

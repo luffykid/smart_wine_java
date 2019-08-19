@@ -9,7 +9,7 @@ import com.changfa.frame.service.jpa.user.AdminUserService;
 import com.changfa.frame.service.jpa.user.LogService;
 import com.changfa.frame.service.jpa.user.RoleService;
 import com.changfa.frame.service.jpa.winery.WineryService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

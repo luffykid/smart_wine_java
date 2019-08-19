@@ -20,7 +20,7 @@ import com.changfa.frame.service.jpa.theme.ThemeService;
 import com.changfa.frame.service.jpa.user.MemberService;
 import com.changfa.frame.service.jpa.voucher.UserVoucherService;
 import com.changfa.frame.service.jpa.wechat.*;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.core.SystemConfigMapper" >
+    <resultMap id="systemConfigMap" type="com.changfa.frame.model.app.SystemConfig" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="config_name" property="configName" jdbcType="VARCHAR" />
+        <result column="config_value" property="configValue" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, config_name, config_value, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="systemConfigMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from c_system_config
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.SystemConfig" >
+        insert into c_system_config (id, config_name, config_value, create_date, modify_date)
+        values (#{id}, #{configName}, #{configValue}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.SystemConfig" >
+        update c_system_config
+        <set >
+            <if test="configName != null and configName != ''" >
+                config_name = #{configName},
+            </if>
+            <if test="configValue != null and configValue != ''" >
+                config_value = #{configValue},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from c_system_config
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="systemConfigMap" >
+        select 
+        <include refid="table_column" />
+        from c_system_config
+        <where >
+            <if test="configName != null and configName != ''" >
+                and null.config_name = #{configName}
+            </if>
+            <if test="configValue != null and configValue != ''" >
+                and null.config_value = #{configValue}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+    <!--批量更新-->
+    <update id="updates"  parameterType="java.util.List">
+
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            <if test="item.configValue != null" >
+                update c_system_config
+                <set>
+                    config_name  = #{item.configName},
+                    modify_date = #{item.modifyDate}
+                </set>
+                where config_name = #{item.name}
+            </if>
+        </foreach>
+    </update>
+
+</mapper>

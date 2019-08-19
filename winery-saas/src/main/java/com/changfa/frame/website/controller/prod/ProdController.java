@@ -15,7 +15,7 @@ import com.changfa.frame.data.repository.voucher.VoucherRepository;
 import com.changfa.frame.service.jpa.banner.BannerService;
 import com.changfa.frame.service.jpa.prod.ProdService;
 import com.changfa.frame.service.jpa.user.AdminUserService;
-import com.changfa.frame.website.common.JsonReturnUtil;
+import com.changfa.frame.website.utils.JsonReturnUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

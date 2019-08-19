@@ -3,10 +3,7 @@ package com.changfa.frame.core.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class DateUtil {
 
@@ -92,6 +89,25 @@ public class DateUtil {
         long day = (end.getTime() - start.getTime()) / (24 * 60 * 60 * 1000);
 
         return (int) day + 1;
+    }
+
+    /**
+     * 字符串转calendar
+     *
+     * @param date    日期的字符串
+     * @param pattern 日期的格式
+     * @return
+     */
+    public static Calendar convertStrToCalendar(String date, String pattern) {
+        Calendar calendar = null;
+        try {
+            calendar = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat(pattern);
+            calendar.setTime(format.parse(date));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return calendar;
     }
 
 }
