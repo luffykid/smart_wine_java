@@ -3,6 +3,7 @@ package com.changfa.frame.website.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.changfa.frame.website.interceptor.TokenInterceptor;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -71,6 +72,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
         //3处理中文乱码问题
         List<MediaType> fastMediaTypes = new ArrayList<>();
         fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+        fastMediaTypes.add(MediaType.TEXT_HTML);
 
         //4.在convert中添加配置信息.
         fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
@@ -90,21 +92,29 @@ public class MvcConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/")
-                .addResourceLocations("classpath:/");
+//        registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/")
+//                .addResourceLocations("classpath:/META-INF/resources/")
+//                .addResourceLocations("classpath:/resources/")
 //                .addResourceLocations("classpath:/static/")
-//                .addResourceLocations("classpath:/public/");
+//                .addResourceLocations("classpath:/public/")
+//                .addResourceLocations("classpath:/");
+
+        // swagger2配置
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     /**
      * 注册拦截器
      *
-     * @param registry
+     * @param registry 拦截器注册对象
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new SettingInterceptor()).addPathPatterns("/**");
-
+        // 令牌拦截器
+        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/wx/auth/**");
     }
 
     /**

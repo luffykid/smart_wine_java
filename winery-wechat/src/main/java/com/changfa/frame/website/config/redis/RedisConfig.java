@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * redis缓存配置类
  * User: WYY
- * Date: 2019-04-11
+ * Date: 2019-08-11
  */
 @Configuration
 @EnableCaching

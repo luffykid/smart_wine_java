@@ -6,6 +6,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -33,13 +34,14 @@ public class Swagger2 {
                 .paths(PathSelectors.any())
                 .build();
     }
+
     //构建 api文档的详细信息函数
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title("智慧酒庄Wechat接口")
+                .title("智慧酒庄小程序接口")
                 //创建人
-                .contact("yzp")
+                .contact(new Contact("CF", "", ""))
                 //版本号
                 .version("1.0")
                 //描述
