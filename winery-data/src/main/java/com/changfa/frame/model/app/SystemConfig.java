@@ -7,7 +7,9 @@
  */
 package com.changfa.frame.model.app;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.changfa.frame.model.common.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFilter;
 
 /**
  * 系统配置表

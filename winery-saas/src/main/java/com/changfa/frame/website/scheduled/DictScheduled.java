@@ -1,4 +1,4 @@
-package com.changfa.frame.website.utils;
+package com.changfa.frame.website.scheduled;
 
 import com.changfa.frame.data.entity.common.CacheUtil;
 import com.changfa.frame.data.entity.common.Dict;
@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

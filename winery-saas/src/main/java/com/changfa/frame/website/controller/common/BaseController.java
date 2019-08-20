@@ -119,4 +119,6 @@ public abstract class BaseController {
         map.put(ResultUtil.DATA_PARAM_NAME, obj);
         return map;
     }
+
+
 }

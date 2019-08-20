@@ -1,21 +1,18 @@
-# Server settings
+# ***************** server配置 开始 ******************************** #
 server:
   address: localhost
   port: 8080
   sessionTimeout: 3000
 
-# Mmultipart settings
-multipart:
-  maxFileSize: 10Mb
-  maxRequestSize: 10Mb
+# ***************** 属性文件配置 开始 ******************************** #
+system:
+  properties:
+    files: application-service.properties
 
-
-# File upload settings
-file-upload:
-  root-path: /home/seeyou/upload/
-  visa-path: visa/
 # ***************** spring配置 开始 ******************************** #
 spring:
+  profiles:
+    active: service
   # ***************** 数据源配置 开始 ******************************** #
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -60,15 +57,17 @@ spring:
         max-active: 50
         max-wait: 1000
 
+  #***************** 文件上传配置 开始 ********************************#
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
 # ***************** mybatis配置 开始 ******************************** #
 mybatis:
-  # MyBatis实体类所在的包路径
   type-aliases-package: com.changfa.frame.model.**
-  # 配置映射mapper.xml所在路径
   mapper-locations: classpath:/mybatis/**/*Mapper.xml
-  # mybatis的配置文件路径
   config-location: classpath:/mybatis/mybatis-config.xml
-# 分页插件配置
 pagehelper:
   helperDialect: mysql
   reasonable: true

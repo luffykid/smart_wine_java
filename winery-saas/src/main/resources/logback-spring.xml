@@ -1,37 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="60 seconds" debug="false">
-    <contextName>changfa</contextName>
-    <property name="log.path" value="D:\\test\\logback.log"/>
-    <!--输出到控制台-->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-             <level>ERROR</level>
-         </filter>-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false" >
+    <!-- 定义日志路径、级别 -->
+    <property name="LOG_DIR" value="/Users/wyy/Documents/00.project_log" />
+
+    <!-- 打印日志到控制台 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%date [%level] %logger{80} [%file : %line] - %msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
     </appender>
 
-    <!--输出到文件-->
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logback.%d{yyyy-MM-dd}.log</fileNamePattern>
-        </rollingPolicy>
+    <!-- 打印error日志 -->
+    <appender name="E" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%date [%level] %logger{80} [%file : %line] - %msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${project.artifactId}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
     </appender>
+
+    <!-- 打印info日志 -->
+    <appender name="I" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <encoder>
+            <pattern>%date [%level] %logger{80} [%file : %line] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${project.artifactId}/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 打印操作日志 -->
+    <appender name="operate" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <encoder>
+            <pattern>%date:%msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${project.artifactId}/operate.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 打印Druid监控日志 -->
+    <appender name="druidLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Append>true</Append>
+        <encoder>
+            <pattern>%date [%level] %logger{80} [%file : %line] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>Debug</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/${project.artifactId}/druid.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <!-- druid转存监控日志 -->
+    <logger name="druid.statLog" additivity="false">
+        <appender-ref ref="druidLog"/>
+    </logger>
+
+    <!-- 项目日志 -->
     <logger name="com.changfa.frame"/>
-    <root level="info">
-        <appender-ref ref="console"/>
-        <!--<appender-ref ref="file" />-->
+
+    <!-- 日志根 -->
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="E"/>
+        <appender-ref ref="I"/>
     </root>
-    　
-    <!-- logback为java中的包 -->
-    <!--<logger name="com.dudu.controller"/>-->
-    <!--logback.LogbackDemo：类的全路径 -->
-    <!--<logger name="com.dudu.controller.LearnController" level="WARN" additivity="true">-->
-    <!--<appender-ref ref="console"/>-->
-    <!--</logger>-->
 </configuration>
