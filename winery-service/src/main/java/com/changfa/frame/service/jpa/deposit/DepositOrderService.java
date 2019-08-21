@@ -343,13 +343,13 @@ public class DepositOrderService {
         String tempUserId = String.format("%02d", userId);
         String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
         depositOrder.setOrderNo(format);
-        depositOrder.setWineryId(adminUser.getWineryId());
+        depositOrder.setWineryId(adminUser.getWineryId().intValue());
         depositOrder.setTotalPrice(money);
         depositOrder.setCreateTime(new Date());
         depositOrder.setStatus("B");
         depositOrder.setFinalPrice(totalMoney);
         depositOrder.setStatusTime(new Date());
-        depositOrder.setCreateUserId(adminUser.getId());
+        depositOrder.setCreateUserId(adminUser.getId().intValue());
         depositOrder.setDescri(descri);
         DepositOrder depositOrderSave = depositOrderRepository.saveAndFlush(depositOrder);
         //添加支付信息
@@ -523,7 +523,7 @@ public class DepositOrderService {
         }
         OfflineOrder offlineOrder = new OfflineOrder();
         //生成订单
-        offlineOrder.setWineryId(adminUser.getWineryId());
+        offlineOrder.setWineryId(adminUser.getWineryId().intValue());
         offlineOrder.setUserId(userId);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String tempUserId = String.format("%02d", userId);
@@ -531,7 +531,7 @@ public class DepositOrderService {
         offlineOrder.setOrderNo(format);
         offlineOrder.setPayType("O");
         offlineOrder.setStatus("B");
-        offlineOrder.setCreateUserId(adminUser.getId());
+        offlineOrder.setCreateUserId(adminUser.getId().intValue());
         offlineOrder.setOrderType("S");
         offlineOrder.setTotalPrice(money);
         offlineOrder.setStatusTime(new Date());
@@ -568,7 +568,7 @@ public class DepositOrderService {
         orderPayRepository.saveAndFlush(orderPay);
         //添加储值流水
         UserDepositDetail userDepositDetail = new UserDepositDetail();
-        userDepositDetail.setWineryId(adminUser.getWineryId());
+        userDepositDetail.setWineryId(adminUser.getWineryId().intValue());
         userDepositDetail.setUserId(userId);
         userDepositDetail.setAction("A");
         userDepositDetail.setBalance(offlineOrderSave.getTotalPrice());

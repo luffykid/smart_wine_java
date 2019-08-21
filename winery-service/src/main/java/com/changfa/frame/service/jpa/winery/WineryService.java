@@ -64,7 +64,7 @@ public class WineryService {
     //添加超级管理员用户
     public AdminUser addSuperAdmin( Winery winery, String userName, String phone, String pwd, List<String> roleId) {
         AdminUser adminUser = new AdminUser();
-        adminUser.setWineryId(winery.getId());
+        adminUser.setWineryId(winery.getId().longValue());
         adminUser.setToken(UUID.randomUUID() + "" + System.currentTimeMillis());
         adminUser.setUserName(userName);
         adminUser.setName(userName);
@@ -80,7 +80,7 @@ public class WineryService {
                 str = str.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\"", "");
                 UserRole userRole = new UserRole();
                 userRole.setRoleId(Integer.valueOf(str));
-                userRole.setUserId(adminUser.getId());
+                userRole.setUserId(adminUser.getId().intValue());
                 userRole.setCreateTime(new Timestamp(System.currentTimeMillis()));
                 userRoleRepository.saveAndFlush(userRole);
             }
@@ -92,7 +92,7 @@ public class WineryService {
     //添加绑定小程序信息
     public void addWineryConfigure( WineryDTO wineryDTO, AdminUser adminUser) {
         WineryConfigure wineryConfigure = new WineryConfigure();
-        wineryConfigure.setWineryId(adminUser.getWineryId());
+        wineryConfigure.setWineryId(adminUser.getWineryId().intValue());
         wineryConfigure.setAppId(wineryDTO.getAppId());
         wineryConfigure.setAppSecret(wineryDTO.getAppSecret());
         wineryConfigure.setWxPayId(wineryDTO.getWxPayId());
@@ -112,7 +112,7 @@ public class WineryService {
             WineryListDTO wineryListDTO = new WineryListDTO();
             wineryListDTO.setId(winery.getId());
             wineryListDTO.setWineryName(winery.getName());
-            AdminUser adminUser = adminUserRepository.findAdminUserByWineryId(winery.getId());
+            AdminUser adminUser = adminUserRepository.findAdminUserByWineryId(winery.getId().longValue());
             if(null != adminUser){
                 wineryListDTO.setUserName(adminUser.getUserName());
             }
@@ -120,7 +120,7 @@ public class WineryService {
             if(null != wineryConfigure){
                 wineryListDTO.setAppName(wineryConfigure.getAppName());
         }
-            int workerNum = adminUserRepository.countAdminUsersByWineryIdAndStatus(winery.getId(),"A");
+            int workerNum = adminUserRepository.countAdminUsersByWineryIdAndStatus(winery.getId().longValue(),"A");
             wineryListDTO.setWorkerNum(workerNum);
             wineryListDTOList.add(wineryListDTO);
         }
@@ -142,7 +142,7 @@ public class WineryService {
             wineryDetailDTO.setId(winery.getId());
             wineryDetailDTO.setWineryName(winery.getName());
             wineryDetailDTO.setAddress(winery.getAddress());
-            AdminUser adminUser = adminUserRepository.findAdminUserByWineryId(winery.getId());
+            AdminUser adminUser = adminUserRepository.findAdminUserByWineryId(winery.getId().longValue());
             if(null != adminUser){
                 wineryDetailDTO.setUserName(adminUser.getUserName());
                 wineryDetailDTO.setPhone(adminUser.getPhone());
@@ -150,7 +150,7 @@ public class WineryService {
                 List<Role> roleAllList = roleRepository.findByWineryId(adminUser.getWineryId());
                 wineryDetailDTO.setRoleAllList(roleAllList);
                 //返回该用户选定的角色
-                List<Role> roleEdList = roleRepository.findRoleList(winery.getId(),adminUser.getId());
+                List<Role> roleEdList = roleRepository.findRoleList(winery.getId().longValue(),adminUser.getId());
                 wineryDetailDTO.setRoleEdList(roleEdList);
             }
             WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(winery.getId());
@@ -172,7 +172,7 @@ public class WineryService {
 
     //获取酒庄的超级管理员用户
     public AdminUser findAdminUserByWineryId(Integer wineryId){
-        AdminUser adminUser = adminUserRepository.findAdminUserByWineryId(wineryId);
+        AdminUser adminUser = adminUserRepository.findAdminUserByWineryId(wineryId.longValue());
         return  adminUser;
     }
 
@@ -200,7 +200,7 @@ public class WineryService {
                 str = str.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\"", "");
                 UserRole userRole = new UserRole();
                 userRole.setRoleId(Integer.valueOf(str));
-                userRole.setUserId(adminUser.getId());
+                userRole.setUserId(adminUser.getId().intValue());
                 userRole.setCreateTime(new Timestamp(System.currentTimeMillis()));
                 userRoleRepository.saveAndFlush(userRole);
             }
@@ -211,10 +211,10 @@ public class WineryService {
     //修改绑定小程序信息
     public void updateWineryConfigure( WineryDTO wineryDTO, AdminUser adminUser) {
         //通过酒庄id 获取酒庄的绑定小程序信息
-        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId());
+        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId().intValue());
         if(null == wineryConfigure ){
             wineryConfigure = new WineryConfigure();
-            wineryConfigure.setWineryId(adminUser.getWineryId());
+            wineryConfigure.setWineryId(adminUser.getWineryId().intValue());
             wineryConfigure.setCreateTime(new Timestamp(System.currentTimeMillis()));
         }
         wineryConfigure.setAppId(wineryDTO.getAppId());

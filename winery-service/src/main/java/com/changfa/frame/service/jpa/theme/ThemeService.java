@@ -441,7 +441,7 @@ public class ThemeService {
         theme.setSeq(1);
         theme.setStatus(addTheMeDTO.getStatus());
         theme.setStatusTime(new Date());
-        theme.setWineryId(adminUser.getWineryId());
+        theme.setWineryId(adminUser.getWineryId().intValue());
         themeRepository.save(theme);
         ThemeLogo themeLogo = new ThemeLogo();
         themeLogo.setCreateTime(new Date());
@@ -449,7 +449,7 @@ public class ThemeService {
         themeLogo.setLogo(addTheMeDTO.getThemeLogo().substring(addTheMeDTO.getThemeLogo().indexOf("/vimg")));
         themeLogo.setSeq(1);
         themeLogo.setThemeId(theme.getId());
-        themeLogo.setWineryId(adminUser.getWineryId());
+        themeLogo.setWineryId(adminUser.getWineryId().intValue());
         themeLogoRepository.save(themeLogo);
         List<Map<String, Object>> maps = addTheMeDTO.getMapList();
         for (Map<String, Object> map : maps) {
@@ -462,7 +462,7 @@ public class ThemeService {
                     themeProd.setProdLogo(String.valueOf(map.get("prodLogo")).substring(String.valueOf(map.get("prodLogo")).indexOf("/vimg")));
                     themeProd.setProdLogoName(String.valueOf(map.get("prodLogoName")));
                     themeProd.setThemeId(theme.getId());
-                    themeProd.setWineryId(adminUser.getWineryId());
+                    themeProd.setWineryId(adminUser.getWineryId().intValue());
                     themeProdRepository.save(themeProd);
                 }
             }
@@ -472,9 +472,9 @@ public class ThemeService {
     public List<Theme> theMeList(AdminUser adminUser, String name) {
         List<Theme> themes;
         if (name == null) {
-            themes = themeRepository.findThemeByWineryIdAndName(adminUser.getWineryId());
+            themes = themeRepository.findThemeByWineryIdAndName(adminUser.getWineryId().intValue());
         } else {
-            themes = themeRepository.findThemeByWineryIdAndName(adminUser.getWineryId(), name);
+            themes = themeRepository.findThemeByWineryIdAndName(adminUser.getWineryId().intValue(), name);
         }
         Integer count = 1;
         for (Theme theme : themes) {
@@ -564,7 +564,7 @@ public class ThemeService {
             theme.setSeq(1);
             theme.setStatus(addTheMeDTO.getStatus());
 //            theme.setStatusTime(new Date());
-            theme.setWineryId(adminUser.getWineryId());
+            theme.setWineryId(adminUser.getWineryId().intValue());
             themeRepository.save(theme);
             ThemeLogo themeLogo = themeLogoRepository.findThemeLogoDefault(theme.getId());
             if (themeLogo != null) {
@@ -572,7 +572,7 @@ public class ThemeService {
                 themeLogo.setLogo(addTheMeDTO.getThemeLogo().substring(addTheMeDTO.getThemeLogo().indexOf("/vimg")));
                 themeLogo.setSeq(1);
                 themeLogo.setThemeId(theme.getId());
-                themeLogo.setWineryId(adminUser.getWineryId());
+                themeLogo.setWineryId(adminUser.getWineryId().intValue());
                 themeLogoRepository.save(themeLogo);
             }
             themeProdRepository.deleteByThemeId(theme.getId());
@@ -587,7 +587,7 @@ public class ThemeService {
                         themeProd.setProdLogo(String.valueOf(map.get("prodLogo")).substring(String.valueOf(map.get("prodLogo")).indexOf("/vimg")));
                         themeProd.setProdLogoName(String.valueOf(map.get("prodLogoName")));
                         themeProd.setThemeId(theme.getId());
-                        themeProd.setWineryId(adminUser.getWineryId());
+                        themeProd.setWineryId(adminUser.getWineryId().intValue());
                         themeProdRepository.save(themeProd);
                     }
                 }
@@ -596,11 +596,11 @@ public class ThemeService {
     }
 
     public List<Theme> checkTheMe(AdminUser adminUser) {
-        return themeRepository.findByWineryIdAndStatus(adminUser.getWineryId(), "A");
+        return themeRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), "A");
     }
 
     public Theme checkTheName(String themeName, AdminUser adminUser) {
-        return themeRepository.findThemeByWineryIdAndNameEq(themeName, adminUser.getWineryId());
+        return themeRepository.findThemeByWineryIdAndNameEq(themeName, adminUser.getWineryId().intValue());
     }
 
     public Theme findOne(Integer themeId) {

@@ -126,7 +126,7 @@ public class BannerService {
      * @Description
      * */
     public Boolean addBanner(AdminUser adminUser, SBannerDTO sBannerDTO, String bannerType) {
-        Banner bannerLike = bannerRepository.findByWineryIdAndNameAndType(adminUser.getWineryId(), sBannerDTO.getName(), bannerType);
+        Banner bannerLike = bannerRepository.findByWineryIdAndNameAndType(adminUser.getWineryId().intValue(), sBannerDTO.getName(), bannerType);
         if (bannerLike != null) {
             return false;
         }
@@ -141,13 +141,13 @@ public class BannerService {
             banner.setActivityId(sBannerDTO.getActivityId());
         }
         banner.setType(bannerType);
-        banner.setWineryId(adminUser.getWineryId());
-        banner.setCreateUserId(adminUser.getId());
+        banner.setWineryId(adminUser.getWineryId().intValue());
+        banner.setCreateUserId(adminUser.getId().intValue());
         banner.setName(sBannerDTO.getName());
         banner.setStatus(sBannerDTO.getStatus());
         banner.setLogo(sBannerDTO.getLogo().substring(sBannerDTO.getLogo().indexOf("/vimg")));
         banner.setDescri(sBannerDTO.getDescri());
-        Integer sum = bannerRepository.findSumByTypeAndStatus(adminUser.getWineryId(), bannerType);
+        Integer sum = bannerRepository.findSumByTypeAndStatus(adminUser.getWineryId().intValue(), bannerType);
         if (sum != null) {
             if (bannerType.equals("B")) {
                 if (sum >= 3) {
@@ -172,13 +172,13 @@ public class BannerService {
      * @Description
      * */
     public List<SBannerDTO> getBannerList(AdminUser adminUser, String bannerType) {
-        List<Banner> bannerList = bannerRepository.findByWineryIdAndType(adminUser.getWineryId(), bannerType);
+        List<Banner> bannerList = bannerRepository.findByWineryIdAndType(adminUser.getWineryId().intValue(), bannerType);
         if (bannerList != null) {
             List<SBannerDTO> sBannerDTOList = new ArrayList<>();
             for (Banner banner : bannerList) {
                 SBannerDTO sBannerDTO = new SBannerDTO();
                 sBannerDTO.setId(banner.getId());
-                sBannerDTO.setWineryId(adminUser.getWineryId());
+                sBannerDTO.setWineryId(adminUser.getWineryId().intValue());
                 sBannerDTO.setName(banner.getName());
                 if (banner.getLogo() != null) {
                     sBannerDTO.setLogo((banner.getLogo().startsWith("/")) ? (Constant.XINDEQI_ICON_PATH.concat(banner.getLogo())) : banner.getLogo());
@@ -217,7 +217,7 @@ public class BannerService {
         SBannerDTO sBannerDTO = new SBannerDTO();
         sBannerDTO.setId(banner.getId());
         sBannerDTO.setName(banner.getName());
-        sBannerDTO.setWineryId(adminUser.getWineryId());
+        sBannerDTO.setWineryId(adminUser.getWineryId().intValue());
         if (banner.getLogo() != null) {
             sBannerDTO.setLogo((banner.getLogo().startsWith("/")) ? (Constant.XINDEQI_ICON_PATH.concat(banner.getLogo())) : banner.getLogo());
         }
@@ -249,7 +249,7 @@ public class BannerService {
      * */
     public String bannerOperade(AdminUser adminUser, Integer bannerId, String Operade, String bannerType) {
         if (Operade.equals("A")) {
-            Integer sum = bannerRepository.findSumByTypeAndStatus(adminUser.getWineryId(), bannerType);
+            Integer sum = bannerRepository.findSumByTypeAndStatus(adminUser.getWineryId().intValue(), bannerType);
             if (bannerType.equals("A")) {
                 if (sum >= 1) {
                     return "已有进行中的banner请先暂停";
@@ -303,7 +303,7 @@ public class BannerService {
      * @Description
      * */
     public String updateBanner(AdminUser adminUser, SBannerDTO sBannerDTO, String bannerType) {
-        Banner banerLike = bannerRepository.findByWineryIdAndNameAndType(adminUser.getWineryId(), sBannerDTO.getName(), bannerType);
+        Banner banerLike = bannerRepository.findByWineryIdAndNameAndType(adminUser.getWineryId().intValue(), sBannerDTO.getName(), bannerType);
         if (banerLike != null && !banerLike.getId().equals(sBannerDTO.getId())) {
             return "banner名称不可重复";
         }
@@ -354,7 +354,7 @@ public class BannerService {
     public List<Map<String, Object>> getActivityList(AdminUser adminUser, String type) {
         List<Map<String, Object>> mapList = new ArrayList<>();
         if (type.equals("B")) {
-            List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryIdAndStatus(adminUser.getWineryId(), "A");
+            List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), "A");
             if (marketActivityList != null && marketActivityList.size() > 0) {
                 for (MarketActivity marketActivity : marketActivityList) {
                     Map<String, Object> map = new HashMap<>();
@@ -367,7 +367,7 @@ public class BannerService {
         }
 
         if (type.equals("A") || type.equals("B")) {
-            List<Activity> activityList = activityRepository.findByWineryIdAndStatus(adminUser.getWineryId(), "A");
+            List<Activity> activityList = activityRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), "A");
             if (activityList != null && activityList.size() > 0) {
                 for (Activity activity : activityList) {
                     Map<String, Object> map = new HashMap<>();
@@ -401,7 +401,7 @@ public class BannerService {
     public Map activityStatus(String bannerType, AdminUser adminUser) {
         Map<String, Object> map = new HashMap<>();
         map.put("status", "A");
-        Integer sum = bannerRepository.findSumByTypeAndStatus(adminUser.getWineryId(), bannerType);
+        Integer sum = bannerRepository.findSumByTypeAndStatus(adminUser.getWineryId().intValue(), bannerType);
         if (sum != null) {
             if (bannerType.equals("B")) {
                 if (sum >= 3) {

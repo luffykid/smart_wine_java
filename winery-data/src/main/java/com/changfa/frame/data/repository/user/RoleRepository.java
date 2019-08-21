@@ -7,14 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface RoleRepository extends AdvancedJpaRepository<Role,Integer> {
-    List<Role> findByWineryId(Integer wid);
+public interface RoleRepository extends AdvancedJpaRepository<Role,Long> {
+    List<Role> findByWineryId(Long wid);
 
     //该用户的角色列表
     @Query(value = "select r.* from user_role ur LEFT JOIN role r ON r.id = ur.role_id  where r.winery_id = ?1 and ur.user_id = ?2 ",nativeQuery = true)
-    List<Role> findRoleList(Integer wineryId, Integer userId);
+    List<Role> findRoleList(Long wineryId, Long userId);
 
-    Role findRoleByWineryIdAndName(Integer wineryId,String name);
+    Role findRoleByWineryIdAndName(Long wineryId,String name);
 
 
     @Query(value = "select * from role  where  name LIKE CONCAT('%' ,?1, '%')  order by create_time desc ", nativeQuery = true)

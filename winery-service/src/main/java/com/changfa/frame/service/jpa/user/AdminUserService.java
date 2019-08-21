@@ -125,7 +125,7 @@ public class AdminUserService {
     //会员等级规则列表
     public List<MemberLevel> memberLevellist(AdminUser adminUser, String search) {
         List<Dict> dicts = CacheUtil.getDicts();
-        List<MemberLevel> list = memberLevelRepository.findMemberLevelsByWineryIdAnd(adminUser.getWineryId(), search);
+        List<MemberLevel> list = memberLevelRepository.findMemberLevelsByWineryIdAnd(adminUser.getWineryId().intValue(), search);
         for (MemberLevel memberLevel : list) {
             for (Dict dict : dicts) {
                 if (dict.getTableName().equals("member_level") && dict.getColumnName().equals("status") && dict.getStsId().equals(memberLevel.getStatus())) {
@@ -139,13 +139,13 @@ public class AdminUserService {
     //创建会员等级规则
     public void addMemberLevel(AdminUser adminUser, String name, String upgradeExperience, String money, String point, String descri, String isFreightFree) {
         MemberLevel memberLevel = new MemberLevel();
-        memberLevel.setWineryId(adminUser.getWineryId());
+        memberLevel.setWineryId(adminUser.getWineryId().intValue());
         memberLevel.setName(name);
         if (upgradeExperience != null) {
             memberLevel.setUpgradeExperience(Integer.valueOf(upgradeExperience));
         }
         memberLevel.setDescri(descri);
-        memberLevel.setCreateUserId(adminUser.getId());
+        memberLevel.setCreateUserId(adminUser.getId().intValue());
         memberLevel.setStatus("A");
         memberLevel.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         memberLevel.setCreateTime(new Timestamp(System.currentTimeMillis()));
@@ -170,14 +170,14 @@ public class AdminUserService {
 
     //编辑会员等级规则
     public void updateMemberLevel(MemberLevel memberLevel, AdminUser adminUser, String name, String upgradeExperience, String money, String point, String descri, String isFreightFree) {
-        memberLevel.setWineryId(adminUser.getWineryId());
+        memberLevel.setWineryId(adminUser.getWineryId().intValue());
         memberLevel.setName(name);
         //经验暂时不能修改
         if (upgradeExperience != null) {
             memberLevel.setUpgradeExperience(Integer.valueOf(upgradeExperience));
         }
         memberLevel.setDescri(descri);
-        memberLevel.setCreateUserId(adminUser.getId());
+        memberLevel.setCreateUserId(adminUser.getId().intValue());
         memberLevel.setStatus("A");
         memberLevel.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         memberLevel.setStatusTime(new Timestamp(System.currentTimeMillis()));
@@ -223,7 +223,7 @@ public class AdminUserService {
 
     //所有会员等级规则
     public List<MemberLevel> allMemberLeve(AdminUser adminUser) {
-        return memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId(), "A");
+        return memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId().intValue(), "A");
     }
 
     //营销活动图片
@@ -345,7 +345,7 @@ public class AdminUserService {
 
     public List<LevelDTO> memberlDetailExperience(Integer userId, AdminUser adminUser) {
         List<LevelDTO> levelDTOS = new ArrayList<>();
-        List<MemberLevel> list = memberLevelRepository.findMemberLevelsByWineryIdAnd(adminUser.getWineryId(), "");
+        List<MemberLevel> list = memberLevelRepository.findMemberLevelsByWineryIdAnd(adminUser.getWineryId().intValue(), "");
         UserExperience experience = userExperienceRepository.findByUserId(userId);
         int count = 0;
         for (int i = 0; i < list.size(); i++) {
@@ -449,10 +449,10 @@ public class AdminUserService {
     }
 
     public MemberLevel findMemberLevelByUpgradeExperience(String upgradeExperience, AdminUser adminUser) {
-        return memberLevelRepository.findMemberLevelByUpgradeExperience(Integer.valueOf(upgradeExperience), adminUser.getWineryId());
+        return memberLevelRepository.findMemberLevelByUpgradeExperience(Integer.valueOf(upgradeExperience), adminUser.getWineryId().intValue());
     }
 
-    public AdminUser findAdminUserByPhone(String phone, Integer wineryId) {
+    public AdminUser findAdminUserByPhone(String phone, Long wineryId) {
         return adminUserRepository.findAdminUserByPhone(phone, wineryId);
     }
 
@@ -461,7 +461,7 @@ public class AdminUserService {
     }
 
     public AdminUser findAdminUserByuserName(String userName, AdminUser adminUser) {
-        return adminUserRepository.findAdminUserByUserName(userName, adminUser.getWineryId());
+        return adminUserRepository.findAdminUserByUserName(userName, adminUser.getWineryId().intValue());
     }
 
     public void addUser(AdminUser adminUserByToken, String userName, String phone, String pwd, List<String> roleId) {
@@ -481,7 +481,7 @@ public class AdminUserService {
                 str = str.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\"", "");
                 UserRole userRole = new UserRole();
                 userRole.setRoleId(Integer.valueOf(str));
-                userRole.setUserId(adminUser.getId());
+                userRole.setUserId(adminUser.getId().intValue());
                 userRole.setCreateTime(new Timestamp(System.currentTimeMillis()));
                 userRoleRepository.saveAndFlush(userRole);
             }
@@ -505,7 +505,7 @@ public class AdminUserService {
                 str = str.replaceAll("\\[", "").replaceAll("]", "").replaceAll("\"", "");
                 UserRole userRole = new UserRole();
                 userRole.setRoleId(Integer.valueOf(str));
-                userRole.setUserId(adminUser.getId());
+                userRole.setUserId(adminUser.getId().intValue());
                 userRole.setCreateTime(new Timestamp(System.currentTimeMillis()));
                 userRoleRepository.saveAndFlush(userRole);
             }
@@ -548,7 +548,7 @@ public class AdminUserService {
             List<UserRole> list = userRoleRepository.findByUserId(adminUser.getId());
             int count = 0;
             for (UserRole userRole : list) {
-                Role role = roleRepository.getOne(userRole.getRoleId());
+                Role role = roleRepository.getOne(userRole.getRoleId().longValue());
                 if (role != null) {
                     if (count == 0) {
                         roleName += role.getName();
@@ -565,7 +565,7 @@ public class AdminUserService {
     }
 
     public void delUser(AdminUser adminUser) {
-        adminUserRepository.deleteById(adminUser.getId());
+        adminUserRepository.deleteById(adminUser.getId().intValue());
     }
 
     public List<OrderListDTO> depositOrder(Integer userId) {
@@ -668,8 +668,8 @@ public class AdminUserService {
 
     public void adminUserLogin(AdminUser adminUser) {
         AdminUserLogin adminUserLogin = new AdminUserLogin();
-        adminUserLogin.setWineryId(adminUser.getWineryId());
-        adminUserLogin.setUserId(adminUser.getId());
+        adminUserLogin.setWineryId(adminUser.getWineryId().intValue());
+        adminUserLogin.setUserId(adminUser.getId().intValue());
         adminUserLogin.setCreateTime(new Date());
         adminUserLoginRepository.save(adminUserLogin);
     }
@@ -771,7 +771,7 @@ public class AdminUserService {
     }
 
     public MemberLevel findMemberLevelByName(String name, AdminUser adminUser) {
-        return memberLevelRepository.findMemberLevelByName(name, adminUser.getWineryId());
+        return memberLevelRepository.findMemberLevelByName(name, adminUser.getWineryId().intValue());
     }
 
     public List<MemberWechat> checkMemberLevel(Integer integer, AdminUser adminUser) {
@@ -818,14 +818,14 @@ public class AdminUserService {
         firstUser.setPhone(phone);
         Member userSave = memberRepository.saveAndFlush(firstUser);
         memberUser.setMbrId(Integer.valueOf(userSave.getId().toString()));
-        List<MemberLevel> memberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId(), "A");
+        List<MemberLevel> memberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId().intValue(), "A");
         memberUser.setMemberLevel(memberLevelList.get(0).getId());
         MemberWechat memberUserSave = memberWechatRepository.saveAndFlush(memberUser);
         //首次登录添加积分记录
         UserPoint userPoint = new UserPoint();
         userPoint.setPoint(0);
         userPoint.setUserId(Integer.valueOf(userSave.getId().toString()));
-        userPoint.setWineryId(adminUser.getWineryId());
+        userPoint.setWineryId(adminUser.getWineryId().intValue());
         userPoint.setUpdateTime(new Date());
         userPointRepository.save(userPoint);
         //添加经验值
@@ -839,7 +839,7 @@ public class AdminUserService {
         userBalance.setUserId(Integer.valueOf(userSave.getId().toString()));
         userBalance.setBalance(new BigDecimal(0));
         userBalance.setDonationAmount(new BigDecimal(0));
-        userBalance.setWineryId(adminUser.getWineryId());
+        userBalance.setWineryId(adminUser.getWineryId().intValue());
         userBalance.setUpdateTime(new Date());
         userBalanceRepository.saveAndFlush(userBalance);
         UserDTO userDTO = new UserDTO();
@@ -902,7 +902,7 @@ public class AdminUserService {
             List<UserRole> list = userRoleRepository.findByUserId(adminUser.getId());
             int count = 0;
             for (UserRole userRole : list) {
-                Role role = roleRepository.getOne(userRole.getRoleId());
+                Role role = roleRepository.getOne(userRole.getRoleId().longValue());
                 if (role != null) {
                     if (count == 0) {
                         roleName += role.getName();

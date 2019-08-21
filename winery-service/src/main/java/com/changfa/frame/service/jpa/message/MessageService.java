@@ -65,7 +65,7 @@ public class MessageService {
      * @Description
      * */
     public List<Map> findAllLevel(AdminUser adminUser) {
-        List<MemberLevel> memberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId(), "A");
+        List<MemberLevel> memberLevelList = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId().intValue(), "A");
         List<Map> mapList = new ArrayList<>();
         if (memberLevelList != null) {
             for (MemberLevel memberLevel : memberLevelList) {
@@ -90,9 +90,9 @@ public class MessageService {
         SmsTempContent smsTempContent = smsTempContentRepository.findBySmsTempId(messageDTO.getSmsTempId());
         //添加消息
         Message message = new Message();
-        message.setAdminUserId(adminUser.getId());
+        message.setAdminUserId(adminUser.getId().intValue());
         message.setTitle(smsTemp.getName());
-        message.setWineryId(adminUser.getWineryId());
+        message.setWineryId(adminUser.getWineryId().intValue());
         message.setRangType(messageDTO.getRangeType());
         message.setSendType(messageDTO.getSendType());
         message.setStatus(messageDTO.getStatus());
@@ -112,7 +112,7 @@ public class MessageService {
                     MessageDetail messageDetail = new MessageDetail();
                     messageDetail.setMessageId(messageSave.getId());
                     messageDetail.setSmsTempParaId(smsTempPara.getId());
-                    messageDetail.setWineryId(adminUser.getWineryId());
+                    messageDetail.setWineryId(adminUser.getWineryId().intValue());
                     messageDetail.setContent(messageDTO.getSmsTempParaNameList().get(smsTempPara.getCode()).toString());
                     messageDetailRepository.saveAndFlush(messageDetail);
                 }
@@ -194,7 +194,7 @@ public class MessageService {
                 String result = SMSUtil.sendRemindSMS(objects[3].toString(), SMSUtil.signName, smsTemp.getCode(), param);
                 log.info(result.equals("200") ? "发送短信成功" : "发送短信失败");
                 if (result.equals("200")) {
-                    addSendMessage(Integer.valueOf(objects[0].toString()), userMessage, adminUser.getId(), message.getSendType(), message.getTitle(), adminUser.getWineryId());
+                    addSendMessage(Integer.valueOf(objects[0].toString()), userMessage, adminUser.getId().intValue(), message.getSendType(), message.getTitle(), adminUser.getWineryId().intValue());
                 }
             }
         }
@@ -261,7 +261,7 @@ public class MessageService {
                         MessageDetail messageDetail = new MessageDetail();
                         messageDetail.setMessageId(messageSave.getId());
                         messageDetail.setSmsTempParaId(smsTempPara.getId());
-                        messageDetail.setWineryId(adminUser.getWineryId());
+                        messageDetail.setWineryId(adminUser.getWineryId().intValue());
                         messageDetail.setContent(messageDTO.getSmsTempParaNameList().get(smsTempPara.getCode()).toString());
                         messageDetailRepository.saveAndFlush(messageDetail);
                     }
@@ -353,7 +353,7 @@ public class MessageService {
      * @Description
      * */
     public List<MessageDTO> findMessageList(AdminUser adminUser, String status) {
-        List<Message> messagesList = messageRepository.findByWineryIdAndStatus(adminUser.getWineryId(), status);
+        List<Message> messagesList = messageRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), status);
         return getMessageDTOList(messagesList);
     }
 
@@ -366,14 +366,14 @@ public class MessageService {
     public List<MessageDTO> findMessageListLike(AdminUser adminUser, String status, String like, String type) {
         List<Message> messagesList = new ArrayList<>();
         if (type.equals("T")) {
-            messagesList = messageRepository.findByWineryIdAndTitleLike(like, adminUser.getWineryId(), status);
+            messagesList = messageRepository.findByWineryIdAndTitleLike(like, adminUser.getWineryId().intValue(), status);
             if (like == null || like.equals("")) {
-                messagesList = messageRepository.findByWineryIdAndType(adminUser.getWineryId(), status);
+                messagesList = messageRepository.findByWineryIdAndType(adminUser.getWineryId().intValue(), status);
             }
         } else {
-            messagesList = messageRepository.findByWineryIdAndCreateTimeLike(like, adminUser.getWineryId(), status);
+            messagesList = messageRepository.findByWineryIdAndCreateTimeLike(like, adminUser.getWineryId().intValue(), status);
             if (like == null || like.equals("")) {
-                messagesList = messageRepository.findByWineryIdAndType(adminUser.getWineryId(), status);
+                messagesList = messageRepository.findByWineryIdAndType(adminUser.getWineryId().intValue(), status);
             }
         }
         return getMessageDTOList(messagesList);
@@ -443,7 +443,7 @@ public class MessageService {
     }
 
     public List<Map> findMessageTime(AdminUser adminUser, String status) {
-        List<Date> timeList = messageRepository.findCreateTimeByWineryIdAndStatus(adminUser.getWineryId(), status);
+        List<Date> timeList = messageRepository.findCreateTimeByWineryIdAndStatus(adminUser.getWineryId().intValue(), status);
         List<Map> mapList = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if (timeList != null) {
@@ -502,7 +502,7 @@ public class MessageService {
         List<Map<String, Object>> mapList = new ArrayList<>();
         if (like != null && !like.equals("")) {
             userList.addAll(memberWechatRepository.findByNickNameLike(adminUser.getWineryId().longValue(), like));
-            userList.addAll(memberRepository.findByWineryIdAndPhonelike(adminUser.getWineryId(), like));
+            userList.addAll(memberRepository.findByWineryIdAndPhonelike(adminUser.getWineryId().intValue(), like));
         }
         if (userList != null && userList.size() > 0) {
             for (Object[] objects : userList) {

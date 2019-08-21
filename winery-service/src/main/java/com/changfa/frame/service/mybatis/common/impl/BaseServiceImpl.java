@@ -27,6 +27,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
     @Autowired
     protected BaseMapper<T, ID> baseMapper;
 
+    @Override
     public int delete(ID id) {
         if (id == null) {
             return 0;
@@ -34,6 +35,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
         return baseMapper.delete(id);
     }
 
+    @Override
     public T save(T entity) {
         if (entity == null) {
             return null;
@@ -60,6 +62,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
         return baseMapper.save(entity) > 0 ? entity : null;
     }
 
+    @Override
     public T update(T entity) {
         if (entity == null) {
             return null;
@@ -74,6 +77,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
         return baseMapper.update(entity) > 0 ? entity : null;
     }
 
+    @Override
     public T getById(ID id) {
 
         if (id == null) {
@@ -83,6 +87,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
         return baseMapper.getById(id);
     }
 
+    @Override
     public PageInfo<T> selectList(T entity, PageInfo<T> pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
@@ -90,6 +95,7 @@ public class BaseServiceImpl<T, ID extends Serializable> implements BaseService<
         return new PageInfo(baseMapper.selectList(entity));
     }
 
+    @Override
     public List<T> selectList(T entity) {
         return baseMapper.selectList(entity);
     }

@@ -61,7 +61,7 @@ public class ProdService {
     //添加规格
     public void addProdSpecGroup(AdminUser adminUser, String specGroup, String specList) {
         ProdSpecGroup prodSpecGroup = new ProdSpecGroup();
-        prodSpecGroup.setWineryId(adminUser.getWineryId());
+        prodSpecGroup.setWineryId(adminUser.getWineryId().intValue());
         prodSpecGroup.setName(specGroup);
         prodSpecGroup.setStatus("A");
         prodSpecGroup.setStatusTime(new Timestamp(System.currentTimeMillis()));
@@ -86,7 +86,7 @@ public class ProdService {
         if (prodSpecGroup == null) {
             return 1;
         }
-        prodSpecGroup.setWineryId(adminUser.getWineryId());
+        prodSpecGroup.setWineryId(adminUser.getWineryId().intValue());
         prodSpecGroup.setName(specGroup);
         prodSpecGroup.setStatus("A");
         prodSpecGroup.setStatusTime(new Timestamp(System.currentTimeMillis()));
@@ -108,7 +108,7 @@ public class ProdService {
     }
 
     public List<Map<String, Object>> prodSpecList(AdminUser adminUser) {
-        List<ProdSpecGroup> list = prodSpecGroupRepository.findByWineryId(adminUser.getWineryId());
+        List<ProdSpecGroup> list = prodSpecGroupRepository.findByWineryId(adminUser.getWineryId().intValue());
         List<Map<String, Object>> mapList = new ArrayList<>();
         for (ProdSpecGroup group : list) {
             Map<String, Object> map = new HashMap<>();
@@ -133,7 +133,7 @@ public class ProdService {
     public void addProdCategory(AdminUser adminUser, String cateName, String descri, String status) {
         ProdCategory prodCategory = new ProdCategory();
         prodCategory.setName(cateName);
-        prodCategory.setWineryId(adminUser.getWineryId());
+        prodCategory.setWineryId(adminUser.getWineryId().intValue());
         prodCategory.setDescri(descri);
         prodCategory.setStatus(status);
         prodCategory.setStatusTime(new Timestamp(System.currentTimeMillis()));
@@ -147,7 +147,7 @@ public class ProdService {
             return 1;
         }
         prodCategory.setName(cateName);
-        prodCategory.setWineryId(adminUser.getWineryId());
+        prodCategory.setWineryId(adminUser.getWineryId().intValue());
         prodCategory.setDescri(descri);
         prodCategory.setStatus(status);
         prodCategory.setStatusTime(new Timestamp(System.currentTimeMillis()));
@@ -157,7 +157,7 @@ public class ProdService {
     }
 
     public List<ProdCategory> prodCategoryLists(AdminUser adminUser, String name) {
-        List<ProdCategory> list = prodCategoryRepository.findByWineryIdAndName(adminUser.getWineryId(), name);
+        List<ProdCategory> list = prodCategoryRepository.findByWineryIdAndName(adminUser.getWineryId().intValue(), name);
         for (int i = 0; i < list.size(); i++) {
             list.get(i).setIndex(i + 1);
         }
@@ -166,7 +166,7 @@ public class ProdService {
 
     public void addProdBrand(AdminUser adminUser, String brandName, String status) {
         ProdBrand prodBrand = new ProdBrand();
-        prodBrand.setWineryId(adminUser.getWineryId());
+        prodBrand.setWineryId(adminUser.getWineryId().intValue());
         prodBrand.setStatus(status);
         prodBrand.setName(brandName);
         prodBrand.setCreateTime(new Date());
@@ -180,7 +180,7 @@ public class ProdService {
         if (prodBrand == null) {
             return 1;
         }
-        prodBrand.setWineryId(adminUser.getWineryId());
+        prodBrand.setWineryId(adminUser.getWineryId().intValue());
         prodBrand.setStatus(status);
         prodBrand.setName(brandName);
         prodBrand.setCreateTime(new Date());
@@ -190,7 +190,7 @@ public class ProdService {
     }
 
     public List<ProdBrand> prodBrandLists(AdminUser adminUser, String name) {
-        List<ProdBrand> list = prodBrandRepository.findByWineryIdAndName(adminUser.getWineryId(), name);
+        List<ProdBrand> list = prodBrandRepository.findByWineryIdAndName(adminUser.getWineryId().intValue(), name);
         Integer count = 0;
         for (ProdBrand prodBrand : list) {
             count++;
@@ -305,7 +305,7 @@ public class ProdService {
         if (prod == null) {
             prod = new Prod();
         }
-        prod.setWineryId(adminUser.getWineryId());
+        prod.setWineryId(adminUser.getWineryId().intValue());
         prod.setName(addProdDTO.getProdName());
         prod.setTitle(addProdDTO.getProdTitle());
         prod.setCode(addProdDTO.getProdCode());
@@ -321,7 +321,7 @@ public class ProdService {
         prod.setMemberDiscount(addProdDTO.getMemberDiscount());
         prod.setStatus(addProdDTO.getStatus());
         prod.setIsHot(addProdDTO.getIsHot());
-        prod.setCreateUserId(adminUser.getId());
+        prod.setCreateUserId(adminUser.getId().intValue());
         prod.setIsPopular(addProdDTO.getIsPopular());
         prod.setIsSelling(addProdDTO.getIsSelling());
         prodRepository.save(prod);
@@ -341,7 +341,7 @@ public class ProdService {
             prodLogo.setStatus("A");
             prodLogo.setStatusTime(new Date());
             prodLogo.setCreateTime(new Date());
-            prodLogo.setWineryId(adminUser.getWineryId());
+            prodLogo.setWineryId(adminUser.getWineryId().intValue());
             if (i == 0) {
                 prodLogo.setIsDefault("Y");
             } else {
@@ -400,7 +400,7 @@ public class ProdService {
             prodChanged.setProdId(prod.getId());
             prodChanged.setProdSpecId(addProdDTO.getProdSpecId());
             prodChanged.setUsePoint(addProdDTO.getPointDetail().getPoint());
-            prodChanged.setWineryId(adminUser.getWineryId());
+            prodChanged.setWineryId(adminUser.getWineryId().intValue());
             prodChangedRepository.save(prodChanged);
         } else {
             prodPriceLevelRepository.deleteByProdId(prod.getId());
@@ -409,7 +409,7 @@ public class ProdService {
 
     public void addProd(AdminUser adminUser, AddProdDTO addProdDTO) {
         Prod prod = new Prod();
-        prod.setWineryId(adminUser.getWineryId());
+        prod.setWineryId(adminUser.getWineryId().intValue());
         prod.setName(addProdDTO.getProdName());
         prod.setTitle(addProdDTO.getProdTitle());
         prod.setCode(addProdDTO.getProdCode());
@@ -428,7 +428,7 @@ public class ProdService {
         prod.setMemberDiscount(addProdDTO.getMemberDiscount());
         prod.setStatus(addProdDTO.getStatus());
         prod.setIsHot(addProdDTO.getIsHot());
-        prod.setCreateUserId(adminUser.getId());
+        prod.setCreateUserId(adminUser.getId().intValue());
         prod.setIsPopular(addProdDTO.getIsPopular());
         prod.setIsSelling(addProdDTO.getIsSelling());
         Prod prodSave = prodRepository.saveAndFlush(prod);
@@ -445,7 +445,7 @@ public class ProdService {
             prodLogo.setStatus("A");
             prodLogo.setStatusTime(new Date());
             prodLogo.setCreateTime(new Date());
-            prodLogo.setWineryId(adminUser.getWineryId());
+            prodLogo.setWineryId(adminUser.getWineryId().intValue());
             if (i == 0) {
                 prodLogo.setIsDefault("Y");
             } else {
@@ -497,7 +497,7 @@ public class ProdService {
             prodChanged.setProdId(prod.getId());
             prodChanged.setProdSpecId(addProdDTO.getProdSpecId());
             prodChanged.setUsePoint(addProdDTO.getPointDetail().getPoint());
-            prodChanged.setWineryId(adminUser.getWineryId());
+            prodChanged.setWineryId(adminUser.getWineryId().intValue());
             prodChangedRepository.save(prodChanged);
         }
 
@@ -505,7 +505,7 @@ public class ProdService {
 
     public Map<String, List<Map<String, Object>>> addProdList(AdminUser adminUser) {
         Map<String, List<Map<String, Object>>> map = new HashMap<>();
-        List<ProdCategory> list1 = prodCategoryRepository.findByWineryId(adminUser.getWineryId());
+        List<ProdCategory> list1 = prodCategoryRepository.findByWineryId(adminUser.getWineryId().intValue());
         List<Map<String, Object>> list = new ArrayList<>();
         for (ProdCategory prodCategory : list1) {
             Map<String, Object> map1 = new HashMap<>();
@@ -514,7 +514,7 @@ public class ProdService {
             list.add(map1);
         }
         map.put("listCategory", list);
-        List<ProdBrand> list2 = prodBrandRepository.findByWineryId(adminUser.getWineryId());
+        List<ProdBrand> list2 = prodBrandRepository.findByWineryId(adminUser.getWineryId().intValue());
         list = new ArrayList<>();
         for (ProdBrand prodBrand : list2) {
             Map<String, Object> map1 = new HashMap<>();
@@ -523,7 +523,7 @@ public class ProdService {
             list.add(map1);
         }
         map.put("listbrand", list);
-        List<ProdSpecGroup> list3 = prodSpecGroupRepository.findByWineryIdIsA(adminUser.getWineryId());
+        List<ProdSpecGroup> list3 = prodSpecGroupRepository.findByWineryIdIsA(adminUser.getWineryId().intValue());
         list = new ArrayList<>();
         for (ProdSpecGroup prodSpecGroup : list3) {
             Map<String, Object> map1 = new HashMap<>();
@@ -532,7 +532,7 @@ public class ProdService {
             list.add(map1);
         }
         map.put("listGroup", list);
-        List<MemberLevel> list4 = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId(), "A");
+        List<MemberLevel> list4 = memberLevelRepository.findByWineryIdAndStatusOrderByUpgradeExperienceAsc(adminUser.getWineryId().intValue(), "A");
         list = new ArrayList<>();
         for (MemberLevel memberLevel : list4) {
             Map<String, Object> map1 = new HashMap<>();
@@ -579,13 +579,13 @@ public class ProdService {
     public List<ProdListDTO> prodList(AdminUser adminUser, String input, String cataId, String status) {
         List<Prod> prodList = new ArrayList<>();
         if (cataId.equals("") && status.equals("")) {
-            prodList = prodRepository.findByWineryIdLikeName(adminUser.getWineryId(), input);
+            prodList = prodRepository.findByWineryIdLikeName(adminUser.getWineryId().intValue(), input);
         } else if (!cataId.equals("") && !status.equals("")) {
-            prodList = prodRepository.findBySearch(adminUser.getWineryId(), input, Integer.valueOf(cataId), status);
+            prodList = prodRepository.findBySearch(adminUser.getWineryId().intValue(), input, Integer.valueOf(cataId), status);
         } else if (cataId.equals("")) {
-            prodList = prodRepository.findBySearchNotCataId(adminUser.getWineryId(), input, status);
+            prodList = prodRepository.findBySearchNotCataId(adminUser.getWineryId().intValue(), input, status);
         } else if (status.equals("")) {
-            prodList = prodRepository.findBySearchNotStatus(adminUser.getWineryId(), input, Integer.valueOf(cataId));
+            prodList = prodRepository.findBySearchNotStatus(adminUser.getWineryId().intValue(), input, Integer.valueOf(cataId));
         }
         List<ProdListDTO> prodListDTOS = new ArrayList<>();
         for (Prod prod : prodList) {
@@ -658,7 +658,7 @@ public class ProdService {
     }
 
     public Prod findByProdCode(String prodCode, AdminUser adminUser) {
-        return prodRepository.findByCode(prodCode, adminUser.getWineryId());
+        return prodRepository.findByCode(prodCode, adminUser.getWineryId().intValue());
     }
 
     public Integer CheckProdSpecGroup(Integer specGroupId) {
@@ -696,11 +696,11 @@ public class ProdService {
     }
 
     public ProdBrand checkProdBrandName(String brandName, AdminUser adminUser) {
-        return prodBrandRepository.findByName(brandName, adminUser.getWineryId());
+        return prodBrandRepository.findByName(brandName, adminUser.getWineryId().intValue());
     }
 
     public ProdCategory checkProdCategoryName(String cateName, AdminUser adminUser) {
-        return prodCategoryRepository.findByName(cateName, adminUser.getWineryId());
+        return prodCategoryRepository.findByName(cateName, adminUser.getWineryId().intValue());
     }
 
     public Integer checkProdDel(Integer prodId) {
@@ -713,7 +713,7 @@ public class ProdService {
     }
 
     public ProdSpecGroup checkProdSpec(String specGroup, AdminUser adminUser) {
-        return prodSpecGroupRepository.findByWineryIdAndName(adminUser.getWineryId(), specGroup);
+        return prodSpecGroupRepository.findByWineryIdAndName(adminUser.getWineryId().intValue(), specGroup);
     }
 
     public void openCloseProd(Integer prodId, String n) {
@@ -735,7 +735,7 @@ public class ProdService {
     //运营端添加商品
     public void addOperateProd(AdminUser adminUser, AddProdDTO addProdDTO ,List<Integer> wineryList) {
         Prod prod = new Prod();
-        prod.setWineryId(adminUser.getWineryId());
+        prod.setWineryId(adminUser.getWineryId().intValue());
         prod.setName(addProdDTO.getProdName());
         prod.setTitle(addProdDTO.getProdTitle());
         prod.setCode(addProdDTO.getProdCode());
@@ -754,7 +754,7 @@ public class ProdService {
         prod.setMemberDiscount(addProdDTO.getMemberDiscount());
         prod.setStatus(addProdDTO.getStatus());
         prod.setIsHot(addProdDTO.getIsHot());
-        prod.setCreateUserId(adminUser.getId());
+        prod.setCreateUserId(adminUser.getId().intValue());
         prod.setIsPopular(addProdDTO.getIsPopular());
         prod.setIsSelling(addProdDTO.getIsSelling());
         Prod prodSave = prodRepository.saveAndFlush(prod);
@@ -771,7 +771,7 @@ public class ProdService {
             prodLogo.setStatus("A");
             prodLogo.setStatusTime(new Date());
             prodLogo.setCreateTime(new Date());
-            prodLogo.setWineryId(adminUser.getWineryId());
+            prodLogo.setWineryId(adminUser.getWineryId().intValue());
             if (i == 0) {
                 prodLogo.setIsDefault("Y");
             } else {
@@ -823,7 +823,7 @@ public class ProdService {
             prodChanged.setProdId(prod.getId());
             prodChanged.setProdSpecId(addProdDTO.getProdSpecId());
             prodChanged.setUsePoint(addProdDTO.getPointDetail().getPoint());
-            prodChanged.setWineryId(adminUser.getWineryId());
+            prodChanged.setWineryId(adminUser.getWineryId().intValue());
             prodChangedRepository.save(prodChanged);
         }
         if(null != wineryList && wineryList.size()>0){
@@ -844,7 +844,7 @@ public class ProdService {
         if (prod == null) {
             prod = new Prod();
         }
-        prod.setWineryId(adminUser.getWineryId());
+        prod.setWineryId(adminUser.getWineryId().intValue());
         prod.setName(addProdDTO.getProdName());
         prod.setTitle(addProdDTO.getProdTitle());
         prod.setCode(addProdDTO.getProdCode());
@@ -860,7 +860,7 @@ public class ProdService {
         prod.setMemberDiscount(addProdDTO.getMemberDiscount());
         prod.setStatus(addProdDTO.getStatus());
         prod.setIsHot(addProdDTO.getIsHot());
-        prod.setCreateUserId(adminUser.getId());
+        prod.setCreateUserId(adminUser.getId().intValue());
         prod.setIsPopular(addProdDTO.getIsPopular());
         prod.setIsSelling(addProdDTO.getIsSelling());
         prodRepository.save(prod);
@@ -880,7 +880,7 @@ public class ProdService {
             prodLogo.setStatus("A");
             prodLogo.setStatusTime(new Date());
             prodLogo.setCreateTime(new Date());
-            prodLogo.setWineryId(adminUser.getWineryId());
+            prodLogo.setWineryId(adminUser.getWineryId().intValue());
             if (i == 0) {
                 prodLogo.setIsDefault("Y");
             } else {
@@ -939,7 +939,7 @@ public class ProdService {
             prodChanged.setProdId(prod.getId());
             prodChanged.setProdSpecId(addProdDTO.getProdSpecId());
             prodChanged.setUsePoint(addProdDTO.getPointDetail().getPoint());
-            prodChanged.setWineryId(adminUser.getWineryId());
+            prodChanged.setWineryId(adminUser.getWineryId().intValue());
             prodChangedRepository.save(prodChanged);
         } else {
             prodPriceLevelRepository.deleteByProdId(prod.getId());

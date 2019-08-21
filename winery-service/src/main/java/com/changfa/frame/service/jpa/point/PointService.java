@@ -149,7 +149,7 @@ public class PointService {
         if(pointRewardRule == null){
             pointRewardRule = new PointRewardRule();
         }
-        pointRewardRule.setWineryId(adminUser.getWineryId());
+        pointRewardRule.setWineryId(adminUser.getWineryId().intValue());
         pointRewardRule.setName(pointRewardRuleDTO.getName());
         pointRewardRule.setIsLongTime(pointRewardRuleDTO.getIsLongTime());
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -174,14 +174,14 @@ public class PointService {
         pointRewardRule.setUpdateTime(new Date());
         pointRewardRule.setCreateTime(new Date());
         pointRewardRule.setStatusTime(new Date());
-        pointRewardRule.setCreateUserId(adminUser.getId());
+        pointRewardRule.setCreateUserId(adminUser.getId().intValue());
         pointRewardRuleRepository.saveAndFlush(pointRewardRule);
         PointExchangeMoney pointExchangeMoney = pointExchangeMoneyRepository.findByPointRewardRuleId(pointRewardRule.getId());
         if(pointExchangeMoney == null){
             pointExchangeMoney = new PointExchangeMoney();
         }
         pointExchangeMoney.setPointRewardRuleId(pointRewardRule.getId());
-        pointExchangeMoney.setWineryId(adminUser.getWineryId());
+        pointExchangeMoney.setWineryId(adminUser.getWineryId().intValue());
         if(pointRewardRuleDTO.getOnlinePoin()!=null&&!pointRewardRuleDTO.getOnlinePoin().equals("")){
             pointExchangeMoney.setOnlinePointToMoney(pointRewardRuleDTO.getOnlinePoin());
         }else{
@@ -196,23 +196,23 @@ public class PointService {
         pointExchangeMoney.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         pointExchangeMoney.setCreateTime(new Timestamp(System.currentTimeMillis()));
         pointExchangeMoney.setStatusTime(new Timestamp(System.currentTimeMillis()));
-        pointExchangeMoney.setCreateUserId(adminUser.getId());
+        pointExchangeMoney.setCreateUserId(adminUser.getId().intValue());
         pointExchangeMoneyRepository.saveAndFlush(pointExchangeMoney);
-        pointExchangeVoucherRepository.deleteByWId(adminUser.getWineryId());
+        pointExchangeVoucherRepository.deleteByWId(adminUser.getWineryId().intValue());
         if(pointRewardRuleDTO.getPointRewardRuleDTOS().get(0)!=null&&pointRewardRuleDTO.getPointRewardRuleDTOS().get(0).getPoint()!=null&&!pointRewardRuleDTO.getPointRewardRuleDTOS().get(0).getPoint().equals("")){
             for (PointRewardRuleItemDTO item:pointRewardRuleDTO.getPointRewardRuleDTOS()) {
                 for (Integer voucher:item.getVoucherId()) {
                         if(voucher!=null){
                             PointExchangeVoucher pointExchangeVoucher = new PointExchangeVoucher();
                             pointExchangeVoucher.setPointRewardRuleId(pointRewardRule.getId());
-                            pointExchangeVoucher.setWineryId(adminUser.getWineryId());
+                            pointExchangeVoucher.setWineryId(adminUser.getWineryId().intValue());
                             pointExchangeVoucher.setPoint(item.getPoint());
                             pointExchangeVoucher.setVoucherId(voucher);
                             pointExchangeVoucher.setStatus("A");
                             pointExchangeVoucher.setCreateTime(new Timestamp(System.currentTimeMillis()));
                             pointExchangeVoucher.setUpdateTime(new Timestamp(System.currentTimeMillis()));
                             pointExchangeVoucher.setStatusTime(new Timestamp(System.currentTimeMillis()));
-                            pointExchangeVoucher.setCreateUserId(adminUser.getId());
+                            pointExchangeVoucher.setCreateUserId(adminUser.getId().intValue());
                             pointExchangeVoucherRepository.saveAndFlush(pointExchangeVoucher);
                         }
                 }
@@ -222,8 +222,8 @@ public class PointService {
 
     public List<PointDTO> pointRewardRuleList(AdminUser adminUser) {
         SimpleDateFormat sd = new SimpleDateFormat("yyyy年MM月dd日");
-        PointRewardRule rule = pointRewardRuleRepository.findByWineryId(adminUser.getWineryId());
-        PointLoginRule rule1 = pointLoginRuleRepository.findByWineryId(adminUser.getWineryId());
+        PointRewardRule rule = pointRewardRuleRepository.findByWineryId(adminUser.getWineryId().intValue());
+        PointLoginRule rule1 = pointLoginRuleRepository.findByWineryId(adminUser.getWineryId().intValue());
         List<PointDTO> pointDTOS = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             PointDTO pointDTO = new PointDTO();
@@ -308,7 +308,7 @@ public class PointService {
         if(pointLoginRule==null){
             pointLoginRule = new PointLoginRule();
         }
-        pointLoginRule.setWineryId(adminUser.getWineryId());
+        pointLoginRule.setWineryId(adminUser.getWineryId().intValue());
         pointLoginRule.setIsLongTime(isLongTime);
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if(isLongTime.equals("N")){
@@ -333,7 +333,7 @@ public class PointService {
         pointLoginRule.setStatusTime(new Timestamp(System.currentTimeMillis()));
         pointLoginRule.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         pointLoginRule.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        pointLoginRule.setCreateUserId(adminUser.getId());
+        pointLoginRule.setCreateUserId(adminUser.getId().intValue());
         pointLoginRuleRepository.saveAndFlush(pointLoginRule);
         List<PointLoginRuleDetail> list = pointLoginRuleDetailRepository.findByPointLoginRuleId(pointLoginRule.getId());
         List<Integer> point = new ArrayList<>();
@@ -359,13 +359,13 @@ public class PointService {
             PointRewardRule rule = pointRewardRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("A");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
-            rule.setCreateUserId(adminUser.getId());
+            rule.setCreateUserId(adminUser.getId().intValue());
             pointRewardRuleRepository.saveAndFlush(rule);
         }else{
             PointLoginRule rule = pointLoginRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("A");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
-            rule.setCreateUserId(adminUser.getId());
+            rule.setCreateUserId(adminUser.getId().intValue());
             pointLoginRuleRepository.saveAndFlush(rule);
         }
     }
@@ -375,13 +375,13 @@ public class PointService {
             PointRewardRule rule = pointRewardRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("P");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
-            rule.setCreateUserId(adminUser.getId());
+            rule.setCreateUserId(adminUser.getId().intValue());
             pointRewardRuleRepository.saveAndFlush(rule);
         }else{
             PointLoginRule rule = pointLoginRuleRepository.getOne(Integer.valueOf(id));
             rule.setStatus("P");
             rule.setStatusTime(new Timestamp(System.currentTimeMillis()));
-            rule.setCreateUserId(adminUser.getId());
+            rule.setCreateUserId(adminUser.getId().intValue());
             pointLoginRuleRepository.saveAndFlush(rule);
         }
     }

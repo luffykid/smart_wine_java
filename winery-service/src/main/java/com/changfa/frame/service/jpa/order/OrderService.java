@@ -576,7 +576,7 @@ public class OrderService {
                 }
             }
         }
-        List<AdminUser> adminUsers = adminUserRepository.findAdminUserByWIdAndRoleName(order.getWineryId(), "管理员");
+        List<AdminUser> adminUsers = adminUserRepository.findAdminUserByWIdAndRoleName(order.getWineryId().longValue(), "管理员");
         for (AdminUser adminUser : adminUsers) {
             if (adminUser.getPhone() != null && !adminUser.getPhone().equals("")) {
                 SmsTemp smsTemp = smsTempRepository.findByWineryIdAndContentLike(order.getWineryId(), "新订单");
@@ -1029,15 +1029,15 @@ public class OrderService {
             }
         }
         if (strstatus.equals("") && strtime.equals("")) {
-            list = orderRepository.findByWineryIdAndNo(adminUser.getWineryId(), orderNo);
+            list = orderRepository.findByWineryIdAndNo(adminUser.getWineryId().intValue(), orderNo);
         } else if (!strstatus.equals("") && !strtime.equals("")) {
             String strtime2 = orderTime.get(1).replaceAll("\\[", "").replaceAll("]", "").replaceAll("\"", "");
-            list = orderRepository.findByWineryIdAndNoAndTimeAndStatus(adminUser.getWineryId(), orderNo, strtime, strtime2, strs);
+            list = orderRepository.findByWineryIdAndNoAndTimeAndStatus(adminUser.getWineryId().intValue(), orderNo, strtime, strtime2, strs);
         } else if (strstatus.equals("")) {
             String strtime2 = orderTime.get(1).replaceAll("\\[", "").replaceAll("]", "").replaceAll("\"", "");
-            list = orderRepository.findByWineryIdAndNoAndTime(adminUser.getWineryId(), orderNo, strtime, strtime2);
+            list = orderRepository.findByWineryIdAndNoAndTime(adminUser.getWineryId().intValue(), orderNo, strtime, strtime2);
         } else if (strtime.equals("")) {
-            list = orderRepository.findByWineryIdAndNoAndStatus(adminUser.getWineryId(), orderNo, strs);
+            list = orderRepository.findByWineryIdAndNoAndStatus(adminUser.getWineryId().intValue(), orderNo, strs);
         }
         Integer count = 1;
         for (Order order : list) {
@@ -1157,7 +1157,7 @@ public class OrderService {
         OrderExpress orderExpress = new OrderExpress();
         orderExpress.setDetail(expressMethod);
         orderExpress.setExpressNo(expressNo);
-        orderExpress.setWineryId(adminUser.getWineryId());
+        orderExpress.setWineryId(adminUser.getWineryId().intValue());
         orderExpress.setOrderId(order.getId());
         orderExpress.setCreateTime(new Date());
         orderExpressRepository.save(orderExpress);

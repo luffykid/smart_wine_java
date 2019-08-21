@@ -100,14 +100,14 @@ public class StatisticalService {
         //会员存量
         map.put("deposit", memberRepository.findUserCountSum(adminUser.getWineryId().longValue())== null ? 0 : memberRepository.findUserCountSum(adminUser.getWineryId().longValue()));
         //昨日消费
-        BigDecimal activityPriceSum = activityOrderRepository.findPriceByWineryId(adminUser.getWineryId());
-        BigDecimal orderPriceSum = orderRepository.findPriceSUM(adminUser.getWineryId());
-        BigDecimal offlinePriceSum = offlineOrderRepository.findPriceSum(adminUser.getWineryId());
+        BigDecimal activityPriceSum = activityOrderRepository.findPriceByWineryId(adminUser.getWineryId().intValue());
+        BigDecimal orderPriceSum = orderRepository.findPriceSUM(adminUser.getWineryId().intValue());
+        BigDecimal offlinePriceSum = offlineOrderRepository.findPriceSum(adminUser.getWineryId().intValue());
         map.put("consumption", (activityPriceSum == null ? new BigDecimal(0) : activityPriceSum).add((offlinePriceSum == null ? new BigDecimal(0) : offlinePriceSum)).add((orderPriceSum == null ? new BigDecimal(0) : orderPriceSum)));
         //昨日消费笔数
-        Integer activityCount = activityOrderRepository.findCountByWineryId(adminUser.getWineryId());
-        Integer orderCount = orderRepository.findCount(adminUser.getWineryId());
-        Integer offlineCount = offlineOrderRepository.findCount(adminUser.getWineryId());
+        Integer activityCount = activityOrderRepository.findCountByWineryId(adminUser.getWineryId().intValue());
+        Integer orderCount = orderRepository.findCount(adminUser.getWineryId().intValue());
+        Integer offlineCount = offlineOrderRepository.findCount(adminUser.getWineryId().intValue());
         map.put("count", (activityCount == null ? 0 : activityCount) + (orderCount == null ? 0 : orderCount) + (offlineCount == null ? 0 : offlineCount));
         return map;
     }
@@ -256,9 +256,9 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (beginTime != null && !beginTime.equals("")) {
-            depositOrderDetail = depositOrderRepository.findDepositorderDetailByTime(adminUser.getWineryId(), beginTime, endTime);
+            depositOrderDetail = depositOrderRepository.findDepositorderDetailByTime(adminUser.getWineryId().intValue(), beginTime, endTime);
         } else {
-            depositOrderDetail = depositOrderRepository.findDepositorderDetail(adminUser.getWineryId());
+            depositOrderDetail = depositOrderRepository.findDepositorderDetail(adminUser.getWineryId().intValue());
         }
         List<DepositOrderDetailDTO> depositOrderDetailDTOList = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -287,9 +287,9 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (beginTime != null && !beginTime.equals("")) {
-            depositOrderDetail = depositOrderRepository.findDepositorderDetailByTimeExcel(adminUser.getWineryId(), beginTime, endTime);
+            depositOrderDetail = depositOrderRepository.findDepositorderDetailByTimeExcel(adminUser.getWineryId().intValue(), beginTime, endTime);
         } else {
-            depositOrderDetail = depositOrderRepository.findDepositorderDetailExcel(adminUser.getWineryId());
+            depositOrderDetail = depositOrderRepository.findDepositorderDetailExcel(adminUser.getWineryId().intValue());
         }
         List<List<String>> listList = new ArrayList<>();
         SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -312,9 +312,9 @@ public class StatisticalService {
      * @Description
      * */
     public Map pointSumByDay(AdminUser adminUser, Integer day) {
-        Integer depositPointSum = userPointDetailRepository.findByActionAndWineryId(day, "D", adminUser.getWineryId());
-        Integer buyPointSum = userPointDetailRepository.findByActionAndWineryId(day, "W", adminUser.getWineryId());
-        Integer giftPointSum = userPointDetailRepository.findByActionAndWineryId(day, "G", adminUser.getWineryId());
+        Integer depositPointSum = userPointDetailRepository.findByActionAndWineryId(day, "D", adminUser.getWineryId().intValue());
+        Integer buyPointSum = userPointDetailRepository.findByActionAndWineryId(day, "W", adminUser.getWineryId().intValue());
+        Integer giftPointSum = userPointDetailRepository.findByActionAndWineryId(day, "G", adminUser.getWineryId().intValue());
         Map map = new HashMap();
         map.put("depositPointSum", depositPointSum == null ? 0 : depositPointSum);
         map.put("buyPointSum", buyPointSum == null ? 0 : buyPointSum);
@@ -336,9 +336,9 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (day != null && !day.equals("")) {
-            pointSumView = userPointDetailRepository.findByActionAndWineryId(day, adminUser.getWineryId(), type);
+            pointSumView = userPointDetailRepository.findByActionAndWineryId(day, adminUser.getWineryId().intValue(), type);
         } else {
-            pointSumView = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTimeFinal, adminUser.getWineryId(), type);
+            pointSumView = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTimeFinal, adminUser.getWineryId().intValue(), type);
         }
         Map<String, Object> map = new HashMap<>();
         if (pointSumView != null && pointSumView.size() > 0) {
@@ -430,9 +430,9 @@ public class StatisticalService {
         }
         List<Object[]> actionSum = new ArrayList<>();
         if (day != null && !day.equals("")) {
-            actionSum = userPointDetailRepository.findActionSum(day, adminUser.getWineryId());
+            actionSum = userPointDetailRepository.findActionSum(day, adminUser.getWineryId().intValue());
         } else {
-            actionSum = userPointDetailRepository.findActionSumTime(beginTime, endTime, adminUser.getWineryId());
+            actionSum = userPointDetailRepository.findActionSumTime(beginTime, endTime, adminUser.getWineryId().intValue());
         }
         if (actionSum != null) {
             for (int i = 0; i < statisticDTOS.size(); i++) {
@@ -471,9 +471,9 @@ public class StatisticalService {
             endTime = formatter.format(rightNow.getTime());
             rightNow.setTime(new Date());
         }
-        Integer depositPointSum = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTime, "D", adminUser.getWineryId());
-        Integer buyPointSum = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTime, "W", adminUser.getWineryId());
-        Integer giftPointSum = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTime, "G", adminUser.getWineryId());
+        Integer depositPointSum = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTime, "D", adminUser.getWineryId().intValue());
+        Integer buyPointSum = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTime, "W", adminUser.getWineryId().intValue());
+        Integer giftPointSum = userPointDetailRepository.findByActionAndWineryIdTime(beginTime, endTime, "G", adminUser.getWineryId().intValue());
         Map map = new HashMap();
         map.put("depositPointSum", depositPointSum == null ? 0 : depositPointSum);
         map.put("buyPointSum", buyPointSum == null ? 0 : buyPointSum);
@@ -501,13 +501,13 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (day != null && !day.equals("")) {
-            sendVoucher = userVoucherRepository.findSendVoucherSumByDay(adminUser.getWineryId(), day);
-            useVoucher = userVoucherRepository.findUseVoucherSumByDay(adminUser.getWineryId(), day);
-            money = userVoucherRepository.findMoneyDay(adminUser.getWineryId(), day);
+            sendVoucher = userVoucherRepository.findSendVoucherSumByDay(adminUser.getWineryId().intValue(), day);
+            useVoucher = userVoucherRepository.findUseVoucherSumByDay(adminUser.getWineryId().intValue(), day);
+            money = userVoucherRepository.findMoneyDay(adminUser.getWineryId().intValue(), day);
         } else {
-            sendVoucher = userVoucherRepository.findSendVoucherSumByTime(adminUser.getWineryId(), beginTime, endTime);
-            useVoucher = userVoucherRepository.findUseVoucherSumByTime(adminUser.getWineryId(), beginTime, endTime);
-            money = new BigDecimal(userVoucherRepository.findMoneyTime(adminUser.getWineryId(), beginTime, endTime).toString());
+            sendVoucher = userVoucherRepository.findSendVoucherSumByTime(adminUser.getWineryId().intValue(), beginTime, endTime);
+            useVoucher = userVoucherRepository.findUseVoucherSumByTime(adminUser.getWineryId().intValue(), beginTime, endTime);
+            money = new BigDecimal(userVoucherRepository.findMoneyTime(adminUser.getWineryId().intValue(), beginTime, endTime).toString());
         }
         StatisticDTO statisticDTO = new StatisticDTO();
         statisticDTO.setSendVoucherCount(sendVoucher == null ? 0 : sendVoucher);
@@ -530,9 +530,9 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (day != null && !day.equals("")) {
-            sendDetail = userVoucherRepository.findSendDetailDay(adminUser.getWineryId(), day);
+            sendDetail = userVoucherRepository.findSendDetailDay(adminUser.getWineryId().intValue(), day);
         } else {
-            sendDetail = userVoucherRepository.findSendDetailTime(adminUser.getWineryId(), beginTime, endTimeFinal);
+            sendDetail = userVoucherRepository.findSendDetailTime(adminUser.getWineryId().intValue(), beginTime, endTimeFinal);
         }
         Map<String, Object> map = new HashMap<>();
         if (sendDetail != null && sendDetail.size() > 0) {
@@ -595,9 +595,9 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (day != null && !day.equals("")) {
-            sendDetail = userVoucherRepository.findUseDetailDay(adminUser.getWineryId(), day);
+            sendDetail = userVoucherRepository.findUseDetailDay(adminUser.getWineryId().intValue(), day);
         } else {
-            sendDetail = userVoucherRepository.findUseDetailTime(adminUser.getWineryId(), beginTime, endTimeFinal);
+            sendDetail = userVoucherRepository.findUseDetailTime(adminUser.getWineryId().intValue(), beginTime, endTimeFinal);
         }
         Map<String, Object> map = new HashMap<>();
         if (sendDetail != null && sendDetail.size() > 0) {
@@ -655,13 +655,13 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (day != null && !day.equals("")) {
-            activityDay = userVoucherRepository.findActivtiyDay(adminUser.getWineryId(), day);
-            offlineDay = userVoucherRepository.findOfflineDay(adminUser.getWineryId(), day);
-            orderDay = userVoucherRepository.findOrderDay(adminUser.getWineryId(), day);
+            activityDay = userVoucherRepository.findActivtiyDay(adminUser.getWineryId().intValue(), day);
+            offlineDay = userVoucherRepository.findOfflineDay(adminUser.getWineryId().intValue(), day);
+            orderDay = userVoucherRepository.findOrderDay(adminUser.getWineryId().intValue(), day);
         } else {
-            activityDay = userVoucherRepository.findActivtiyTime(adminUser.getWineryId(), beginTime, endTimeFinal);
-            offlineDay = userVoucherRepository.findOfflineTime(adminUser.getWineryId(), beginTime, endTimeFinal);
-            orderDay = userVoucherRepository.findOrderTime(adminUser.getWineryId(), beginTime, endTimeFinal);
+            activityDay = userVoucherRepository.findActivtiyTime(adminUser.getWineryId().intValue(), beginTime, endTimeFinal);
+            offlineDay = userVoucherRepository.findOfflineTime(adminUser.getWineryId().intValue(), beginTime, endTimeFinal);
+            orderDay = userVoucherRepository.findOrderTime(adminUser.getWineryId().intValue(), beginTime, endTimeFinal);
         }
         Map<String, BigDecimal> activityMap = new HashMap<>();
         if (activityDay != null && activityDay.size() > 0) {
@@ -733,17 +733,17 @@ public class StatisticalService {
             rightNow.setTime(new Date());
         }
         if (day != null && !day.equals("")) {
-            List<Object[]> send = userVoucherRepository.findSendDetailDay(adminUser.getWineryId(), day);
+            List<Object[]> send = userVoucherRepository.findSendDetailDay(adminUser.getWineryId().intValue(), day);
             Map<String, Integer> sendMap = new HashMap<>();
             for (Object[] object : send) {
                 sendMap.put(object[0].toString(), Integer.valueOf(object[1].toString()));
             }
-            List<Object[]> use = userVoucherRepository.findUseDetailDay(adminUser.getWineryId(), day);
+            List<Object[]> use = userVoucherRepository.findUseDetailDay(adminUser.getWineryId().intValue(), day);
             Map<String, Integer> useMap = new HashMap<>();
             for (Object[] object : use) {
                 useMap.put(object[0].toString(), Integer.valueOf(object[1].toString()));
             }
-            List<Object[]> ineffective = userVoucherRepository.findIneffectiveDay(adminUser.getWineryId(), day);
+            List<Object[]> ineffective = userVoucherRepository.findIneffectiveDay(adminUser.getWineryId().intValue(), day);
             Map<String, Integer> ineffectiveMap = new HashMap<>();
             for (Object[] object : ineffective) {
                 ineffectiveMap.put(object[0].toString(), Integer.valueOf(object[1].toString()));
@@ -754,17 +754,17 @@ public class StatisticalService {
                 statisticDTO.setIneffectiveCount(ineffectiveMap.get(statisticDTO.getTime()) == null ? 0 : ineffectiveMap.get(statisticDTO.getTime()));
             }
         } else {
-            List<Object[]> send = userVoucherRepository.findSendDetailTime(adminUser.getWineryId(), beginTime, endTime);
+            List<Object[]> send = userVoucherRepository.findSendDetailTime(adminUser.getWineryId().intValue(), beginTime, endTime);
             Map<String, Integer> sendMap = new HashMap<>();
             for (Object[] object : send) {
                 sendMap.put(object[0].toString(), Integer.valueOf(object[1].toString()));
             }
-            List<Object[]> use = userVoucherRepository.findUseDetailTime(adminUser.getWineryId(), beginTime, endTime);
+            List<Object[]> use = userVoucherRepository.findUseDetailTime(adminUser.getWineryId().intValue(), beginTime, endTime);
             Map<String, Integer> useMap = new HashMap<>();
             for (Object[] object : use) {
                 useMap.put(object[0].toString(), Integer.valueOf(object[1].toString()));
             }
-            List<Object[]> ineffective = userVoucherRepository.findIneffectiveTime(adminUser.getWineryId(), beginTime, endTime);
+            List<Object[]> ineffective = userVoucherRepository.findIneffectiveTime(adminUser.getWineryId().intValue(), beginTime, endTime);
             Map<String, Integer> ineffectiveMap = new HashMap<>();
             for (Object[] object : ineffective) {
                 ineffectiveMap.put(object[0].toString(), Integer.valueOf(object[1].toString()));
@@ -799,24 +799,24 @@ public class StatisticalService {
         calendar.set(Calendar.DAY_OF_MONTH, 1);// 设置为1号,当前日期既为本月第一天
         String firstDay = format.format(calendar.getTime());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-        List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryId(adminUser.getWineryId());
+        List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryId(adminUser.getWineryId().intValue());
         if (marketActivityList != null && marketActivityList.size() > 0) {
-            List<Object[]> activityType = marketActivityRepository.findActivityType(adminUser.getWineryId());
-            List<Object[]> use = voucherInstRepository.getMarketUseVoucherByYear(sdf.format(new Date()), adminUser.getWineryId());
+            List<Object[]> activityType = marketActivityRepository.findActivityType(adminUser.getWineryId().intValue());
+            List<Object[]> use = voucherInstRepository.getMarketUseVoucherByYear(sdf.format(new Date()), adminUser.getWineryId().intValue());
             Map<String, Object[]> useMap = new HashMap<>();
             if (use != null && use.size() > 0) {
                 for (Object[] objects : use) {
                     useMap.put(objects[0] == null ? null : objects[0].toString(), objects);
                 }
             }
-            List<Object[]> send = voucherInstRepository.getMarketSendVoucherByYear(sdf.format(new Date()), adminUser.getWineryId());
+            List<Object[]> send = voucherInstRepository.getMarketSendVoucherByYear(sdf.format(new Date()), adminUser.getWineryId().intValue());
             Map<String, Object[]> sendMap = new HashMap<>();
             if (send != null && send.size() > 0) {
                 for (Object[] objects : send) {
                     sendMap.put(objects[0] == null ? null : objects[0].toString(), objects);
                 }
             }
-            List<Object[]> activity = voucherInstRepository.getActivtiyMoney(adminUser.getWineryId(), sdf.format(new Date()));
+            List<Object[]> activity = voucherInstRepository.getActivtiyMoney(adminUser.getWineryId().intValue(), sdf.format(new Date()));
             Map<String, Object[]> activityMap = new HashMap<>();
             if (activity != null && activity.size() > 0) {
                 for (Object[] objects : activity) {
@@ -825,7 +825,7 @@ public class StatisticalService {
                     }
                 }
             }
-            List<Object[]> offline = voucherInstRepository.getOfflineMoney(adminUser.getWineryId(), sdf.format(new Date()));
+            List<Object[]> offline = voucherInstRepository.getOfflineMoney(adminUser.getWineryId().intValue(), sdf.format(new Date()));
             Map<String, Object[]> offlineMap = new HashMap<>();
             if (offline != null && offline.size() > 0) {
                 for (Object[] objects : offline) {
@@ -834,7 +834,7 @@ public class StatisticalService {
                     }
                 }
             }
-            List<Object[]> order = voucherInstRepository.getOrderMoney(adminUser.getWineryId(), sdf.format(new Date()));
+            List<Object[]> order = voucherInstRepository.getOrderMoney(adminUser.getWineryId().intValue(), sdf.format(new Date()));
             Map<String, Object[]> orderMap = new HashMap<>();
             if (order != null && order.size() > 0) {
                 for (Object[] objects : order) {
@@ -843,7 +843,7 @@ public class StatisticalService {
                     }
                 }
             }
-            List<Object[]> deposit = voucherInstRepository.getDepositMoney(adminUser.getWineryId(), sdf.format(new Date()));
+            List<Object[]> deposit = voucherInstRepository.getDepositMoney(adminUser.getWineryId().intValue(), sdf.format(new Date()));
             Map<String, Object[]> depositMap = new HashMap<>();
             if (deposit != null && deposit.size() > 0) {
                 for (Object[] objects : deposit) {
@@ -876,16 +876,16 @@ public class StatisticalService {
 
     public List<Map> findMarketUseVoucher(AdminUser adminUser, String year) {
         List<Map> mapList = new ArrayList<>();
-        List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryId(adminUser.getWineryId());
+        List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryId(adminUser.getWineryId().intValue());
         if (marketActivityList != null && marketActivityList.size() > 0) {
-            List<Object[]> use = voucherInstRepository.getMarketUseVoucherByYear(year, adminUser.getWineryId());
+            List<Object[]> use = voucherInstRepository.getMarketUseVoucherByYear(year, adminUser.getWineryId().intValue());
             Map<String, Object[]> useMap = new HashMap<>();
             if (use != null && use.size() > 0) {
                 for (Object[] objects : use) {
                     useMap.put(objects[0].toString(), objects);
                 }
             }
-            List<Object[]> send = voucherInstRepository.getMarketSendVoucherByYear(year, adminUser.getWineryId());
+            List<Object[]> send = voucherInstRepository.getMarketSendVoucherByYear(year, adminUser.getWineryId().intValue());
             Map<String, Object[]> sendMap = new HashMap<>();
             if (send != null && send.size() > 0) {
                 for (Object[] objects : send) {
@@ -917,9 +917,9 @@ public class StatisticalService {
      * @Description
      * */
     public Map<String, Object> findWeekMax(AdminUser adminUser) {
-        List<Object[]> depositMax = depositOrderRepository.findDeopositMax(adminUser.getWineryId());
-        List<Object[]> consumpMax = orderRepository.findOrderMax(adminUser.getWineryId());
-        List<Object[]> prodMax = orderRepository.findProdMax(adminUser.getWineryId());
+        List<Object[]> depositMax = depositOrderRepository.findDeopositMax(adminUser.getWineryId().intValue());
+        List<Object[]> consumpMax = orderRepository.findOrderMax(adminUser.getWineryId().intValue());
+        List<Object[]> prodMax = orderRepository.findProdMax(adminUser.getWineryId().intValue());
         Map<String, Object> map = new HashMap<>();
         if (depositMax != null && depositMax.size() > 0) {
             List<StatisticDTO> depositList = new ArrayList<>();
@@ -1021,7 +1021,7 @@ public class StatisticalService {
         String beforeLastWeekbegin = simpleDateFormat.format(cal.getTime());
         cal.add(Calendar.DAY_OF_WEEK, 6);
         String beforeLastWeekEnd = simpleDateFormat.format(cal.getTime());
-        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId());
+        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId().intValue());
         String lastJsonMsg = "{\"begin_date\": \""+lastWeekBegin+"\", \"end_date\": \""+lastWeekEnd+"\"}";
         String beforeLastJsonMsg = "{\"begin_date\": \""+beforeLastWeekbegin+"\", \"end_date\": \""+beforeLastWeekEnd+"\"}";
         System.out.println(lastJsonMsg);
@@ -1057,9 +1057,9 @@ public class StatisticalService {
             }
         }
         //上周用户消费
-        BigDecimal lastWeekC = (orderRepository.findMoneyByWeek(1, adminUser.getWineryId())) == null ? new BigDecimal(0) : (orderRepository.findMoneyByWeek(1, adminUser.getWineryId()));
+        BigDecimal lastWeekC = (orderRepository.findMoneyByWeek(1, adminUser.getWineryId().intValue())) == null ? new BigDecimal(0) : (orderRepository.findMoneyByWeek(1, adminUser.getWineryId().intValue()));
         //上上周用户消费
-        BigDecimal beforeLastWeekC = (orderRepository.findMoneyByWeek(2, adminUser.getWineryId())) == null ? new BigDecimal(0) : (orderRepository.findMoneyByWeek(2, adminUser.getWineryId()));
+        BigDecimal beforeLastWeekC = (orderRepository.findMoneyByWeek(2, adminUser.getWineryId().intValue())) == null ? new BigDecimal(0) : (orderRepository.findMoneyByWeek(2, adminUser.getWineryId().intValue()));
         map.put("consumeDiffer", lastWeekC.subtract(beforeLastWeekC));
         if (lastWeekC != null && lastWeekC.compareTo(BigDecimal.ZERO) != 0) {
             if (beforeLastWeekC != null && beforeLastWeekC.compareTo(BigDecimal.ZERO) != 0) {
@@ -1069,9 +1069,9 @@ public class StatisticalService {
             }
         }
         //上周消费笔数
-        Integer lastWeekSum = (orderRepository.findCountByWeek(1, adminUser.getWineryId())) == null ? 0 : (orderRepository.findCountByWeek(1, adminUser.getWineryId()));
+        Integer lastWeekSum = (orderRepository.findCountByWeek(1, adminUser.getWineryId().intValue())) == null ? 0 : (orderRepository.findCountByWeek(1, adminUser.getWineryId().intValue()));
         //上周消费笔数
-        Integer beforeLastWeekSum = (orderRepository.findCountByWeek(2, adminUser.getWineryId())) == null ? 0 : (orderRepository.findCountByWeek(2, adminUser.getWineryId()));
+        Integer beforeLastWeekSum = (orderRepository.findCountByWeek(2, adminUser.getWineryId().intValue())) == null ? 0 : (orderRepository.findCountByWeek(2, adminUser.getWineryId().intValue()));
         map.put("consumeCountDiffer", lastWeekSum - beforeLastWeekSum);
         if (lastWeekSum != null && lastWeekSum != 0) {
             if (beforeLastWeekSum != null && beforeLastWeekSum != 0) {

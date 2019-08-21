@@ -50,11 +50,11 @@ public class AccountingService {
         List<Object[]> depositSumList = new ArrayList<>();
         BigDecimal sendVoucherMoney = new BigDecimal(0);
         if (beginTime != null && !beginTime.equals("")) {
-            depositSumList = depositOrderRepository.findDepositMoneySumByTime(adminUser.getWineryId(), beginTime, endTime);
-            sendVoucherMoney = depositOrderRepository.findSendVoucherMoneyByTime(adminUser.getWineryId(), beginTime, endTime);
+            depositSumList = depositOrderRepository.findDepositMoneySumByTime(adminUser.getWineryId().intValue(), beginTime, endTime);
+            sendVoucherMoney = depositOrderRepository.findSendVoucherMoneyByTime(adminUser.getWineryId().intValue(), beginTime, endTime);
         } else {
-            depositSumList = depositOrderRepository.findDepositMoneySum(adminUser.getWineryId());
-            sendVoucherMoney = depositOrderRepository.findSendVoucherMoney(adminUser.getWineryId());
+            depositSumList = depositOrderRepository.findDepositMoneySum(adminUser.getWineryId().intValue());
+            sendVoucherMoney = depositOrderRepository.findSendVoucherMoney(adminUser.getWineryId().intValue());
         }
         Map<String, Object> map = new HashMap<>();
         if (depositSumList != null) {
@@ -85,16 +85,16 @@ public class AccountingService {
             rightNow.setTime(new Date());
         }
         if(beginTime!=null && orderNoLike!=null){
-            depositDetail = depositOrderRepository.findDepositDetailByOrderNoAndTime(adminUser.getWineryId(),beginTime,endTime,orderNoLike);
+            depositDetail = depositOrderRepository.findDepositDetailByOrderNoAndTime(adminUser.getWineryId().intValue(),beginTime,endTime,orderNoLike);
         }
         if (beginTime!=null && orderNoLike==null){
-            depositDetail = depositOrderRepository.findDepositDetailByTime(adminUser.getWineryId(),beginTime,endTime);
+            depositDetail = depositOrderRepository.findDepositDetailByTime(adminUser.getWineryId().intValue(),beginTime,endTime);
         }
         if (beginTime==null && orderNoLike!=null){
-            depositDetail = depositOrderRepository.findDepositDetailByOrderNo(adminUser.getWineryId(),orderNoLike);
+            depositDetail = depositOrderRepository.findDepositDetailByOrderNo(adminUser.getWineryId().intValue(),orderNoLike);
         }
         if (beginTime==null && orderNoLike==null){
-            depositDetail = depositOrderRepository.findDepositDetail(adminUser.getWineryId());
+            depositDetail = depositOrderRepository.findDepositDetail(adminUser.getWineryId().intValue());
         }
         List<AccountingDTO> accountingDTOList = new ArrayList<>();
         SimpleDateFormat format  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -130,9 +130,9 @@ public class AccountingService {
             rightNow.setTime(new Date());
         }
         if(beginTime!=null && !beginTime.equals("")) {
-            orderSum = orderRepository.findOrderSumTime(adminUser.getWineryId(), beginTime, endTime);
+            orderSum = orderRepository.findOrderSumTime(adminUser.getWineryId().intValue(), beginTime, endTime);
         }else{
-            orderSum = orderRepository.findOrderSum(adminUser.getWineryId());
+            orderSum = orderRepository.findOrderSum(adminUser.getWineryId().intValue());
         }
         Map<String, Object> map = new HashMap<>();
         if (orderSum != null) {
@@ -165,16 +165,16 @@ public class AccountingService {
             rightNow.setTime(new Date());
         }
         if(beginTime!=null && orderNoLike!=null){
-            orderDetailList = orderRepository.findOrderDetailByTimeAndOrderNo(adminUser.getWineryId(),beginTime,endTime,orderNoLike);
+            orderDetailList = orderRepository.findOrderDetailByTimeAndOrderNo(adminUser.getWineryId().intValue(),beginTime,endTime,orderNoLike);
         }
         if (beginTime!=null && orderNoLike==null){
-            orderDetailList = orderRepository.findOrderDetailByTime(adminUser.getWineryId(),beginTime,endTime);
+            orderDetailList = orderRepository.findOrderDetailByTime(adminUser.getWineryId().intValue(),beginTime,endTime);
         }
         if (beginTime==null && orderNoLike!=null){
-            orderDetailList = orderRepository.findOrderDetailByOrderNo(adminUser.getWineryId(),orderNoLike);
+            orderDetailList = orderRepository.findOrderDetailByOrderNo(adminUser.getWineryId().intValue(),orderNoLike);
         }
         if (beginTime==null && orderNoLike==null){
-            orderDetailList = orderRepository.findOrderDetail(adminUser.getWineryId());
+            orderDetailList = orderRepository.findOrderDetail(adminUser.getWineryId().intValue());
         }
         List<AccountingDTO> accountingDTOList = new ArrayList<>();
         if (orderDetailList != null && orderDetailList.size() > 0) {
@@ -206,28 +206,28 @@ public class AccountingService {
             rightNow.setTime(new Date());
         }
         if (beginTime != null && orderNoLike != null && payType != null) {
-            orderDetailList = orderRepository.findOrderProdDetailByTimeAndOrderNoLikeAndType(adminUser.getWineryId(),orderNoLike,beginTime,endTime,payType);
+            orderDetailList = orderRepository.findOrderProdDetailByTimeAndOrderNoLikeAndType(adminUser.getWineryId().intValue(),orderNoLike,beginTime,endTime,payType);
         }
         if (beginTime == null && orderNoLike == null && payType == null) {
-            orderDetailList = orderRepository.findOrderProdDetail(adminUser.getWineryId());
+            orderDetailList = orderRepository.findOrderProdDetail(adminUser.getWineryId().intValue());
         }
         if (beginTime != null && orderNoLike != null && payType == null) {
-            orderDetailList = orderRepository.findOrderProdDetailByTimeAndOrderNoLike(adminUser.getWineryId(),orderNoLike,beginTime,endTime);
+            orderDetailList = orderRepository.findOrderProdDetailByTimeAndOrderNoLike(adminUser.getWineryId().intValue(),orderNoLike,beginTime,endTime);
         }
         if (beginTime != null && payType != null && orderNoLike == null) {
-            orderDetailList = orderRepository.findOrderProdDetailByTimeAndType(adminUser.getWineryId(),beginTime,endTime,payType);
+            orderDetailList = orderRepository.findOrderProdDetailByTimeAndType(adminUser.getWineryId().intValue(),beginTime,endTime,payType);
         }
         if (payType != null && orderNoLike != null && beginTime == null) {
-            orderDetailList = orderRepository.findOrderProdDetailByOrderNoLikeAndType(adminUser.getWineryId(),orderNoLike,payType);
+            orderDetailList = orderRepository.findOrderProdDetailByOrderNoLikeAndType(adminUser.getWineryId().intValue(),orderNoLike,payType);
         }
         if (payType == null && orderNoLike == null && beginTime != null) {
-            orderDetailList = orderRepository.findOrderProdDetailByTime(adminUser.getWineryId(),beginTime,endTime);
+            orderDetailList = orderRepository.findOrderProdDetailByTime(adminUser.getWineryId().intValue(),beginTime,endTime);
         }
         if (payType == null && orderNoLike != null && beginTime == null) {
-            orderDetailList = orderRepository.findOrderProdDetailByOrderNoLike(adminUser.getWineryId(),orderNoLike);
+            orderDetailList = orderRepository.findOrderProdDetailByOrderNoLike(adminUser.getWineryId().intValue(),orderNoLike);
         }
         if (payType != null && orderNoLike == null && beginTime == null) {
-            orderDetailList = orderRepository.findOrderProdDetailByType(adminUser.getWineryId(),payType);
+            orderDetailList = orderRepository.findOrderProdDetailByType(adminUser.getWineryId().intValue(),payType);
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<AccountingDTO> accountingDTOList = new ArrayList<>();
@@ -268,28 +268,28 @@ public class AccountingService {
             rightNow.setTime(new Date());
         }
         if (beginTime != null && orderNo != null && phone != null) {
-            depositList = depositOrderRepository.findDepositByTimeAndLikeAndPhone(adminUser.getWineryId(), phone, orderNo, beginTime, endTime);
+            depositList = depositOrderRepository.findDepositByTimeAndLikeAndPhone(adminUser.getWineryId().intValue(), phone, orderNo, beginTime, endTime);
         }
         if (beginTime == null && orderNo == null && phone == null) {
-            depositList = depositOrderRepository.findDeposit(adminUser.getWineryId());
+            depositList = depositOrderRepository.findDeposit(adminUser.getWineryId().intValue());
         }
         if (beginTime != null && orderNo != null && phone == null) {
-            depositList = depositOrderRepository.findDepositByTimeAndLike(adminUser.getWineryId(), orderNo, beginTime, endTime);
+            depositList = depositOrderRepository.findDepositByTimeAndLike(adminUser.getWineryId().intValue(), orderNo, beginTime, endTime);
         }
         if (beginTime != null && phone != null && orderNo == null) {
-            depositList = depositOrderRepository.findDepositByTimeAndPhone(adminUser.getWineryId(), phone, beginTime, endTime);
+            depositList = depositOrderRepository.findDepositByTimeAndPhone(adminUser.getWineryId().intValue(), phone, beginTime, endTime);
         }
         if (phone != null && orderNo != null && beginTime == null) {
-            depositList = depositOrderRepository.findDepositByLikeAndPhone(adminUser.getWineryId(), phone, orderNo);
+            depositList = depositOrderRepository.findDepositByLikeAndPhone(adminUser.getWineryId().intValue(), phone, orderNo);
         }
         if (phone == null && orderNo == null && beginTime != null) {
-            depositList = depositOrderRepository.findDepositByTime(adminUser.getWineryId(), beginTime, endTime);
+            depositList = depositOrderRepository.findDepositByTime(adminUser.getWineryId().intValue(), beginTime, endTime);
         }
         if (phone == null && orderNo != null && beginTime == null) {
-            depositList = depositOrderRepository.findDepositByLike(adminUser.getWineryId(), orderNo);
+            depositList = depositOrderRepository.findDepositByLike(adminUser.getWineryId().intValue(), orderNo);
         }
         if (phone != null && orderNo == null && beginTime == null) {
-            depositList = depositOrderRepository.findDepositByPhone(adminUser.getWineryId(), phone);
+            depositList = depositOrderRepository.findDepositByPhone(adminUser.getWineryId().intValue(), phone);
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<AccountingDTO> accountingDTOList = new ArrayList<>();
@@ -326,28 +326,28 @@ public class AccountingService {
             rightNow.setTime(new Date());
         }
         if (beginTime != null && orderNo != null && phone != null) {
-            depositList = pointToVoucherRepository.findByTimeAndOrderNoAndPhone(adminUser.getWineryId(), phone, orderNo, beginTime, endTime);
+            depositList = pointToVoucherRepository.findByTimeAndOrderNoAndPhone(adminUser.getWineryId().intValue(), phone, orderNo, beginTime, endTime);
         }
         if (beginTime == null && orderNo == null && phone == null) {
-            depositList = pointToVoucherRepository.findByWineryId(adminUser.getWineryId());
+            depositList = pointToVoucherRepository.findByWineryId(adminUser.getWineryId().intValue());
         }
         if (beginTime != null && orderNo != null && phone == null) {
-            depositList = pointToVoucherRepository.findByTimeAndOrderNo(adminUser.getWineryId(), orderNo, beginTime, endTime);
+            depositList = pointToVoucherRepository.findByTimeAndOrderNo(adminUser.getWineryId().intValue(), orderNo, beginTime, endTime);
         }
         if (beginTime != null && phone != null && orderNo == null) {
-            depositList = pointToVoucherRepository.findByTimeAndPhone(adminUser.getWineryId(), phone, beginTime, endTime);
+            depositList = pointToVoucherRepository.findByTimeAndPhone(adminUser.getWineryId().intValue(), phone, beginTime, endTime);
         }
         if (phone != null && orderNo != null && beginTime == null) {
-            depositList = pointToVoucherRepository.findByOrderNoAndPhone(adminUser.getWineryId(), phone, orderNo);
+            depositList = pointToVoucherRepository.findByOrderNoAndPhone(adminUser.getWineryId().intValue(), phone, orderNo);
         }
         if (phone == null && orderNo == null && beginTime != null) {
-            depositList = pointToVoucherRepository.findByTime(adminUser.getWineryId(), beginTime, endTime);
+            depositList = pointToVoucherRepository.findByTime(adminUser.getWineryId().intValue(), beginTime, endTime);
         }
         if (phone == null && orderNo != null && beginTime == null) {
-            depositList = pointToVoucherRepository.findByOrderNo(adminUser.getWineryId(), orderNo);
+            depositList = pointToVoucherRepository.findByOrderNo(adminUser.getWineryId().intValue(), orderNo);
         }
         if (phone != null && orderNo == null && beginTime == null) {
-            depositList = pointToVoucherRepository.findByPhone(adminUser.getWineryId(), phone);
+            depositList = pointToVoucherRepository.findByPhone(adminUser.getWineryId().intValue(), phone);
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<AccountingDTO> accountingDTOList = new ArrayList<>();

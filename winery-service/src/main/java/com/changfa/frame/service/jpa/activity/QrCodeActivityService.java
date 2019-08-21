@@ -87,7 +87,7 @@ public class QrCodeActivityService {
      * @Description
      * */
     public void add(String type, Integer prodId, Integer activityId, String descri, AdminUser adminUser, Integer themeId) {
-        QrCodeUrl qrCodeUrl = qrCodeUrlRepository.findByWineryIdAndType(adminUser.getWineryId(), type);
+        QrCodeUrl qrCodeUrl = qrCodeUrlRepository.findByWineryIdAndType(adminUser.getWineryId().intValue(), type);
         QrCodeActivity qrCodeActivity = new QrCodeActivity();
         if (type.equals("O")) {
             qrCodeActivity.setProdId(prodId);
@@ -98,13 +98,13 @@ public class QrCodeActivityService {
         }
         qrCodeActivity.setType(type); //O商品，T主题，M活动
         qrCodeActivity.setStatus("A");
-        qrCodeActivity.setWineryId(adminUser.getWineryId());
+        qrCodeActivity.setWineryId(adminUser.getWineryId().intValue());
         qrCodeActivity.setQrCodeUrlId(qrCodeUrl.getId());
         qrCodeActivity.setCreateTime(new Date());
         QrCodeActivity qrCodeActivitySave = qrCodeActivityRepository.saveAndFlush(qrCodeActivity);
         WineryQrCode wineryQrCode = new WineryQrCode();
-        wineryQrCode.setWineryId(adminUser.getWineryId());
-        wineryQrCode.setUrl(getQRcode(adminUser.getWineryId(), qrCodeActivitySave.getId()));
+        wineryQrCode.setWineryId(adminUser.getWineryId().intValue());
+        wineryQrCode.setUrl(getQRcode(adminUser.getWineryId().intValue(), qrCodeActivitySave.getId()));
         wineryQrCode.setStatus("A");
         wineryQrCode.setDescri(descri);
         wineryQrCode.setStatusTime(new Date());
@@ -139,7 +139,7 @@ public class QrCodeActivityService {
     public List<QRCodeDTO> getActivityOrProd(AdminUser adminUser, String type) {
         List<QRCodeDTO> qrCodeDTOList = new ArrayList<>();
         if (type.equals("A")) {
-            List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryIdAndStatus(adminUser.getWineryId(), "A");
+            List<MarketActivity> marketActivityList = marketActivityRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), "A");
             if (marketActivityList != null && marketActivityList.size() > 0) {
                 for (MarketActivity marketActivity : marketActivityList) {
                     QRCodeDTO qrCodeDTO = new QRCodeDTO();
@@ -149,7 +149,7 @@ public class QrCodeActivityService {
                     qrCodeDTOList.add(qrCodeDTO);
                 }
             }
-            List<Activity> activityList = activityRepository.findByWineryIdAndStatus(adminUser.getWineryId(), "A");
+            List<Activity> activityList = activityRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), "A");
             if (activityList != null && activityList.size() > 0) {
                 for (Activity activity : activityList) {
                     QRCodeDTO qrCodeDTO = new QRCodeDTO();
@@ -160,7 +160,7 @@ public class QrCodeActivityService {
                 }
             }
         } else if (type.equals("O")) {
-            List<Prod> prodList = prodRepository.findByWineryIdAndStatus(adminUser.getWineryId(), "Y");
+            List<Prod> prodList = prodRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), "Y");
             if (prodList != null && prodList.size() > 0) {
                 for (Prod prod : prodList) {
                     QRCodeDTO qrCodeDTO = new QRCodeDTO();
@@ -172,7 +172,7 @@ public class QrCodeActivityService {
             }
 
         } else {
-            List<Theme> themeList = themeRepository.findThemeByWineryId(adminUser.getWineryId());
+            List<Theme> themeList = themeRepository.findThemeByWineryId(adminUser.getWineryId().intValue());
             if (themeList != null && themeList.size() > 0) {
                 for (Theme theme : themeList) {
                     QRCodeDTO qrCodeDTO = new QRCodeDTO();
@@ -193,7 +193,7 @@ public class QrCodeActivityService {
      * @Description
      * */
     public List<QRCodeDTO> getQRCodeDTOList(AdminUser adminUser) {
-        List<QrCodeActivity> qrCodeActivitieList = qrCodeActivityRepository.findByWineryIdAndStatus(adminUser.getWineryId(), "A");
+        List<QrCodeActivity> qrCodeActivitieList = qrCodeActivityRepository.findByWineryIdAndStatus(adminUser.getWineryId().intValue(), "A");
         List<QRCodeDTO> qrCodeDTOList = new ArrayList<>();
         if (qrCodeActivitieList != null && qrCodeActivitieList.size() > 0) {
             for (QrCodeActivity qrCodeActivity : qrCodeActivitieList) {
@@ -263,10 +263,10 @@ public class QrCodeActivityService {
 
 
     public void update(Integer id, String type, Integer prodId, Integer activityId, String descri, AdminUser adminUser, Integer themeId) {
-        QrCodeUrl qrCodeUrl = qrCodeUrlRepository.findByWineryIdAndType(adminUser.getWineryId(), type);
+        QrCodeUrl qrCodeUrl = qrCodeUrlRepository.findByWineryIdAndType(adminUser.getWineryId().intValue(), type);
         QrCodeActivity qrCodeActivity = getQrCodeActivity(id);
         WineryQrCode wineryQrCode = getWineryQrCode(qrCodeActivity.getWineryQRCodeId());
-        wineryQrCode.setWineryId(adminUser.getWineryId());
+        wineryQrCode.setWineryId(adminUser.getWineryId().intValue());
         wineryQrCode.setStatus("A");
         if (descri != null) {
             wineryQrCode.setDescri(descri);
@@ -283,7 +283,7 @@ public class QrCodeActivityService {
         }
         qrCodeActivity.setType(type);
         qrCodeActivity.setStatus("A");
-        qrCodeActivity.setWineryId(adminUser.getWineryId());
+        qrCodeActivity.setWineryId(adminUser.getWineryId().intValue());
         qrCodeActivity.setWineryQRCodeId(wineryQrCodeSave.getId());
         qrCodeActivity.setQrCodeUrlId(qrCodeUrl.getId());
         qrCodeActivity.setCreateTime(new Date());

@@ -47,7 +47,7 @@ public class DepositRuleController {
             if (adminUser == null) {
                 return JsonReturnUtil.getJsonIntReturn(2, "找不到token" + depositRuleDTO.getToken());
             } else {
-                DepositRule depositRule = depositRuleService.findDepositRuleByWId(adminUser.getWineryId());
+                DepositRule depositRule = depositRuleService.findDepositRuleByWId(adminUser.getWineryId().intValue());
                 if (depositRule != null && depositRule.getStatus().equals("A")) {
                     return JsonReturnUtil.getJsonIntReturn(1, "已有储值规则" + depositRule.getName());
                 } else {

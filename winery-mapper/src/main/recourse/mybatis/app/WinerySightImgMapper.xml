@@ -85,4 +85,12 @@
         </where>
     </select>
 
+    <select id="findScenicImgById" parameterType="java.lang.Long" resultType="string">
+        select img_addr from b_winery_sight_img  where winery_sight_id = #{id} order by create_date desc
+    </select>
+
+    <delete id="deleteWinerySightImgById" parameterType="java.lang.Long">
+        delete from b_winery_sight_img  where winery_sight_id = #{id}
+    </delete>
+
 </mapper>

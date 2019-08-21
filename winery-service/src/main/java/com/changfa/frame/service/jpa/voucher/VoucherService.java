@@ -65,8 +65,8 @@ public class VoucherService {
     //新增券
     public int addVoucher(AdminUser adminUser, String name, String type, String money, String enableType, String enableMoeny, String quantityLimit,String enableDay, String usefulTime, String[] effectiveTime, String scope, String canPresent) throws ParseException {
         Voucher voucher = new Voucher();
-        voucher.setCreateUserId(adminUser.getId());
-        voucher.setWineryId(adminUser.getWineryId());
+        voucher.setCreateUserId(adminUser.getId().intValue());
+        voucher.setWineryId(adminUser.getWineryId().intValue());
         voucher.setName(name);
         voucher.setEnableType(enableType);
         if(enableMoeny!=null&&!enableMoeny.equals("")){
@@ -107,7 +107,7 @@ public class VoucherService {
             voucher.setType("M");
             voucher.setScope(scope);
             voucher.setMoney(new BigDecimal(money));
-            Voucher byMoney = voucherRepository.findByMoney(new BigDecimal(money),adminUser.getWineryId());
+            Voucher byMoney = voucherRepository.findByMoney(new BigDecimal(money),adminUser.getWineryId().intValue());
             if(byMoney!=null){
                 return 1;
             }
@@ -115,7 +115,7 @@ public class VoucherService {
             voucher.setType("D");
             voucher.setScope("B");
             voucher.setDiscount(new BigDecimal(money));
-            Voucher byMoney = voucherRepository.findByDiscount(new BigDecimal(money),adminUser.getWineryId());
+            Voucher byMoney = voucherRepository.findByDiscount(new BigDecimal(money),adminUser.getWineryId().intValue());
             if(byMoney!=null){
                 return 2;
             }
@@ -133,7 +133,7 @@ public class VoucherService {
     public Map<String,Object> voucherList(AdminUser adminUser,String search) {
         SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd");
         List<Dict> dicts = CacheUtil.getDicts();
-        List<Voucher> list = voucherRepository.findVouchersByWineryIdAndName(adminUser.getWineryId(),search,"A");
+        List<Voucher> list = voucherRepository.findVouchersByWineryIdAndName(adminUser.getWineryId().intValue(),search,"A");
         List<VoucherListDTO> voucherLists = new ArrayList<>();
         for (Voucher voucher:list) {
             VoucherListDTO voucherList = new VoucherListDTO();
@@ -168,10 +168,10 @@ public class VoucherService {
             voucherLists.add(voucherList);
         }
         Map<String,Object> map = new HashMap<>();
-        map.put("mVoucherCount",voucherInstRepository.findCountByType("M",adminUser.getWineryId()));
-        map.put("dVoucherCount",voucherInstRepository.findCountByType("D",adminUser.getWineryId()));
-        map.put("gVoucherCount",voucherInstRepository.findCountByType("G",adminUser.getWineryId()));
-        map.put("totalVoucherCount",voucherInstRepository.findByWineryId(adminUser.getWineryId()).size());
+        map.put("mVoucherCount",voucherInstRepository.findCountByType("M",adminUser.getWineryId().intValue()));
+        map.put("dVoucherCount",voucherInstRepository.findCountByType("D",adminUser.getWineryId().intValue()));
+        map.put("gVoucherCount",voucherInstRepository.findCountByType("G",adminUser.getWineryId().intValue()));
+        map.put("totalVoucherCount",voucherInstRepository.findByWineryId(adminUser.getWineryId().intValue()).size());
         map.put("list",voucherLists);
         return map;
     }
@@ -181,8 +181,8 @@ public class VoucherService {
         if(voucher==null){
             voucher = new Voucher();
         }
-        voucher.setCreateUserId(adminUser.getId());
-        voucher.setWineryId(adminUser.getWineryId());
+        voucher.setCreateUserId(adminUser.getId().intValue());
+        voucher.setWineryId(adminUser.getWineryId().intValue());
         voucher.setName(name);
         voucher.setType(type);
         voucher.setEnableType(enableType);
@@ -235,7 +235,7 @@ public class VoucherService {
     public void ineffective(Voucher voucher, AdminUser adminUser) {
         voucher.setStatusTime(new Timestamp(System.currentTimeMillis()));
         voucher.setStatus("P");
-        voucher.setCreateUserId(adminUser.getId());
+        voucher.setCreateUserId(adminUser.getId().intValue());
         voucher.setStatusTime(new Date());
         voucherRepository.saveAndFlush(voucher);
         List<PointExchangeVoucher> pointExchangeVoucher = pointExchangeVoucherRepository.findByVoucherId(voucher.getId());
@@ -247,7 +247,7 @@ public class VoucherService {
     public List<IneffectiveVoucherListDTO> myIneffective(AdminUser adminUser, String search) {
         SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd");
         List<Dict> dicts = CacheUtil.getDicts();
-        List<Voucher> list = voucherRepository.findVouchersByWineryIdAndName(adminUser.getWineryId(),search,"P");
+        List<Voucher> list = voucherRepository.findVouchersByWineryIdAndName(adminUser.getWineryId().intValue(),search,"P");
         List<IneffectiveVoucherListDTO> voucherLists = new ArrayList<>();
         for (Voucher voucher:list) {
             IneffectiveVoucherListDTO voucherList = new IneffectiveVoucherListDTO();
@@ -275,7 +275,7 @@ public class VoucherService {
 
     public List<VoucherListDTO> allVoucher(AdminUser adminUser, String type) {
         List<VoucherListDTO> list = new ArrayList<>();
-        List<Voucher> list1 = voucherRepository.findVouchersByWineryId(adminUser.getWineryId());
+        List<Voucher> list1 = voucherRepository.findVouchersByWineryId(adminUser.getWineryId().intValue());
         for (Voucher voucher:list1) {
             VoucherListDTO voucherList = new VoucherListDTO();
             voucherList.setId(voucher.getId());
@@ -304,7 +304,7 @@ public class VoucherService {
 
     public List<Map<String,Object>> giftProdList(AdminUser adminUser,Integer isHave) {
         List<Map<String,Object>> list = new ArrayList<>();
-        List<Prod> prodList = prodRepository.findByWineryId(adminUser.getWineryId());
+        List<Prod> prodList = prodRepository.findByWineryId(adminUser.getWineryId().intValue());
         for (Prod prod:prodList) {
             Map<String,Object> map = new HashMap<>();
             map.put("prodId",prod.getId());
@@ -321,6 +321,6 @@ public class VoucherService {
     }
 
     public Voucher checkVoucherName(String name,AdminUser adminUser) {
-        return voucherRepository.findByName(name,adminUser.getWineryId());
+        return voucherRepository.findByName(name,adminUser.getWineryId().intValue());
     }
 }
