@@ -41,7 +41,7 @@ public class WeiXinSDKUtil {
 
         if (null != jsonObject && jsonObject.get("list") != null) {
             JSONArray userCount = JSONArray.fromObject(jsonObject.get("list").toString());
-            if (userCount!=null && userCount.length()>0) {
+            if (userCount!=null && userCount.size()>0) {
                 JSONObject result = JSONObject.fromObject(userCount.get(0).toString());
                 System.out.println(Integer.valueOf(result.get("visit_pv").toString()));
                 return Integer.valueOf(result.get("visit_pv").toString());

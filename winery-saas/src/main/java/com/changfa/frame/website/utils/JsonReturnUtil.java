@@ -27,31 +27,31 @@ public class JsonReturnUtil {
      */
     public static String getJsonIntReturn(int result, String msg) {
         JSONObject json = new JSONObject();
-        json.set("result", result);
-        json.set("msg", msg);
+        json.element("result", result);
+        json.element("msg", msg);
         return json.toString();
     }
 
     public static String getJsonIntReturn(int result, String code, String msg) {
         JSONObject json = new JSONObject();
-        json.set("result", result);
-        json.set("code", code == null ? "" : code);
-        json.set("msg", msg);
+        json.element("result", result);
+        json.element("code", code == null ? "" : code);
+        json.element("msg", msg);
         return json.toString();
     }
 
     public static JSONObject getJsonObjectReturn(int result, String code, String msg, Object obj) {
         JSONObject json = new JSONObject();
-        json.set("result", result);
-        json.set("code", code);
-        json.set("msg", msg);
+        json.element("result", result);
+        json.element("code", code);
+        json.element("msg", msg);
 
         if (List.class.isInstance(obj)) {
             //json.set("data", JSONArray.fromArray(((List) obj).toArray()));
-            json.set("data", listToJson((List) obj));
+            json.element("data", listToJson((List) obj));
         } else {
 //            json.set("data", JSONObject.fromBean(obj));
-            json.set("data", javabeanToJson(obj));
+            json.element("data", javabeanToJson(obj));
 
         }
         return json;
@@ -61,17 +61,17 @@ public class JsonReturnUtil {
 
 
         JSONObject json = new JSONObject();
-        json.set("result", result);
-        json.set("num", num);
-        json.set("code", code);
-        json.set("msg", msg);
+        json.element("result", result);
+        json.element("num", num);
+        json.element("code", code);
+        json.element("msg", msg);
 
         if (List.class.isInstance(obj)) {
             //json.set("data", JSONArray.fromArray(((List) obj).toArray()));
-            json.set("data", listToJson((List) obj));
+            json.element("data", listToJson((List) obj));
         } else {
 //            json.set("data", JSONObject.fromBean(obj));
-            json.set("data", javabeanToJson(obj));
+            json.element("data", javabeanToJson(obj));
         }
         return json;
     }
@@ -110,10 +110,10 @@ public class JsonReturnUtil {
 
     private static JSONObject getImage(int result, String code, String msg, String image) {
         JSONObject json = new JSONObject();
-        json.set("result", result);
-        json.set("code", code);
-        json.set("msg", msg);
-        json.set("data", image);
+        json.element("result", result);
+        json.element("code", code);
+        json.element("msg", msg);
+        json.element("data", image);
         return json;
     }
 }

@@ -19,36 +19,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 @SpringBootApplication
-@EnableScheduling
-@MapperScan("com.changfa.frame.mapper.*")
+@MapperScan("com.changfa.frame.mapper")
 public class Application extends SpringBootServletInitializer {
-
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner init(final ObjectProvider<List<HttpMessageConverter<?>>> convertersProvider) {
-//        /*TimeZone tz = TimeZone.getTimeZone("GMT+8");
-//        TimeZone.setDefault(tz);*/
-//        return new CommandLineRunner() {
-//            @Override
-//            public void run(String... args) throws Exception {
-//                List<HttpMessageConverter<?>> converters = convertersProvider.getIfAvailable();
-//                System.out.print(converters.size());
-//            }
-//        };
-//    }
-
-//    @Bean
-//    public ObjectMapper objectMapper()
-//    {
-//        ObjectMapper mapper = new ObjectMapper();
-//        mapper.findAndRegisterModules();
-//        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-//        mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE,
-//                false);
-//        return mapper;
-//    }
 }

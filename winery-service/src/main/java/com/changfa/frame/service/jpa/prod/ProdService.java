@@ -68,7 +68,7 @@ public class ProdService {
         prodSpecGroup.setCreateTime(new Timestamp(System.currentTimeMillis()));
         prodSpecGroupRepository.saveAndFlush(prodSpecGroup);
         JSONArray json = JSONArray.fromObject(specList);
-        for (int i = 0; i < json.length(); i++) {
+        for (int i = 0; i < json.size(); i++) {
             JSONObject jsonObject = json.getJSONObject(i);
             ProdSpec prodSpec = new ProdSpec();
             prodSpec.setProdSpecGroupId(prodSpecGroup.getId());
@@ -94,7 +94,7 @@ public class ProdService {
         prodSpecGroupRepository.saveAndFlush(prodSpecGroup);
         prodSpecRepository.deleteByProdSpecGroupId(prodSpecGroup.getId());
         JSONArray json = JSONArray.fromObject(specList);
-        for (int i = 0; i < json.length(); i++) {
+        for (int i = 0; i < json.size(); i++) {
             JSONObject jsonObject = json.getJSONObject(i);
             ProdSpec prodSpec = new ProdSpec();
             prodSpec.setProdSpecGroupId(prodSpecGroup.getId());

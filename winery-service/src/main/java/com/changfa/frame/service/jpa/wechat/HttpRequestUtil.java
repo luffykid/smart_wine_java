@@ -130,7 +130,7 @@ public class HttpRequestUtil {
 
             if (returnStr.startsWith("<xml>")) {
                 XMLSerializer xmlSerializer = new XMLSerializer();
-                jsonObject = xmlSerializer.readObject(returnStr);
+                jsonObject = JSONObject.fromObject(xmlSerializer.read(returnStr));
             } else {
                 jsonObject = JSONObject.fromObject(returnStr);
             }
@@ -224,7 +224,7 @@ public class HttpRequestUtil {
 
             if (returnStr.startsWith("<xml>")) {
                 XMLSerializer xmlSerializer = new XMLSerializer();
-                jsonObject = XMLSerializer.readObject(returnStr);
+                jsonObject = JSONObject.fromObject(xmlSerializer.read(returnStr));
             } else {
                 jsonObject = JSONObject.fromObject(returnStr);
             }

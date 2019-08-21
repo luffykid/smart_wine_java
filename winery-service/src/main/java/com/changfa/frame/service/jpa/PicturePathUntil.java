@@ -1,6 +1,5 @@
 package com.changfa.frame.service.jpa;
 
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;

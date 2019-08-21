@@ -263,7 +263,7 @@ public class MemberService {
         params.add("secret", wineryConfigure.getAppSecret());
 
         String responseBody = sendPostRequest(WeChatConts.requestUrl, params);
-        JSONObject jsonObject = JSONObject.fromString(responseBody);
+        JSONObject jsonObject = JSONObject.fromObject(responseBody);
         String openId = jsonObject.getString("openid");
         System.out.print(openId);
         System.out.println(jsonObject);

@@ -1213,7 +1213,7 @@ public class ActivityService {
         params.add("secret", wineryConfigure.getAppSecret());
 
         String responseBody = MemberService.sendPostRequest(WeChatConts.requestUrl, params);
-        JSONObject jsonObject = JSONObject.fromString(responseBody);
+        JSONObject jsonObject = JSONObject.fromObject(responseBody);
         String openId = jsonObject.getString("openid");
         System.out.print(openId);
 

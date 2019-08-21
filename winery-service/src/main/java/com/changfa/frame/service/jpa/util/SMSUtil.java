@@ -148,9 +148,9 @@ public class SMSUtil {
     private static String getReturnCode(String rspBody) {
         if (rspBody.contains("error_response")) {
             // 短信验证码发送有异常
-            JSONObject jsonObject = JSONObject.fromString(rspBody);
+            JSONObject jsonObject = JSONObject.fromObject(rspBody);
             String errorResponseStr = jsonObject.getString("error_response");
-            JSONObject errorResponseJson = JSONObject.fromString(errorResponseStr);
+            JSONObject errorResponseJson = JSONObject.fromObject(errorResponseStr);
             String errCode = errorResponseJson.getString("code");
             String subMsg = errorResponseJson.getString("sub_msg");
 
@@ -158,11 +158,11 @@ public class SMSUtil {
             return "{\"errCode\":\"" + errCode + "\",\"subMsg\":\"" + subMsg + "\"}";
 
         } else {
-            JSONObject jsonObject = JSONObject.fromString(rspBody);
+            JSONObject jsonObject = JSONObject.fromObject(rspBody);
             String sendResponseStr = jsonObject.getString("alibaba_aliqin_fc_sms_num_send_response");
-            JSONObject sendResponseJson = JSONObject.fromString(sendResponseStr);
+            JSONObject sendResponseJson = JSONObject.fromObject(sendResponseStr);
             String resultStr = sendResponseJson.getString("result");
-            JSONObject resultJsonJson = JSONObject.fromString(resultStr);
+            JSONObject resultJsonJson = JSONObject.fromObject(resultStr);
             String errCode = resultJsonJson.getString("err_code");
 
             if ("0".equals(errCode)) {

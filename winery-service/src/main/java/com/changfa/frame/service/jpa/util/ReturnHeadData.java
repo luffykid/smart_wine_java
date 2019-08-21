@@ -24,7 +24,7 @@ public class ReturnHeadData {
     public static ReturnHeadData parserReturnHeadFromStr(String result) {
         ReturnHeadData returnHeadData = new ReturnHeadData();
         try {
-            JSONObject resultJSONObject = new JSONObject(result);
+            JSONObject resultJSONObject = JSONObject.fromObject(result);
             JSONObject mobileHeadJSONObject = resultJSONObject.getJSONObject("mobileHead");
             String code = mobileHeadJSONObject.getString("returnCode");
             returnHeadData.returnCode = code;
