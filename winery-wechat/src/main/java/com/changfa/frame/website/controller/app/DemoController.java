@@ -26,7 +26,7 @@ import java.util.Map;
  * @date 2019-08-20 19:57
  */
 @Api(value = "控制器编码范例", tags = "控制器编码范例")
-@RestController("adminSystemConfigController")
+@RestController("wxMinSystemConfigController")
 @RequestMapping("/wxMin/auth/systemConfig")
 public class DemoController extends BaseController {
 
