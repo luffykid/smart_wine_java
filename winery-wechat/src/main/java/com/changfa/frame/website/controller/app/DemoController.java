@@ -25,7 +25,7 @@ import java.util.Map;
  * @author wyy
  * @date 2019-08-20 19:57
  */
-@Api(value = "控制器编码范例", tags = "控制器编码范例")
+@Api(value = "Demo编码范例", tags = "Demo编码范例")
 @RestController("wxMiniDemoController")
 @RequestMapping("/wxMini/auth/demo")
 public class DemoController extends BaseController {
