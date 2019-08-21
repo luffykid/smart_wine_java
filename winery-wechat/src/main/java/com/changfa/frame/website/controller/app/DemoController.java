@@ -26,8 +26,8 @@ import java.util.Map;
  * @date 2019-08-20 19:57
  */
 @Api(value = "控制器编码范例", tags = "控制器编码范例")
-@RestController("wxMinSystemConfigController")
-@RequestMapping("/wxMin/auth/systemConfig")
+@RestController("wxMinDemoController")
+@RequestMapping("/wxMin/auth/demo")
 public class DemoController extends BaseController {
 
     // service层必须是接口、实现类方式，Spring为面向接口编程
