@@ -24,16 +24,16 @@
 
 ### 接口JWT令牌【默认登录方式获取Token】
 
-（1）接口调用方获取公钥【/admin/common/getRsaPubKey】
+（1）接口调用方获取公钥【/wxMini/common/getRsaPubKey】
 
-（2）接口调用方登录并返回Token【/admin/anon/login】
+（2）接口调用方登录并返回Token【/wxMini/anon/login】
 
 （3）需要令牌的接口，将token放入请求头
 
 ### 服务端接口规则
 
-（1）公共接口：/admin/common/*
+（1）公共接口：/wxMini/common/*
 
-（2）访客身份接口：/admin/anon/*
+（2）访客身份接口：/wxMini/anon/*
 
-（3）需令牌接口：/admin/auth/*
+（3）需令牌接口：/wxMini/auth/*

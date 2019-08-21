@@ -62,7 +62,18 @@
 			<artifactId>jackson-jaxrs</artifactId>
 			<version>1.9.10</version>
 		</dependency>
-
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<!-- apache工具类-->
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -94,7 +105,12 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
 		</dependency>
-    </dependencies>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
