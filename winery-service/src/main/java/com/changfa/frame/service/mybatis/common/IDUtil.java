@@ -23,7 +23,7 @@ public class IDUtil {
         return instance;
     }
 
-    public static long getId() {
+    public static Long getId() {
         return getInstance().nextId();
     }
 }

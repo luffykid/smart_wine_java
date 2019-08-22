@@ -95,7 +95,7 @@ public class MarketActivityService {
     //营销活动列表
     public List<MarketActivityListDTO> marketActivityList(AdminUser adminUser, String search) {
         List<Dict> dicts = CacheUtil.getDicts();
-        List<MarketActivity> list = marketActivityRepository.findByWineryIdAndName(adminUser.getWineryId(), search);
+        List<MarketActivity> list = marketActivityRepository.findByWineryIdAndName(adminUser.getWineryId().intValue(), search);
         List<MarketActivityListDTO> marketActivityLists = new ArrayList<>();
         SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd");
         for (MarketActivity marketActivity : list) {
@@ -127,7 +127,7 @@ public class MarketActivityService {
     //活动模板列表
     public List<MarketActivityType> marketTypeList(AdminUser adminUser) {
         List<Dict> dicts = CacheUtil.getDicts();
-        List<MarketActivityType> all = marketActivityTypeRepository.findByWineryId(adminUser.getWineryId());
+        List<MarketActivityType> all = marketActivityTypeRepository.findByWineryId(adminUser.getWineryId().intValue());
         for (MarketActivityType marketActivityType : all) {
             for (Dict dict : dicts) {
                 if (dict.getTableName().equals("market_activity_type") && dict.getColumnName().equals("subject") && dict.getStsId().equals(marketActivityType.getSubject())) {
@@ -135,7 +135,7 @@ public class MarketActivityService {
                 }
             }
             if (marketActivityType.getId() != 4 && marketActivityType.getSubject().equals("F")) {
-                MarketActivity activity = marketActivityRepository.findByWineryIdAndStatusAndMarketActivityTypeId(adminUser.getWineryId(), "C", marketActivityType.getId());
+                MarketActivity activity = marketActivityRepository.findByWineryIdAndStatusAndMarketActivityTypeId(adminUser.getWineryId().intValue(), "C", marketActivityType.getId());
                 if (activity != null) {
                     marketActivityType.setActivityId(activity.getId());
                 }
@@ -147,8 +147,8 @@ public class MarketActivityService {
     public void addmarketactivity(GiveVoucherDTO giveVoucherDTO, AdminUser adminUser) throws ParseException {
         MarketActivity marketActivity = new MarketActivity();
         marketActivity.setMarketActivityTypeId(giveVoucherDTO.getMarketActivityTypeId());
-        marketActivity.setWineryId(adminUser.getWineryId());
-        marketActivity.setCreateUserId(adminUser.getId());
+        marketActivity.setWineryId(adminUser.getWineryId().intValue());
+        marketActivity.setCreateUserId(adminUser.getId().intValue());
         marketActivity.setName(giveVoucherDTO.getName());
         marketActivity.setSendVoucherRemind(giveVoucherDTO.getSendVoucherRemind());
         marketActivity.setExpireRemind(giveVoucherDTO.getExpireRemind());
@@ -186,7 +186,7 @@ public class MarketActivityService {
         marketActivity.setCreateTime(new Timestamp(System.currentTimeMillis()));
         marketActivity.setStatusTime(new Timestamp(System.currentTimeMillis()));
         MarketActivity marketActivitySave = marketActivityRepository.saveAndFlush(marketActivity);
-        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId());
+        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId().intValue());
         String url = null;
         if (wineryConfigure.getWineryId() == 1) {
             url = PicturePathUntil.QRCode + PicturePathUntil.PICTURE_MARKETACTIVITY_URL_PATH + 2 + "&activityId=" + marketActivitySave.getId();
@@ -229,7 +229,7 @@ public class MarketActivityService {
             List<MarketActivityRange> marketActivityRanges = new ArrayList<>();
             for (Integer str : giveVoucherDTO.getLevel()) {
                 MarketActivityRange range = new MarketActivityRange();
-                range.setWineryId(adminUser.getWineryId());
+                range.setWineryId(adminUser.getWineryId().intValue());
                 range.setMarketActivityId(marketActivity.getId());
                 range.setMemberLevelId(str);
                 marketActivityRanges.add(range);
@@ -268,7 +268,7 @@ public class MarketActivityService {
         MarketActivity activity = marketActivityRepository.getOne(id);
         MarketActivityType type = marketActivityTypeRepository.getOne(activity.getMarketActivityTypeId());
         if (type != null) {
-            MarketActivity marketActivity = marketActivityRepository.findByTimeAndType(type.getId(), activity.getBeginTime(), adminUser.getWineryId());
+            MarketActivity marketActivity = marketActivityRepository.findByTimeAndType(type.getId(), activity.getBeginTime(), adminUser.getWineryId().intValue());
             if (marketActivity != null) {
                 return false;
             }
@@ -302,8 +302,8 @@ public class MarketActivityService {
     @Transactional
     public void update(MarketActivity marketActivity, AdminUser adminUser, GiveVoucherDTO giveVoucherDTO) throws ParseException {
         marketActivity.setMarketActivityTypeId(giveVoucherDTO.getMarketActivityTypeId());
-        marketActivity.setWineryId(adminUser.getWineryId());
-        marketActivity.setCreateUserId(adminUser.getId());
+        marketActivity.setWineryId(adminUser.getWineryId().intValue());
+        marketActivity.setCreateUserId(adminUser.getId().intValue());
         marketActivity.setName(giveVoucherDTO.getName());
         marketActivity.setSendVoucherRemind(giveVoucherDTO.getSendVoucherRemind());
         marketActivity.setExpireRemind(giveVoucherDTO.getExpireRemind());
@@ -366,7 +366,7 @@ public class MarketActivityService {
             List<MarketActivityRange> marketActivityRanges = new ArrayList<>();
             for (Integer str : giveVoucherDTO.getLevel()) {
                 MarketActivityRange range = new MarketActivityRange();
-                range.setWineryId(adminUser.getWineryId());
+                range.setWineryId(adminUser.getWineryId().intValue());
                 range.setMarketActivityId(marketActivity.getId());
                 range.setMemberLevelId(str);
                 marketActivityRanges.add(range);
@@ -897,7 +897,7 @@ public class MarketActivityService {
         MarketActivityType marketActivityType = new MarketActivityType();
         marketActivityType.setName(giveVoucherDTO.getName());
         marketActivityType.setSubject("F");
-        marketActivityType.setWineryId(adminUser.getWineryId());
+        marketActivityType.setWineryId(adminUser.getWineryId().intValue());
         marketActivityTypeRepository.saveAndFlush(marketActivityType);
         return marketActivityType;
     }
@@ -982,7 +982,7 @@ public class MarketActivityService {
     }
 
     public MarketActivity checkMarketactivityName(String name, AdminUser adminUser) {
-        return marketActivityRepository.findByName(name, adminUser.getWineryId());
+        return marketActivityRepository.findByName(name, adminUser.getWineryId().intValue());
     }
 
     public MarketActivity checkMarketactivityTime(GiveVoucherDTO giveVoucherDTO, AdminUser adminUser) throws ParseException {
@@ -998,7 +998,7 @@ public class MarketActivityService {
         if (date != null) {
             MarketActivityType type = marketActivityTypeRepository.getOne(giveVoucherDTO.getMarketActivityTypeId());
             if (type != null) {
-                return marketActivityRepository.findByTimeAndType(type.getId(), date, adminUser.getWineryId());
+                return marketActivityRepository.findByTimeAndType(type.getId(), date, adminUser.getWineryId().intValue());
             } else {
                 return null;
             }

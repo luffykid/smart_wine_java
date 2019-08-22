@@ -84,7 +84,7 @@ public class WineService {
             if(null == userId && userList.size()>0){
                 userId = userList.get(0).getId().intValue();
             }
-            wineId = adminUser.getWineryId();
+            wineId = adminUser.getWineryId().intValue();
 
             Date date = new Date();
             System.out.println(date);
@@ -112,14 +112,14 @@ public class WineService {
         Wine wine = wineRepository.getOne(wineId);
         //酒订单
         WineOrder wineOrder = new WineOrder();
-        wineOrder.setWineryId(adminUser.getWineryId());
+        wineOrder.setWineryId(adminUser.getWineryId().intValue());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
         String tempUserId = String.format("%02d", userId);
         String format = sdf.format(new Date()) + String.format("%02d", new Random().nextInt(99)) + tempUserId.substring(tempUserId.length() - 2);
         wineOrder.setOrderNo(format);
         wineOrder.setUserId(userId);
         wineOrder.setWineId(wineId);
-        wineOrder.setCreateUserId(adminUser.getId());
+        wineOrder.setCreateUserId(adminUser.getId().intValue());
         wineOrder.setType(type);
         wineOrder.setWineQuantity(quantity);
         wineOrder.setStorageAmount(storageAmount);
@@ -161,8 +161,8 @@ public class WineService {
         userWineDetail.setWineId(wineId);
         userWineDetail.setUserId(userId);
         userWineDetail.setWine(quantity);
-        userWineDetail.setCreateUserId(adminUser.getId());
-        userWineDetail.setWineryId(adminUser.getWineryId());
+        userWineDetail.setCreateUserId(adminUser.getId().intValue());
+        userWineDetail.setWineryId(adminUser.getWineryId().intValue());
         userWineDetail.setWineType(type);
         userWineDetail.setCreateTime(new Date());
         userWineDetailRepository.saveAndFlush(userWineDetail);

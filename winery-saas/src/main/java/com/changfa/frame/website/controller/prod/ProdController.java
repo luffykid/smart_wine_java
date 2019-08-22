@@ -448,7 +448,7 @@ public class ProdController {
                     return JsonReturnUtil.getJsonIntReturn(0, "上架成功");
                 } else {
                     Integer isDel = prodService.checkProdDel(prodId);
-                    List<Voucher> voucherList = voucherRepository.findByWineryIdAndExchangeProdId(adminUser.getWineryId(), prodId);
+                    List<Voucher> voucherList = voucherRepository.findByWineryIdAndExchangeProdId(adminUser.getWineryId().intValue(), prodId);
                     if (isDel != 0) {
                         return JsonReturnUtil.getJsonIntReturn(1, "不能下架，主题中正在使用");
                     } else if (voucherList != null && voucherList.size() > 0) {
@@ -472,7 +472,7 @@ public class ProdController {
             AdminUser adminUser = adminUserService.findAdminUserByToken(token);
             Integer isDel = prodService.checkProdDel(prodId);
             Banner banner = bannerService.checkProdId(prodId);
-            List<Voucher> voucherList = voucherRepository.findByWineryIdAndExchangeProdId(adminUser.getWineryId(), prodId);
+            List<Voucher> voucherList = voucherRepository.findByWineryIdAndExchangeProdId(adminUser.getWineryId().intValue(), prodId);
             if (adminUser == null) {
                 return JsonReturnUtil.getJsonIntReturn(1, "找不到token" + token);
             } else if (isDel != 0) {

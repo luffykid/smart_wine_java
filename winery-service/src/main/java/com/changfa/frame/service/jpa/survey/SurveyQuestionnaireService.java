@@ -215,7 +215,7 @@ public class SurveyQuestionnaireService {
         SurveyQuestionnaire surveyQuestionnaire = null;
         if(surveyQuestionnaireDTO.getId()==null){
             surveyQuestionnaire = new SurveyQuestionnaire();
-            surveyQuestionnaire.setUserId(adminUser.getId());
+            surveyQuestionnaire.setUserId(adminUser.getId().intValue());
             surveyQuestionnaire.setCreateTime(new Date());
             surveyQuestionnaire.setUpdateTime(surveyQuestionnaire.getCreateTime());
             surveyQuestionnaire.setModifier(null);
@@ -223,7 +223,7 @@ public class SurveyQuestionnaireService {
         }else{
             surveyQuestionnaire = surveyQuestionnaireRepository.getOne(surveyQuestionnaireDTO.getId());
             surveyQuestionnaire.setUpdateTime(new Date());
-            surveyQuestionnaire.setModifier(adminUser.getId());
+            surveyQuestionnaire.setModifier(adminUser.getId().intValue());
         }
         surveyQuestionnaire.setSurveyName(surveyQuestionnaireDTO.getSurveyName());
         surveyQuestionnaire.setSurveyNote(surveyQuestionnaireDTO.getSurveyNote());

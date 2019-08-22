@@ -189,11 +189,11 @@ public class DepositRuleService {
 
     public void addDepositRule(AdminUser adminUser, com.changfa.frame.data.dto.saas.DepositRuleDTO depositRuleDTO) {
         DepositRule depositRule = new DepositRule();
-        depositRule.setWineryId(adminUser.getWineryId());
+        depositRule.setWineryId(adminUser.getWineryId().intValue());
         depositRule.setName(depositRuleDTO.getRuleName());
         depositRule.setDescri("（当本规则与活动充值规则冲突时，按照活动储值规则为准）");
         depositRule.setStatus("A");
-        depositRule.setCreateUserId(adminUser.getId());
+        depositRule.setCreateUserId(adminUser.getId().intValue());
         depositRule.setCreateTime(new Timestamp(System.currentTimeMillis()));
         depositRule.setStatusTime(new Timestamp(System.currentTimeMillis()));
         depositRule.setUpdateTime(new Timestamp(System.currentTimeMillis()));
@@ -216,7 +216,7 @@ public class DepositRuleService {
     }
 
     public DepositRule depositRuleList(AdminUser adminUser) {
-        DepositRule depositRule = depositRuleRepository.findByWineryId(adminUser.getWineryId());
+        DepositRule depositRule = depositRuleRepository.findByWineryId(adminUser.getWineryId().intValue());
         if (depositRule != null) {
             depositRule.setOper(depositRule.getStatus().equals("P") ? "启用" : "禁用");
             List<DepositRuleSpecDetail> list = depositRuleSpecDetailRepository.findByDepositRuleId(depositRule.getId());
@@ -263,10 +263,10 @@ public class DepositRuleService {
     }
 
     public void updateDepositRule(AdminUser adminUser, com.changfa.frame.data.dto.saas.DepositRuleDTO depositRuleDTO, DepositRule depositRule) {
-        depositRule.setWineryId(adminUser.getWineryId());
+        depositRule.setWineryId(adminUser.getWineryId().intValue());
         depositRule.setName(depositRuleDTO.getRuleName());
         depositRule.setDescri("（当本规则与活动充值规则冲突时，按照活动储值规则为准）");
-        depositRule.setCreateUserId(adminUser.getId());
+        depositRule.setCreateUserId(adminUser.getId().intValue());
         depositRule.setStatusTime(new Timestamp(System.currentTimeMillis()));
         depositRule.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         depositRuleRepository.saveAndFlush(depositRule);

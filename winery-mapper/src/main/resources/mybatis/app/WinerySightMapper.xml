@@ -130,4 +130,16 @@
         </where>
     </select>
 
+    <select id="getByName" parameterType="string" resultType="com.changfa.frame.model.app.WinerySight">
+        select
+        <include refid="table_column"/>
+        from b_winery_sight where sight_name = #{sightName}
+    </select>
+
+    <select id="selectWinerySightList" resultType="com.changfa.frame.model.app.WinerySight">
+        select
+        <include refid="table_column"/>
+        from b_winery_sight
+    </select>
+
 </mapper>

@@ -59,7 +59,7 @@ public class WineController {
             if (adminUser == null) {
                 return JsonReturnUtil.getJsonReturn(37001, "用户[" + token + "]不正确,请重新登录");
             }
-            List<Map<String,Object>> list = wineService.wineList(userId,adminUser.getWineryId(),type);
+            List<Map<String,Object>> list = wineService.wineList(userId,adminUser.getWineryId().intValue(),type);
             if (list!=null && list.size()>0) {
                 return JsonReturnUtil.getJsonObjectReturn(0, "200", "操作成功",list).toString();
             } else {

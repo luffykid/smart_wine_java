@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.ProdMapper" >
+    <resultMap id="prodMap" type="com.changfa.frame.model.app.Prod">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="prod_category_id" property="prodCategoryId" jdbcType="INTEGER" />
+        <result column="lable_type" property="lableType" jdbcType="INTEGER" />
+        <result column="prod_name" property="prodName" jdbcType="VARCHAR" />
+        <result column="prod_title" property="prodTitle" jdbcType="VARCHAR" />
+        <result column="prod_code" property="prodCode" jdbcType="VARCHAR" />
+        <result column="total_stock_cnt" property="totalStockCnt" jdbcType="BIGINT" />
+        <result column="list_img" property="listImg" jdbcType="VARCHAR" />
+        <result column="descri" property="descri" jdbcType="LONGVARCHAR" />
+        <result column="is_limit" property="isLimit" jdbcType="TINYINT" />
+        <result column="limit_count" property="limitCount" jdbcType="INTEGER" />
+        <result column="prod_status" property="prodStatus" jdbcType="INTEGER" />
+        <result column="is_recommend" property="isRecommend" jdbcType="TINYINT" />
+        <result column="admin_id" property="adminId" jdbcType="BIGINT" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_id, prod_category_id, lable_type, prod_name, prod_title, prod_code, total_stock_cnt, 
+        list_img, descri, is_limit, limit_count, prod_status, is_recommend, admin_id, create_date, 
+        modify_date
+    </sql>
+
+    <select id="getById" resultMap="prodMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from s_prod
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.Prod" >
+        insert into s_prod (id, winery_id, prod_category_id, lable_type, prod_name, prod_title, 
+            prod_code, total_stock_cnt, list_img, descri, is_limit, limit_count, 
+            prod_status, is_recommend, admin_id, create_date, modify_date)
+        values (#{id}, #{wineryId}, #{prodCategoryId}, #{lableType}, #{prodName}, #{prodTitle}, 
+            #{prodCode}, #{totalStockCnt}, #{listImg}, #{descri}, #{isLimit}, #{limitCount}, 
+            #{prodStatus}, #{isRecommend}, #{adminId}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.Prod" >
+        update s_prod
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="prodCategoryId != null" >
+                prod_category_id = #{prodCategoryId},
+            </if>
+            <if test="lableType != null" >
+                lable_type = #{lableType},
+            </if>
+            <if test="prodName != null and prodName != ''" >
+                prod_name = #{prodName},
+            </if>
+            <if test="prodTitle != null and prodTitle != ''" >
+                prod_title = #{prodTitle},
+            </if>
+            <if test="prodCode != null and prodCode != ''" >
+                prod_code = #{prodCode},
+            </if>
+            <if test="totalStockCnt != null" >
+                total_stock_cnt = #{totalStockCnt},
+            </if>
+            <if test="listImg != null and listImg != ''" >
+                list_img = #{listImg},
+            </if>
+            <if test="descri != null" >
+                descri = #{descri},
+            </if>
+            <if test="isLimit != null" >
+                is_limit = #{isLimit},
+            </if>
+            <if test="limitCount != null" >
+                limit_count = #{limitCount},
+            </if>
+            <if test="prodStatus != null" >
+                prod_status = #{prodStatus},
+            </if>
+            <if test="isRecommend != null" >
+                is_recommend = #{isRecommend},
+            </if>
+            <if test="adminId != null" >
+                admin_id = #{adminId},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_prod
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="prodMap" >
+        select 
+        <include refid="table_column" />
+        from s_prod
+        <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="prodCategoryId != null" >
+                and null.prod_category_id = #{prodCategoryId}
+            </if>
+            <if test="lableType != null" >
+                and null.lable_type = #{lableType}
+            </if>
+            <if test="prodName != null and prodName != ''" >
+                and null.prod_name = #{prodName}
+            </if>
+            <if test="prodTitle != null and prodTitle != ''" >
+                and null.prod_title = #{prodTitle}
+            </if>
+            <if test="prodCode != null and prodCode != ''" >
+                and null.prod_code = #{prodCode}
+            </if>
+            <if test="totalStockCnt != null" >
+                and null.total_stock_cnt = #{totalStockCnt}
+            </if>
+            <if test="listImg != null and listImg != ''" >
+                and null.list_img = #{listImg}
+            </if>
+            <if test="descri != null" >
+                and null.descri = #{descri}
+            </if>
+            <if test="isLimit != null" >
+                and null.is_limit = #{isLimit}
+            </if>
+            <if test="limitCount != null" >
+                and null.limit_count = #{limitCount}
+            </if>
+            <if test="prodStatus != null" >
+                and null.prod_status = #{prodStatus}
+            </if>
+            <if test="isRecommend != null" >
+                and null.is_recommend = #{isRecommend}
+            </if>
+            <if test="adminId != null" >
+                and null.admin_id = #{adminId}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findProdList" resultType="com.changfa.frame.model.app.Prod">
+        select
+        <include refid="table_column"/>
+        from s_prod
+    </select>
+
+</mapper>

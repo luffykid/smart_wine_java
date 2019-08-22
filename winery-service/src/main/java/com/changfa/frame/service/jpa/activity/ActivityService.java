@@ -506,7 +506,7 @@ public class ActivityService {
     //创建线下活动
     public void addActivity(AdminUser adminUser, ActivitytDTO activitytDTO) throws ParseException {
         Activity activity = new Activity();
-        activity.setWineryId(adminUser.getWineryId());
+        activity.setWineryId(adminUser.getWineryId().intValue());
         activity.setName(activitytDTO.getEventName());
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (activitytDTO.getActiviTime() != null && activitytDTO.getActiviTime().size() != 0 && !"".equals(activitytDTO.getActiviTime().get(0).replaceAll("\"", ""))) {
@@ -553,12 +553,12 @@ public class ActivityService {
         }
         activity.setDetailAddress(activitytDTO.getDetailAddress());
         activity.setFullAddress(add + activity.getDetailAddress());
-        activity.setCreateUserId(adminUser.getId());
+        activity.setCreateUserId(adminUser.getId().intValue());
         activity.setStatus("A");
         activity.setStatusTime(new Timestamp(System.currentTimeMillis()));
         activity.setCreateTime(new Timestamp(System.currentTimeMillis()));
         activityRepository.saveAndFlush(activity);
-        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId());
+        WineryConfigure wineryConfigure = wineryConfigureRepository.findByWineryId(adminUser.getWineryId().intValue());
         String url = null;
         if (wineryConfigure.getWineryId() == 1) {
             url = PicturePathUntil.QRCode + PicturePathUntil.PICTURE_ACTIVITY_URL_PATH + activity.getId();
@@ -659,7 +659,7 @@ public class ActivityService {
 
     public List<ActivityListDTO> activityList(AdminUser adminUser, String search) {
         List<Dict> dicts = CacheUtil.getDicts();
-        List<Activity> list = activityRepository.findByWineryIdAndName(adminUser.getWineryId(), search);
+        List<Activity> list = activityRepository.findByWineryIdAndName(adminUser.getWineryId().intValue(), search);
         List<ActivityListDTO> activityLists = new ArrayList<>();
         for (Activity activity : list) {
             ActivityListDTO activityList = new ActivityListDTO();
@@ -702,7 +702,7 @@ public class ActivityService {
 
     @Transactional
     public void updateActivity(Activity activity, AdminUser adminUser, ActivitytDTO activitytDTO) throws ParseException {
-        activity.setWineryId(adminUser.getWineryId());
+        activity.setWineryId(adminUser.getWineryId().intValue());
         activity.setName(activitytDTO.getEventName());
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (activitytDTO.getActiviTime() != null && activitytDTO.getActiviTime().size() != 0 && !"".equals(activitytDTO.getActiviTime().get(0).replaceAll("\"", ""))) {
@@ -815,7 +815,7 @@ public class ActivityService {
     public void stopActivity(Activity activity, AdminUser adminUser) {
         activity.setStatus("P");
         activity.setStatusTime(new Timestamp(System.currentTimeMillis()));
-        activity.setCreateUserId(adminUser.getId());
+        activity.setCreateUserId(adminUser.getId().intValue());
         activityRepository.saveAndFlush(activity);
     }
 
@@ -1193,13 +1193,13 @@ public class ActivityService {
     public void openActivity(Activity activity, AdminUser adminUser) {
         activity.setStatus("A");
         activity.setStatusTime(new Timestamp(System.currentTimeMillis()));
-        activity.setCreateUserId(adminUser.getId());
+        activity.setCreateUserId(adminUser.getId().intValue());
         activityRepository.saveAndFlush(activity);
     }
 
     /* *
      * 线下活动扫码签到
-     * @Author        zyj
+     * @Author        zyjs
      * @Date          2018/11/28 11:29
      * @Description
      * */
@@ -1222,7 +1222,7 @@ public class ActivityService {
     }
 
     public Activity checkActivitytName(String eventName, AdminUser adminUser) {
-        return activityRepository.findByName(eventName, adminUser.getWineryId());
+        return activityRepository.findByName(eventName, adminUser.getWineryId().intValue());
     }
 
     public void offlinePay(ActivityOrder activityOrder) {

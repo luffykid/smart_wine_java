@@ -106,7 +106,7 @@ public class AssembleService {
 	 */
 	public List<ProdAssembleDTO> prodList(AdminUser adminUser, String input) {
 		List<Prod> prodList = new ArrayList<>();
-		prodList = prodRepository.findByWineryIdLikeName(adminUser.getWineryId(), input);
+		prodList = prodRepository.findByWineryIdLikeName(adminUser.getWineryId().intValue(), input);
 		List<ProdAssembleDTO> prodListDTOS = new ArrayList<>();
 		for (Prod prod : prodList) {
 			ProdAssembleDTO prodListDTO = new ProdAssembleDTO();
@@ -137,7 +137,7 @@ public class AssembleService {
 	//新增拼团
 	public void addAssemble(AdminUser adminUser, AssembleCommodityDTO assembleCommodityDTO) {
 		AssembleCommodity assembleCommodity = new AssembleCommodity();
-		assembleCommodity.setWineryId(adminUser.getWineryId());
+		assembleCommodity.setWineryId(adminUser.getWineryId().intValue());
 		assembleCommodity.setProdId(assembleCommodityDTO.getProdId());
 		assembleCommodity.setAssemblePrice(assembleCommodityDTO.getAssemblePrice());
 		assembleCommodity.setAssembleAllnum(assembleCommodityDTO.getAssembleAllnum());
@@ -147,7 +147,7 @@ public class AssembleService {
 		assembleCommodity.setExistTimes(assembleCommodityDTO.getExistTimes());
 		assembleCommodity.setCreateTime(new Date());
 		assembleCommodity.setTopTime(assembleCommodity.getCreateTime());
-		assembleCommodity.setUserId(adminUser.getId());
+		assembleCommodity.setUserId(adminUser.getId().intValue());
 		assembleCommodity.setIsDelete(1);
 		assembleCommodityRepository.saveAndFlush(assembleCommodity);
 	}
@@ -161,7 +161,7 @@ public class AssembleService {
 	 */
 	public List<AssembleCommodityListDTO> assembleList(AdminUser adminUser, String input) {
 		List<AssembleCommodity> assembleList = new ArrayList<>();
-		assembleList = assembleCommodityRepository.findByWineryIdLikeName(adminUser.getWineryId(), input);
+		assembleList = assembleCommodityRepository.findByWineryIdLikeName(adminUser.getWineryId().intValue(), input);
 		List<AssembleCommodityListDTO> acListDTOS = new ArrayList<>();
 		for (AssembleCommodity ac : assembleList) {
 			AssembleCommodityListDTO acListDTO = new AssembleCommodityListDTO();
@@ -172,10 +172,10 @@ public class AssembleService {
 			}
 			acListDTO.setAssemblePrice(ac.getAssemblePrice());
 			acListDTO.setAssembleAllnum(ac.getAssembleAllnum());
-			int assembleNum = assembleCommodityRepository.findByWineryIdAndIdUser(adminUser.getWineryId(),ac.getId());
+			int assembleNum = assembleCommodityRepository.findByWineryIdAndIdUser(adminUser.getWineryId().intValue(),ac.getId());
 			acListDTO.setAssembleNum(assembleNum);
 			acListDTO.setAssemblePreson(ac.getAssemblePreson());
-			int teamNum = assembleCommodityRepository.findByWineryIdAndIdTeam(adminUser.getWineryId(),ac.getId());
+			int teamNum = assembleCommodityRepository.findByWineryIdAndIdTeam(adminUser.getWineryId().intValue(),ac.getId());
 			acListDTO.setTeamNum(teamNum);
 			acListDTO.setStartTime(ac.getStartTime());
 			acListDTO.setEndTime(ac.getEndTime());
@@ -233,9 +233,9 @@ public class AssembleService {
 			assembleCommodity = new AssembleCommodity();
 			assembleCommodity.setCreateTime(new Date());
 			assembleCommodity.setTopTime(assembleCommodity.getCreateTime());
-			assembleCommodity.setUserId(adminUser.getId());
+			assembleCommodity.setUserId(adminUser.getId().intValue());
 		}
-		assembleCommodity.setWineryId(adminUser.getWineryId());
+		assembleCommodity.setWineryId(adminUser.getWineryId().intValue());
 		assembleCommodity.setProdId(assembleCommodityDTO.getProdId());
 		assembleCommodity.setAssemblePrice(assembleCommodityDTO.getAssemblePrice());
 		assembleCommodity.setAssembleAllnum(assembleCommodityDTO.getAssembleAllnum());
@@ -283,7 +283,7 @@ public class AssembleService {
 	public List<AssembleListListDTO> assembleListList(AdminUser adminUser, String input, Integer assembleStatus) {
 		List<AssembleListListDTO> assembleListReturn = new ArrayList<>();
 
-		List<AssembleList> assembleListList = assembleListRepository.findByAssembleStatus(adminUser.getWineryId(),input,assembleStatus);
+		List<AssembleList> assembleListList = assembleListRepository.findByAssembleStatus(adminUser.getWineryId().intValue(),input,assembleStatus);
 		for (AssembleList aList : assembleListList) {
 			AssembleListListDTO acListDTO = new AssembleListListDTO();
 			acListDTO.setId(aList.getId());

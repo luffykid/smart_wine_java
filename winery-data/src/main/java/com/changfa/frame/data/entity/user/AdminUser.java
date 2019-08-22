@@ -15,9 +15,9 @@ import java.util.Date;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @JsonIdentityInfo(generator = JSOGGenerator.class)
 public class AdminUser {
-    private Integer id;
+    private Long id;
     private String token;
-    private Integer wineryId;
+    private Long wineryId;
     private String userName;
     private String password;
     private String name;
@@ -30,11 +30,11 @@ public class AdminUser {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -50,11 +50,11 @@ public class AdminUser {
 
     @Basic
     @Column(name = "winery_id")
-    public Integer getWineryId() {
+    public Long getWineryId() {
         return wineryId;
     }
 
-    public void setWineryId(Integer wineryId) {
+    public void setWineryId(Long wineryId) {
         this.wineryId = wineryId;
     }
 
@@ -161,7 +161,7 @@ public class AdminUser {
 
     @Override
     public int hashCode() {
-        Integer result = id;
+        Long result = id;
         result = 31 * result + (token != null ? token.hashCode() : 0);
         result = 31 * result + wineryId;
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
@@ -172,6 +172,6 @@ public class AdminUser {
         result = 31 * result + (statusTime != null ? statusTime.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (isSuper != null ? isSuper.hashCode() : 0);
-        return result;
+        return result.intValue();
     }
 }

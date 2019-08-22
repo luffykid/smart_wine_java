@@ -73,7 +73,7 @@ public class BargainingService {
 	 */
 	public List<BargainingCommodityListDTO> bargainingList(AdminUser adminUser, String input) {
 		List<BargainingCommodity> bargainingList = new ArrayList<>();
-		bargainingList = bargainingCommodityRepository.findByWineryIdLikeName(adminUser.getWineryId(), input);
+		bargainingList = bargainingCommodityRepository.findByWineryIdLikeName(adminUser.getWineryId().intValue(), input);
 		List<BargainingCommodityListDTO> bcListDTOS = new ArrayList<>();
 		for (BargainingCommodity bc : bargainingList) {
 			BargainingCommodityListDTO bcListDTO = new BargainingCommodityListDTO();
@@ -85,7 +85,7 @@ public class BargainingService {
 			bcListDTO.setStartTime(bc.getStartTime());
 			bcListDTO.setEndTime(bc.getEndTime());
 			bcListDTO.setBargainingNum(bc.getBargainingNum());
-			int bargainingNumEd = bargainingCommodityRepository.findByWineryIdAndIdUser(adminUser.getWineryId(),bc.getId());
+			int bargainingNumEd = bargainingCommodityRepository.findByWineryIdAndIdUser(adminUser.getWineryId().intValue(),bc.getId());
 			int noBargainingNum = bc.getBargainingNum() - bargainingNumEd;
 			bcListDTO.setNoBargainingNum(noBargainingNum);
 			bcListDTO.setBargainingPrice(bc.getBargainingPrice());
@@ -101,7 +101,7 @@ public class BargainingService {
 	//新增砍价商品
 	public void addBargaining(AdminUser adminUser, BargainingCommodityDTO bargainingCommodityDTO) {
 		BargainingCommodity bargainingCommodity = new BargainingCommodity();
-		bargainingCommodity.setWineryId(adminUser.getWineryId());
+		bargainingCommodity.setWineryId(adminUser.getWineryId().intValue());
 		bargainingCommodity.setProdId(bargainingCommodityDTO.getProdId());
 		bargainingCommodity.setBargainingPrice(bargainingCommodityDTO.getBargainingPrice());
 		bargainingCommodity.setBargainingNum(bargainingCommodityDTO.getBargainingNum());
@@ -120,7 +120,7 @@ public class BargainingService {
 		bargainingCommodity.setEndTime(bargainingCommodityDTO.getEndTime());
 		bargainingCommodity.setCreateTime(new Date());
 		bargainingCommodity.setTopTime(bargainingCommodity.getCreateTime());
-		bargainingCommodity.setUserId(adminUser.getId());
+		bargainingCommodity.setUserId(adminUser.getId().intValue());
 		bargainingCommodity.setIsDelete(1);
 		bargainingCommodityRepository.saveAndFlush(bargainingCommodity);
 	}
@@ -172,9 +172,9 @@ public class BargainingService {
 			bargainingCommodity = new BargainingCommodity();
 			bargainingCommodity.setCreateTime(new Date());
 			bargainingCommodity.setTopTime(bargainingCommodity.getCreateTime());
-			bargainingCommodity.setUserId(adminUser.getId());
+			bargainingCommodity.setUserId(adminUser.getId().intValue());
 		}
-		bargainingCommodity.setWineryId(adminUser.getWineryId());
+		bargainingCommodity.setWineryId(adminUser.getWineryId().intValue());
 		bargainingCommodity.setProdId(bargainingCommodityDTO.getProdId());
 		bargainingCommodity.setBargainingPrice(bargainingCommodityDTO.getBargainingPrice());
 		bargainingCommodity.setBargainingNum(bargainingCommodityDTO.getBargainingNum());

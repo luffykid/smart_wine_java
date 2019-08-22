@@ -10,6 +10,8 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 酒庄景点表
@@ -72,6 +74,10 @@ public class WinerySight extends BaseEntity {
      */
     private Boolean isSign;
 
+    /**
+     * 景点图片
+     */
+    private  List<String> scenicImg;
 
     /**
      * 获取酒庄ID
@@ -215,5 +221,21 @@ public class WinerySight extends BaseEntity {
      */
     public void setIsSign(Boolean isSign) {
         this.isSign = isSign;
+    }
+
+    /**
+     * 获取景点图片
+     * @return
+     */
+    public List<String> getScenicImg() {
+        return scenicImg;
+    }
+
+    /**
+     * 设置景点图片
+     * @param scenicImg
+     */
+    public void setScenicImg(List<String> scenicImg) {
+        this.scenicImg = scenicImg;
     }
 }

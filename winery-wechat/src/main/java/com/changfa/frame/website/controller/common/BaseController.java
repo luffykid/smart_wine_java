@@ -1,20 +1,14 @@
 package com.changfa.frame.website.controller.common;
 
-import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.model.app.Member;
-import com.changfa.frame.service.mybatis.app.MemberService;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.stereotype.Component;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -22,8 +16,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -38,9 +30,6 @@ import java.util.Map;
 public abstract class BaseController {
     private static final long serialVersionUID = -6344078923170236539L;
     protected Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Resource(name = "memberServiceImpl")
-    private MemberService memberService;
 
     /**
      * 应用接口异常处理

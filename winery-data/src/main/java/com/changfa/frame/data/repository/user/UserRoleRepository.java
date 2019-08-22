@@ -9,15 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface UserRoleRepository extends AdvancedJpaRepository<UserRole,Integer> {
-    List<UserRole> findByUserId(Integer userId);
+    List<UserRole> findByUserId(Long userId);
 
     @Query(value = "select * from user_role where user_id = ?1 limit 1",nativeQuery = true)
-    UserRole findByUserIdLimit(Integer uid);
+    UserRole findByUserIdLimit(Long uid);
 
     @Query(value = "select role_id from user_role where user_id = ?1",nativeQuery = true)
-    Object[] findRoleIdList(Integer userId);
+    Object[] findRoleIdList(Long userId);
 
     @Modifying
     @Transactional
-    void deleteByUserId(Integer userId);
+    void deleteByUserId(Long userId);
 }
