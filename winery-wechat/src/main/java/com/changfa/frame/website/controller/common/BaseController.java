@@ -1,5 +1,7 @@
 package com.changfa.frame.website.controller.common;
 
+import com.changfa.frame.model.app.Member;
+import com.changfa.frame.service.mybatis.app.MemberService;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -30,6 +34,9 @@ import java.util.Map;
 public abstract class BaseController {
     private static final long serialVersionUID = -6344078923170236539L;
     protected Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Resource(name = "memberServiceImpl")
+    private MemberService memberService;
 
     /**
      * 应用接口异常处理
@@ -136,7 +143,7 @@ public abstract class BaseController {
 //        // 根据手机号查询会员
 //        Member member = memberService.selectByPhone(headerAcctName);
 
-          //  本地开发使用
+        //  本地开发使用
         Member member = memberService.getById(1L);
         return member;
     }
