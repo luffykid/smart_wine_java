@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @Api(value = "会员商品订单接口", tags = "会员商品订单接口")
 @RestController("wxMiniMbrStoreOrderController")
-@RequestMapping("/wxMini/auth/member")
+//@RequestMapping("/wxMini/auth/member")
 public class MbrStoreOrderController extends BaseController {
 
     /**
