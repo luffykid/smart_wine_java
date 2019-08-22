@@ -10,6 +10,9 @@ package com.changfa.frame.mapper.app;
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.Member;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 会员Mapper
  *
@@ -25,4 +28,18 @@ public interface MemberMapper extends BaseMapper<Member, Long> {
      * @return
      */
     Member selectByPhone(String phone);
+
+    /**
+     * 获取招募会员列表
+     * @param mbrId
+     * @return
+     */
+    List<Map<String, Object>> selectSubList(Long mbrId);
+
+    /**
+     * 获取招募会员数据统计
+     * @param mbrId
+     * @return
+     */
+    List<Map<String, Object>> selectSubStatis(Long mbrId);
 }

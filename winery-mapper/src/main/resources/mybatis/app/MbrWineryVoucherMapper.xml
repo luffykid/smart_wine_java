@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrWineryVoucherMapper" >
+    <resultMap id="mbrWineryVoucherMap" type="com.changfa.frame.model.app.MbrWineryVoucher" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="winery_voucher_inst_id" property="wineryVoucherInstId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="voucher_amt" property="voucherAmt" jdbcType="DECIMAL" />
+        <result column="voucher_discount" property="voucherDiscount" jdbcType="DECIMAL" />
+        <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
+        <result column="enable_type" property="enableType" jdbcType="INTEGER" />
+        <result column="enable_amt" property="enableAmt" jdbcType="DECIMAL" />
+        <result column="quantity_limit_cnt" property="quantityLimitCnt" jdbcType="INTEGER" />
+        <result column="effective_begin_date" property="effectiveBeginDate" jdbcType="TIMESTAMP" />
+        <result column="effective_end_date" property="effectiveEndDate" jdbcType="TIMESTAMP" />
+        <result column="use_scope" property="useScope" jdbcType="INTEGER" />
+        <result column="voucher_cnt" property="voucherCnt" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_id, winery_voucher_inst_id, mbr_id, name, type, voucher_amt, voucher_discount, 
+        prod_sku_id, enable_type, enable_amt, quantity_limit_cnt, effective_begin_date, effective_end_date, 
+        use_scope, voucher_cnt, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrWineryVoucherMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_mbr_winery_voucher
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineryVoucher" >
+        insert into b_mbr_winery_voucher (id, winery_id, winery_voucher_inst_id, mbr_id, name, type, voucher_amt, 
+            voucher_discount, prod_sku_id, enable_type, enable_amt, quantity_limit_cnt, 
+            effective_begin_date, effective_end_date, use_scope, voucher_cnt, create_date, 
+            modify_date)
+        values (#{id}, #{wineryId}, #{wineryVoucherInstId}, #{mbrId}, #{name}, #{type}, #{voucherAmt}, 
+            #{voucherDiscount}, #{prodSkuId}, #{enableType}, #{enableAmt}, #{quantityLimitCnt}, 
+            #{effectiveBeginDate}, #{effectiveEndDate}, #{useScope}, #{voucherCnt}, #{createDate}, 
+            #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrWineryVoucher" >
+        update b_mbr_winery_voucher
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="wineryVoucherInstId != null" >
+                winery_voucher_inst_id = #{wineryVoucherInstId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="name != null and name != ''" >
+                name = #{name},
+            </if>
+            <if test="type != null" >
+                type = #{type},
+            </if>
+            <if test="voucherAmt != null" >
+                voucher_amt = #{voucherAmt},
+            </if>
+            <if test="voucherDiscount != null" >
+                voucher_discount = #{voucherDiscount},
+            </if>
+            <if test="prodSkuId != null" >
+                prod_sku_id = #{prodSkuId},
+            </if>
+            <if test="enableType != null" >
+                enable_type = #{enableType},
+            </if>
+            <if test="enableAmt != null" >
+                enable_amt = #{enableAmt},
+            </if>
+            <if test="quantityLimitCnt != null" >
+                quantity_limit_cnt = #{quantityLimitCnt},
+            </if>
+            <if test="effectiveBeginDate != null" >
+                effective_begin_date = #{effectiveBeginDate},
+            </if>
+            <if test="effectiveEndDate != null" >
+                effective_end_date = #{effectiveEndDate},
+            </if>
+            <if test="useScope != null" >
+                use_scope = #{useScope},
+            </if>
+            <if test="voucherCnt != null" >
+                voucher_cnt = #{voucherCnt},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_mbr_winery_voucher
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrWineryVoucherMap" >
+        select 
+        <include refid="table_column" />
+        from b_mbr_winery_voucher
+        <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="wineryVoucherInstId != null" >
+                and null.winery_voucher_inst_id = #{wineryVoucherInstId}
+            </if>
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
+            <if test="name != null and name != ''" >
+                and null.name = #{name}
+            </if>
+            <if test="type != null" >
+                and null.type = #{type}
+            </if>
+            <if test="voucherAmt != null" >
+                and null.voucher_amt = #{voucherAmt}
+            </if>
+            <if test="voucherDiscount != null" >
+                and null.voucher_discount = #{voucherDiscount}
+            </if>
+            <if test="prodSkuId != null" >
+                and null.prod_sku_id = #{prodSkuId}
+            </if>
+            <if test="enableType != null" >
+                and null.enable_type = #{enableType}
+            </if>
+            <if test="enableAmt != null" >
+                and null.enable_amt = #{enableAmt}
+            </if>
+            <if test="quantityLimitCnt != null" >
+                and null.quantity_limit_cnt = #{quantityLimitCnt}
+            </if>
+            <if test="effectiveBeginDate != null" >
+                and null.effective_begin_date = #{effectiveBeginDate}
+            </if>
+            <if test="effectiveEndDate != null" >
+                and null.effective_end_date = #{effectiveEndDate}
+            </if>
+            <if test="useScope != null" >
+                and null.use_scope = #{useScope}
+            </if>
+            <if test="voucherCnt != null" >
+                and null.voucher_cnt = #{voucherCnt}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectEnableVoucherCount" resultMap="mbrWineryVoucherMap">
+        select
+        <include refid="table_column" />
+        from b_mbr_winery_voucher
+        <where>
+            mbr_id=#{0} and voucher_cnt=#{1} and UNIX_TIMESTAMP(now()) bettwen  effective_begin_date and effective_begin_date
+        </where>
+    </select>
+</mapper>
