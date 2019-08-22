@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.ProdImgMapper" >
+    <resultMap id="prodImgMap" type="com.changfa.frame.model.app.ProdImg">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="prod_id" property="prodId" jdbcType="BIGINT" />
+        <result column="img_name" property="imgName" jdbcType="VARCHAR" />
+        <result column="img_addrr" property="imgAddrr" jdbcType="VARCHAR" />
+        <result column="img_remark" property="imgRemark" jdbcType="VARCHAR" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, prod_id, img_name, img_addrr, img_remark, sort, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="prodImgMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from s_prod_img
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.ProdImg" >
+        insert into s_prod_img (id, prod_id, img_name, img_addrr, img_remark, sort, create_date, 
+            modify_date)
+        values (#{id}, #{prodId}, #{imgName}, #{imgAddrr}, #{imgRemark}, #{sort}, #{createDate}, 
+            #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.ProdImg" >
+        update s_prod_img
+        <set >
+            <if test="prodId != null" >
+                prod_id = #{prodId},
+            </if>
+            <if test="imgName != null and imgName != ''" >
+                img_name = #{imgName},
+            </if>
+            <if test="imgAddrr != null and imgAddrr != ''" >
+                img_addrr = #{imgAddrr},
+            </if>
+            <if test="imgRemark != null and imgRemark != ''" >
+                img_remark = #{imgRemark},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_prod_img
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="prodImgMap" >
+        select 
+        <include refid="table_column" />
+        from s_prod_img
+        <where >
+            <if test="prodId != null" >
+                and null.prod_id = #{prodId}
+            </if>
+            <if test="imgName != null and imgName != ''" >
+                and null.img_name = #{imgName}
+            </if>
+            <if test="imgAddrr != null and imgAddrr != ''" >
+                and null.img_addrr = #{imgAddrr}
+            </if>
+            <if test="imgRemark != null and imgRemark != ''" >
+                and null.img_remark = #{imgRemark}
+            </if>
+            <if test="sort != null" >
+                and null.sort = #{sort}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

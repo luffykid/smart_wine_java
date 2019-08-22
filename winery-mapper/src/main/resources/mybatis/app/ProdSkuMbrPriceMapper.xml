@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.ProdSkuMbrPriceMapper" >
+    <resultMap id="prodSkuMbrPriceMap" type="com.changfa.frame.model.app.ProdSkuMbrPrice" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
+        <result column="mbr_level_id" property="mbrLevelId" jdbcType="BIGINT" />
+        <result column="mbr_level_price" property="mbrLevelPrice" jdbcType="DECIMAL" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, prod_sku_id, mbr_level_id, mbr_level_price, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="prodSkuMbrPriceMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from s_prod_sku_mbr_price
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.ProdSkuMbrPrice" >
+        insert into s_prod_sku_mbr_price (id, prod_sku_id, mbr_level_id, mbr_level_price, create_date, modify_date
+            )
+        values (#{id}, #{prodSkuId}, #{mbrLevelId}, #{mbrLevelPrice}, #{createDate}, #{modifyDate}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.ProdSkuMbrPrice" >
+        update s_prod_sku_mbr_price
+        <set >
+            <if test="prodSkuId != null" >
+                prod_sku_id = #{prodSkuId},
+            </if>
+            <if test="mbrLevelId != null" >
+                mbr_level_id = #{mbrLevelId},
+            </if>
+            <if test="mbrLevelPrice != null" >
+                mbr_level_price = #{mbrLevelPrice},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from s_prod_sku_mbr_price
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="prodSkuMbrPriceMap" >
+        select 
+        <include refid="table_column" />
+        from s_prod_sku_mbr_price
+        <where >
+            <if test="prodSkuId != null" >
+                and null.prod_sku_id = #{prodSkuId}
+            </if>
+            <if test="mbrLevelId != null" >
+                and null.mbr_level_id = #{mbrLevelId}
+            </if>
+            <if test="mbrLevelPrice != null" >
+                and null.mbr_level_price = #{mbrLevelPrice}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

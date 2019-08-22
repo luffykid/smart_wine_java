@@ -4,7 +4,7 @@
     <resultMap id="mbrSightSignMap" type="com.changfa.frame.model.app.MbrSightSign" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="winery_sight_id" property="winerySightId" jdbcType="BIGINT" />
-        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mberId" jdbcType="BIGINT" />
         <result column="sign_date" property="signDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />

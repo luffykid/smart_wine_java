@@ -1,13 +1,10 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.mapper.app.WinerySightImgMapper;
-import com.changfa.frame.mapper.app.WinerySightMapper;
-import com.changfa.frame.model.app.WinerySight;
-import com.changfa.frame.model.app.WinerySightImg;
+import com.changfa.frame.mapper.app.*;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.WinerySightService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
-import com.changfa.frame.service.mybatis.common.IDWorker;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -32,6 +29,15 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     @Autowired
     private WinerySightImgMapper winerySightImgMapper;
 
+    @Autowired
+    private WinerySightDetailMapper winerySightDetailMapper;
+
+    @Autowired
+    private ProdMapper prodMapper;
+
+    @Autowired
+    private ProdSkuMapper prodSkuMapper;
+
 
     @Override
     public List<WinerySight> findWinerySightList() {
@@ -40,20 +46,49 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     }
 
     @Override
+    public void addScenicImageText(List<WinerySightDetail> winerySightDetailList) {
+
+        try {
+            for (WinerySightDetail winerySightDetail: winerySightDetailList) {
+                winerySightDetail.setCreateDate(new Date());
+                winerySightDetail.setModifyDate(new Date());
+                winerySightDetailMapper.save(winerySightDetail);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("异常{}", ExceptionUtils.getFullStackTrace(e));
+            throw new ClassCastException();
+        }
+    }
+
+    @Override
+    public List<Prod> findProdList() {
+        List<Prod> prodList =prodMapper.findProdList();
+        return prodList;
+    }
+
+    @Override
+    public List<ProdSku> findProdSkuList(Integer id) {
+        List<ProdSku> prodSkuList = prodSkuMapper.getByProdId(id);
+        return prodSkuList;
+    }
+
+    @Override
     public void addWinerySight(WinerySight winerySight, AdminUser curAdmin ) {
         try {
-            //curAdmin.getWineryId().longValue()
             winerySight.setId(IDUtil.getId());
             winerySight.setCreateDate(new Date());
-            winerySight.setWineryId(1231L);
+            winerySight.setWineryId(curAdmin.getWineryId().longValue());
             winerySightMapper.save(winerySight);
             WinerySight winerySightv = winerySightMapper.getByName(winerySight.getSightName());
 
             for (String scenicImg : winerySight.getScenicImg()) {
                 WinerySightImg winerySightImg = new WinerySightImg();
-                winerySightImg.setWinerySightId(winerySightv.getWineryId());
+                winerySightImg.setId(IDUtil.getId());
+                winerySightImg.setWinerySightId(winerySightv.getId());
                 winerySightImg.setImgName(getImgName(scenicImg));
                 winerySightImg.setImgAddr(scenicImg);
+                winerySightImg.setCreateDate(new Date());
                 winerySightImgMapper.save(winerySightImg);
             }
             log.info("添加成功!");
