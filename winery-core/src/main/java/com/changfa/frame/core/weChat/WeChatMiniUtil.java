@@ -1,15 +1,12 @@
 package com.changfa.frame.core.weChat;
 
-import com.changfa.frame.core.exception.AppException;
 import com.changfa.frame.core.exception.CustomException;
 import com.changfa.frame.core.prop.PropAttributes;
 import com.changfa.frame.core.prop.PropConfig;
-import com.changfa.frame.core.redis.RedisClient;
 import com.changfa.frame.core.util.HttpUtil;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -22,11 +19,11 @@ import java.util.Map;
  * @date 2019-08-21 14:38
  */
 @Component
-public class WechatMiniUtil {
+public class WeChatMiniUtil {
     /**
      * 日志对象
      */
-    private static final Logger log = LoggerFactory.getLogger(WechatMiniUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(WeChatMiniUtil.class);
 
     /**
      * 微信小程序授权【auth.code2Session】

@@ -110,4 +110,16 @@ public class DateUtil {
         return calendar;
     }
 
+    /**
+     * 格式化date为指定的格式字符串
+     *
+     * @param date
+     * @param pattern
+     * @return
+     */
+    public static String convertDateToStr(Date date, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        return sdf.format(date);
+    }
+
 }
