@@ -32,7 +32,7 @@ import java.util.Map;
 @RequestMapping("/wxMini/auth/member")
 public class MemberController extends BaseController {
     @Autowired
-    private MemberService memberService;
+    private MemberService memberServiceImpl;
     @Autowired
     private MbrWineryVoucherService mbrWineryVoucherService;
     /**
@@ -59,8 +59,8 @@ public class MemberController extends BaseController {
     public Map<String, Object> getSubList(HttpServletRequest request, PageInfo pageInfo) {
         Member member = getCurMember(request);
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("list",memberService.getSubList(member.getId(), pageInfo));
-        returnMap.put("other",memberService.getSubList(member.getId(), pageInfo));
+        returnMap.put("list",memberServiceImpl.getSubList(member.getId(), pageInfo));
+        returnMap.put("other",memberServiceImpl.getSubList(member.getId(), pageInfo));
         return getResult(returnMap);
     }
 
@@ -83,7 +83,7 @@ public class MemberController extends BaseController {
     public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, String sex, String phone) {
         Member member = getCurMember(request);
         try{
-            memberService.updateMember(member.getId(), userIcon, nickName, birthday, sex, phone);
+            memberServiceImpl.updateMember(member.getId(), userIcon, nickName, birthday, sex, phone);
         }catch (Exception e){
             log.info("此处有错误:{}",e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);

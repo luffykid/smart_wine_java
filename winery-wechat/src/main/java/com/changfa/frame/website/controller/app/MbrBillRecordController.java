@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @Api(value = "会员账单接口", tags = "会员账单接口")
 @RestController("wxMiniMbrBillRecordController")
-@RequestMapping("/wxMini/auth/member")
+@RequestMapping("/wxMini/auth/mbrBillRecord")
 public class MbrBillRecordController extends BaseController {
     /**
      * 获取优惠券列表
