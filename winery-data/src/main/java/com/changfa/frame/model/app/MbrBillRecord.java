@@ -7,6 +7,8 @@
  */
 package com.changfa.frame.model.app;
 
+import com.changfa.frame.model.common.BaseEntity;
+
 import java.math.BigDecimal;
 
 /**

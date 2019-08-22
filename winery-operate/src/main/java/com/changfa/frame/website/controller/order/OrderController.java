@@ -122,7 +122,7 @@ public class OrderController {
                     return JsonReturnUtil.getJsonReturn(1, "100", "库存不足");
                 }
             }
-            orderService.updateOrderStatus(adminUser.getId(), order, status);
+            orderService.updateOrderStatus(adminUser.getId().intValue(), order, status);
             return JsonReturnUtil.getJsonIntReturn(0, "成功");
         } catch (Exception e) {
             e.printStackTrace();
