@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
-@Service
-@Transactional
+@Service("memberServiceImpl")
 public class MemberServiceImpl extends BaseServiceImpl implements MemberService{
 }
