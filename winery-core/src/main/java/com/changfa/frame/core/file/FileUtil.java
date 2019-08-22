@@ -222,12 +222,12 @@ public static String getNFSUrl(MultipartFile file, String targetDir) {
 }
 
 /**
- * 根据原文件、新文件地址删除
+ * 根据原文件、新文件地址删除NFS上文件
  *
  * @param orgFileUrl 原文件地址
  * @param newFileUrl 新文件地址
  */
-public static void deleteForUpload(String orgFileUrl, String newFileUrl) {
+public static void deleteNFSByFileUrl(String orgFileUrl, String newFileUrl) {
     try {
         //不一致说明图片已被修改
         if (StringUtils.isNotBlank(orgFileUrl) && !StringUtils.equals(orgFileUrl, newFileUrl)) {

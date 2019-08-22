@@ -89,11 +89,13 @@ public class DemoController extends BaseController {
         String fileUrl = FileUtil.copyNFSByFileName(orgFileName, FilePathConsts.TEST_FILE_PATH);
 
         // 3、如果是编辑页面，需要先删除原图片
+        //FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
 
-        log.info("图片访问地址地址：{}",fileUrl);
+        // 4、如果是直接图片上传到NFS服务器，返回文件NFS访问URL
+        String nfsUrl = FileUtil.getNFSUrl(file, FilePathConsts.TEST_FILE_PATH);
 
         // ************* 图片异步上传 **************
 
-        return getResult(null);
+        return getResult(org);
     }
 }

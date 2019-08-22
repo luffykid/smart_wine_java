@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author wyy
  * @date 2019-08-15 14:40
  */
-@Service("MemberServiceImpl")
+@Service("memberServiceImpl")
 public class MemberServiceImpl extends BaseServiceImpl<Member,Long> implements MemberService{
 
     @Autowired
