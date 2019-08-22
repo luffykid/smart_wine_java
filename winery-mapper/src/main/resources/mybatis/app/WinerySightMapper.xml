@@ -139,7 +139,7 @@
     <select id="selectWinerySightList" resultType="com.changfa.frame.model.app.WinerySight">
         select
         <include refid="table_column"/>
-        from b_winery_sight
+        from b_winery_sight where winery_id =#{wineryId} order by create_date desc
     </select>
 
 </mapper>

@@ -78,4 +78,8 @@
         </where>
     </select>
 
+    <select id="findMbrSightSign" parameterType="java.lang.Long" resultType="string">
+        select id from m_mbr_sight_sign where date(create_date) = curdate() and winery_sight_id = #{wineryId} and mbr_id = #{id}  order by create_date desc
+    </select>
+
 </mapper>
