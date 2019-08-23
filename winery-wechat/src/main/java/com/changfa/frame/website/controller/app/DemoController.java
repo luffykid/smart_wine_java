@@ -63,7 +63,6 @@ public class DemoController extends BaseController {
         returnMap.put("name", "小栗子");
         returnMap.put("model实体类", new Setting());
         returnMap.put("集合", new ArrayList<String>());
-
         return getResult(returnMap);
     }
 
