@@ -50,11 +50,11 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
      * @return
      */
     @Override
-    public List<Map<String, Object>> getSubList(Long mbrId, PageInfo pageInfo) {
+    public PageInfo getSubList(Long mbrId, PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return (List<Map<String, Object>>) new PageInfo(memberMapper.selectSubList(mbrId));
+        return new PageInfo(memberMapper.selectSubList(mbrId));
     }
 
     /**

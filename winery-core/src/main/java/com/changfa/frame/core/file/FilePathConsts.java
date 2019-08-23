@@ -6,5 +6,5 @@ package com.changfa.frame.core.file;
  */
 public class FilePathConsts {
     // 测试图片图片路径
-    public static final String TEST_FILE_PATH = "/upload/test";
+    public static final String TEST_FILE_PATH = "/upload/test/";
 }

@@ -34,7 +34,6 @@ import java.util.Map;
 public class DemoController extends BaseController {
 
     // service层必须是接口、实现类方式，Spring为面向接口编程
-    @Resource(name = "systemConfigServiceImpl")
     private SystemConfigService systemConfigService;
 
     /**
@@ -64,7 +63,6 @@ public class DemoController extends BaseController {
         returnMap.put("name", "小栗子");
         returnMap.put("model实体类", new Setting());
         returnMap.put("集合", new ArrayList<String>());
-
         return getResult(returnMap);
     }
 
@@ -87,7 +85,7 @@ public class DemoController extends BaseController {
         String fileUrl = FileUtil.copyNFSByFileName(orgFileName, FilePathConsts.TEST_FILE_PATH);
 
         // 3、如果是编辑页面，需要先删除原图片
-//        FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
+        // FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
 
         // 4、如果是直接图片上传到NFS服务器，返回文件NFS访问URL
         String nfsUrl = FileUtil.getNFSUrl(testFile, FilePathConsts.TEST_FILE_PATH);

@@ -29,7 +29,7 @@ public interface MemberService extends BaseService<Member,Long> {
      * @param pageInfo
      * @return
      */
-    List<Map<String, Object>> getSubList(Long mbrId, PageInfo pageInfo);
+    PageInfo getSubList(Long mbrId, PageInfo pageInfo);
 
     /**
      * 获取招募会员数据统计
