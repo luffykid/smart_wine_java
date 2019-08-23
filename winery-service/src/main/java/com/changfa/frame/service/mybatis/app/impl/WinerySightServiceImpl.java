@@ -68,6 +68,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     @Transactional
     public void addScenicImageText(List<WinerySightDetail> winerySightDetailList) {
         for (WinerySightDetail winerySightDetail: winerySightDetailList) {
+            winerySightDetail.setId(IDUtil.getId());
             winerySightDetail.setCreateDate(new Date());
             winerySightDetail.setModifyDate(new Date());
             winerySightDetailMapper.save(winerySightDetail);
@@ -90,7 +91,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      * @return  List<ProdSku>
      */
     @Override
-    public List<ProdSku> findProdSkuList(Integer id) {
+    public List<ProdSku> findProdSkuList(Long id) {
         List<ProdSku> prodSkuList = prodSkuMapper.getByProdId(id);
         return prodSkuList;
     }
@@ -132,7 +133,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
         Map<String,Object> map = new HashMap<>();
         WinerySight winerySight = winerySightMapper.getById(id);// 查询景点信息
         List<String> scenicImg = winerySightImgMapper.findScenicImgById(winerySight.getId()); // 查询景点图片
-        if(winerySight != null && scenicImg.size() != 0){
+        if(winerySight != null && scenicImg != null && scenicImg.size() > 0){
             map.put("winerySight",winerySight);
             map.put("scenicImg",scenicImg);
         }
@@ -145,8 +146,8 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      */
     @Override
     @Transactional
-    public void updateWinerySight(WinerySight winerySight) {
-        winerySightMapper.update(winerySight);
+    public boolean updateWinerySight(WinerySight winerySight) {
+       return ( winerySightMapper.update(winerySight) > 0 ? true : false);
     }
 
     /**
@@ -155,9 +156,11 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      */
     @Override
     @Transactional
-    public void deleteWinerySight(Long id) {
-        winerySightImgMapper.deleteWinerySightImgById(id);
-        winerySightMapper.delete(id);
+    public boolean deleteWinerySight(Long id) {
+        if( winerySightImgMapper.deleteWinerySightImgById(id) >0 ? true : false){
+            return winerySightMapper.delete(id) > 0 ? true : false;
+        }
+        return false;
     }
 
     // 字符串截取
@@ -173,8 +176,8 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      * @return Winery
      */
     @Override
-    public Winery findWinery(AdminUser curAdmin) {
-        Winery winery = wineryMapper.getById(curAdmin.getWineryId());
+    public Winery findWinery(Member member) {
+        Winery winery = wineryMapper.getById(member.getWineryId());
         return winery;
     }
 
@@ -188,17 +191,47 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      * K：已签景点数量       V：SightSignIdCount
      */
     @Override
-    public Map<String, Object> findSignSight(AdminUser curAdmin) {
+    public Map<String, Object> findSignSight(Member member) {
         Map<String, Object>  map = new HashMap<>();
-        List<WinerySight> winerySightList = winerySightMapper.selectWinerySightList(curAdmin.getWineryId()); // 获取酒庄所有景点信息
-        List<String> SightSignIdList = mbrSightSignMapper.findMbrSightSign(curAdmin.getWineryId(),curAdmin.getId()); //获取已签到信息
-        if(winerySightList.size() != 0 && SightSignIdList.size() !=0 ){
+        List<WinerySight> winerySightList = winerySightMapper.selectWinerySightList(member.getWineryId()); // 获取酒庄所有景点信息
+        List<String> SightSignIdList = mbrSightSignMapper.findMbrSightSign(member.getId()); //获取已签到信息
+        if(winerySightList.size() > 0 && winerySightList != null && SightSignIdList.size() >0 && SightSignIdList != null){
             map.put("WinerySight",winerySightList);
             map.put("SightSignId",SightSignIdList);
             map.put("WinerySightCount",winerySightList.size());
             map.put("SightSignIdCount",SightSignIdList.size());
         }
         return map;
+    }
+
+    /**
+     * 查询景点图文/景点图片
+     * @param id 景点id
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> findSightImageText(Long id) {
+        Map<String, Object>  map = new HashMap<>();
+        List<WinerySightDetail> winerySightDetailList = winerySightDetailMapper.findSightImageTextByWinerySightId(id);
+        List<String> scenicImg = winerySightImgMapper.findScenicImgById(id); // 查询景点图片
+        if(winerySightDetailList.size() > 0 && winerySightDetailList != null && scenicImg.size() > 0 && scenicImg != null){
+            map.put("winerySightDetail",winerySightDetailList);
+            map.put("scenicImg",scenicImg);
+        }
+        return map;
+    }
+
+
+    /**
+     * 景点点赞
+     * @param id 景点id
+     * @return boolean
+     */
+    @Override
+    public boolean scenicLike(Long id) {
+        WinerySight  winerySight = winerySightMapper.selectWinerySightByWineryId(id);
+        winerySight.setLikeTotalCnt(winerySight.getLikeTotalCnt()+1L);
+       return winerySightMapper.updateSightLike(winerySight) > 0 ? true : false;
     }
 
 

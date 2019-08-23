@@ -42,7 +42,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
-     * 配置消息转换器--这里我用的是alibaba 开源的 fastjson
+     * 配置消息转换器：Ali开源的fastJson
      *
      * @param converters
      */

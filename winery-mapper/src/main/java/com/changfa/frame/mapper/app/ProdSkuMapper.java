@@ -13,5 +13,7 @@ import com.changfa.frame.model.app.ProdSku;
 import java.util.List;
 
 public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
-    List<ProdSku> getByProdId(Integer id);
+
+    List<ProdSku> getByProdId(Long id);
+
 }

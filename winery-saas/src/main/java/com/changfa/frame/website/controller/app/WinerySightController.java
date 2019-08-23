@@ -47,7 +47,7 @@ public class WinerySightController extends BaseController {
     public Map<String, Object> findWinerySightList(HttpServletRequest request){
         AdminUser curAdmin = getCurAdmin(request);
         List<WinerySight> winerySightList =winerySightService.findWinerySightList(curAdmin);
-        if (winerySightList.size()==0){
+        if (winerySightList.size() == 0 && winerySightList == null){
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(winerySightList);
@@ -78,7 +78,7 @@ public class WinerySightController extends BaseController {
     @RequestMapping(value = "/findWinerySightById", method = RequestMethod.POST)
     public Map<String,Object> findWinerySight(@RequestParam("id") Long id){
         Map<String,Object> map = winerySightService.findWinerySight(id);
-        if(map == null){
+        if(map.isEmpty()){
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(map);
@@ -93,8 +93,10 @@ public class WinerySightController extends BaseController {
     @ApiImplicitParams(@ApiImplicitParam(name = "winerySight", value = "景点修改对象", dataType = "WinerySight"))
     @RequestMapping(value = "/updateWinerySight", method = RequestMethod.POST)
     public Map<String,Object> updateWinerySight(WinerySight winerySight){
-        winerySightService.updateWinerySight(winerySight);
-        return getResult("修改成功");
+       if ( winerySightService.updateWinerySight(winerySight)){
+           return getResult("修改成功");
+       }
+        throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
     }
 
     /**
@@ -106,8 +108,10 @@ public class WinerySightController extends BaseController {
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "删除景点byId", dataType = "Long"))
     @RequestMapping(value = "/deleteWinerySight", method = RequestMethod.POST)
     public Map<String,Object> deleteWinerySight(@RequestParam("id") Long id){
-        winerySightService.deleteWinerySight(id);
-        return getResult("删除成功");
+        if ( winerySightService.deleteWinerySight(id) ){
+            return getResult("删除成功");
+        }
+        throw new CustomException(RESPONSE_CODE_ENUM.DELETE_FAILED);
     }
 
     /**
@@ -141,10 +145,13 @@ public class WinerySightController extends BaseController {
      * @return  Map<String, Object>
      */
     @ApiOperation(value = "查询商品SKU列表",notes = "查询商品SKU列表")
-    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "商品id", dataType = "Integer"))
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "商品id", dataType = "Long"))
     @RequestMapping(value = "/findProdSku", method = RequestMethod.POST)
-    public Map<String, Object> findProdSkuList(@RequestParam("id") Integer id){
+    public Map<String, Object> findProdSkuList(@RequestParam("id") Long id){
         List<ProdSku> prodSkuList =winerySightService.findProdSkuList(id);
+        if (prodSkuList.size() ==0 && prodSkuList == null){
+            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+        }
         return getResult(prodSkuList);
     }
 

@@ -136,10 +136,20 @@
         from b_winery_sight where sight_name = #{sightName}
     </select>
 
-    <select id="selectWinerySightList" resultType="com.changfa.frame.model.app.WinerySight">
+    <select id="selectWinerySightList" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.WinerySight">
         select
         <include refid="table_column"/>
         from b_winery_sight where winery_id =#{wineryId} order by create_date desc
+    </select>
+
+    <update id="updateSightLike" parameterType="com.changfa.frame.model.app.WinerySight">
+         update b_winery_sight set like_total_cnt = #{likeTotalCnt} where id = #{id}
+    </update>
+
+    <select id="selectWinerySightByWineryId" parameterType="java.lang.Long" resultMap="winerySightMap">
+        select
+        <include refid="table_column"/>
+        from b_winery_sight  where id =#{id}
     </select>
 
 </mapper>

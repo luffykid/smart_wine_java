@@ -26,8 +26,8 @@ public class ProdSku extends BaseEntity {
     private Long skuName;
 
     /** sku状态
-0：未上架
-1：已上架 */
+    0：未上架
+    1：已上架 */
     private Integer skuStatus;
 
     /** 库存 */
@@ -91,8 +91,8 @@ public class ProdSku extends BaseEntity {
     
     /**
      * 获取sku状态
-0：未上架
-1：已上架
+    0：未上架
+    1：已上架
     */
     public Integer getSkuStatus() {
         return skuStatus;
@@ -100,8 +100,8 @@ public class ProdSku extends BaseEntity {
     
     /**
      * 设置sku状态
-0：未上架
-1：已上架
+    0：未上架
+    1：已上架
     */
     public void setSkuStatus(Integer skuStatus) {
         this.skuStatus = skuStatus;

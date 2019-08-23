@@ -13,5 +13,5 @@ import com.changfa.frame.model.app.MbrSightSign;
 import java.util.List;
 
 public interface MbrSightSignMapper extends BaseMapper<MbrSightSign, Long> {
-    List<String> findMbrSightSign(Long wineryId, Long id);
+    List<String> findMbrSightSign( Long id);
 }

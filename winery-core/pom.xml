@@ -26,6 +26,10 @@
             <version>3.5.2</version>
             <scope>compile</scope>
         </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
 
        <!-- spring-boot redis依赖 -->
 		<dependency>
@@ -109,6 +113,12 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.2</version>
+		</dependency>
+		<!-- google开源工具实现图片压缩 -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
 		</dependency>
 	</dependencies>
 	<build>

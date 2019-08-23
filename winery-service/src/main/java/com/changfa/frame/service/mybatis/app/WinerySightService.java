@@ -32,13 +32,13 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
      * 修改景点
      * @param winerySight  景点对象
      */
-    void updateWinerySight(WinerySight winerySight);
+    boolean updateWinerySight(WinerySight winerySight);
 
     /**
      * 删除景点
      * @param id
      */
-    void deleteWinerySight(Long id);
+    boolean deleteWinerySight(Long id);
 
     /**
      * 查询景点列表
@@ -64,19 +64,32 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
      * @param   id  商品id
      * @return  List<ProdSku>
      */
-    List<ProdSku> findProdSkuList(Integer id);
+    List<ProdSku> findProdSkuList(Long id);
 
     /**
      * wx/查询酒庄信息
      * @param curAdmin  当前用户
      * @return Winery
      */
-    Winery findWinery(AdminUser curAdmin);
+    Winery findWinery(Member curAdmin);
 
     /**
      * 查询全部景点，和已签到景点
      * @param curAdmin   当前用户
      * @return Map<String, Object>
      */
-    Map<String, Object> findSignSight(AdminUser curAdmin);
+    Map<String, Object> findSignSight(Member Member);
+
+    /**
+     * 查询景点图文
+     * @param id
+     * @return  Map<String, Object>
+     */
+    Map<String, Object> findSightImageText(Long id);
+
+    /**
+     * 景点点赞
+     * @param id
+     */
+    boolean scenicLike(Long id);
 }

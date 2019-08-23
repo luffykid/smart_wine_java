@@ -168,4 +168,12 @@
         </where>
     </select>
 
+    <!-- 根据手机号查询会员 -->
+    <select id="selectByPhone" resultMap="memberMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_member
+        where phone = #{phone}
+    </select>
+
 </mapper>

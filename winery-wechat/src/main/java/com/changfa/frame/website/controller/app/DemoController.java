@@ -1,5 +1,9 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.core.file.FilePathConsts;
+import com.changfa.frame.core.file.FileUtil;
+import com.changfa.frame.core.prop.PropAttributes;
+import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.service.mybatis.app.SystemConfigService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -13,6 +17,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -35,12 +40,12 @@ public class DemoController extends BaseController {
     private SystemConfigService systemConfigService;
 
     /**
-     * 更新系统配置
+     * 普通控制器接口书写规范
      *
      * @param setting 系统设置对象
      * @return
      */
-    @ApiOperation(value = "更新系统配置", notes = "更新系统的配置")
+    @ApiOperation(value = "普通接口书写范例", notes = "普通接口书写范例")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "setting", value = "系统配置对象", dataType = "Setting"))
     @RequestMapping(value = "/updateSysConfig", method = RequestMethod.GET)
@@ -63,5 +68,34 @@ public class DemoController extends BaseController {
         returnMap.put("集合", new ArrayList<String>());
 
         return getResult(returnMap);
+    }
+
+    /**
+     * 文件上传接口书写规范
+     *
+     * @param file 上传文件
+     * @return
+     */
+    @ApiOperation(value = "文件上传范例", notes = "文件上传范例")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "setting", value = "系统配置对象", dataType = "MultipartFile"))
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    public Map<String, Object> uploadFile(MultipartFile file,String org) {
+        // ***************** 后台调用方式 *******************
+        // 1、图片异步上传返回图片URL，此时图片保存在临时文件夹,
+        String orgFileName = FileUtil.getNFSFileName(file);
+
+        // 2、表单提交，需将临时文件夹中文件拷贝到图片仓库文件夹中，并返回图片URL
+        String fileUrl = FileUtil.copyNFSByFileName(orgFileName, FilePathConsts.TEST_FILE_PATH);
+
+        // 3、如果是编辑页面，需要先删除原图片
+        //FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
+
+        // 4、如果是直接图片上传到NFS服务器，返回文件NFS访问URL
+        String nfsUrl = FileUtil.getNFSUrl(file, FilePathConsts.TEST_FILE_PATH);
+
+        // ************* 图片异步上传 **************
+
+        return getResult(org);
     }
 }

@@ -1,16 +1,14 @@
 package com.changfa.frame.website.controller.common;
 
-import com.changfa.frame.data.entity.user.AdminUser;
-import com.changfa.frame.service.jpa.user.AdminUserService;
+import com.changfa.frame.model.app.Member;
+import com.changfa.frame.service.mybatis.app.MemberService;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -36,8 +35,8 @@ public abstract class BaseController {
     private static final long serialVersionUID = -6344078923170236539L;
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private AdminUserService adminUserService;
+    @Resource(name = "memberServiceImpl")
+    private MemberService memberService;
 
     /**
      * 应用接口异常处理
@@ -129,21 +128,23 @@ public abstract class BaseController {
     }
 
     /**
-     * 获取当前用户
+     * 获取当前会员
      *
      * @param request 请求对象
      */
-    public AdminUser getCurAdmin(HttpServletRequest request) {
+    public Member getCurMember(HttpServletRequest request) {
 
-        // 取出登陆账号
-        String headerAcctName = request.getHeader("request-header-acct");
-        if (StringUtils.isBlank(headerAcctName)) {
-            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
-        }
+//        // 取出登陆账号
+//        String headerAcctName = request.getHeader("request-header-acct");
+//        if (StringUtils.isBlank(headerAcctName)) {
+//            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
+//        }
+//
+//        // 根据手机号查询会员
+//        Member member = memberService.selectByPhone(headerAcctName);
 
-        AdminUser adminUser = adminUserService.findAdminUserByPhone(headerAcctName);
-        return adminUser;
+        //  本地开发使用
+        Member member = memberService.getById(1L);
+        return member;
     }
-
-
 }

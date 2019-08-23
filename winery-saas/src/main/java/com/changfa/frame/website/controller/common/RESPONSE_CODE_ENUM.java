@@ -34,7 +34,9 @@ public enum RESPONSE_CODE_ENUM {
     ACCONAME_IS_EXIST("1017", "账号已存在"),
     REPEATED_RECORD("1018", "数据重复"),
     NO_DATA("1050", "数据为空"),
-    CAPTCHA_EXIST("1051", "验证码已发送，请稍等");
+    CAPTCHA_EXIST("1051", "验证码已发送，请稍等"),
+    UPDATE_FAILED("1019","修改失败"),
+    DELETE_FAILED("1020","删除失败");
 
     /**
      * 错误编码

@@ -7,6 +7,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PropAttributes {
+
+    /****************************** NFS配置 END ******************************/
+    public static final String NFS__SERVICE_FILE_SHARE_PATH = "nfs.service.file.share.path";
+    public static final String NFS__SERVICE_FILE_TEMP_PATH = "nfs.service.file.temp.path";
+    public static final String NFS_SERVICE_FILE_SERVER = "nfs.service.file.server";
+    /****************************** NFS配置 END ******************************/
+
     /****************************** 酒庄商家后台系统 START ******************************/
     public static final String SYSTEM_WINERY_NAME = "system.winery.name";
     /****************************** 酒庄商家后台系统 END ******************************/
