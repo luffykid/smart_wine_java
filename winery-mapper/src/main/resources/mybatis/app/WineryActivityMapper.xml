@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineryActivityMapper" >
+    <resultMap id="wineryActivityMap" type="com.changfa.frame.model.app.WineryActivity" >
+        <result column="id" property="id" jdbcType="LONGVARCHAR" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="act_title" property="actTitle" jdbcType="VARCHAR" />
+        <result column="act_cover_img" property="actCoverImg" jdbcType="VARCHAR" />
+        <result column="is_platform" property="isPlatform" jdbcType="TINYINT" />
+        <result column="act_type" property="actType" jdbcType="INTEGER" />
+        <result column="sign_start_date" property="signStartDate" jdbcType="TIMESTAMP" />
+        <result column="sign_end_date" property="signEndDate" jdbcType="TIMESTAMP" />
+        <result column="act_start_date" property="actStartDate" jdbcType="TIMESTAMP" />
+        <result column="act_end_date" property="actEndDate" jdbcType="TIMESTAMP" />
+        <result column="like_total_cnt" property="likeTotalCnt" jdbcType="INTEGER" />
+        <result column="share_total_cnt" property="shareTotalCnt" jdbcType="INTEGER" />
+        <result column="sign_total_cnt" property="signTotalCnt" jdbcType="BIGINT" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <result column="act_status" property="actStatus" jdbcType="INTEGER" />
+    </resultMap>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineryActivity" >
+        insert into b_winery_activity (id, winery_id, act_title, act_cover_img, is_platform, act_type, 
+            sign_start_date, sign_end_date, act_start_date, act_end_date, like_total_cnt, 
+            share_total_cnt, sign_total_cnt, create_date, modify_date, act_status
+            )
+        values (#{id}, #{wineryId}, #{actTitle}, #{actCoverImg}, #{isPlatform}, #{actType}, 
+            #{signStartDate}, #{signEndDate}, #{actStartDate}, #{actEndDate}, #{likeTotalCnt}, 
+            #{shareTotalCnt}, #{signTotalCnt}, #{createDate}, #{modifyDate}, #{actStatus}
+            )
+    </insert>
+
+    <select id="selectList" resultMap="wineryActivityMap" >
+        select 
+        <include refid="table_column" />
+        from b_winery_activity
+        <where >
+            <if test="id != null" >
+                and null.id = #{id}
+            </if>
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="actTitle != null and actTitle != ''" >
+                and null.act_title = #{actTitle}
+            </if>
+            <if test="actCoverImg != null and actCoverImg != ''" >
+                and null.act_cover_img = #{actCoverImg}
+            </if>
+            <if test="isPlatform != null" >
+                and null.is_platform = #{isPlatform}
+            </if>
+            <if test="actType != null" >
+                and null.act_type = #{actType}
+            </if>
+            <if test="signStartDate != null" >
+                and null.sign_start_date = #{signStartDate}
+            </if>
+            <if test="signEndDate != null" >
+                and null.sign_end_date = #{signEndDate}
+            </if>
+            <if test="actStartDate != null" >
+                and null.act_start_date = #{actStartDate}
+            </if>
+            <if test="actEndDate != null" >
+                and null.act_end_date = #{actEndDate}
+            </if>
+            <if test="likeTotalCnt != null" >
+                and null.like_total_cnt = #{likeTotalCnt}
+            </if>
+            <if test="shareTotalCnt != null" >
+                and null.share_total_cnt = #{shareTotalCnt}
+            </if>
+            <if test="signTotalCnt != null" >
+                and null.sign_total_cnt = #{signTotalCnt}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+            <if test="actStatus != null" >
+                and null.act_status = #{actStatus}
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectNoStartList" resultMap="wineryActivityMap">
+        select
+        <include refid="table_column" />
+        from b_winery_activity where act_end_date <![CDATA[ >= ]]> now()
+    </select>
+
+
+</mapper>

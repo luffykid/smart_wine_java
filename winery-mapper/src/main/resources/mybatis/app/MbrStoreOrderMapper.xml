@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrStoreOrderMapper" >
+    <resultMap id="mbrStoreOrderMap" type="com.changfa.frame.model.app.MbrStoreOrder" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="wine_cellar_activity_id" property="wineCellarActivityId" jdbcType="BIGINT" />
+        <result column="pay_mode" property="payMode" jdbcType="INTEGER" />
+        <result column="prod_total_cnt" property="prodTotalCnt" jdbcType="INTEGER" />
+        <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
+        <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
+        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="BIGINT" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="total_org_weight" property="totalOrgWeight" jdbcType="DECIMAL" />
+        <result column="total_org_capacity" property="totalOrgCapacity" jdbcType="DECIMAL" />
+        <result column="total_increase_weight" property="totalIncreaseWeight" jdbcType="DECIMAL" />
+        <result column="total_increase_capacity" property="totalIncreaseCapacity" jdbcType="DECIMAL" />
+        <result column="total_remain_weight" property="totalRemainWeight" jdbcType="DECIMAL" />
+        <result column="total_remain_capacity" property="totalRemainCapacity" jdbcType="DECIMAL" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_id, mbr_id, wine_cellar_activity_id, pay_mode, prod_total_cnt, pay_total_amt, 
+        pay_real_amt, pay_integral_cnt, order_status, total_org_weight, total_org_capacity, 
+        total_increase_weight, total_increase_capacity, total_remain_weight, total_remain_capacity, 
+        create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrStoreOrderMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_store_order
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrStoreOrder" >
+        insert into m_mbr_store_order (id, winery_id, mbr_id, wine_cellar_activity_id, pay_mode, prod_total_cnt, 
+            pay_total_amt, pay_real_amt, pay_integral_cnt, order_status, total_org_weight, 
+            total_org_capacity, total_increase_weight, total_increase_capacity, total_remain_weight, 
+            total_remain_capacity, create_date, modify_date)
+        values (#{id}, #{wineryId}, #{mbrId}, #{wineCellarActivityId}, #{payMode}, #{prodTotalCnt}, 
+            #{payTotalAmt}, #{payRealAmt}, #{payIntegralCnt}, #{orderStatus}, #{totalOrgWeight}, 
+            #{totalOrgCapacity}, #{totalIncreaseWeight}, #{totalIncreaseCapacity}, #{totalRemainWeight}, 
+            #{totalRemainCapacity}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrStoreOrder" >
+        update m_mbr_store_order
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="wineCellarActivityId != null" >
+                wine_cellar_activity_id = #{wineCellarActivityId},
+            </if>
+            <if test="payMode != null" >
+                pay_mode = #{payMode},
+            </if>
+            <if test="prodTotalCnt != null" >
+                prod_total_cnt = #{prodTotalCnt},
+            </if>
+            <if test="payTotalAmt != null" >
+                pay_total_amt = #{payTotalAmt},
+            </if>
+            <if test="payRealAmt != null" >
+                pay_real_amt = #{payRealAmt},
+            </if>
+            <if test="payIntegralCnt != null" >
+                pay_integral_cnt = #{payIntegralCnt},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="totalOrgWeight != null" >
+                total_org_weight = #{totalOrgWeight},
+            </if>
+            <if test="totalOrgCapacity != null" >
+                total_org_capacity = #{totalOrgCapacity},
+            </if>
+            <if test="totalIncreaseWeight != null" >
+                total_increase_weight = #{totalIncreaseWeight},
+            </if>
+            <if test="totalIncreaseCapacity != null" >
+                total_increase_capacity = #{totalIncreaseCapacity},
+            </if>
+            <if test="totalRemainWeight != null" >
+                total_remain_weight = #{totalRemainWeight},
+            </if>
+            <if test="totalRemainCapacity != null" >
+                total_remain_capacity = #{totalRemainCapacity},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_store_order
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrStoreOrderMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_store_order
+        <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
+            <if test="wineCellarActivityId != null" >
+                and null.wine_cellar_activity_id = #{wineCellarActivityId}
+            </if>
+            <if test="payMode != null" >
+                and null.pay_mode = #{payMode}
+            </if>
+            <if test="prodTotalCnt != null" >
+                and null.prod_total_cnt = #{prodTotalCnt}
+            </if>
+            <if test="payTotalAmt != null" >
+                and null.pay_total_amt = #{payTotalAmt}
+            </if>
+            <if test="payRealAmt != null" >
+                and null.pay_real_amt = #{payRealAmt}
+            </if>
+            <if test="payIntegralCnt != null" >
+                and null.pay_integral_cnt = #{payIntegralCnt}
+            </if>
+            <if test="orderStatus != null" >
+                and null.order_status = #{orderStatus}
+            </if>
+            <if test="totalOrgWeight != null" >
+                and null.total_org_weight = #{totalOrgWeight}
+            </if>
+            <if test="totalOrgCapacity != null" >
+                and null.total_org_capacity = #{totalOrgCapacity}
+            </if>
+            <if test="totalIncreaseWeight != null" >
+                and null.total_increase_weight = #{totalIncreaseWeight}
+            </if>
+            <if test="totalIncreaseCapacity != null" >
+                and null.total_increase_capacity = #{totalIncreaseCapacity}
+            </if>
+            <if test="totalRemainWeight != null" >
+                and null.total_remain_weight = #{totalRemainWeight}
+            </if>
+            <if test="totalRemainCapacity != null" >
+                and null.total_remain_capacity = #{totalRemainCapacity}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+    <select id="selectStoreList" parameterType="Long" resultType="HashMap">
+        select i.sku_name,s.total_org_weight,s.total_increase_weight,s.total_remain_weight,s.create_date from m_mbr_store_order s inner JOIN
+        m_mbr_store_order_item i on s.id = i.mbr_store_order_id
+        where mbr_id = #{mbrId} and s.order_status=4 and s.total_increase_weight <![CDATA[ > ]]> 0 and s.total_remain_weight <![CDATA[ > ]]> 0
+    </select>
+</mapper>

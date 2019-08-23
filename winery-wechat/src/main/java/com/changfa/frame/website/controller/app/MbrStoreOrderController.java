@@ -1,14 +1,17 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.model.app.Member;
+import com.changfa.frame.service.mybatis.app.MbrStoreOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,6 +23,8 @@ import java.util.Map;
 //@RequestMapping("/wxMini/auth/member")
 public class MbrStoreOrderController extends BaseController {
 
+    @Autowired
+    private MbrStoreOrderService mbrStoreOrderServiceImpl;
     /**
      * 获取我的储酒列表
      *
@@ -27,8 +32,13 @@ public class MbrStoreOrderController extends BaseController {
      */
     @ApiOperation(value = "获取我的储酒列表", notes = "获取我的储酒列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
-    public Map<String, Object> getList() {
-        return null;
+    public Map<String, Object> getList(HttpServletRequest request) {
+        Member member = getCurMember(request);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("totalStoreRemain", member.getTotalStoreRemain());
+        returnMap.put("totalStoreIncrement", member.getTotalStoreIncrement());
+        returnMap.put("list", mbrStoreOrderServiceImpl.getStoreList(member.getId()));
+        return getResult(returnMap);
     }
 
 }

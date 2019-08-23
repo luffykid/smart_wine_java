@@ -176,4 +176,6 @@
             mbr_id=#{0} and voucher_cnt=#{1} and UNIX_TIMESTAMP(now()) bettwen  effective_begin_date and effective_begin_date
         </where>
     </select>
+
+
 </mapper>
