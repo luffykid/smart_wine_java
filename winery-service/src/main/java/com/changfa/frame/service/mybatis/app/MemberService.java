@@ -2,6 +2,10 @@ package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.common.BaseService;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 会员service
@@ -18,4 +22,31 @@ public interface MemberService extends BaseService<Member,Long> {
      * @return
      */
     Member selectByPhone(String phone);
+
+    /**
+     * 获取招募会员列表
+     * @param mbrId
+     * @param pageInfo
+     * @return
+     */
+    List<Map<String, Object>> getSubList(Long mbrId, PageInfo pageInfo);
+
+    /**
+     * 获取招募会员数据统计
+     * @param mbrId
+     * @return
+     */
+    List<Map<String, Object>> getSubStatis(Long mbrId);
+
+    /**
+     * 修改会员信息
+     * @param mbrId
+     * @param userIcon 头像
+     * @param nickName 名称
+     * @param birthday 生日
+     * @param sex 性别
+     * @param phone 电话
+     */
+    void updateMember(Long mbrId, String userIcon, String nickName, String birthday, String sex, String phone);
 }
+

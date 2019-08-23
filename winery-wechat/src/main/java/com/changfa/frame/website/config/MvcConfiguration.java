@@ -73,6 +73,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
         List<MediaType> fastMediaTypes = new ArrayList<>();
         fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         fastMediaTypes.add(MediaType.TEXT_HTML);
+        fastMediaTypes.add(MediaType.MULTIPART_FORM_DATA);
 
         //4.在convert中添加配置信息.
         fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);

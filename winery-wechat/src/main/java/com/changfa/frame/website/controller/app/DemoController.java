@@ -2,8 +2,6 @@ package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
-import com.changfa.frame.core.prop.PropAttributes;
-import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.service.mybatis.app.SystemConfigService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -13,9 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,7 +53,7 @@ public class DemoController extends BaseController {
 
         if (true) {
             // 必要的地方打印日志【日志使用占位符方式，如果打印堆栈信息，可以使用ExceptionUtils】
-            log.info("此处有错误:{}","错误信息");
+            log.info("此处有错误:{}", "错误信息");
 
             // 如果需要返回错误提示【框架中错误返回均以全局异常处理】
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
@@ -63,7 +61,7 @@ public class DemoController extends BaseController {
 
         // 如果返回对象信息，可以为简单类型、复合类型[Object、Map、List、model实体等]
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("name","小栗子");
+        returnMap.put("name", "小栗子");
         returnMap.put("model实体类", new Setting());
         returnMap.put("集合", new ArrayList<String>());
 
@@ -73,28 +71,26 @@ public class DemoController extends BaseController {
     /**
      * 文件上传接口书写规范
      *
-     * @param file 上传文件
+     * @param testFile 上传文件
      * @return
      */
     @ApiOperation(value = "文件上传范例", notes = "文件上传范例")
     @ApiImplicitParams(
-            @ApiImplicitParam(name = "setting", value = "系统配置对象", dataType = "MultipartFile"))
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public Map<String, Object> uploadFile(MultipartFile file,String org) {
-        // ***************** 后台调用方式 *******************
+            @ApiImplicitParam(name = "uploadFile", value = "上传文件", dataType = "MultipartFile"))
+    @RequestMapping(value = "/uploadFile")
+    @ResponseBody
+    public Map<String, Object> uploadFile(MultipartFile testFile, String org) {
         // 1、图片异步上传返回图片URL，此时图片保存在临时文件夹,
-        String orgFileName = FileUtil.getNFSFileName(file);
+        String orgFileName = FileUtil.getNFSFileName(testFile);
 
         // 2、表单提交，需将临时文件夹中文件拷贝到图片仓库文件夹中，并返回图片URL
         String fileUrl = FileUtil.copyNFSByFileName(orgFileName, FilePathConsts.TEST_FILE_PATH);
 
         // 3、如果是编辑页面，需要先删除原图片
-        //FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
+//        FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
 
         // 4、如果是直接图片上传到NFS服务器，返回文件NFS访问URL
-        String nfsUrl = FileUtil.getNFSUrl(file, FilePathConsts.TEST_FILE_PATH);
-
-        // ************* 图片异步上传 **************
+        String nfsUrl = FileUtil.getNFSUrl(testFile, FilePathConsts.TEST_FILE_PATH);
 
         return getResult(org);
     }

@@ -9,6 +9,7 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -83,6 +84,9 @@ public class Member extends BaseEntity {
      */
     private BigDecimal totalStoreRemain;
 
+    //优惠券数量
+    @Transient
+    private Integer voucherCount;
     /**
      * 总储酒增量
      */
@@ -98,6 +102,13 @@ public class Member extends BaseEntity {
      */
     private Long marketPid;
 
+    public Integer getVoucherCount() {
+        return voucherCount;
+    }
+
+    public void setVoucherCount(Integer voucherCount) {
+        this.voucherCount = voucherCount;
+    }
 
     /**
      * 获取会员等级ID

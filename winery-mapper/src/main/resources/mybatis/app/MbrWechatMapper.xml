@@ -99,4 +99,9 @@
         </where>
     </select>
 
+    <select id="selectListByMbrIdAndWineryId" resultMap="mbrWechatMap">
+        select
+        <include refid="table_column" />
+        from m_mbr_wechat where mbr_id = #{0} and winery_id = #{1}
+    </select>
 </mapper>
