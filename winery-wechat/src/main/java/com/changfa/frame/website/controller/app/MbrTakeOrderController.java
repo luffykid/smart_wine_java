@@ -1,5 +1,7 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.model.app.Member;
+import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -18,7 +21,7 @@ import java.util.Map;
 @Api(value = "会员取酒订单接口", tags = "会员取酒订单接口")
 @RestController("wxMiniMbrTakeOrderController")
 @RequestMapping("/wxMini/auth/mbrTakeOrder")
-public class MbrTakeOrderController {
+public class MbrTakeOrderController extends BaseController {
     /**
      * 获取荣誉庄主列表
      *
@@ -49,16 +52,20 @@ public class MbrTakeOrderController {
     }
 
     /**
-     * 取酒
+     * 自提
      *
+     * @param mbrStoreOrderId 我的储酒订单Id
      * @param takeWeight 取酒重量
      * @return
      */
-    @ApiOperation(value = "取酒", notes = "取酒")
-    @ApiImplicitParams(
-            @ApiImplicitParam(name = "takeWeight", value = "id", dataType = "BigDecimal"))
-    @RequestMapping(value = "/take", method = RequestMethod.GET)
-    public Map<String, Object> take(BigDecimal takeWeight) {
+    @ApiOperation(value = "自提", notes = "自提")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mbrStoreOrderId", value = "我的储酒订单Id", dataType = "Long"),
+            @ApiImplicitParam(name = "takeWeight", value = "id", dataType = "BigDecimal")
+    })
+    @RequestMapping(value = "/takeInPerson", method = RequestMethod.GET)
+    public Map<String, Object> takeInPerson(HttpServletRequest request, Long mbrStoreOrderId, BigDecimal takeWeight) {
+        Member member = getCurMember(request);
 
         return null;
     }

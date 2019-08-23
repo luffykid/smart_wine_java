@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrTakeOrderRecordMapper" >
+    <resultMap id="mbrTakeOrderRecordMap" type="com.changfa.frame.model.app.MbrTakeOrderRecord" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="mbr_take_order_id" property="mbrTakeOrderId" jdbcType="BIGINT" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="order_remark" property="orderRemark" jdbcType="VARCHAR" />
+        <result column="audit_admin_id" property="auditAdminId" jdbcType="BIGINT" />
+        <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, mbr_take_order_id, order_status, order_remark, audit_admin_id, audit_date, create_date, 
+        modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrTakeOrderRecordMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_take_order_record
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrTakeOrderRecord" >
+        insert into m_mbr_take_order_record (id, mbr_take_order_id, order_status, order_remark, audit_admin_id, 
+            audit_date, create_date, modify_date)
+        values (#{id}, #{mbrTakeOrderId}, #{orderStatus}, #{orderRemark}, #{auditAdminId}, 
+            #{auditDate}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrTakeOrderRecord" >
+        update m_mbr_take_order_record
+        <set >
+            <if test="mbrTakeOrderId != null" >
+                mbr_take_order_id = #{mbrTakeOrderId},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="orderRemark != null and orderRemark != ''" >
+                order_remark = #{orderRemark},
+            </if>
+            <if test="auditAdminId != null" >
+                audit_admin_id = #{auditAdminId},
+            </if>
+            <if test="auditDate != null" >
+                audit_date = #{auditDate},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_take_order_record
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrTakeOrderRecordMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_take_order_record
+        <where >
+            <if test="mbrTakeOrderId != null" >
+                and null.mbr_take_order_id = #{mbrTakeOrderId}
+            </if>
+            <if test="orderStatus != null" >
+                and null.order_status = #{orderStatus}
+            </if>
+            <if test="orderRemark != null and orderRemark != ''" >
+                and null.order_remark = #{orderRemark}
+            </if>
+            <if test="auditAdminId != null" >
+                and null.audit_admin_id = #{auditAdminId}
+            </if>
+            <if test="auditDate != null" >
+                and null.audit_date = #{auditDate}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

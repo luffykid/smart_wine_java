@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrWineryActivitySignMapper" >
+    <resultMap id="mbrWineryActivitySignMap" type="com.changfa.frame.model.app.MbrWineryActivitySign" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_activity_id" property="wineryActivityId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="mbr_act_status" property="mbrActStatus" jdbcType="INTEGER" />
+        <result column="sign_up_date" property="signUpDate" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <result column="sign_in_date" property="signInDate" jdbcType="TIMESTAMP" />
+        <result column="sign_off_date" property="signOffDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_activity_id, mbr_id, mbr_act_status, sign_up_date, create_date, modify_date, 
+        sign_in_date, sign_off_date
+    </sql>
+
+    <select id="getById" resultMap="mbrWineryActivitySignMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_winery_activity_sign
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineryActivitySign" >
+        insert into m_mbr_winery_activity_sign (id, winery_activity_id, mbr_id, mbr_act_status, sign_up_date, create_date, 
+            modify_date, sign_in_date, sign_off_date)
+        values (#{id}, #{wineryActivityId}, #{mbrId}, #{mbrActStatus}, #{signUpDate}, #{createDate}, 
+            #{modifyDate}, #{signInDate}, #{signOffDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrWineryActivitySign" >
+        update m_mbr_winery_activity_sign
+        <set >
+            <if test="wineryActivityId != null" >
+                winery_activity_id = #{wineryActivityId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="mbrActStatus != null" >
+                mbr_act_status = #{mbrActStatus},
+            </if>
+            <if test="signUpDate != null" >
+                sign_up_date = #{signUpDate},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+            <if test="signInDate != null" >
+                sign_in_date = #{signInDate},
+            </if>
+            <if test="signOffDate != null" >
+                sign_off_date = #{signOffDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_winery_activity_sign
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrWineryActivitySignMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_winery_activity_sign
+        <where >
+            <if test="wineryActivityId != null" >
+                and null.winery_activity_id = #{wineryActivityId}
+            </if>
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
+            <if test="mbrActStatus != null" >
+                and null.mbr_act_status = #{mbrActStatus}
+            </if>
+            <if test="signUpDate != null" >
+                and null.sign_up_date = #{signUpDate}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+            <if test="signInDate != null" >
+                and null.sign_in_date = #{signInDate}
+            </if>
+            <if test="signOffDate != null" >
+                and null.sign_off_date = #{signOffDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSignUpOne" parameterType="Long" resultType="Integer">
+        select count(id) count from b_winery_activity id = #{wineryActivityId} where now() between sign_start_date and sign_end_date
+    </select>
+
+    <select id="selectSignUpTwo" resultType="Integer">
+        select count(id) count from m_mbr_winery_activity_sign where winery_activity_id = #{0} and mbr_id = #{1}
+    </select>
+
+    <insert id="signUp">
+        insert into m_mbr_winery_activity_sign (winery_activity_id, mbr_id, mbr_act_status, sign_up_date, create_date)
+        values (#{0}, #{2}, 1, now(), now())
+    </insert>
+
+    <select id="selectSignIn" resultType="Integer">
+        select count(a.id) count from b_winery_activity a left join m_mbr_winery_activity_sign s on a.id = s.winery_activity_id
+        where s.mbr_act_status=1 and winery_activity_id = #{0} and mbr_id = #{1} and now() between act_start_date and act_end_date
+    </select>
+
+    <update id="signIn">
+        update m_mbr_winery_activity_sign set mbr_act_status = 2, modify_date = now(), sign_in_date = now()
+        where winery_activity_id = #{0} and mbr_id = #{1}
+    </update>
+
+    <select id="selectSignOff" resultType="Integer">
+        select count(a.id) count from b_winery_activity a left join m_mbr_winery_activity_sign s on a.id = s.winery_activity_id
+        where s.mbr_act_status=2 and winery_activity_id = #{0} and mbr_id = #{1} and now() between act_start_date and act_end_date
+    </select>
+
+    <update id="signOff">
+        update m_mbr_winery_activity_sign set mbr_act_status = 3, modify_date = now(), sign_in_date = now()
+        where winery_activity_id = #{0} and mbr_id = #{1}
+    </update>
+</mapper>
