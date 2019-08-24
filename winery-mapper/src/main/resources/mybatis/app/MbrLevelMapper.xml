@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrLevelMapper" >
+    <resultMap id="mbrLevelMap" type="com.changfa.frame.model.app.MbrLevel" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="upgrade_experience" property="upgradeExperience" jdbcType="INTEGER" />
+        <result column="descri" property="descri" jdbcType="VARCHAR" />
+        <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="update_time" property="updateTime" jdbcType="CHAR" />
+        <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, create_date, modify_date, winery_id, name, upgrade_experience, descri, create_user_id, 
+        status, update_time, status_time, create_time
+    </sql>
+
+    <select id="getById" resultMap="mbrLevelMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_level
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrLevel" >
+        insert into m_mbr_level (id, create_date, modify_date, winery_id, name, upgrade_experience, 
+            descri, create_user_id, status, update_time, status_time, create_time
+            )
+        values (#{id}, #{createDate}, #{modifyDate}, #{wineryId}, #{name}, #{upgradeExperience}, 
+            #{descri}, #{createUserId}, #{status}, #{updateTime}, #{statusTime}, #{createTime}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrLevel" >
+        update m_mbr_level
+        <set >
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="name != null and name != ''" >
+                name = #{name},
+            </if>
+            <if test="upgradeExperience != null" >
+                upgrade_experience = #{upgradeExperience},
+            </if>
+            <if test="descri != null and descri != ''" >
+                descri = #{descri},
+            </if>
+            <if test="createUserId != null" >
+                create_user_id = #{createUserId},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime},
+            </if>
+            <if test="statusTime != null" >
+                status_time = #{statusTime},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_level
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrLevelMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_level
+        <where >
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="name != null and name != ''" >
+                and null.name = #{name}
+            </if>
+            <if test="upgradeExperience != null" >
+                and null.upgrade_experience = #{upgradeExperience}
+            </if>
+            <if test="descri != null and descri != ''" >
+                and null.descri = #{descri}
+            </if>
+            <if test="createUserId != null" >
+                and null.create_user_id = #{createUserId}
+            </if>
+            <if test="status != null" >
+                and null.status = #{status}
+            </if>
+            <if test="updateTime != null" >
+                and null.update_time = #{updateTime}
+            </if>
+            <if test="statusTime != null" >
+                and null.status_time = #{statusTime}
+            </if>
+            <if test="createTime != null" >
+                and null.create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="getMbrLevelList" resultType="com.changfa.frame.model.app.MbrLevel">
+        select
+        <include refid="table_column"/>
+        from m_mbr_level status = 'A'  order by  modify_date desc
+    </select>
+
+</mapper>

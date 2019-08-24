@@ -17,7 +17,11 @@ public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
 
     List<ProdSku> getByProdId(Long id);
 
-    int updateSkuStatus(@Param("id") Long id, @Param("skuStatus") Integer skuStatus);
+    int updateSkuStatusByProdId(@Param("id") Long id, @Param("skuStatus") Integer skuStatus);
 
     List<ProdSku> selectProdSkuStatusByProdId(Long id, Long status);
+
+    int updateProdSkuStatus(@Param("id") Long id, @Param("skuStatus") Integer skuStatus);
+
+    int deleteProdSku(Long id);
 }

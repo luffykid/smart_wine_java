@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 商品sku表
@@ -70,6 +71,11 @@ public class ProdSku extends BaseEntity {
      0：否
      1：是*/
     private Boolean isDel;
+
+    /**
+     * 产品规格会员价对象
+     */
+    private List<ProdSkuMbrPrice> prodSkuMbrPriceList;
 
     /**
      * 获取商品ID
@@ -297,5 +303,13 @@ public class ProdSku extends BaseEntity {
      1：是*/
     public void setDel(Boolean del) {
         isDel = del;
+    }
+
+    public List<ProdSkuMbrPrice> getProdSkuMbrPriceList() {
+        return prodSkuMbrPriceList;
+    }
+
+    public void setProdSkuMbrPriceList(List<ProdSkuMbrPrice> prodSkuMbrPriceList) {
+        this.prodSkuMbrPriceList = prodSkuMbrPriceList;
     }
 }

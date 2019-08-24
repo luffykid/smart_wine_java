@@ -18,25 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 /**
  * 类名称:ProdController
- * 类描述:商品管理
- * 创建人:Administrator
+ * 类描述:商品管理Controller
+ * 创建人:wy
  * 创建时间:2019/8/23 14:13
  * Version 1.0
  */
 @Api(value = "酒庄管理",tags = "酒庄管理")
-@RestController("adminWinerySightController")
-@RequestMapping("/admin/anon/WinerySight")
+@RestController("adminProdController")
+@RequestMapping("/admin/anon/Prod")
 public class ProdController extends BaseController {
 
     @Resource(name = "prodServiceImpl")
     private ProdService prodService;
 
-    /**
+   /**
      * 查询产品列表
      * @param pageInfo 分页对象
      * @return Map<String, Object>
@@ -55,8 +54,8 @@ public class ProdController extends BaseController {
     @ApiOperation(value = "搜索产品",notes = "搜索产品")
     @ApiImplicitParams({@ApiImplicitParam(name = "prodName", value = "产品名称", dataType = "String"),
                         @ApiImplicitParam(name = "lableType", value = "产品类型", dataType = "Long")})
-    @RequestMapping(value = "/getProdList", method = RequestMethod.POST)
-    public Map<String, Object> findProd(String prodName, Long lableType){
+    @RequestMapping(value = "/findProdList", method = RequestMethod.POST)
+    public Map<String, Object> findProdList(String prodName, Long lableType){
         return getResult(prodService.findProd(prodName,lableType));
     }
 
@@ -84,7 +83,7 @@ public class ProdController extends BaseController {
      * @param id 产品id
      * @return Map<String, Object>
      */
-    @ApiOperation(value = "查询产品列表",notes = "查询产品列表")
+    @ApiOperation(value = "产品下架",notes = "产品下架")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"),
                         @ApiImplicitParam(name = "skuStatus", value = "下上架参数", dataType = "Integer")})
     @RequestMapping(value = "/prodOut", method = RequestMethod.POST)
@@ -112,11 +111,11 @@ public class ProdController extends BaseController {
 
     /**
      * 编辑产品信息
-     * @param prod 产品对象
+     * @param prod 产品编辑对象
      * @return Map<String, Object>
      */
     @ApiOperation(value = "编辑产品信息",notes = "编辑产品信息")
-    @ApiImplicitParams(@ApiImplicitParam(name = "Prod", value = "产品修改对象", dataType = "Prod"))
+    @ApiImplicitParams(@ApiImplicitParam(name = "Prod", value = "产品编辑对象", dataType = "Prod"))
     @RequestMapping(value = "/updateProd", method = RequestMethod.POST)
     public Map<String, Object> updateProd(Prod prod){
         try{
@@ -133,7 +132,7 @@ public class ProdController extends BaseController {
      * @param id 产品图文id
      * @return Map<String, Object>
      */
-    @ApiOperation(value = "查询产品详情",notes = "查询产品详情")
+    @ApiOperation(value = "删除详情图片",notes = "删除详情图片")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品图文id", dataType = "Long"))
     @RequestMapping(value = "/deleteProdDetailImg", method = RequestMethod.POST)
     public Map<String, Object> deleteProdDetailImg(Long id){
@@ -150,8 +149,8 @@ public class ProdController extends BaseController {
      */
     @ApiOperation(value = "删除产品",notes = "删除产品")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"))
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Map<String, Object> delete(Long id){
+    @RequestMapping(value = "/deleteProd", method = RequestMethod.POST)
+    public Map<String, Object> deleteProd(Long id){
         if(prodService.deleteById(id)){
             return getResult("删除成功");
         }
@@ -159,13 +158,26 @@ public class ProdController extends BaseController {
     }
 
     /**
-     * 新建规格
+     * 通过产品id 查询产品规格列表
+     * @param pageInfo 分页对象
+     * @return Map<String, Object>
+     */
+    @ApiOperation(value = "查询产品规格列表",notes = "查询产品规格列表")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"))
+    @RequestMapping(value = "/getProdSkuList", method = RequestMethod.POST)
+    public Map<String, Object> getProdSkuList(Long id,PageInfo pageInfo){
+        return getResult(prodService.getProdSkuList(id,pageInfo));
+    }
+
+
+    /**
+     * 新建产品规格
      * @param prodSku 规格新建对象
      * @return Map<String, Object>
      */
     @ApiOperation(value = "新建规格",notes = "新建产品规格")
     @ApiImplicitParams(@ApiImplicitParam(name = "prodSku", value = "产品规格新建对象", dataType = "ProdSku"))
-    @RequestMapping(value = "/addProd", method = RequestMethod.POST)
+    @RequestMapping(value = "/addProdSku", method = RequestMethod.POST)
     public Map<String, Object> addProdSku(ProdSku prodSku){
         try{
             prodService.addProdSku(prodSku);
@@ -187,11 +199,9 @@ public class ProdController extends BaseController {
     @RequestMapping(value = "/prodSkuOut", method = RequestMethod.POST)
     public Map<String, Object> ProdSkuOut(Long id,Integer skuStatus){
         if(prodService.updateProdSkuStatus(id,skuStatus)){
-            return getResult("修改成功");
+            return getResult("下架成功");
         }
         throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
-
-
     }
 
     /**
@@ -201,7 +211,7 @@ public class ProdController extends BaseController {
      */
     @ApiOperation(value = "删除产品规格",notes = "删除产品规格")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品规格id", dataType = "Long"))
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteProdSku", method = RequestMethod.POST)
     public Map<String, Object> deleteProdSku(Long id){
         if(prodService.deleteProdSku(id)){
             return getResult("删除成功");
@@ -209,4 +219,44 @@ public class ProdController extends BaseController {
         throw new CustomException(RESPONSE_CODE_ENUM.DELETE_FAILED);
     }
 
+    /**
+     * 查询会员等级列表
+     * @return Map<String, Object>
+     */
+    @ApiOperation(value = "查询会员等级列表",notes = "查询会员等级列表")
+    @RequestMapping(value = "/getMbrLevel", method = RequestMethod.POST)
+    public Map<String, Object> getMbrLevel(){
+        return getResult(prodService.getMbrLevel());
+    }
+
+    /**
+     * 查询产品规格详情
+     * @param id 产品规格id
+     * @return Map<String, Object>
+     */
+    @ApiOperation(value = "查询产品规格详情",notes = "查询产品规格详情")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"))
+    @RequestMapping(value = "/getProdSku", method = RequestMethod.POST)
+    public Map<String, Object> getProdSku(Long id){
+        return getResult(prodService.getProdSku(id));
+    }
+
+
+    /**
+     * 编辑产品规格
+     * @param prodSku 编辑产品规格对象
+     * @return Map<String, Object>
+     */
+    @ApiOperation(value = "编辑产品规格",notes = "编辑产品规格")
+    @ApiImplicitParams(@ApiImplicitParam(name = "prodSku", value = "编辑产品规格对象", dataType = "ProdSku"))
+    @RequestMapping(value = "/updateProdSku", method = RequestMethod.POST)
+    public Map<String, Object> updateProdSku(ProdSku prodSku){
+        try{
+            prodService.updateProdSku(prodSku);
+        }catch (Exception e){
+            log.info("此处有错误:{}",e.getMessage());
+            throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
+        }
+        return getResult("修改成功");
+    }
 }

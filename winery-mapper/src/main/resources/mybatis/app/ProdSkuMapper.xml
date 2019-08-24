@@ -18,7 +18,7 @@
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
         <result column="integral_cnt" property="integralCnt" jdbcType="DECIMAL" />
-        <result column="is_del" property="isDel" jdbcType="TINYINT" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
@@ -162,7 +162,7 @@
                 and null.integral_cnt = #{integralCnt}
             </if>
             <if test="isDel != null" >
-                is_del = #{isDel},
+                and null.is_del = #{isDel}
             </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}
@@ -179,7 +179,7 @@
         from s_prod_sku where prod_id = #{id}
     </select>
 
-    <update id="updateSkuStatus">
+    <update id="updateSkuStatusByProdId">
         update s_prod_sku set skuStatus =#{skuStatus} where prod_id = #{id}
     </update>
 
@@ -188,5 +188,14 @@
         <include refid="table_column"/>
         from s_prod_sku where prod_id = #{id} and is_del =#{status}
     </select>
+
+    <update id="updateProdSkuStatus">
+        update s_prod_sku set sku_status = #{skuStatus} where id =#{id}
+    </update>
+
+    <update id="deleteProdSku" parameterType="java.lang.Long">
+        update s_prod_sku set is_del = 1 where id =#{id}
+    </update>
+
 
 </mapper>

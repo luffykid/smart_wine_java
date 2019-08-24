@@ -11,6 +11,7 @@
 package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.data.entity.user.AdminUser;
+import com.changfa.frame.model.app.MbrLevel;
 import com.changfa.frame.model.app.Prod;
 import com.changfa.frame.model.app.ProdSku;
 import com.changfa.frame.service.mybatis.common.BaseService;
@@ -104,5 +105,31 @@ public interface ProdService extends BaseService<Prod, Long> {
      * @return boolean
      */
     boolean deleteProdSku(Long id);
+
+    /**
+     * 查询会员等级列表
+     * @return List<MbrLevel>
+     */
+    List<MbrLevel> getMbrLevel();
+
+    /**
+     * 查询产品规格sku
+     * @param id
+     * @return List<ProdSku>
+     */
+    ProdSku getProdSku(Long id);
+
+    /**
+     * 编辑产品规格
+     * @param prodSku 编辑产品规格对象
+     */
+    void updateProdSku(ProdSku prodSku);
+
+    /**
+     * 通过产品id 查询产品规格列表
+     * @param pageInfo
+     * @return
+     */
+    List<ProdSku> getProdSkuList(Long id,PageInfo pageInfo);
 }
  

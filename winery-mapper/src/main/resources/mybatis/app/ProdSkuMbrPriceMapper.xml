@@ -78,4 +78,10 @@
         </where>
     </select>
 
+    <select id="getBySkuId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.ProdSkuMbrPrice">
+        select
+        <include refid="table_column"/>
+        from s_prod_sku_mbr_price where prod_sku_id =#{id}
+    </select>
+
 </mapper>
