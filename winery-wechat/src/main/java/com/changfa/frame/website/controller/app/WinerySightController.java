@@ -48,7 +48,7 @@ public class WinerySightController extends BaseController {
         Member curMember = getCurMember(request);
         Winery winery =winerySightService.findWinery(curMember);
         if(winery == null){
-            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+            throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
         }
         return getResult(winery);
     }
@@ -66,7 +66,7 @@ public class WinerySightController extends BaseController {
         Member curMember = getCurMember(request);
         Map<String, Object> returnMap =winerySightService.findSignSight(curMember);
         if(returnMap.isEmpty()){
-            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+            throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
         }
         return getResult(returnMap);
     }
@@ -82,7 +82,7 @@ public class WinerySightController extends BaseController {
     public Map<String,Object> findSightImageText(@RequestParam("id") Long id){
         Map<String,Object> returnMap = winerySightService.findSightImageText(id);
         if(returnMap.isEmpty()){
-            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+            throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
         }
         return getResult(returnMap);
     }
@@ -99,7 +99,7 @@ public class WinerySightController extends BaseController {
         if(winerySightService.scenicLike(id)){
             return getResult("点赞成功");
         }
-        throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+        throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
 
     }
 
