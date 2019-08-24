@@ -90,27 +90,4 @@ public class MemberController extends BaseController {
         }
         return getResult(new HashMap<>());
     }
-
-    /**
-     * 会员登录
-     *
-     * @param jsCode 小程序登录码【换取token】
-     * @return
-     */
-    @ApiOperation(value = "会员登录", notes = "会员登录")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "jsCode", value = "openID兑换码", dataType = "String")
-    })
-    @PostMapping(value = "/login")
-    public Map<String, Object> login(String jsCode) {
-        // 参数校验
-        if (StringUtils.isBlank(jsCode)) {
-            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
-        }
-
-        //
-
-        return getResult(null);
-    }
-
 }

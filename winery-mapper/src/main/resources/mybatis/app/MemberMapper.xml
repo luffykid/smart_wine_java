@@ -189,4 +189,13 @@
         left join m_mbr_level l on m.mbr_level_id=l.id
         where m.market_pid =#{mbrId}
     </select>
+
+    <!-- 根据openId查询会员 -->
+    <select id="selectByOpenId" resultMap="memberMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_member
+        where open_id = #{openId}
+    </select>
+
 </mapper>

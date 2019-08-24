@@ -29,13 +29,10 @@ public enum RESPONSE_CODE_ENUM {
     ACCONAME_OR_ACCOPASS_ERROR("1012", "账号或密码错误"),
     ACCONAME_HAS_FROZEN("1013", "账号已冻结"),
     NOT_LOGIN_ERROR("1014", "用户未登录"),
-    CAPTCHA_CODE_INVALID("1015", "验证码失效"),
-    CAPTCHA_CODE_ERROR("1016", "验证码错误"),
-    ACCONAME_IS_EXIST("1017", "账号已存在"),
-    REPEATED_RECORD("1018", "数据重复"),
-    NO_DATA("1050", "数据为空"),
-    CAPTCHA_EXIST("1051", "验证码已发送，请稍等"),
-    UPDTATE_EXIST("1052", "修改数据失败");
+    NOT_WXMINI_LOGIN_ERROR("1015", "小程序微登录"),
+    ACCONAME_IS_EXIST("1016", "账号已存在"),
+    UPDTATE_EXIST("1018", "数据重复"),
+    ACCT_PHONE_NO_SAME("1019", "账户手机号不一致");
 
     /**
      * 错误编码
