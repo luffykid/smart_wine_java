@@ -1,6 +1,10 @@
 package com.changfa.frame.website.interceptor;
 
 import com.changfa.frame.core.redis.RedisClient;
+import com.changfa.frame.core.redis.RedisConsts;
+import com.changfa.frame.website.controller.common.CustomException;
+import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +30,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     public static final String REQUEST_HEADER_TOKEN_KEY = "request-header-token";
 
     /**
-     * 接口用户名(手机号)
+     * 接口(openID)
      */
-    public static final String REQUEST_HEADER_ACCT_KEY = "request-header-acct";
+    public static final String REQUEST_HEADER_OPENID_KEY = "request-header-openID";
 
 
     @Autowired
@@ -50,24 +54,24 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 //        String headerToken = request.getHeader(REQUEST_HEADER_TOKEN_KEY);
 //
 //        // 取出登陆账号
-//        String headerAcctName = request.getHeader(REQUEST_HEADER_ACCT_KEY);
-//        if (StringUtils.isBlank(headerToken) || StringUtils.isBlank(headerAcctName)) {
-//            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
+//        String openId = request.getHeader(REQUEST_HEADER_OPENID_KEY);
+//        if (StringUtils.isBlank(headerToken) || StringUtils.isBlank(openId)) {
+//            throw new CustomException(RESPONSE_CODE_ENUM.NOT_WXMINI_LOGIN_ERROR);
 //        }
 //
 //        // 获取redis中的token
-//        Object redisToken = redisClient.get(RedisConsts.ADMIN_USERID + headerAcctName);
+//        Object redisToken = redisClient.get(RedisConsts.WXMINI_OPENID + openId);
 //        if (redisToken == null) {
 //            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
 //        }
 //
 //        // token不相同则重新登陆
-//        if (!StringUtils.equals(headerToken, redisToken.toString())) {
+//        if (!StringUtils.equals(headerToken, String.valueOf(redisToken))) {
 //            throw new CustomException(RESPONSE_CODE_ENUM.TOKEN_IS_NOT_EXIST);
 //        }
 //
 //        // 重置token时间
-//        redisClient.setAndExpire(RedisConsts.ADMIN_USERID + headerAcctName, headerToken, RedisConsts.ADMIN_USERID_EXPIRE);
+//        redisClient.setAndExpire(RedisConsts.WXMINI_OPENID + openId, headerToken, RedisConsts.WXMINI_OPENID_EXPIRE);
         return true;
     }
 

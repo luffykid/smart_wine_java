@@ -31,6 +31,7 @@ public interface MemberMapper extends BaseMapper<Member, Long> {
 
     /**
      * 获取招募会员列表
+     *
      * @param mbrId
      * @return
      */
@@ -38,8 +39,17 @@ public interface MemberMapper extends BaseMapper<Member, Long> {
 
     /**
      * 获取招募会员数据统计
+     *
      * @param mbrId
      * @return
      */
     List<Map<String, Object>> selectSubStatis(Long mbrId);
+
+    /**
+     * 根据openId查询会员数据
+     *
+     * @param openId 会员微信标识
+     * @return
+     */
+    Member selectByOpenId(String openId);
 }

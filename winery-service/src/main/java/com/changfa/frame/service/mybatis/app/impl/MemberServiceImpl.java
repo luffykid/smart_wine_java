@@ -100,4 +100,15 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
             mbrWechatMapper.update(mbrWechat);
         }
     }
+
+    /**
+     * 根据会员openId查询会员对象
+     *
+     * @param openId 会员openId
+     * @return
+     */
+    @Override
+    public Member getByOpenId(String openId) {
+        return memberMapper.selectByOpenId(openId);
+    }
 }
