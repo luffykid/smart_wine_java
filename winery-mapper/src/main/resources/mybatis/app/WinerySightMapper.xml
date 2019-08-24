@@ -130,7 +130,7 @@
         </where>
     </select>
 
-    <select id="getByName" parameterType="string" resultType="com.changfa.frame.model.app.WinerySight">
+    <select id="getByName" parameterType="string" resultMap="winerySightMap">
         select
         <include refid="table_column"/>
         from b_winery_sight where sight_name = #{sightName}
@@ -151,5 +151,14 @@
         <include refid="table_column"/>
         from b_winery_sight  where id =#{id}
     </select>
+
+    <insert id="addWinerySight" parameterType="com.changfa.frame.model.app.WinerySight">
+         insert into b_winery_sight (id, winery_id, sight_name, sight_icon, sight_detail, cover_img,
+            latitude, longitude, like_total_cnt, share_total_cnt, create_date,
+            modify_date, is_sign)
+        values (#{id}, #{wineryId}, #{sightName}, #{sightIcon}, #{sightDetail}, #{coverImg},
+            #{latitude}, #{longitude}, #{likeTotalCnt}, #{shareTotalCnt}, #{createDate},
+            #{modifyDate}, #{isSign})
+    </insert>
 
 </mapper>

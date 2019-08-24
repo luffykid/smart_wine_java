@@ -9,6 +9,7 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.ProdSku;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
 
     List<ProdSku> getByProdId(Long id);
 
+    int updateSkuStatus(@Param("id") Long id, @Param("skuStatus") Integer skuStatus);
+
+    List<ProdSku> selectProdSkuStatusByProdId(Long id, Long status);
 }

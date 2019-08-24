@@ -71,7 +71,7 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
      * @param curAdmin  当前用户
      * @return Winery
      */
-    Winery findWinery(Member curAdmin);
+    Winery getWinery(Member curAdmin);
 
     /**
      * 查询全部景点，和已签到景点

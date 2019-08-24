@@ -1,5 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.model.app.Prod;
 import com.changfa.frame.model.app.ProdSku;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +44,8 @@ public class WinerySightController extends BaseController {
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询景点列表",notes = "查询景点列表")
-    @ApiImplicitParams(@ApiImplicitParam(name = "request", value = "获取当前用户", dataType = "HttpServletRequest"))
-    @RequestMapping(value = "/findWinerySightList", method = RequestMethod.POST)
-    public Map<String, Object> findWinerySightList(HttpServletRequest request){
+    @RequestMapping(value = "/getWinerySightList", method = RequestMethod.POST)
+    public Map<String, Object> getWinerySightList(HttpServletRequest request){
         AdminUser curAdmin = getCurAdmin(request);
         List<WinerySight> winerySightList =winerySightService.findWinerySightList(curAdmin);
         if (winerySightList.size() == 0 && winerySightList == null){
@@ -75,8 +76,8 @@ public class WinerySightController extends BaseController {
      */
     @ApiOperation(value = "景点详情",notes = "查询景点详情")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点查询id", dataType = "Long"))
-    @RequestMapping(value = "/findWinerySightById", method = RequestMethod.POST)
-    public Map<String,Object> findWinerySight(@RequestParam("id") Long id){
+    @RequestMapping(value = "/getWinerySightById", method = RequestMethod.POST)
+    public Map<String,Object> getWinerySightById(@RequestParam("id") Long id){
         Map<String,Object> map = winerySightService.findWinerySight(id);
         if(map.isEmpty()){
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
@@ -133,8 +134,8 @@ public class WinerySightController extends BaseController {
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询商品列表",notes = "查询商品列表")
-    @RequestMapping(value = "/findProdList", method = RequestMethod.POST)
-    public Map<String, Object> findProdList(){
+    @RequestMapping(value = "/getProdList", method = RequestMethod.POST)
+    public Map<String, Object> getProdList(){
         List<Prod> prodList =winerySightService.findProdList();
         return getResult(prodList);
     }
@@ -146,8 +147,8 @@ public class WinerySightController extends BaseController {
      */
     @ApiOperation(value = "查询商品SKU列表",notes = "查询商品SKU列表")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "商品id", dataType = "Long"))
-    @RequestMapping(value = "/findProdSku", method = RequestMethod.POST)
-    public Map<String, Object> findProdSkuList(@RequestParam("id") Long id){
+    @RequestMapping(value = "/getProdSkuList", method = RequestMethod.POST)
+    public Map<String, Object> getProdSkuList(@RequestParam("id") Long id){
         List<ProdSku> prodSkuList =winerySightService.findProdSkuList(id);
         if (prodSkuList.size() ==0 && prodSkuList == null){
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
@@ -156,8 +157,18 @@ public class WinerySightController extends BaseController {
     }
 
 
-
-
-
+    /**
+     * 上传文件到临时库
+     * @param uploadFile 文件
+     * @return  Map<String, Object>
+     */
+    @ApiOperation(value = "上传文件",notes = "上传文件到临时库")
+    @ApiImplicitParams(@ApiImplicitParam(name = "uploadFile", value = "上传文件", dataType = "MultipartFile"))
+    @RequestMapping(value = "/uploadFileTemp", method = RequestMethod.POST)
+    public Map<String, Object> uploadFileTemp(MultipartFile uploadFile) {
+        // 图片异步上传返回图片URL，此时图片保存在临时文件夹,
+        String orgFileName = FileUtil.getNFSFileName(uploadFile);
+        return getResult(orgFileName);
+    }
 
 }

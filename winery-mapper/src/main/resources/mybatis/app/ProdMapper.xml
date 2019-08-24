@@ -17,13 +17,14 @@
         <result column="prod_status" property="prodStatus" jdbcType="INTEGER" />
         <result column="is_recommend" property="isRecommend" jdbcType="TINYINT" />
         <result column="admin_id" property="adminId" jdbcType="BIGINT" />
+        <result column="is_del" property="isDel" jdbcType="BIT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
         id, winery_id, prod_category_id, lable_type, prod_name, prod_title, prod_code, total_stock_cnt, 
-        list_img, descri, is_limit, limit_count, prod_status, is_recommend, admin_id, create_date, 
+        list_img, descri, is_limit, limit_count, prod_status, is_recommend, admin_id,is_del, create_date,
         modify_date
     </sql>
 
@@ -37,10 +38,10 @@
     <insert id="save" parameterType="com.changfa.frame.model.app.Prod" >
         insert into s_prod (id, winery_id, prod_category_id, lable_type, prod_name, prod_title, 
             prod_code, total_stock_cnt, list_img, descri, is_limit, limit_count, 
-            prod_status, is_recommend, admin_id, create_date, modify_date)
+            prod_status, is_recommend, admin_id,is_del, create_date, modify_date)
         values (#{id}, #{wineryId}, #{prodCategoryId}, #{lableType}, #{prodName}, #{prodTitle}, 
             #{prodCode}, #{totalStockCnt}, #{listImg}, #{descri}, #{isLimit}, #{limitCount}, 
-            #{prodStatus}, #{isRecommend}, #{adminId}, #{createDate}, #{modifyDate})
+            #{prodStatus}, #{isRecommend}, #{adminId}, #{isDel} #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.Prod" >
@@ -87,6 +88,9 @@
             </if>
             <if test="adminId != null" >
                 admin_id = #{adminId},
+            </if>
+            <if test="isDel != null" >
+                is_del = #{isDel},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -150,6 +154,9 @@
             <if test="adminId != null" >
                 and null.admin_id = #{adminId}
             </if>
+            <if test="isDel != null" >
+                is_del = #{isDel}
+            </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}
             </if>
@@ -163,6 +170,20 @@
         select
         <include refid="table_column"/>
         from s_prod
+    </select>
+
+    <update id="updateProdStatus">
+        update s_prod set prod_status =#{skuStatus} where id =#{id}
+    </update>
+
+    <update id="deleteByid" parameterType="java.lang.Long">
+         update s_prod set is_del = 1 where id =#{id}
+    </update>
+
+    <select id="findProdByLikeName" resultType="com.changfa.frame.model.app.Prod">
+        select
+        <include refid="table_column"/>
+        from s_prod where prodName like concat(concat('%',#{prodName}),'%')
     </select>
 
 </mapper>
