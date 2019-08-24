@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,14 +34,14 @@ public class AdminUserController extends BaseController {
 
     private static Logger log = LoggerFactory.getLogger(AdminUserController.class);
 
-    @Autowired
+    @Resource(name = "adminUserService")
     private AdminUserService adminUserService;
 
     /**
      * 登录
-     * @param phone
-     * @param pwd
-     * @return
+     * @param phone 登录所需账号
+     * @param pwd  登录所需密码
+     * @return Map<String, Object>
      */
     @ApiOperation(value = "用户登录",notes = "用户登录")
     @ApiImplicitParams({@ApiImplicitParam(name = "phone", value = "登录所需账号", dataType = "String"),

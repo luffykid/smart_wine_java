@@ -7,6 +7,8 @@ import com.changfa.frame.model.app.WinerySight;
 import com.changfa.frame.model.app.WinerySightDetail;
 import com.changfa.frame.service.mybatis.app.WinerySightService;
 import com.changfa.frame.website.controller.common.BaseController;
+import com.changfa.frame.website.controller.common.CustomException;
+import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,7 +22,7 @@ import java.util.Map;
 
 /**
  * 类名称:WinerySightController
- * 类描述:景点管理
+ * 类描述:admin/景点管理
  * 创建人:WY
  * 创建时间:2019/8/20 15:34
  * Version 1.0
@@ -36,21 +38,26 @@ public class WinerySightController extends BaseController {
 
     /**
      * 查询景点列表
-     * @param
-     * @return
+     * @param request 获取请求
+     * @return Map<String, Object>
      */
     @ApiOperation(value = "查询景点列表",notes = "查询景点列表")
-    @ApiImplicitParams(@ApiImplicitParam(name = "", value = "", dataType = ""))
+    @ApiImplicitParams(@ApiImplicitParam(name = "request", value = "获取当前用户", dataType = "HttpServletRequest"))
     @RequestMapping(value = "/findWinerySightList", method = RequestMethod.POST)
-    public Map<String, Object> findWinerySightList(){
-        List<WinerySight> winerySightList =winerySightService.findWinerySightList();
+    public Map<String, Object> findWinerySightList(HttpServletRequest request){
+        AdminUser curAdmin = getCurAdmin(request);
+        List<WinerySight> winerySightList =winerySightService.findWinerySightList(curAdmin);
+        if (winerySightList.size() == 0 && winerySightList == null){
+            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+        }
         return getResult(winerySightList);
     }
 
     /**
      * 添加景点
-     * @param winerySight
-     * @return
+     * @param winerySight 景点对象
+     * @param request     获取请求
+     * @return Map<String,Object>
      */
     @ApiOperation(value = "添加景点",notes = "添加景点信息")
     @ApiImplicitParams(@ApiImplicitParam(name = "winerySight", value = "景点添加对象", dataType = "WinerySight"))
@@ -58,53 +65,59 @@ public class WinerySightController extends BaseController {
     public Map<String, Object> addWinerySight(@RequestBody WinerySight winerySight,HttpServletRequest request){
         AdminUser curAdmin = getCurAdmin(request);
         winerySightService.addWinerySight(winerySight,curAdmin);
-        //log.error("异常{}",ExceptionUtils.getFullStackTrace(e));
         return getResult("添加成功");
     }
 
     /**
      * 查看景点
-     * @param id
-     * @return map
+     * @param id 景点id
+     * @return Map<String,Object>
      */
     @ApiOperation(value = "景点详情",notes = "查询景点详情")
-    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点查询id", dataType = "Integer"))
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点查询id", dataType = "Long"))
     @RequestMapping(value = "/findWinerySightById", method = RequestMethod.POST)
-    public Map<String,Object> findWinerySight(@RequestParam("id") Integer id){
+    public Map<String,Object> findWinerySight(@RequestParam("id") Long id){
         Map<String,Object> map = winerySightService.findWinerySight(id);
+        if(map.isEmpty()){
+            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+        }
         return getResult(map);
     }
 
     /**
      * 编辑景点
-     * @param winerySight
-     * @return map
+     * @param winerySight 景点对象
+     * @return Map<String,Object>
      */
     @ApiOperation(value = "编辑景点",notes = "编辑景点")
     @ApiImplicitParams(@ApiImplicitParam(name = "winerySight", value = "景点修改对象", dataType = "WinerySight"))
     @RequestMapping(value = "/updateWinerySight", method = RequestMethod.POST)
     public Map<String,Object> updateWinerySight(WinerySight winerySight){
-        winerySightService.updateWinerySight(winerySight);
-        return getResult("修改成功");
+       if ( winerySightService.updateWinerySight(winerySight)){
+           return getResult("修改成功");
+       }
+        throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
     }
 
     /**
      * 删除景点
-     * @param id
-     * @return map
+     * @param id  景点id
+     * @return Map<String,Object>
      */
     @ApiOperation(value = "删除景点",notes = "删除景点")
-    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "删除景点byId", dataType = "Integer"))
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "删除景点byId", dataType = "Long"))
     @RequestMapping(value = "/deleteWinerySight", method = RequestMethod.POST)
-    public Map<String,Object> deleteWinerySight(@RequestParam("id") Integer id){
-        winerySightService.deleteWinerySight(id);
-        return getResult("删除成功");
+    public Map<String,Object> deleteWinerySight(@RequestParam("id") Long id){
+        if ( winerySightService.deleteWinerySight(id) ){
+            return getResult("删除成功");
+        }
+        throw new CustomException(RESPONSE_CODE_ENUM.DELETE_FAILED);
     }
 
     /**
      * 景点添加图文
-     * @param winerySightDetailList
-     * @return map
+     * @param winerySightDetailList  景点图文对象集合
+     * @return Map<String,Object>
      */
     @ApiOperation(value = "添加图文",notes = "景点添加图文")
     @ApiImplicitParams(@ApiImplicitParam(name = "winerySightDetailList", value = "图文添加对象", dataType = "List<WinerySightDetail>"))
@@ -117,10 +130,9 @@ public class WinerySightController extends BaseController {
     /**
      * 查询商品列表
      * @param
-     * @return
+     * @return Map<String, Object>
      */
     @ApiOperation(value = "查询商品列表",notes = "查询商品列表")
-    @ApiImplicitParams(@ApiImplicitParam(name = "", value = "", dataType = ""))
     @RequestMapping(value = "/findProdList", method = RequestMethod.POST)
     public Map<String, Object> findProdList(){
         List<Prod> prodList =winerySightService.findProdList();
@@ -128,15 +140,18 @@ public class WinerySightController extends BaseController {
     }
 
     /**
-     * 查询商品列表
-     * @param
-     * @return
+     * 查询商品SKU列表
+     * @param id  商品id
+     * @return  Map<String, Object>
      */
     @ApiOperation(value = "查询商品SKU列表",notes = "查询商品SKU列表")
-    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "商品id", dataType = "Integer"))
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "商品id", dataType = "Long"))
     @RequestMapping(value = "/findProdSku", method = RequestMethod.POST)
-    public Map<String, Object> findProdSkuList(@RequestParam("id") Integer id){
+    public Map<String, Object> findProdSkuList(@RequestParam("id") Long id){
         List<ProdSku> prodSkuList =winerySightService.findProdSkuList(id);
+        if (prodSkuList.size() ==0 && prodSkuList == null){
+            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+        }
         return getResult(prodSkuList);
     }
 

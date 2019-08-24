@@ -152,7 +152,7 @@
         </where>
     </select>
 
-    <select id="getByProdId" parameterType="java.lang.Integer" resultType="com.changfa.frame.model.app.ProdSku">
+    <select id="getByProdId" parameterType="java.lang.Long" resultMap="prodSkuMap">
         select
         <include refid="table_column"/>
         from s_prod_sku where prod_id = #{id}

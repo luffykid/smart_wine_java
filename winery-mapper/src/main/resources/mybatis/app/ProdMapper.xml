@@ -159,7 +159,7 @@
         </where>
     </select>
 
-    <select id="findProdList" resultType="com.changfa.frame.model.app.Prod">
+    <select id="findProdList" resultMap="prodMap">
         select
         <include refid="table_column"/>
         from s_prod

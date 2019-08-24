@@ -200,8 +200,8 @@ public class Prod extends BaseEntity {
     
     /**
      * 获取是否限购
-0：否
-1：是
+    0：否
+    1：是
     */
     public Boolean getIsLimit() {
         return isLimit;
