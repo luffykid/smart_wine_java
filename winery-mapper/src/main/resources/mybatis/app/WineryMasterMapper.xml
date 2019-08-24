@@ -3,7 +3,9 @@
 <mapper namespace="com.changfa.frame.mapper.app.WineryMasterMapper" >
     <resultMap id="wineryMasterMap" type="com.changfa.frame.model.app.WineryMaster" >
         <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="INTEGER" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="master_type" property="masterType" jdbcType="INTEGER" />
         <result column="master_name" property="masterName" jdbcType="VARCHAR" />
         <result column="master_detail" property="masterDetail" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
@@ -11,7 +13,7 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_id, master_name, master_detail, create_date, modify_date
+        id, mbr_id, winery_id, master_type, master_name, master_detail, create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="wineryMasterMap" parameterType="java.lang.Long" >
@@ -22,17 +24,23 @@
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineryMaster" >
-        insert into b_winery_master (id, winery_id, master_name, master_detail, create_date, modify_date
-            )
-        values (#{id}, #{wineryId}, #{masterName}, #{masterDetail}, #{createDate}, #{modifyDate}
-            )
+        insert into b_winery_master (id, mbr_id, winery_id, master_type, master_name, master_detail, 
+            create_date, modify_date)
+        values (#{id}, #{mbrId}, #{wineryId}, #{masterType}, #{masterName}, #{masterDetail}, 
+            #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.WineryMaster" >
         update b_winery_master
         <set >
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
             <if test="wineryId != null" >
                 winery_id = #{wineryId},
+            </if>
+            <if test="masterType != null" >
+                master_type = #{masterType},
             </if>
             <if test="masterName != null and masterName != ''" >
                 master_name = #{masterName},
@@ -60,8 +68,14 @@
         <include refid="table_column" />
         from b_winery_master
         <where >
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
             <if test="wineryId != null" >
                 and null.winery_id = #{wineryId}
+            </if>
+            <if test="masterType != null" >
+                and null.master_type = #{masterType}
             </if>
             <if test="masterName != null and masterName != ''" >
                 and null.master_name = #{masterName}

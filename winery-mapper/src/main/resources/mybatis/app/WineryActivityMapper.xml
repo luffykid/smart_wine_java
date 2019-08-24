@@ -20,6 +20,10 @@
         <result column="act_status" property="actStatus" jdbcType="INTEGER" />
     </resultMap>
 
+    <sql id="table_column" >
+        id, winery_id, act_title, act_cover_img, is_platform, act_type, sign_start_date, sign_end_date,act_start_date,act_end_date,like_total_cnt,share_total_cnt,sign_total_cnt,create_date,modify_date,act_status
+    </sql>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.WineryActivity" >
         insert into b_winery_activity (id, winery_id, act_title, act_cover_img, is_platform, act_type, 
             sign_start_date, sign_end_date, act_start_date, act_end_date, like_total_cnt, 
