@@ -42,6 +42,7 @@ public class WeChatController extends BaseController {
             @ApiImplicitParam(name = "jsCode", value = "换取凭证code", dataType = "String"))
     @GetMapping(value = "/jsCode2session")
     public Map<String, Object> jsCode2session(String jsCode) {
+        log.info("************ 进入【jsCode2session】方法{}",jsCode);
         // 获取微信登录会话
         JSONObject jsonObject = WeChatMiniUtil.jsCode2session(jsCode);
         Object openId = jsonObject.get("openId");

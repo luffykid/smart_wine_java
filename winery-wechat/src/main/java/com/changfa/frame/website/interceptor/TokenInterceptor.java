@@ -50,7 +50,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        // 取出token
+        log.info("********** 进入登录拦截 **************");
+        //        // 取出token
 //        String headerToken = request.getHeader(REQUEST_HEADER_TOKEN_KEY);
 //
 //        // 取出登陆账号
