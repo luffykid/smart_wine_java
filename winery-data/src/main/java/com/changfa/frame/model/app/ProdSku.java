@@ -60,7 +60,17 @@ public class ProdSku extends BaseEntity {
     /** 积分数量 */
     private BigDecimal integralCnt;
 
-    
+    /** 香型*/
+    private String fragranceType;
+
+    /**酒精度*/
+    private BigDecimal alcoholCnt;
+
+    /**是否删除
+     0：否
+     1：是*/
+    private Boolean isDel;
+
     /**
      * 获取商品ID
     */
@@ -245,5 +255,47 @@ public class ProdSku extends BaseEntity {
     */
     public void setIntegralCnt(BigDecimal integralCnt) {
         this.integralCnt = integralCnt;
+    }
+
+    /**
+     * 获取香型
+     */
+    public String getFragranceType() {
+        return fragranceType;
+    }
+
+    /**
+     * 设置香型
+     */
+    public void setFragranceType(String fragranceType) {
+        this.fragranceType = fragranceType;
+    }
+
+    /**
+     * 获取酒精度
+     */
+    public BigDecimal getAlcoholCnt() {
+        return alcoholCnt;
+    }
+
+    /**
+     * 设置酒精度
+     */
+    public void setAlcoholCnt(BigDecimal alcoholCnt) {
+        this.alcoholCnt = alcoholCnt;
+    }
+
+    /**是否删除
+     0：否
+     1：是*/
+    public Boolean getDel() {
+        return isDel;
+    }
+
+    /**是否删除
+     0：否
+     1：是*/
+    public void setDel(Boolean del) {
+        isDel = del;
     }
 }

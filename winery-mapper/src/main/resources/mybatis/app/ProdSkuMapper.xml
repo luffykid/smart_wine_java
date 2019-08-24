@@ -7,6 +7,8 @@
         <result column="sku_name" property="skuName" jdbcType="BIGINT" />
         <result column="sku_status" property="skuStatus" jdbcType="INTEGER" />
         <result column="sku_stock_cnt" property="skuStockCnt" jdbcType="BIGINT" />
+        <result column="fragrance_type" property="fragranceType" jdbcType="VARCHAR" />
+        <result column="alcohol_cnt" property="alcoholCnt" jdbcType="DECIMAL" />
         <result column="sku_weight" property="skuWeight" jdbcType="DECIMAL" />
         <result column="sku_capacity" property="skuCapacity" jdbcType="DECIMAL" />
         <result column="sku_sell_price" property="skuSellPrice" jdbcType="DECIMAL" />
@@ -16,13 +18,14 @@
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
         <result column="integral_cnt" property="integralCnt" jdbcType="DECIMAL" />
+        <result column="is_del" property="isDel" jdbcType="TINYINT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        id, prod_id, sku_name, sku_status, sku_stock_cnt, sku_weight, sku_capacity, sku_sell_price, 
-        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, 
+        id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type,alcohol_cnt, sku_weight, sku_capacity, sku_sell_price,
+        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, is_del,
         create_date, modify_date
     </sql>
 
@@ -34,12 +37,12 @@
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.ProdSku" >
-        insert into s_prod_sku (id, prod_id, sku_name, sku_status, sku_stock_cnt, sku_weight, 
+        insert into s_prod_sku (id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type, alcohol_cnt, sku_weight,
             sku_capacity, sku_sell_price, sku_market_price, sell_total_cnt, sort, 
-            is_integral, integral_amt, integral_cnt, create_date, modify_date)
-        values (#{id}, #{prodId}, #{skuName}, #{skuStatus}, #{skuStockCnt}, #{skuWeight}, 
+            is_integral, integral_amt, integral_cnt, is_del, create_date, modify_date)
+        values (#{id}, #{prodId}, #{skuName}, #{skuStatus}, #{skuStockCnt}, #{fragranceType}, #{alcoholCnt} #{skuWeight},
             #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort}, 
-            #{isIntegral}, #{integralAmt}, #{integralCnt}, #{createDate}, #{modifyDate})
+            #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.ProdSku" >
@@ -56,6 +59,12 @@
             </if>
             <if test="skuStockCnt != null" >
                 sku_stock_cnt = #{skuStockCnt},
+            </if>
+            <if test="fragranceType != null" >
+                fragrance_type = #{fragranceType},
+            </if>
+            <if test="alcoholCnt != null" >
+                alcohol_cnt = #{alcoholCnt},
             </if>
             <if test="skuWeight != null" >
                 sku_weight = #{skuWeight},
@@ -83,6 +92,9 @@
             </if>
             <if test="integralCnt != null" >
                 integral_cnt = #{integralCnt},
+            </if>
+            <if test="isDel != null" >
+                is_del = #{isDel},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -116,6 +128,12 @@
             <if test="skuStockCnt != null" >
                 and null.sku_stock_cnt = #{skuStockCnt}
             </if>
+            <if test="fragranceType != null" >
+                fragrance_type = #{fragranceType},
+            </if>
+            <if test="alcoholCnt != null" >
+                alcohol_cnt = #{alcoholCnt},
+            </if>
             <if test="skuWeight != null" >
                 and null.sku_weight = #{skuWeight}
             </if>
@@ -143,6 +161,9 @@
             <if test="integralCnt != null" >
                 and null.integral_cnt = #{integralCnt}
             </if>
+            <if test="isDel != null" >
+                is_del = #{isDel},
+            </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}
             </if>
@@ -156,6 +177,16 @@
         select
         <include refid="table_column"/>
         from s_prod_sku where prod_id = #{id}
+    </select>
+
+    <update id="updateSkuStatus">
+        update s_prod_sku set skuStatus =#{skuStatus} where prod_id = #{id}
+    </update>
+
+    <select id="selectProdSkuStatusByProdId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.ProdSku">
+        select
+        <include refid="table_column"/>
+        from s_prod_sku where prod_id = #{id} and is_del =#{status}
     </select>
 
 </mapper>

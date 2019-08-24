@@ -21,4 +21,6 @@ public interface WinerySightMapper extends BaseMapper<WinerySight, Long> {
     int updateSightLike(WinerySight winerySight);
 
     WinerySight selectWinerySightByWineryId(Long id);
+
+    int addWinerySight(WinerySight winerySight);
 }

@@ -42,13 +42,12 @@ public class WinerySightController extends BaseController {
      * @return
      */
     @ApiOperation(value = "酒庄LOGO展示",notes = "酒庄LOGO展示")
-    @ApiImplicitParams(@ApiImplicitParam(name = "request", value = "用于获取当前用户", dataType = "HttpServletRequest"))
-    @RequestMapping(value = "/findWinery", method = RequestMethod.POST)
-    public Map<String, Object> findWinery(HttpServletRequest request){
+    @RequestMapping(value = "/getWinery", method = RequestMethod.POST)
+    public Map<String, Object> getWinery(HttpServletRequest request){
         Member curMember = getCurMember(request);
-        Winery winery =winerySightService.findWinery(curMember);
+        Winery winery =winerySightService.getWinery(curMember);
         if(winery == null){
-            throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
+            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(winery);
     }
@@ -59,14 +58,13 @@ public class WinerySightController extends BaseController {
      * @return
      */
     @ApiOperation(value = "查询所有景点",notes = "查询酒庄所有景点")
-    @ApiImplicitParams(@ApiImplicitParam(name = "request", value = "用于获取当前用户", dataType = "HttpServletRequest"))
-    @RequestMapping(value = "/findWinerySight", method = RequestMethod.POST)
-    public Map<String, Object> findWinerySight(HttpServletRequest request){
+    @RequestMapping(value = "/getWinerySightList", method = RequestMethod.POST)
+    public Map<String, Object> getWinerySightList(HttpServletRequest request){
         //AdminUser curAdmin = getCurAdmin(request);
         Member curMember = getCurMember(request);
         Map<String, Object> returnMap =winerySightService.findSignSight(curMember);
         if(returnMap.isEmpty()){
-            throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
+            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(returnMap);
     }
@@ -78,11 +76,11 @@ public class WinerySightController extends BaseController {
      */
     @ApiOperation(value = "景点详情",notes = "查看景点图文")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点id", dataType = "Long"))
-    @RequestMapping(value = "/findSightImageText", method = RequestMethod.POST)
-    public Map<String,Object> findSightImageText(@RequestParam("id") Long id){
+    @RequestMapping(value = "/getSightImageText", method = RequestMethod.POST)
+    public Map<String,Object> getSightImageText(@RequestParam("id") Long id){
         Map<String,Object> returnMap = winerySightService.findSightImageText(id);
         if(returnMap.isEmpty()){
-            throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
+            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(returnMap);
     }
@@ -99,7 +97,7 @@ public class WinerySightController extends BaseController {
         if(winerySightService.scenicLike(id)){
             return getResult("点赞成功");
         }
-        throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
+        throw new CustomException(RESPONSE_CODE_ENUM.PARAMETER_ERROR);
 
     }
 

@@ -1,5 +1,7 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.file.FilePathConsts;
+import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
@@ -69,6 +71,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     public void addScenicImageText(List<WinerySightDetail> winerySightDetailList) {
         for (WinerySightDetail winerySightDetail: winerySightDetailList) {
             winerySightDetail.setId(IDUtil.getId());
+            winerySightDetail.setDetailImg(FileUtil.copyNFSByFileName(winerySightDetail.getDetailImg(), FilePathConsts.TEST_FILE_PATH));
             winerySightDetail.setCreateDate(new Date());
             winerySightDetail.setModifyDate(new Date());
             winerySightDetailMapper.save(winerySightDetail);
@@ -103,19 +106,21 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      */
     @Override
     @Transactional
-    public void addWinerySight(WinerySight winerySight, AdminUser curAdmin ) {
+    public void addWinerySight(WinerySight winerySight,AdminUser curAdmin ) {
         winerySight.setId(IDUtil.getId());
+        winerySight.setSightIcon(FileUtil.copyNFSByFileName(winerySight.getSightIcon(), FilePathConsts.TEST_FILE_PATH));
+        winerySight.setCoverImg(FileUtil.copyNFSByFileName(winerySight.getCoverImg(),FilePathConsts.TEST_FILE_PATH));
         winerySight.setCreateDate(new Date());
-        winerySight.setWineryId(curAdmin.getWineryId().longValue());
-        winerySightMapper.save(winerySight);
+        winerySight.setWineryId(curAdmin.getWineryId());
+        winerySightMapper.addWinerySight(winerySight);
         WinerySight winerySightv = winerySightMapper.getByName(winerySight.getSightName());
 
         for (String scenicImg : winerySight.getScenicImg()) {
             WinerySightImg winerySightImg = new WinerySightImg();
             winerySightImg.setId(IDUtil.getId());
             winerySightImg.setWinerySightId(winerySightv.getId());
-            winerySightImg.setImgName(getImgName(scenicImg));
-            winerySightImg.setImgAddr(scenicImg);
+            winerySightImg.setImgName(scenicImg);
+            winerySightImg.setImgAddr(FileUtil.copyNFSByFileName(scenicImg, FilePathConsts.TEST_FILE_PATH));
             winerySightImg.setCreateDate(new Date());
             winerySightImgMapper.save(winerySightImg);
         }
@@ -176,7 +181,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      * @return Winery
      */
     @Override
-    public Winery findWinery(Member member) {
+    public Winery getWinery(Member member) {
         Winery winery = wineryMapper.getById(member.getWineryId());
         return winery;
     }

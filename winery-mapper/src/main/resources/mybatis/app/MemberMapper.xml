@@ -176,14 +176,14 @@
         where phone = #{phone}
     </select>
 
-    <select id="selectSubList" parameterType="java.lang.Long" parameterMap="HashMap">
+    <select id="selectSubList" parameterType="java.lang.Long"  resultType="java.util.Map">
         select m.nick_name,b.bill_amt,b.sign_type,b.create_date,l.descri from m_member m
         left join m_mbr_bill_record b on m.id = b.mbr_id
         left join m_mbr_level l on m.mbr_level_id=l.id
         where m.market_pid =#{mbrId}
     </select>
 
-    <select id="selectSubStatis" parameterType="java.lang.Long" parameterMap="HashMap">
+    <select id="selectSubStatis" parameterType="java.lang.Long"  resultType="java.util.Map">
         select sum(b.bill_amt) amt, count(m.id) count from m_member m
         left join m_mbr_bill_record b on m.id = b.mbr_id
         left join m_mbr_level l on m.mbr_level_id=l.id
