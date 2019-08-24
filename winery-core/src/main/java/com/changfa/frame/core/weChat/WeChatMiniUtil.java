@@ -46,6 +46,7 @@ public class WeChatMiniUtil {
 
         // 调用换取API
         JSONObject obj = HttpUtil.getJSONObjectFromHttpsGet(CODE_2_SESSION_URL, paramMap);
+        log.info("【jscode2session】微信返回的信息：{}",String.valueOf(obj));
         if (obj == null || obj.containsKey("errcode")) {
             log.error("调用【getCode2Session】出错：{}", obj != null ? String.valueOf(obj) : "");
             throw new CustomException("根据小程序授权CODE换取OpenID!", String.valueOf(obj));
