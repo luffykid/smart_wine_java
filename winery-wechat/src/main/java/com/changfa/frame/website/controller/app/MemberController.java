@@ -1,7 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
 
-import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrWineryVoucherService;
 import com.changfa.frame.service.mybatis.app.MemberService;
@@ -13,19 +12,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 会员接口
- *
  */
 @Api(value = "会员接口", tags = "会员接口")
 @RestController("wxMiniMemberController")
@@ -35,6 +34,7 @@ public class MemberController extends BaseController {
     private MemberService memberServiceImpl;
     @Autowired
     private MbrWineryVoucherService mbrWineryVoucherService;
+
     /**
      * 获取个人信息
      *
@@ -59,8 +59,8 @@ public class MemberController extends BaseController {
     public Map<String, Object> getSubList(HttpServletRequest request, PageInfo pageInfo) {
         Member member = getCurMember(request);
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("list",memberServiceImpl.getSubList(member.getId(), pageInfo));
-        returnMap.put("other",memberServiceImpl.getSubList(member.getId(), pageInfo));
+        returnMap.put("list", memberServiceImpl.getSubList(member.getId(), pageInfo));
+        returnMap.put("other", memberServiceImpl.getSubList(member.getId(), pageInfo));
         return getResult(returnMap);
     }
 
@@ -82,15 +82,12 @@ public class MemberController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, String sex, String phone) {
         Member member = getCurMember(request);
-        try{
+        try {
             memberServiceImpl.updateMember(member.getId(), userIcon, nickName, birthday, sex, phone);
-        }catch (Exception e){
-            log.info("此处有错误:{}",e.getMessage());
+        } catch (Exception e) {
+            log.info("此处有错误:{}", e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
         }
         return getResult(new HashMap<>());
     }
-
-
-
 }

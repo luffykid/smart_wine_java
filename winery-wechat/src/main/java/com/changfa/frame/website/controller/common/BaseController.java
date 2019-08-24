@@ -2,6 +2,7 @@ package com.changfa.frame.website.controller.common;
 
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MemberService;
+import com.changfa.frame.website.interceptor.TokenInterceptor;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -133,18 +134,19 @@ public abstract class BaseController {
      * @param request 请求对象
      */
     public Member getCurMember(HttpServletRequest request) {
-
-//        // 取出登陆账号
-//        String headerAcctName = request.getHeader("request-header-acct");
-//        if (StringUtils.isBlank(headerAcctName)) {
-//            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
-//        }
+        /************ 生产环境使用 ****************/
+//        // 获取会员openId，并查询会员数据
+//        String openId = request.getHeader(TokenInterceptor.REQUEST_HEADER_OPENID_KEY);
 //
 //        // 根据手机号查询会员
-//        Member member = memberService.selectByPhone(headerAcctName);
+//        Member member = memberService.getByOpenId(openId);
+//        if (member == null) {
+//            throw new CustomException(RESPONSE_CODE_ENUM.ACCONAME_NOT_EXIST);
+//        }
 
-        //  本地开发使用
+        /************ 开发环境中使用 ****************/
         Member member = memberService.getById(1L);
+
         return member;
     }
 }

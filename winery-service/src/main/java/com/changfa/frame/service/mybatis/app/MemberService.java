@@ -13,7 +13,7 @@ import java.util.Map;
  * @author wyy
  * @date 2019-08-15 14:40
  */
-public interface MemberService extends BaseService<Member,Long> {
+public interface MemberService extends BaseService<Member, Long> {
 
     /**
      * 根据手机号查询会员
@@ -25,6 +25,7 @@ public interface MemberService extends BaseService<Member,Long> {
 
     /**
      * 获取招募会员列表
+     *
      * @param mbrId
      * @param pageInfo
      * @return
@@ -33,6 +34,7 @@ public interface MemberService extends BaseService<Member,Long> {
 
     /**
      * 获取招募会员数据统计
+     *
      * @param mbrId
      * @return
      */
@@ -40,13 +42,22 @@ public interface MemberService extends BaseService<Member,Long> {
 
     /**
      * 修改会员信息
+     *
      * @param mbrId
      * @param userIcon 头像
      * @param nickName 名称
      * @param birthday 生日
-     * @param sex 性别
-     * @param phone 电话
+     * @param sex      性别
+     * @param phone    电话
      */
     void updateMember(Long mbrId, String userIcon, String nickName, String birthday, String sex, String phone);
+
+    /**
+     * 根据openId查询会员
+     *
+     * @param openId 会员openId
+     */
+    Member getByOpenId(String openId);
+
 }
 

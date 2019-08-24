@@ -16,4 +16,10 @@ public class RedisConsts {
     public final static int ADMIN_USERID_EXPIRE = 60 * 60 * 24 * 30;
     /* ***************************** 酒庄商家后台管理端缓存设置结束 ***************************** */
 
+    /* ***************************** 酒庄小程序端缓存设置开始 ***************************** */
+    // 接口Token参数设置
+    public final static String WXMINI_OPENID = "admin:openId:";
+    public final static int WXMINI_OPENID_EXPIRE = 60 * 60 * 24 * 30;
+    /* ***************************** 酒庄小程序端缓存设置结束 ***************************** */
+
 }

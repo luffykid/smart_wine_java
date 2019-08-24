@@ -115,7 +115,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 令牌拦截器
-        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/wx/auth/**");
+        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/wxMini/auth/**");
     }
 
     /**

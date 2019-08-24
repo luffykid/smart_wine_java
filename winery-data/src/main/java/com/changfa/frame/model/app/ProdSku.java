@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 商品sku表
@@ -26,8 +27,8 @@ public class ProdSku extends BaseEntity {
     private Long skuName;
 
     /** sku状态
-0：未上架
-1：已上架 */
+    0：未上架
+    1：已上架 */
     private Integer skuStatus;
 
     /** 库存 */
@@ -60,7 +61,22 @@ public class ProdSku extends BaseEntity {
     /** 积分数量 */
     private BigDecimal integralCnt;
 
-    
+    /** 香型*/
+    private String fragranceType;
+
+    /**酒精度*/
+    private BigDecimal alcoholCnt;
+
+    /**是否删除
+     0：否
+     1：是*/
+    private Boolean isDel;
+
+    /**
+     * 产品规格会员价对象
+     */
+    private List<ProdSkuMbrPrice> prodSkuMbrPriceList;
+
     /**
      * 获取商品ID
     */
@@ -91,8 +107,8 @@ public class ProdSku extends BaseEntity {
     
     /**
      * 获取sku状态
-0：未上架
-1：已上架
+    0：未上架
+    1：已上架
     */
     public Integer getSkuStatus() {
         return skuStatus;
@@ -100,8 +116,8 @@ public class ProdSku extends BaseEntity {
     
     /**
      * 设置sku状态
-0：未上架
-1：已上架
+    0：未上架
+    1：已上架
     */
     public void setSkuStatus(Integer skuStatus) {
         this.skuStatus = skuStatus;
@@ -245,5 +261,55 @@ public class ProdSku extends BaseEntity {
     */
     public void setIntegralCnt(BigDecimal integralCnt) {
         this.integralCnt = integralCnt;
+    }
+
+    /**
+     * 获取香型
+     */
+    public String getFragranceType() {
+        return fragranceType;
+    }
+
+    /**
+     * 设置香型
+     */
+    public void setFragranceType(String fragranceType) {
+        this.fragranceType = fragranceType;
+    }
+
+    /**
+     * 获取酒精度
+     */
+    public BigDecimal getAlcoholCnt() {
+        return alcoholCnt;
+    }
+
+    /**
+     * 设置酒精度
+     */
+    public void setAlcoholCnt(BigDecimal alcoholCnt) {
+        this.alcoholCnt = alcoholCnt;
+    }
+
+    /**是否删除
+     0：否
+     1：是*/
+    public Boolean getDel() {
+        return isDel;
+    }
+
+    /**是否删除
+     0：否
+     1：是*/
+    public void setDel(Boolean del) {
+        isDel = del;
+    }
+
+    public List<ProdSkuMbrPrice> getProdSkuMbrPriceList() {
+        return prodSkuMbrPriceList;
+    }
+
+    public void setProdSkuMbrPriceList(List<ProdSkuMbrPrice> prodSkuMbrPriceList) {
+        this.prodSkuMbrPriceList = prodSkuMbrPriceList;
     }
 }

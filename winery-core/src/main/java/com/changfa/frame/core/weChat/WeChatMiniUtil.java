@@ -36,7 +36,7 @@ public class WeChatMiniUtil {
      * @param jsCode 小程序登录时获取的code
      * @return JSONObject
      */
-    public static JSONObject getCode2Session(String jsCode){
+    public static JSONObject jsCode2session(String jsCode) {
         // 初始化接口请求参数
         Map<String, Object> paramMap = new LinkedHashMap<String, Object>();
         paramMap.put("appid", PropConfig.getProperty(PropAttributes.THIRDPARTY_WX_MINI_APPID));
@@ -45,10 +45,11 @@ public class WeChatMiniUtil {
         paramMap.put("grant_type", "authorization_code");
 
         // 调用换取API
-        JSONObject obj = HttpUtil.getJSONObjectFromHttpsGet(CODE_2_SESSION_URL,paramMap);
+        JSONObject obj = HttpUtil.getJSONObjectFromHttpsGet(CODE_2_SESSION_URL, paramMap);
+        log.info("【jscode2session】微信返回的信息：{}",String.valueOf(obj));
         if (obj == null || obj.containsKey("errcode")) {
-            log.error("调用【getCode2Session】出错：{}", obj != null ? obj.toString() : "");
-            throw new CustomException("根据小程序授权CODE换取OpenID!", obj.toString());
+            log.error("调用【getCode2Session】出错：{}", obj != null ? String.valueOf(obj) : "");
+            throw new CustomException("根据小程序授权CODE换取OpenID!", String.valueOf(obj));
         }
         return obj;
     }

@@ -10,5 +10,8 @@ package com.changfa.frame.mapper.app;
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.ProdSkuMbrPrice;
 
+import java.util.List;
+
 public interface ProdSkuMbrPriceMapper extends BaseMapper<ProdSkuMbrPrice, Long> {
+    List<ProdSkuMbrPrice> getBySkuId(Long skuId);
 }

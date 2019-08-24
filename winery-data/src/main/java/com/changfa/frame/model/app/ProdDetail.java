@@ -30,9 +30,9 @@ public class ProdDetail extends BaseEntity {
     private String detailImg;
 
     /** 详情状态
-0：新建
-1：启用
-2：禁用 */
+    0：新建
+    1：启用
+    2：禁用 */
     private Integer detailStatus;
 
     /** 详情排序 */
@@ -97,9 +97,9 @@ public class ProdDetail extends BaseEntity {
     
     /**
      * 获取详情状态
-0：新建
-1：启用
-2：禁用
+    0：新建
+    1：启用
+    2：禁用
     */
     public Integer getDetailStatus() {
         return detailStatus;
@@ -107,9 +107,9 @@ public class ProdDetail extends BaseEntity {
     
     /**
      * 设置详情状态
-0：新建
-1：启用
-2：禁用
+    0：新建
+    1：启用
+    2：禁用
     */
     public void setDetailStatus(Integer detailStatus) {
         this.detailStatus = detailStatus;

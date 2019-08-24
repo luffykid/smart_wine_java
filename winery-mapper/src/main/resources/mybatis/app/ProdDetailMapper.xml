@@ -100,4 +100,47 @@
         </where>
     </select>
 
+    <select id="getProdImgTextByProdId" parameterType="java.lang.Long" resultMap="prodDetailMap">
+        select id,prod_id,detail_title,detail_brief,detail_img,sort from s_prod_detail where prod_id =#{id} order by sort asc
+    </select>
+
+    <update id="updateByProdId" parameterType="com.changfa.frame.model.app.ProdDetail">
+        update s_prod_detail
+        <set >
+            <if test="prodId != null" >
+                prod_id = #{prodId},
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                detail_title = #{detailTitle},
+            </if>
+            <if test="detailBrief != null and detailBrief != ''" >
+                detail_brief = #{detailBrief},
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                detail_img = #{detailImg},
+            </if>
+            <if test="detailStatus != null" >
+                detail_status = #{detailStatus},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where prod_id = #{id}
+    </update>
+
+    <delete id="deleteByProdId" parameterType="java.lang.Long">
+        delete from s_prod_detail where prod_id = #{Id}
+    </delete>
+    
+    <update id="deleteProdDetailImg" parameterType="java.lang.Long">
+        update s_prod_detail set detail_img = null where prod_id =#{id}
+    </update>
+
 </mapper>

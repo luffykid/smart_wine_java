@@ -9,6 +9,8 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
+import java.util.List;
+
 /**
  * 商品表
  * @version 1.0 2019-08-22
@@ -67,6 +69,15 @@ public class Prod extends BaseEntity {
     /** 创建人 */
     private Long adminId;
 
+    /**是否删除
+     0：否
+     1：是*/
+    private Boolean isDel;
+
+    /**
+     * 产品详情
+     */
+    private List<ProdDetail> prodDetailList;
     
     /**
      * 获取酒庄ID
@@ -200,8 +211,8 @@ public class Prod extends BaseEntity {
     
     /**
      * 获取是否限购
-0：否
-1：是
+    0：否
+    1：是
     */
     public Boolean getIsLimit() {
         return isLimit;
@@ -278,5 +289,33 @@ public class Prod extends BaseEntity {
     */
     public void setAdminId(Long adminId) {
         this.adminId = adminId;
+    }
+
+    /**
+     * 获取产品详情
+     */
+    public List<ProdDetail> getProdDetailList() {
+        return prodDetailList;
+    }
+
+    /**
+     * 设置产品详情
+     */
+    public void setProdDetailList(List<ProdDetail> prodDetailList) {
+        this.prodDetailList = prodDetailList;
+    }
+
+    /**是否删除
+     0：否
+     1：是*/
+    public Boolean getDel() {
+        return isDel;
+    }
+
+    /**是否删除
+     0：否
+     1：是*/
+    public void setDel(Boolean del) {
+        isDel = del;
     }
 }
