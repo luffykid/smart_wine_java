@@ -45,7 +45,7 @@ public class WeChatController extends BaseController {
         log.info("************ 进入【jsCode2session】方法{}",jsCode);
         // 获取微信登录会话
         JSONObject jsonObject = WeChatMiniUtil.jsCode2session(jsCode);
-        Object openId = jsonObject.get("openId");
+        Object openId = jsonObject.get("openid");
         Object sessionKey = jsonObject.get("session_key");
         if (openId == null || sessionKey==null) {
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
