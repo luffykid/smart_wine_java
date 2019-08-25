@@ -28,7 +28,7 @@ import java.util.Map;
 
 @Api(value = "酒庄管理", tags = "酒庄管理")
 @RestController("adminWinerySightController")
-@RequestMapping("/admin/anon/WinerySight")
+@RequestMapping("/admin/auth/WinerySight")
 public class WinerySightController extends BaseController {
 
     @Resource(name = "winerySightServiceImpl")

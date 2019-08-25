@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Api(value = "酒庄管理",tags = "酒庄管理")
 @RestController("adminProdController")
-@RequestMapping("/admin/anon/Prod")
+@RequestMapping("/admin/auth/Prod")
 public class ProdController extends BaseController {
 
     @Resource(name = "prodServiceImpl")
