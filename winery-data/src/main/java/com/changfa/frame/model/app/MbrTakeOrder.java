@@ -3,20 +3,21 @@
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-23 Created
+ * 2019-08-25 Created
  */
 package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
+
 import java.math.BigDecimal;
 
 /**
  * 
- * @version 1.0 2019-08-23
+ * @version 1.0 2019-08-25
  */
 public class MbrTakeOrder extends BaseEntity {
 
-    private static final long serialVersionUID = 444716508761817088L;
+    private static final long serialVersionUID = 445451806915428352L;
 
     /** 会员储酒订单ID */
     private Long mbrStoreOrderId;
@@ -62,6 +63,12 @@ public class MbrTakeOrder extends BaseEntity {
 
     /** 收货县地区 */
     private Long shippingCountyId;
+
+    /** 交易单号【三方支付返回单号】 */
+    private String transactionNo;
+
+    /** 订单号【系统生成单号】 */
+    private String orderNo;
 
     
     /**
@@ -272,5 +279,33 @@ public class MbrTakeOrder extends BaseEntity {
     */
     public void setShippingCountyId(Long shippingCountyId) {
         this.shippingCountyId = shippingCountyId;
+    }
+    
+    /**
+     * 获取交易单号【三方支付返回单号】
+    */
+    public String getTransactionNo() {
+        return transactionNo;
+    }
+    
+    /**
+     * 设置交易单号【三方支付返回单号】
+    */
+    public void setTransactionNo(String transactionNo) {
+        this.transactionNo = transactionNo == null ? null : transactionNo.trim();
+    }
+    
+    /**
+     * 获取订单号【系统生成单号】
+    */
+    public String getOrderNo() {
+        return orderNo;
+    }
+    
+    /**
+     * 设置订单号【系统生成单号】
+    */
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo == null ? null : orderNo.trim();
     }
 }

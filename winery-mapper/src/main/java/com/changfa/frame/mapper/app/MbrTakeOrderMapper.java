@@ -3,7 +3,7 @@
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-23 Created
+ * 2019-08-25 Created
  */
 package com.changfa.frame.mapper.app;
 
@@ -15,10 +15,5 @@ import java.util.List;
 
 public interface MbrTakeOrderMapper extends BaseMapper<MbrTakeOrder, Long> {
 
-    /**
-     * 获取储酒提酒列表
-     * @param mbrStoreOrderId
-     * @return
-     */
     public List<MbrTakeOrder> selectListByMbrStoreOrderId(@Param("mbrStoreOrderId") Long mbrStoreOrderId);
 }

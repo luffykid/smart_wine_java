@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrRechargeOrderMapper" >
+    <resultMap id="mbrRechargeOrderMap" type="com.changfa.frame.model.app.MbrRechargeOrder" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
+        <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_id, mbr_id, pay_total_amt, pay_real_amt, order_status, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrRechargeOrderMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_recharge_order
+        where id = #{id}
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
+        insert into m_mbr_recharge_order (id, winery_id, mbr_id, pay_total_amt, pay_real_amt, order_status, 
+            create_date, modify_date)
+        values (#{id}, #{wineryId}, #{mbrId}, #{payTotalAmt}, #{payRealAmt}, #{orderStatus}, 
+            #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
+        update m_mbr_recharge_order
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="payTotalAmt != null" >
+                pay_total_amt = #{payTotalAmt},
+            </if>
+            <if test="payRealAmt != null" >
+                pay_real_amt = #{payRealAmt},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_recharge_order
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrRechargeOrderMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_recharge_order
+        <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
+            <if test="payTotalAmt != null" >
+                and null.pay_total_amt = #{payTotalAmt}
+            </if>
+            <if test="payRealAmt != null" >
+                and null.pay_real_amt = #{payRealAmt}
+            </if>
+            <if test="orderStatus != null" >
+                and null.order_status = #{orderStatus}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

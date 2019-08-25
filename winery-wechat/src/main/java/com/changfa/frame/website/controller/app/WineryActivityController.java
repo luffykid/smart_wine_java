@@ -25,7 +25,7 @@ import java.util.Map;
  *
  */
 @Api(value = "酒庄活动接口", tags = "酒庄活动接口")
-@RestController("wxMiniwineryActivityController")
+@RestController("wxMiniWineryActivityController")
 @RequestMapping("/wxMini/auth/wineryActivity")
 public class WineryActivityController extends BaseController {
     @Autowired

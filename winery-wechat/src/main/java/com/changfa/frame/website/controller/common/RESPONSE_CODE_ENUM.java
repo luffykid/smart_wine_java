@@ -38,8 +38,11 @@ public enum RESPONSE_CODE_ENUM {
     CAPTCHA_CODE_INVALID("1021", "验证码失效"),
     REPEATED_RECORD("1022", "数据重复"),
     CAPTCHA_EXIST("1051", "验证码已发送，请稍等"),
+    INSERT_EXIST("1052", "插入数据失败"),
     UPDTATE_EXIST("1052", "修改数据失败"),
-    PARAMETER_ERROR("1053","数据参数错误");
+    DELETE_EXIST("1054", "删除数据失败"),
+    PARAMETER_ERROR("1055","数据参数错误"),
+    CREATE_ORDER_ERROR("1056","创建订单失败");
 
 
 

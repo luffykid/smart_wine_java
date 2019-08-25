@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrRechargeOrderRecordMapper" >
+    <resultMap id="mbrRechargeOrderRecordMap" type="com.changfa.frame.model.app.MbrRechargeOrderRecord" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="mbr_recharge_order_id" property="mbrRechargeOrderId" jdbcType="BIGINT" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, mbr_recharge_order_id, order_status, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrRechargeOrderRecordMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_recharge_order_record
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrRechargeOrderRecord" >
+        insert into m_mbr_recharge_order_record (id, mbr_recharge_order_id, order_status, create_date, modify_date
+            )
+        values (#{id}, #{mbrRechargeOrderId}, #{orderStatus}, #{createDate}, #{modifyDate}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrRechargeOrderRecord" >
+        update m_mbr_recharge_order_record
+        <set >
+            <if test="mbrRechargeOrderId != null" >
+                mbr_recharge_order_id = #{mbrRechargeOrderId},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_recharge_order_record
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrRechargeOrderRecordMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_recharge_order_record
+        <where >
+            <if test="mbrRechargeOrderId != null" >
+                and null.mbr_recharge_order_id = #{mbrRechargeOrderId}
+            </if>
+            <if test="orderStatus != null" >
+                and null.order_status = #{orderStatus}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

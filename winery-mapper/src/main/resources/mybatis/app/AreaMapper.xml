@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.AreaMapper" >
+    <resultMap id="areaMap" type="com.changfa.frame.model.app.Area" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="sname" property="sname" jdbcType="VARCHAR" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+        <result column="sort_position" property="sortPosition" jdbcType="INTEGER" />
+        <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+        <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+        <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, name, sname, code, type, parent_id, sort_position, longitude, latitude, full_name, 
+        remarks
+    </sql>
+
+    <select id="getById" resultMap="areaMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="table_column" />
+        from c_area
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.Area" >
+        insert into c_area (id, name, sname, code, type, parent_id, sort_position, 
+            longitude, latitude, full_name, remarks)
+        values (#{id}, #{name}, #{sname}, #{code}, #{type}, #{parentId}, #{sortPosition}, 
+            #{longitude}, #{latitude}, #{fullName}, #{remarks})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.Area" >
+        update c_area
+        <set >
+            <if test="name != null and name != ''" >
+                name = #{name},
+            </if>
+            <if test="sname != null and sname != ''" >
+                sname = #{sname},
+            </if>
+            <if test="code != null and code != ''" >
+                code = #{code},
+            </if>
+            <if test="type != null and type != ''" >
+                type = #{type},
+            </if>
+            <if test="parentId != null and parentId != ''" >
+                parent_id = #{parentId},
+            </if>
+            <if test="sortPosition != null" >
+                sort_position = #{sortPosition},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude},
+            </if>
+            <if test="fullName != null and fullName != ''" >
+                full_name = #{fullName},
+            </if>
+            <if test="remarks != null and remarks != ''" >
+                remarks = #{remarks},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from c_area
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="areaMap" >
+        select 
+        <include refid="table_column" />
+        from c_area
+        <where >
+            <if test="name != null and name != ''" >
+                and null.name = #{name}
+            </if>
+            <if test="sname != null and sname != ''" >
+                and null.sname = #{sname}
+            </if>
+            <if test="code != null and code != ''" >
+                and null.code = #{code}
+            </if>
+            <if test="type != null and type != ''" >
+                and null.type = #{type}
+            </if>
+            <if test="parentId != null" >
+                and null.parent_id = #{parentId}
+            </if>
+            <if test="sortPosition != null" >
+                and null.sort_position = #{sortPosition}
+            </if>
+            <if test="longitude != null" >
+                and null.longitude = #{longitude}
+            </if>
+            <if test="latitude != null" >
+                and null.latitude = #{latitude}
+            </if>
+            <if test="fullName != null and fullName != ''" >
+                and null.full_name = #{fullName}
+            </if>
+            <if test="remarks != null and remarks != ''" >
+                and null.remarks = #{remarks}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -18,6 +18,8 @@
         <result column="shipping_province_id" property="shippingProvinceId" jdbcType="VARCHAR" />
         <result column="shipping_city_id" property="shippingCityId" jdbcType="BIGINT" />
         <result column="shipping_county_id" property="shippingCountyId" jdbcType="BIGINT" />
+        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
@@ -25,7 +27,8 @@
     <sql id="table_column" >
         id, mbr_store_order_id, winery_id, mbr_id, take_weight, take_capacity, delivery_mode, 
         package_price, total_package_amt, pay_total_amt, pay_real_amt, order_status, shipping_detail_addr, 
-        shipping_province_id, shipping_city_id, shipping_county_id, create_date, modify_date
+        shipping_province_id, shipping_city_id, shipping_county_id, transaction_no, order_no, 
+        create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="mbrTakeOrderMap" parameterType="java.lang.Long" >
@@ -39,11 +42,13 @@
         insert into m_mbr_take_order (id, mbr_store_order_id, winery_id, mbr_id, take_weight, take_capacity, 
             delivery_mode, package_price, total_package_amt, pay_total_amt, pay_real_amt, 
             order_status, shipping_detail_addr, shipping_province_id, shipping_city_id, 
-            shipping_county_id, create_date, modify_date)
+            shipping_county_id, transaction_no, order_no, create_date, modify_date
+            )
         values (#{id}, #{mbrStoreOrderId}, #{wineryId}, #{mbrId}, #{takeWeight}, #{takeCapacity}, 
             #{deliveryMode}, #{packagePrice}, #{totalPackageAmt}, #{payTotalAmt}, #{payRealAmt}, 
             #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId}, #{shippingCityId}, 
-            #{shippingCountyId}, #{createDate}, #{modifyDate})
+            #{shippingCountyId}, #{transactionNo}, #{orderNo}, #{createDate}, #{modifyDate}
+            )
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrTakeOrder" >
@@ -93,6 +98,12 @@
             </if>
             <if test="shippingCountyId != null" >
                 shipping_county_id = #{shippingCountyId},
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                transaction_no = #{transactionNo},
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                order_no = #{orderNo},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -159,6 +170,12 @@
             <if test="shippingCountyId != null" >
                 and null.shipping_county_id = #{shippingCountyId}
             </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                and null.transaction_no = #{transactionNo}
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                and null.order_no = #{orderNo}
+            </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}
             </if>
@@ -167,5 +184,9 @@
             </if>
         </where>
     </select>
-
+    <select id="selectListByMbrStoreOrderId" parameterType="Long" resultMap="mbrTakeOrderMap">
+        select
+        <include refid="table_column" />
+        from m_mbr_take_order where order_status=4 and mbr_store_order_id=#{mbrStoreOrderId}
+    </select>
 </mapper>

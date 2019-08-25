@@ -18,6 +18,8 @@
         <result column="total_increase_capacity" property="totalIncreaseCapacity" jdbcType="DECIMAL" />
         <result column="total_remain_weight" property="totalRemainWeight" jdbcType="DECIMAL" />
         <result column="total_remain_capacity" property="totalRemainCapacity" jdbcType="DECIMAL" />
+        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
@@ -26,7 +28,7 @@
         id, winery_id, mbr_id, wine_cellar_activity_id, pay_mode, prod_total_cnt, pay_total_amt, 
         pay_real_amt, pay_integral_cnt, order_status, total_org_weight, total_org_capacity, 
         total_increase_weight, total_increase_capacity, total_remain_weight, total_remain_capacity, 
-        create_date, modify_date
+        transaction_no, order_no, create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="mbrStoreOrderMap" parameterType="java.lang.Long" >
@@ -40,11 +42,13 @@
         insert into m_mbr_store_order (id, winery_id, mbr_id, wine_cellar_activity_id, pay_mode, prod_total_cnt, 
             pay_total_amt, pay_real_amt, pay_integral_cnt, order_status, total_org_weight, 
             total_org_capacity, total_increase_weight, total_increase_capacity, total_remain_weight, 
-            total_remain_capacity, create_date, modify_date)
+            total_remain_capacity, transaction_no, order_no, create_date, modify_date
+            )
         values (#{id}, #{wineryId}, #{mbrId}, #{wineCellarActivityId}, #{payMode}, #{prodTotalCnt}, 
             #{payTotalAmt}, #{payRealAmt}, #{payIntegralCnt}, #{orderStatus}, #{totalOrgWeight}, 
             #{totalOrgCapacity}, #{totalIncreaseWeight}, #{totalIncreaseCapacity}, #{totalRemainWeight}, 
-            #{totalRemainCapacity}, #{createDate}, #{modifyDate})
+            #{totalRemainCapacity}, #{transactionNo}, #{orderNo}, #{createDate}, #{modifyDate}
+            )
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrStoreOrder" >
@@ -94,6 +98,12 @@
             </if>
             <if test="totalRemainCapacity != null" >
                 total_remain_capacity = #{totalRemainCapacity},
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                transaction_no = #{transactionNo},
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                order_no = #{orderNo},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -160,6 +170,12 @@
             <if test="totalRemainCapacity != null" >
                 and null.total_remain_capacity = #{totalRemainCapacity}
             </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                and null.transaction_no = #{transactionNo}
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                and null.order_no = #{orderNo}
+            </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}
             </if>
@@ -168,9 +184,10 @@
             </if>
         </where>
     </select>
-    <select id="selectStoreList" parameterType="Long" resultType="HashMap">
-        select i.sku_name,s.total_org_weight,s.total_increase_weight,s.total_remain_weight,s.create_date from m_mbr_store_order s inner JOIN
-        m_mbr_store_order_item i on s.id = i.mbr_store_order_id
-        where mbr_id = #{mbrId} and s.order_status=4 and s.total_increase_weight <![CDATA[ > ]]> 0 and s.total_remain_weight <![CDATA[ > ]]> 0
+
+    <select id="selectStoreList" parameterType="Long" resultType="java.util.Map">
+        select o.total_increase_weight,o.total_org_weight,o.total_remain_weight,i.sku_name from m_mbr_store_order o
+        inner join m_mbr_store_order_item i on o.id = i.mbr_store_order_id
+        where o.order_status = 4 and o.mbr_id=#{mbrId}
     </select>
 </mapper>
