@@ -1,5 +1,5 @@
 /*
- * MbrStoreOrder.java
+ * MbrProdOrder.java
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
@@ -7,17 +7,17 @@
  */
 package com.changfa.frame.model.app;
 
-import com.changfa.frame.model.common.BaseEntity;
-
+import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 会员商品订单
  * @version 1.0 2019-08-25
  */
-public class MbrStoreOrder extends BaseEntity {
+public class MbrProdOrder extends MbrProdOrderKey {
 
-    private static final long serialVersionUID = 445451992593072128L;
+    private static final long serialVersionUID = 445452357556240384L;
 
     /** 酒庄ID */
     private Long wineryId;
@@ -25,17 +25,11 @@ public class MbrStoreOrder extends BaseEntity {
     /** 会员ID */
     private Long mbrId;
 
-    /** 云酒窖活动ID */
-    private Long wineCellarActivityId;
-
     /** 支付方式1：微信支付2：积分支付3：积分+微信支付 */
     private Integer payMode;
 
     /** 商品总数量 */
     private Integer prodTotalCnt;
-
-    /** 支付总金额 */
-    private BigDecimal payTotalAmt;
 
     /** 实付总金额 */
     private BigDecimal payRealAmt;
@@ -46,31 +40,41 @@ public class MbrStoreOrder extends BaseEntity {
     /** 订单状态0：新建订单1：未支付（已生成预支付ID）2：已取消（取消订单）3：已支付（用户完成支付）4：支付成功（回调通知成功）5：支付失败（回调通知失败） */
     private Integer orderStatus;
 
-    /** 总原始重量 */
-    private BigDecimal totalOrgWeight;
+    /** 收货详细地址 */
+    private String shippingDetailAddr;
 
-    /** 总原始容量 */
-    private BigDecimal totalOrgCapacity;
+    /** 收货省份ID */
+    private Long shippingProvinceId;
 
-    /** 总增长重量 */
-    private BigDecimal totalIncreaseWeight;
+    /** 收货市ID */
+    private Long shippingCityId;
 
-    /** 总增长容量 */
-    private BigDecimal totalIncreaseCapacity;
+    /** 收获地址县 */
+    private Long shippingCountyId;
 
-    /** 总剩余量 */
-    private BigDecimal totalRemainWeight;
+    /** 收货人名称 */
+    private String shippingPersonName;
 
-    /** 总剩余容量 */
-    private BigDecimal totalRemainCapacity;
-
-    /** 交易单号【三方支付返回单号】 */
-    private String transactionNo;
+    /** 收货人电话 */
+    private String shippingPersonPhone;
 
     /** 订单号【系统生成】 */
     private String orderNo;
 
-    
+    /** 交易单号【三方支付返回单号】 */
+    private String transactionNo;
+
+    @Transient
+    private List<MbrProdOrderItem> mbrProdOrderItems;
+
+    public List<MbrProdOrderItem> getMbrProdOrderItems() {
+        return mbrProdOrderItems;
+    }
+
+    public void setMbrProdOrderItems(List<MbrProdOrderItem> mbrProdOrderItems) {
+        this.mbrProdOrderItems = mbrProdOrderItems;
+    }
+
     /**
      * 获取酒庄ID
     */
@@ -100,20 +104,6 @@ public class MbrStoreOrder extends BaseEntity {
     }
     
     /**
-     * 获取云酒窖活动ID
-    */
-    public Long getWineCellarActivityId() {
-        return wineCellarActivityId;
-    }
-    
-    /**
-     * 设置云酒窖活动ID
-    */
-    public void setWineCellarActivityId(Long wineCellarActivityId) {
-        this.wineCellarActivityId = wineCellarActivityId;
-    }
-    
-    /**
      * 获取支付方式1：微信支付2：积分支付3：积分+微信支付
     */
     public Integer getPayMode() {
@@ -139,20 +129,6 @@ public class MbrStoreOrder extends BaseEntity {
     */
     public void setProdTotalCnt(Integer prodTotalCnt) {
         this.prodTotalCnt = prodTotalCnt;
-    }
-    
-    /**
-     * 获取支付总金额
-    */
-    public BigDecimal getPayTotalAmt() {
-        return payTotalAmt;
-    }
-    
-    /**
-     * 设置支付总金额
-    */
-    public void setPayTotalAmt(BigDecimal payTotalAmt) {
-        this.payTotalAmt = payTotalAmt;
     }
     
     /**
@@ -198,101 +174,87 @@ public class MbrStoreOrder extends BaseEntity {
     }
     
     /**
-     * 获取总原始重量
+     * 获取收货详细地址
     */
-    public BigDecimal getTotalOrgWeight() {
-        return totalOrgWeight;
+    public String getShippingDetailAddr() {
+        return shippingDetailAddr;
     }
     
     /**
-     * 设置总原始重量
+     * 设置收货详细地址
     */
-    public void setTotalOrgWeight(BigDecimal totalOrgWeight) {
-        this.totalOrgWeight = totalOrgWeight;
+    public void setShippingDetailAddr(String shippingDetailAddr) {
+        this.shippingDetailAddr = shippingDetailAddr == null ? null : shippingDetailAddr.trim();
     }
     
     /**
-     * 获取总原始容量
+     * 获取收货省份ID
     */
-    public BigDecimal getTotalOrgCapacity() {
-        return totalOrgCapacity;
+    public Long getShippingProvinceId() {
+        return shippingProvinceId;
     }
     
     /**
-     * 设置总原始容量
+     * 设置收货省份ID
     */
-    public void setTotalOrgCapacity(BigDecimal totalOrgCapacity) {
-        this.totalOrgCapacity = totalOrgCapacity;
+    public void setShippingProvinceId(Long shippingProvinceId) {
+        this.shippingProvinceId = shippingProvinceId;
     }
     
     /**
-     * 获取总增长重量
+     * 获取收货市ID
     */
-    public BigDecimal getTotalIncreaseWeight() {
-        return totalIncreaseWeight;
+    public Long getShippingCityId() {
+        return shippingCityId;
     }
     
     /**
-     * 设置总增长重量
+     * 设置收货市ID
     */
-    public void setTotalIncreaseWeight(BigDecimal totalIncreaseWeight) {
-        this.totalIncreaseWeight = totalIncreaseWeight;
+    public void setShippingCityId(Long shippingCityId) {
+        this.shippingCityId = shippingCityId;
     }
     
     /**
-     * 获取总增长容量
+     * 获取收获地址县
     */
-    public BigDecimal getTotalIncreaseCapacity() {
-        return totalIncreaseCapacity;
+    public Long getShippingCountyId() {
+        return shippingCountyId;
     }
     
     /**
-     * 设置总增长容量
+     * 设置收获地址县
     */
-    public void setTotalIncreaseCapacity(BigDecimal totalIncreaseCapacity) {
-        this.totalIncreaseCapacity = totalIncreaseCapacity;
+    public void setShippingCountyId(Long shippingCountyId) {
+        this.shippingCountyId = shippingCountyId;
     }
     
     /**
-     * 获取总剩余量
+     * 获取收货人名称
     */
-    public BigDecimal getTotalRemainWeight() {
-        return totalRemainWeight;
+    public String getShippingPersonName() {
+        return shippingPersonName;
     }
     
     /**
-     * 设置总剩余量
+     * 设置收货人名称
     */
-    public void setTotalRemainWeight(BigDecimal totalRemainWeight) {
-        this.totalRemainWeight = totalRemainWeight;
+    public void setShippingPersonName(String shippingPersonName) {
+        this.shippingPersonName = shippingPersonName == null ? null : shippingPersonName.trim();
     }
     
     /**
-     * 获取总剩余容量
+     * 获取收货人电话
     */
-    public BigDecimal getTotalRemainCapacity() {
-        return totalRemainCapacity;
+    public String getShippingPersonPhone() {
+        return shippingPersonPhone;
     }
     
     /**
-     * 设置总剩余容量
+     * 设置收货人电话
     */
-    public void setTotalRemainCapacity(BigDecimal totalRemainCapacity) {
-        this.totalRemainCapacity = totalRemainCapacity;
-    }
-    
-    /**
-     * 获取交易单号【三方支付返回单号】
-    */
-    public String getTransactionNo() {
-        return transactionNo;
-    }
-    
-    /**
-     * 设置交易单号【三方支付返回单号】
-    */
-    public void setTransactionNo(String transactionNo) {
-        this.transactionNo = transactionNo == null ? null : transactionNo.trim();
+    public void setShippingPersonPhone(String shippingPersonPhone) {
+        this.shippingPersonPhone = shippingPersonPhone == null ? null : shippingPersonPhone.trim();
     }
     
     /**
@@ -307,5 +269,19 @@ public class MbrStoreOrder extends BaseEntity {
     */
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+    
+    /**
+     * 获取交易单号【三方支付返回单号】
+    */
+    public String getTransactionNo() {
+        return transactionNo;
+    }
+    
+    /**
+     * 设置交易单号【三方支付返回单号】
+    */
+    public void setTransactionNo(String transactionNo) {
+        this.transactionNo = transactionNo == null ? null : transactionNo.trim();
     }
 }

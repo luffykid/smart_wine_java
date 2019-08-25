@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MemberAddressMapper" >
+    <resultMap id="memberAddressMap" type="com.changfa.frame.model.app.MemberAddress" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="contact" property="contact" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="province" property="province" jdbcType="BIGINT" />
+        <result column="city" property="city" jdbcType="BIGINT" />
+        <result column="country" property="country" jdbcType="BIGINT" />
+        <result column="detail_address" property="detailAddress" jdbcType="VARCHAR" />
+        <result column="full_address" property="fullAddress" jdbcType="VARCHAR" />
+        <result column="is_default" property="isDefault" jdbcType="TINYINT" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_id, mbr_id, contact, phone, province, city, country, detail_address, full_address, 
+        is_default, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="memberAddressMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_member_address
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MemberAddress" >
+        insert into m_member_address (id, winery_id, mbr_id, contact, phone, province, city, 
+            country, detail_address, full_address, is_default, create_date, modify_date
+            )
+        values (#{id}, #{wineryId}, #{mbrId}, #{contact}, #{phone}, #{province}, #{city}, 
+            #{country}, #{detailAddress}, #{fullAddress}, #{isDefault}, #{createDate}, #{modifyDate}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MemberAddress" >
+        update m_member_address
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="contact != null and contact != ''" >
+                contact = #{contact},
+            </if>
+            <if test="phone != null and phone != ''" >
+                phone = #{phone},
+            </if>
+            <if test="province != null" >
+                province = #{province},
+            </if>
+            <if test="city != null" >
+                city = #{city},
+            </if>
+            <if test="country != null" >
+                country = #{country},
+            </if>
+            <if test="detailAddress != null and detailAddress != ''" >
+                detail_address = #{detailAddress},
+            </if>
+            <if test="fullAddress != null and fullAddress != ''" >
+                full_address = #{fullAddress},
+            </if>
+            <if test="isDefault != null" >
+                is_default = #{isDefault},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_member_address
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="memberAddressMap" >
+        select 
+        <include refid="table_column" />
+        from m_member_address
+        <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
+            <if test="contact != null and contact != ''" >
+                and null.contact = #{contact}
+            </if>
+            <if test="phone != null and phone != ''" >
+                and null.phone = #{phone}
+            </if>
+            <if test="province != null" >
+                and null.province = #{province}
+            </if>
+            <if test="city != null" >
+                and null.city = #{city}
+            </if>
+            <if test="country != null" >
+                and null.country = #{country}
+            </if>
+            <if test="detailAddress != null and detailAddress != ''" >
+                and null.detail_address = #{detailAddress}
+            </if>
+            <if test="fullAddress != null and fullAddress != ''" >
+                and null.full_address = #{fullAddress}
+            </if>
+            <if test="isDefault != null" >
+                and null.is_default = #{isDefault}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>
