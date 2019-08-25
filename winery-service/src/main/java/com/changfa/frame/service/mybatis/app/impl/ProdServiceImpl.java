@@ -2,7 +2,6 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
-import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.ProdService;
@@ -66,7 +65,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      */
     @Override
     @Transactional
-    public void addProd(AdminUser curAdmin, Prod prod) {
+    public void addProd(Admin curAdmin, Prod prod) {
         prod.setId(IDUtil.getId());
         prod.setWineryId(curAdmin.getWineryId());
         prod.setAdminId(curAdmin.getId());

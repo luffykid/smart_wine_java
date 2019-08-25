@@ -1,6 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.data.entity.user.AdminUser;
+import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.model.app.Prod;
 import com.changfa.frame.model.app.ProdSku;
 import com.changfa.frame.service.mybatis.app.ProdService;
@@ -68,7 +68,7 @@ public class ProdController extends BaseController {
     @ApiImplicitParams(@ApiImplicitParam(name = "prod", value = "产品新建对象", dataType = "Prod"))
     @RequestMapping(value = "/addProd", method = RequestMethod.POST)
     public Map<String, Object> addProd(HttpServletRequest request, Prod prod){
-        AdminUser curAdmin = getCurAdmin(request);
+        Admin curAdmin = getCurAdmin(request);
         try{
             prodService.addProd(curAdmin,prod);
         }catch (Exception e){

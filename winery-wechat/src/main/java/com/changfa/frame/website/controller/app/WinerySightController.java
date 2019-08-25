@@ -1,6 +1,5 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.data.entity.user.AdminUser;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.service.mybatis.app.WinerySightService;
@@ -38,15 +37,16 @@ public class WinerySightController extends BaseController {
 
     /**
      * 酒庄LOGO展示
+     *
      * @param request 获取请求
      * @return
      */
-    @ApiOperation(value = "酒庄LOGO展示",notes = "酒庄LOGO展示")
+    @ApiOperation(value = "酒庄LOGO展示", notes = "酒庄LOGO展示")
     @RequestMapping(value = "/getWinery", method = RequestMethod.POST)
-    public Map<String, Object> getWinery(HttpServletRequest request){
+    public Map<String, Object> getWinery(HttpServletRequest request) {
         Member curMember = getCurMember(request);
-        Winery winery =winerySightService.getWinery(curMember);
-        if(winery == null){
+        Winery winery = winerySightService.getWinery(curMember);
+        if (winery == null) {
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(winery);
@@ -54,16 +54,17 @@ public class WinerySightController extends BaseController {
 
     /**
      * 查询当前酒庄所有景点
+     *
      * @param request 获取请求
      * @return
      */
-    @ApiOperation(value = "查询所有景点",notes = "查询酒庄所有景点")
+    @ApiOperation(value = "查询所有景点", notes = "查询酒庄所有景点")
     @RequestMapping(value = "/getWinerySightList", method = RequestMethod.POST)
-    public Map<String, Object> getWinerySightList(HttpServletRequest request){
+    public Map<String, Object> getWinerySightList(HttpServletRequest request) {
         //AdminUser curAdmin = getCurAdmin(request);
         Member curMember = getCurMember(request);
-        Map<String, Object> returnMap =winerySightService.findSignSight(curMember);
-        if(returnMap.isEmpty()){
+        Map<String, Object> returnMap = winerySightService.findSignSight(curMember);
+        if (returnMap.isEmpty()) {
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(returnMap);
@@ -71,15 +72,16 @@ public class WinerySightController extends BaseController {
 
     /**
      * 查看景点图文
+     *
      * @param id 景点id
-     * @return Map<String,Object>
+     * @return Map<String, Object>
      */
-    @ApiOperation(value = "景点详情",notes = "查看景点图文")
+    @ApiOperation(value = "景点详情", notes = "查看景点图文")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点id", dataType = "Long"))
     @RequestMapping(value = "/getSightImageText", method = RequestMethod.POST)
-    public Map<String,Object> getSightImageText(@RequestParam("id") Long id){
-        Map<String,Object> returnMap = winerySightService.findSightImageText(id);
-        if(returnMap.isEmpty()){
+    public Map<String, Object> getSightImageText(@RequestParam("id") Long id) {
+        Map<String, Object> returnMap = winerySightService.findSightImageText(id);
+        if (returnMap.isEmpty()) {
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
         return getResult(returnMap);
@@ -87,27 +89,20 @@ public class WinerySightController extends BaseController {
 
     /**
      * 景点点赞
+     *
      * @param id 景点id
-     * @return Map<String,Object>
+     * @return Map<String, Object>
      */
-    @ApiOperation(value = "景点点赞",notes = "景点点赞")
+    @ApiOperation(value = "景点点赞", notes = "景点点赞")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点id", dataType = "Long"))
     @RequestMapping(value = "/scenicLike", method = RequestMethod.POST)
-    public Map<String,Object> scenicLike(@RequestParam("id") Long id){
-        if(winerySightService.scenicLike(id)){
+    public Map<String, Object> scenicLike(@RequestParam("id") Long id) {
+        if (winerySightService.scenicLike(id)) {
             return getResult("点赞成功");
         }
         throw new CustomException(RESPONSE_CODE_ENUM.PARAMETER_ERROR);
 
     }
-
-
-
-
-
-
-
-
 
 
 }

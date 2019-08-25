@@ -1,6 +1,10 @@
 package com.changfa.frame.website.interceptor;
 
 import com.changfa.frame.core.redis.RedisClient;
+import com.changfa.frame.core.redis.RedisConsts;
+import com.changfa.frame.website.controller.common.CustomException;
+import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +60,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 //        }
 //
 //        // 获取redis中的token
-//        Object redisToken = redisClient.get(RedisConsts.ADMIN_USERID + headerAcctName);
+//        Object redisToken = redisClient.get(RedisConsts.ADMIN_ACCTNAME + headerAcctName);
 //        if (redisToken == null) {
 //            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
 //        }
@@ -67,7 +71,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 //        }
 //
 //        // 重置token时间
-//        redisClient.setAndExpire(RedisConsts.ADMIN_USERID + headerAcctName, headerToken, RedisConsts.ADMIN_USERID_EXPIRE);
+//        redisClient.setAndExpire(RedisConsts.ADMIN_ACCTNAME + headerAcctName, headerToken, RedisConsts.ADMIN_ACCTNAME_EXPIRE);
         return true;
     }
 

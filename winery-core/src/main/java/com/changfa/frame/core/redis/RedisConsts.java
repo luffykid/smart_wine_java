@@ -12,8 +12,8 @@ public class RedisConsts {
     public static final String SYSTEM_SETTING = "system:setting:setting";
 
     // 接口Token参数设置
-    public final static String ADMIN_USERID = "admin:userId:";
-    public final static int ADMIN_USERID_EXPIRE = 60 * 60 * 24 * 30;
+    public final static String ADMIN_ACCTNAME = "admin:acctName:";
+    public final static int ADMIN_ACCTNAME_EXPIRE = 60 * 60 * 24 * 30;
     /* ***************************** 酒庄商家后台管理端缓存设置结束 ***************************** */
 
     /* ***************************** 酒庄小程序端缓存设置开始 ***************************** */

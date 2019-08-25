@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.core.AdminMapper" >
+    <resultMap id="adminMap" type="com.changfa.frame.model.app.Admin" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="login_pwd" property="loginPwd" jdbcType="VARCHAR" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="STATUS" property="status" jdbcType="INTEGER" />
+        <result column="login_fail_cnt" property="loginFailCnt" jdbcType="INTEGER" />
+        <result column="is_locked" property="isLocked" jdbcType="TINYINT" />
+        <result column="locked_date" property="lockedDate" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_id, login_name, user_name, login_pwd, mobile, email, STATUS, login_fail_cnt,
+        is_locked, locked_date, create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="adminMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from c_admin
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.Admin" >
+        insert into c_admin (id, winery_id, login_name, user_name, login_pwd, mobile, email,
+            STATUS, login_fail_cnt, is_locked, locked_date, create_date, modify_date
+            )
+        values (#{id}, #{wineryId}, #{loginName}, #{userName}, #{loginPwd}, #{mobile}, #{email},
+            #{status}, #{loginFailCnt}, #{isLocked}, #{lockedDate}, #{createDate}, #{modifyDate}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.Admin" >
+        update c_admin
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="loginName != null and loginName != ''" >
+                login_name = #{loginName},
+            </if>
+            <if test="userName != null and userName != ''" >
+                user_name = #{userName},
+            </if>
+            <if test="loginPwd != null and loginPwd != ''" >
+                login_pwd = #{loginPwd},
+            </if>
+            <if test="mobile != null and mobile != ''" >
+                mobile = #{mobile},
+            </if>
+            <if test="email != null and email != ''" >
+                email = #{email},
+            </if>
+            <if test="status != null" >
+                STATUS = #{status},
+            </if>
+            <if test="loginFailCnt != null" >
+                login_fail_cnt = #{loginFailCnt},
+            </if>
+            <if test="isLocked != null" >
+                is_locked = #{isLocked},
+            </if>
+            <if test="lockedDate != null" >
+                locked_date = #{lockedDate},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from c_admin
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="adminMap" >
+        select
+        <include refid="table_column" />
+        from c_admin
+        <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="loginName != null and loginName != ''" >
+                and null.login_name = #{loginName}
+            </if>
+            <if test="userName != null and userName != ''" >
+                and null.user_name = #{userName}
+            </if>
+            <if test="loginPwd != null and loginPwd != ''" >
+                and null.login_pwd = #{loginPwd}
+            </if>
+            <if test="mobile != null and mobile != ''" >
+                and null.mobile = #{mobile}
+            </if>
+            <if test="email != null and email != ''" >
+                and null.email = #{email}
+            </if>
+            <if test="status != null" >
+                and null.STATUS = #{status}
+            </if>
+            <if test="loginFailCnt != null" >
+                and null.login_fail_cnt = #{loginFailCnt}
+            </if>
+            <if test="isLocked != null" >
+                and null.is_locked = #{isLocked}
+            </if>
+            <if test="lockedDate != null" >
+                and null.locked_date = #{lockedDate}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

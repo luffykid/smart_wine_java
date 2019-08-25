@@ -10,7 +10,7 @@
  */
 package com.changfa.frame.service.mybatis.app;
 
-import com.changfa.frame.data.entity.user.AdminUser;
+import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.model.app.MbrLevel;
 import com.changfa.frame.model.app.Prod;
 import com.changfa.frame.model.app.ProdSku;
@@ -40,7 +40,7 @@ public interface ProdService extends BaseService<Prod, Long> {
      * @param curAdmin 当前用户
      * @param prod  产品添加对象
      */
-    void addProd(AdminUser curAdmin, Prod prod);
+    void addProd(Admin curAdmin, Prod prod);
 
     /**
      * 产品下架  同时下架有关商品sku
