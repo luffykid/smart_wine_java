@@ -29,7 +29,6 @@
         <module>winery-service</module>
         <module>winery-saas</module>
         <module>winery-wechat</module>
-        <module>winery-operate</module>
         <module>winery-mapper</module>
     </modules>
 

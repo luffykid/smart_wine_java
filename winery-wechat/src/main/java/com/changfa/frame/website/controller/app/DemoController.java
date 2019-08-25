@@ -7,6 +7,7 @@ import com.changfa.frame.service.mybatis.app.SystemConfigService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
+import com.changfa.frame.website.utils.SettingUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,9 +44,13 @@ public class DemoController extends BaseController {
             @ApiImplicitParam(name = "setting", value = "系统配置对象", dataType = "Setting"))
     @RequestMapping(value = "/updateSysConfig", method = RequestMethod.GET)
     public Map<String, Object> updateSysConfig(Setting setting) {
+        // 测试Setting获取
+        System.out.println(SettingUtils.get().getCopyRight());
+
         // 正常Service层调用，控制层不能直接调用DAO层
         systemConfigService.set(setting);
 
+        // controller层异常方式
         if (true) {
             // 必要的地方打印日志【日志使用占位符方式，如果打印堆栈信息，可以使用ExceptionUtils】
             log.info("此处有错误:{}", "错误信息");

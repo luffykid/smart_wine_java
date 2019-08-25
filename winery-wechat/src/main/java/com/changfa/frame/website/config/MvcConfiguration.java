@@ -3,6 +3,7 @@ package com.changfa.frame.website.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.changfa.frame.website.interceptor.SettingInterceptor;
 import com.changfa.frame.website.interceptor.TokenInterceptor;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -115,6 +116,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 令牌拦截器
+        registry.addInterceptor(new SettingInterceptor()).addPathPatterns("/wxMini/**");
         registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/wxMini/auth/**");
     }
 
