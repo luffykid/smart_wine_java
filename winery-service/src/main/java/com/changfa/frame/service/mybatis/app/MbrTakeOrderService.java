@@ -2,13 +2,19 @@ package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.model.app.MbrTakeOrder;
 import com.changfa.frame.service.mybatis.common.BaseService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import com.github.pagehelper.PageInfo;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface MbrTakeOrderService extends BaseService<MbrTakeOrder, Long> {
+
+    /**
+     * 获取储酒提酒列表
+     * @param mbrStoreOrderId
+     * @return
+     */
+    public PageInfo getListByMbrStoreOrderId(Long mbrStoreOrderId, PageInfo pageInfo);
     /**
      * 自提
      *
