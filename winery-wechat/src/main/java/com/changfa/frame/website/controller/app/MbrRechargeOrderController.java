@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import java.util.Map;
 @RequestMapping("/wxMini/auth/mbrRechargeOrder")
 public class MbrRechargeOrderController extends BaseController {
 
-    @Autowired
+    @Resource(name = "mbrRechargeOrderServiceImpl")
     private MbrRechargeOrderService mbrRechargeOrderServiceImpl;
     /**
      * 会员新建充值订单
@@ -35,8 +36,9 @@ public class MbrRechargeOrderController extends BaseController {
      */
     @ApiOperation(value = "会员新建充值订单", notes = "会员新建充值订单")
     @RequestMapping(value = "/recharge ", method = RequestMethod.GET)
-    public Map<String, Object> recharge(Long wineryId, BigDecimal payTotalAmt, BigDecimal payRealAmt, HttpServletRequest request) {
+    public Map<String, Object> recharge(BigDecimal payTotalAmt, BigDecimal payRealAmt, HttpServletRequest request) {
         Member member = getCurMember(request);
+        Long wineryId = getCurWineryId();
         try{
             mbrRechargeOrderServiceImpl.recharge(member.getId(), wineryId, payTotalAmt, payRealAmt);
         }catch (Exception e){

@@ -9,6 +9,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("mbrProdOrderServiceImpl")
 public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long> implements MbrProdOrderService {
     @Autowired
@@ -19,12 +21,10 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
      * @return
      */
     @Override
-    public PageInfo getListByType(Integer orderStatus, PageInfo pageInfo){
+    public PageInfo getListByType(Long mbrId, Integer orderStatus, PageInfo pageInfo){
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        MbrProdOrder mbrProdOrder = new MbrProdOrder();
-        mbrProdOrder.setOrderStatus(orderStatus);
-        return new PageInfo(mbrProdOrderMapper.selectList(mbrProdOrder));
+        return new PageInfo(mbrProdOrderMapper.selectListByType(mbrId, orderStatus));
     }
 }

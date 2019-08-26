@@ -105,31 +105,31 @@
     </select>
 
     <select id="selectSignUpTwo" resultType="Integer">
-        select count(id) count from m_mbr_winery_activity_sign where winery_activity_id = #{0} and mbr_id = #{1}
+        select count(id) count from m_mbr_winery_activity_sign where winery_activity_id = #{wineryActivityId} and mbr_id = #{mbrId}
     </select>
 
     <insert id="signUp">
         insert into m_mbr_winery_activity_sign (winery_activity_id, mbr_id, mbr_act_status, sign_up_date, create_date)
-        values (#{0}, #{2}, 1, now(), now())
+        values (#{wineryActivityId}, #{mbrId}, 1, now(), now())
     </insert>
 
     <select id="selectSignIn" resultType="Integer">
         select count(a.id) count from b_winery_activity a left join m_mbr_winery_activity_sign s on a.id = s.winery_activity_id
-        where s.mbr_act_status=1 and winery_activity_id = #{0} and mbr_id = #{1} and now() between act_start_date and act_end_date
+        where s.mbr_act_status=1 and winery_activity_id = #{wineryActivityId} and mbr_id = #{mbrId} and now() between act_start_date and act_end_date
     </select>
 
     <update id="signIn">
         update m_mbr_winery_activity_sign set mbr_act_status = 2, modify_date = now(), sign_in_date = now()
-        where winery_activity_id = #{0} and mbr_id = #{1}
+        where winery_activity_id = #{wineryActivityId} and mbr_id = #{mbrId}
     </update>
 
     <select id="selectSignOff" resultType="Integer">
         select count(a.id) count from b_winery_activity a left join m_mbr_winery_activity_sign s on a.id = s.winery_activity_id
-        where s.mbr_act_status=2 and winery_activity_id = #{0} and mbr_id = #{1} and now() between act_start_date and act_end_date
+        where s.mbr_act_status=2 and winery_activity_id = #{wineryActivityId} and mbr_id = #{mbrId} and now() between act_start_date and act_end_date
     </select>
 
     <update id="signOff">
         update m_mbr_winery_activity_sign set mbr_act_status = 3, modify_date = now(), sign_in_date = now()
-        where winery_activity_id = #{0} and mbr_id = #{1}
+        where winery_activity_id = #{wineryActivityId} and mbr_id = #{mbrId}
     </update>
 </mapper>

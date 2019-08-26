@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 
@@ -27,7 +28,7 @@ import java.util.Map;
 @RequestMapping("/wxMini/anon/wineryMaster")
 public class WineryMasterController extends BaseController {
 
-    @Autowired
+    @Resource(name = "wineryMasterServiceImpl")
     private WineryMasterService wineryMasterServiceImpl;
     /**
      * 获取荣誉庄主列表

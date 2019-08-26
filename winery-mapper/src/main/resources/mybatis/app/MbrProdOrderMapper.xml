@@ -23,6 +23,46 @@
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
+    <resultMap id="mbrProdOrderMap2" type="com.changfa.frame.model.app.MbrProdOrder" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <id column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="pay_mode" property="payMode" jdbcType="INTEGER" />
+        <result column="prod_total_cnt" property="prodTotalCnt" jdbcType="INTEGER" />
+        <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
+        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="BIGINT" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="shipping_detail_addr" property="shippingDetailAddr" jdbcType="VARCHAR" />
+        <result column="shipping_province_id" property="shippingProvinceId" jdbcType="BIGINT" />
+        <result column="shipping_city_id" property="shippingCityId" jdbcType="BIGINT" />
+        <result column="shipping_county_id" property="shippingCountyId" jdbcType="BIGINT" />
+        <result column="shipping_person_name" property="shippingPersonName" jdbcType="VARCHAR" />
+        <result column="shipping_person_phone" property="shippingPersonPhone" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <collection property="mbrProdOrderItems" ofType="com.changfa.frame.model.app.MbrProdOrderItem">
+            <id column="id" property="id" jdbcType="BIGINT" />
+            <result column="mbr_prod_order_id" property="mbrProdOrderId" jdbcType="BIGINT" />
+            <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+            <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+            <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
+            <result column="prod_sku_cnt" property="prodSkuCnt" jdbcType="INTEGER" />
+            <result column="sku_name" property="skuName" jdbcType="BIGINT" />
+            <result column="sku_market_price" property="skuMarketPrice" jdbcType="DECIMAL" />
+            <result column="sku_sell_price" property="skuSellPrice" jdbcType="DECIMAL" />
+            <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="BIGINT" />
+            <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
+            <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
+            <result column="integral_cnt" property="integralCnt" jdbcType="BIGINT" />
+            <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+            <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        </collection>
+
+    </resultMap>
+
     <sql id="table_column" >
         id, pay_total_amt, winery_id, mbr_id, pay_mode, prod_total_cnt, pay_real_amt, pay_integral_cnt, 
         order_status, shipping_detail_addr, shipping_province_id, shipping_city_id, shipping_county_id, 
@@ -118,7 +158,7 @@
         select 
         <include refid="table_column" />
         from m_mbr_prod_order
-        <where >
+        <where>
             <if test="wineryId != null" >
                 and null.winery_id = #{wineryId}
             </if>
@@ -172,5 +212,9 @@
             </if>
         </where>
     </select>
-
+    <select id="selectListByType" resultMap="mbrProdOrderMap2">
+        select o.id,order_no,o.order_status,o.create_date,i.sku_name,i.prod_sku_cnt,i.sku_sell_price from m_mbr_prod_order o
+        inner join m_mbr_prod_order_item i on o.id = i.mbr_prod_order_id
+        where o.mbr_id = #{mbrId} and o.order_status=#{orderStatus}
+    </select>
 </mapper>

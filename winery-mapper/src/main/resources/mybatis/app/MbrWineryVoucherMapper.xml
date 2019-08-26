@@ -173,7 +173,7 @@
         <include refid="table_column" />
         from b_mbr_winery_voucher
         <where>
-            mbr_id=#{0} and voucher_cnt=#{1} and UNIX_TIMESTAMP(now()) bettwen  effective_begin_date and effective_begin_date
+            mbr_id=#{mbrId} and voucher_cnt=#{voucherCnt} and UNIX_TIMESTAMP(now()) bettwen  effective_begin_date and effective_begin_date
         </where>
     </select>
 

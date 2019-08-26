@@ -7,6 +7,8 @@
  */
 package com.changfa.frame.model.app;
 
+import com.changfa.frame.model.common.BaseEntity;
+
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
  * 会员商品订单
  * @version 1.0 2019-08-25
  */
-public class MbrProdOrder extends MbrProdOrderKey {
+public class MbrProdOrder extends BaseEntity {
 
     private static final long serialVersionUID = 445452357556240384L;
 

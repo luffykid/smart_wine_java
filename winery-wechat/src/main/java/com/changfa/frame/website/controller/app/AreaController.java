@@ -2,6 +2,7 @@ package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.model.app.Area;
 import com.changfa.frame.service.mybatis.app.AreaService;
+import com.changfa.frame.service.mybatis.app.impl.AreaServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +25,8 @@ import java.util.Map;
 @RestController("wxMiniAreaController")
 @RequestMapping("/wxMini/anon/area")
 public class AreaController extends BaseController {
-    @Autowired
-    private AreaService AreaServiceImpl;
+    @Resource(name = "areaServiceImpl")
+    private AreaService areaServiceImpl;
     /**
      * 根据上级代码获取区域列表
      *
@@ -37,7 +39,7 @@ public class AreaController extends BaseController {
     public Map<String, Object> getList(String parentId) {
         Area area = new Area();
         area.setParentId(parentId);
-        List<Area> list = AreaServiceImpl.selectList(area);
+        List<Area> list = areaServiceImpl.selectList(area);
         return getResult(list);
     }
 }

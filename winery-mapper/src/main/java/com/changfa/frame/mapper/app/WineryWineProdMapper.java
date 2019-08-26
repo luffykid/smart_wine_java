@@ -9,10 +9,11 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WineryWineProd;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface WineryWineProdMapper extends BaseMapper<WineryWineProd, Long> {
 
-    List<WineryWineProd> getProdListByWinerWineId(Long wineryWineId);
+    List<WineryWineProd> getProdListByWinerWineId(@Param("wineryWineId") Long wineryWineId);
 }

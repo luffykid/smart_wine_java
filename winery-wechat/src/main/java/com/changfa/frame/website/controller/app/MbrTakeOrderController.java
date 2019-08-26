@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import java.util.Map;
 @RequestMapping("/wxMini/auth/mbrTakeOrder")
 public class MbrTakeOrderController extends BaseController {
 
-    @Autowired
+    @Resource(name = "mbrTakeOrderServiceImpl")
     private MbrTakeOrderService mbrTakeOrderServiceImpl;
     /**
      * 获取荣誉庄主列表

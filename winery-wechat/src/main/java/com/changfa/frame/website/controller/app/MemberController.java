@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,9 +31,9 @@ import java.util.Map;
 @RestController("wxMiniMemberController")
 @RequestMapping("/wxMini/auth/member")
 public class MemberController extends BaseController {
-    @Autowired
+    @Resource(name = "memberServiceImpl")
     private MemberService memberServiceImpl;
-    @Autowired
+    @Resource(name = "mbrWineryVoucherService")
     private MbrWineryVoucherService mbrWineryVoucherService;
 
     /**

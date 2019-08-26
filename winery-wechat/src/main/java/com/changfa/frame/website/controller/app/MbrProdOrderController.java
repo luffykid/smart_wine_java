@@ -54,8 +54,8 @@ public class MbrProdOrderController extends BaseController {
     @RequestMapping(value = "/getListByType", method = RequestMethod.GET)
     public Map<String, Object> getListByType(Integer orderStatus, PageInfo pageInfo, HttpServletRequest request) {
         Member member = getCurMember(request);
-        PageInfo<MbrProdOrder> list = mbrProdOrderServiceImpl.getListByType(orderStatus, pageInfo);
+        PageInfo<MbrProdOrder> list = mbrProdOrderServiceImpl.getListByType(member.getId(), orderStatus, pageInfo);
         return getResult(list);
     }
-    
+
 }

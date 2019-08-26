@@ -3,6 +3,7 @@ package com.changfa.frame.website.controller.app;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrWineryActivitySignService;
 import com.changfa.frame.service.mybatis.app.WineryActivityService;
+import com.changfa.frame.service.mybatis.app.impl.MbrWineryActivitySignServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,10 +30,10 @@ import java.util.Map;
 @RestController("wxMiniWineryActivityController")
 @RequestMapping("/wxMini/auth/wineryActivity")
 public class WineryActivityController extends BaseController {
-    @Autowired
+    @Resource(name = "wineryActivityServiceImpl")
     private WineryActivityService wineryActivityServiceImpl;
-    @Autowired
-    private MbrWineryActivitySignService MbrWineryActivitySignServiceImpl;
+    @Resource(name = "mbrWineryActivitySignServiceImpl")
+    private MbrWineryActivitySignService mbrWineryActivitySignServiceImpl;
     /**
      * 获取未结束活动列表
      *
@@ -56,7 +58,7 @@ public class WineryActivityController extends BaseController {
     @RequestMapping(value = "/singUp", method = RequestMethod.GET)
     public void singUp(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = MbrWineryActivitySignServiceImpl.singUp(wineryActivityId, member.getId());
+        boolean flag = mbrWineryActivitySignServiceImpl.singUp(wineryActivityId, member.getId());
         if (!flag){
             log.info("此处有错误:{}", "活动报名失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
@@ -74,7 +76,7 @@ public class WineryActivityController extends BaseController {
     @RequestMapping(value = "/singIn", method = RequestMethod.GET)
     public void singIn(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = MbrWineryActivitySignServiceImpl.singIn(wineryActivityId, member.getId());
+        boolean flag = mbrWineryActivitySignServiceImpl.singIn(wineryActivityId, member.getId());
         {
             log.info("此处有错误:{}", "活动签到失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
@@ -93,7 +95,7 @@ public class WineryActivityController extends BaseController {
     @RequestMapping(value = "/singOff", method = RequestMethod.GET)
     public void singOff(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = MbrWineryActivitySignServiceImpl.singOff(wineryActivityId, member.getId());
+        boolean flag = mbrWineryActivitySignServiceImpl.singOff(wineryActivityId, member.getId());
         {
             log.info("此处有错误:{}", "活动签退失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);

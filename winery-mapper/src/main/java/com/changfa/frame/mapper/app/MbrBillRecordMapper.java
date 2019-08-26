@@ -9,6 +9,7 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.MbrBillRecord;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface MbrBillRecordMapper extends BaseMapper<MbrBillRecord, Long> {
      * @param mbrId
      * @return
      */
-    public List<MbrBillRecord> selectFlowList(Long mbrId);
+    public List<MbrBillRecord> selectFlowList(@Param("mbrId") Long mbrId);
 }
