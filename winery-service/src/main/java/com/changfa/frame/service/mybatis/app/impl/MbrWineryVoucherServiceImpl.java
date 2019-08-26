@@ -7,8 +7,8 @@ import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class MbrWineryVoucherImpl extends BaseServiceImpl<MbrWineryVoucher, Long> implements MbrWineryVoucherService {
+@Service("mbrWineryVoucherServiceImpl")
+public class MbrWineryVoucherServiceImpl extends BaseServiceImpl<MbrWineryVoucher, Long> implements MbrWineryVoucherService {
 
     @Autowired
     private MbrWineryVoucherMapper mbrWineryVoucherMapper;

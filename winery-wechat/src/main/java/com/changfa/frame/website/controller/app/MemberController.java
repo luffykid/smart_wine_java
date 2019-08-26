@@ -34,8 +34,8 @@ import java.util.Map;
 public class MemberController extends BaseController {
     @Resource(name = "memberServiceImpl")
     private MemberService memberServiceImpl;
-    @Resource(name = "mbrWineryVoucherService")
-    private MbrWineryVoucherService mbrWineryVoucherService;
+    @Resource(name = "mbrWineryVoucherServiceImpl")
+    private MbrWineryVoucherService mbrWineryVoucherServiceImpl;
 
     /**
      * 获取个人信息
@@ -47,7 +47,7 @@ public class MemberController extends BaseController {
     public Map<String, Object> getDetail(HttpServletRequest request) {
 
         Member member = getCurMember(request);
-        member.setVoucherCount(mbrWineryVoucherService.getEnableVoucherCount(member.getId()));
+        member.setVoucherCount(mbrWineryVoucherServiceImpl.getEnableVoucherCount(member.getId()));
         return getResult(member);
     }
 
