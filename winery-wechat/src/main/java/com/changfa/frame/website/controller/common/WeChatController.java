@@ -1,5 +1,7 @@
 package com.changfa.frame.website.controller.common;
 
+import com.changfa.frame.core.prop.PropAttributes;
+import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.core.weChat.WeChatMiniUtil;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MemberService;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +46,6 @@ public class WeChatController extends BaseController {
             @ApiImplicitParam(name = "jsCode", value = "换取凭证code", dataType = "String"))
     @GetMapping(value = "/jsCode2session")
     public Map<String, Object> jsCode2session(String jsCode) {
-        log.info("************ 进入【jsCode2session】方法{}",jsCode);
         // 获取微信登录会话
         JSONObject jsonObject = WeChatMiniUtil.jsCode2session(jsCode);
         Object openId = jsonObject.get("openid");
@@ -59,6 +62,14 @@ public class WeChatController extends BaseController {
         if (mbrByOpenId == null) {
             Member member = new Member();
             member.setOpenId(String.valueOf(openId));
+            member.setWineryId(Long.valueOf(PropConfig.getProperty(PropAttributes.SYSTEM_SETTING_WINERY_ID)));
+            member.setStatus(Member.STATUS_ENUM.NORMAL.getValue());
+            member.setStatusTime(new Date());
+            member.setTotalIntegral(new BigDecimal("0.00"));
+            member.setTotalStoreRemain(new BigDecimal("0.00"));
+            member.setTotalStoreIncrement(new BigDecimal("0.00"));
+            member.setAcctBalance(new BigDecimal("0.00"));
+            memberService.save(member);
         }
 
         // 初始化返回集合

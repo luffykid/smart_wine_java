@@ -18,6 +18,7 @@
         <result column="total_store_increment" property="totalStoreIncrement" jdbcType="DECIMAL" />
         <result column="market_qr_code" property="marketQrCode" jdbcType="VARCHAR" />
         <result column="market_pid" property="marketPid" jdbcType="BIGINT" />
+        <result column="acct_balance" property="acctBalance" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
@@ -25,7 +26,7 @@
     <sql id="table_column" >
         id, mbr_level_id, winery_id, token, nick_name, phone, wechat, open_id, user_icon,
         STATUS, status_time, total_integral, total_store_remain, total_store_increment, market_qr_code,
-        market_pid, create_date, modify_date
+        market_pid, acct_balance, create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="memberMap" parameterType="java.lang.Long" >
@@ -38,11 +39,11 @@
     <insert id="save" parameterType="com.changfa.frame.model.app.Member" >
         insert into m_member (id, mbr_level_id, winery_id, token, nick_name, phone, wechat,
             open_id, user_icon, STATUS, status_time, total_integral, total_store_remain,
-            total_store_increment, market_qr_code, market_pid, create_date, modify_date
+            total_store_increment, market_qr_code, market_pid, acct_balance, create_date, modify_date
             )
         values (#{id}, #{mbrLevelId}, #{wineryId}, #{token}, #{nickName}, #{phone}, #{wechat},
             #{openId}, #{userIcon}, #{status}, #{statusTime}, #{totalIntegral}, #{totalStoreRemain},
-            #{totalStoreIncrement}, #{marketQrCode}, #{marketPid}, #{createDate}, #{modifyDate}
+            #{totalStoreIncrement}, #{marketQrCode}, #{marketPid}, #{acctBalance}, #{createDate}, #{modifyDate}
             )
     </insert>
 
@@ -93,6 +94,9 @@
             </if>
             <if test="marketPid != null" >
                 market_pid = #{marketPid},
+            </if>
+            <if test="acctBalance != null" >
+                acct_balance = #{acctBalance},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -158,6 +162,9 @@
             </if>
             <if test="marketPid != null" >
                 and null.market_pid = #{marketPid}
+            </if>
+            <if test="acctBalance != null" >
+                and null.acct_balance = #{acctBalance}
             </if>
             <if test="createDate != null" >
                 and null.create_date = #{createDate}

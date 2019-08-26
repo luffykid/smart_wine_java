@@ -72,6 +72,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
         //3处理中文乱码问题
         List<MediaType> fastMediaTypes = new ArrayList<>();
+        fastMediaTypes.add(MediaType.APPLICATION_JSON);
         fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         fastMediaTypes.add(MediaType.TEXT_HTML);
         fastMediaTypes.add(MediaType.MULTIPART_FORM_DATA);

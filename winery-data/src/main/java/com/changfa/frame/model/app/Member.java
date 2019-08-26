@@ -70,6 +70,64 @@ public class Member extends BaseEntity {
     private Integer status;
 
     /**
+     * 用户状态枚举
+     */
+    public enum STATUS_ENUM {
+        DISABLE(0, "禁用"),
+        NORMAL(1, "正常");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         * @return
+         */
+        public static Member.STATUS_ENUM getEnum(Integer value) {
+            for (Member.STATUS_ENUM statusEnum : Member.STATUS_ENUM.values()) {
+                if (value.equals(statusEnum.getValue())) {
+                    return statusEnum;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
+    /**
      * 状态时间
      */
     private Date statusTime;
@@ -84,9 +142,6 @@ public class Member extends BaseEntity {
      */
     private BigDecimal totalStoreRemain;
 
-    //优惠券数量
-    @Transient
-    private Integer voucherCount;
     /**
      * 总储酒增量
      */
@@ -102,13 +157,17 @@ public class Member extends BaseEntity {
      */
     private Long marketPid;
 
-    public Integer getVoucherCount() {
-        return voucherCount;
-    }
+    /**
+     * 账户余额
+     */
+    public BigDecimal acctBalance;
 
-    public void setVoucherCount(Integer voucherCount) {
-        this.voucherCount = voucherCount;
-    }
+    /******************** 扩展属性 ***********************/
+    /**
+     * 优惠券数量
+     */
+    @Transient
+    private Integer voucherCount;
 
     /**
      * 获取会员等级ID
@@ -322,5 +381,33 @@ public class Member extends BaseEntity {
      */
     public void setMarketPid(Long marketPid) {
         this.marketPid = marketPid;
+    }
+
+    /**
+     * 获取优惠券数量
+     */
+    public Integer getVoucherCount() {
+        return voucherCount;
+    }
+
+    /**
+     * 设置优惠券数量
+     */
+    public void setVoucherCount(Integer voucherCount) {
+        this.voucherCount = voucherCount;
+    }
+
+    /**
+     * 获取账户余额
+     */
+    public BigDecimal getAcctBalance() {
+        return acctBalance;
+    }
+
+    /**
+     * 设置账户余额
+     */
+    public void setAcctBalance(BigDecimal acctBalance) {
+        this.acctBalance = acctBalance;
     }
 }

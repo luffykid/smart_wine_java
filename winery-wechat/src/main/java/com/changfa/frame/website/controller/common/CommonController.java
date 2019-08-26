@@ -39,9 +39,8 @@ public class CommonController extends BaseController {
     /**
      * 会员登录
      *
-     * @param phone   登录手机号
-     * @param phoneCode   手机验证码
-     * @param request 请求对象
+     * @param phone     登录手机号
+     * @param phoneCode 手机验证码
      * @return
      */
     @ApiOperation(value = "会员登录", notes = "会员登录", httpMethod = "POST")
@@ -50,9 +49,9 @@ public class CommonController extends BaseController {
             @ApiImplicitParam(name = "phoneCode", value = "手机验证码", dataType = "String")
     })
     @PostMapping(value = "/login")
-    public Map<String, Object> login(String phone, String phoneCode,HttpServletRequest request) {
+    public Map<String, Object> login(String phone, String phoneCode, HttpServletRequest request) {
         // 参数校验
-        if (StringUtils.isBlank(phone)) {
+        if (StringUtils.isBlank(phone) || StringUtils.isBlank(phoneCode) ) {
             throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
         }
         Member curMember = getCurMember(request);
@@ -77,22 +76,22 @@ public class CommonController extends BaseController {
         // 返回登录token
         HashMap<Object, Object> resultMap = new HashMap<>();
         resultMap.put("token", token);
-        return getResult(resultMap);
+        return getResult(null);
     }
 
     /**
      * 保存微信用户返回信息
      *
-     * @param  paramMap 用户信息
+     * @param paramMap 用户信息
      * @return
      */
     @ApiOperation(value = "保存微信用户返回信息", notes = "保存微信用户返回信息", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "paramMap", value = "参数集合", dataType = "String")
     })
-    @GetMapping(value = "/saveWxUserInfo")
+    @PostMapping(value = "/saveWxUserInfo")
     public Map<String, Object> saveWxUserInfo(Map paramMap) {
-
+        log.info(paramMap.toString());
         return getResult(null);
     }
 
@@ -108,7 +107,7 @@ public class CommonController extends BaseController {
     })
     @GetMapping(value = "/getPhoneCode")
     public Map<String, Object> getPhoneCode(String phone) {
-
+        log.info("手机号{}",phone);
         // 手机验证码
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("phoneCode", RandomStringUtils.randomAlphanumeric(6));
