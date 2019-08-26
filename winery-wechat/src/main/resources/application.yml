@@ -1,7 +1,7 @@
 # ***************** server配置 开始 ******************************** #
 server:
-  address: localhost
-  port: 8080
+  address: 47.92.118.135
+  port: 8088
   sessionTimeout: 3000
 
 # ***************** 属性文件配置 开始 ******************************** #
@@ -81,3 +81,12 @@ pagehelper:
 # ***************** logback配置 开始 ******************************** #
 logging:
   config: classpath:logback-spring.xml
+
+# *************用于自动化部署时，通过命令关闭springboot项目************
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+    web:
+      exposure:
+        include: *
