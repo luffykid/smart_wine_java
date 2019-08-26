@@ -71,7 +71,7 @@ public class CommonController extends BaseController {
         }
 
         // 校验密码
-        String pwdDb = admin.getLoginPwd();
+        String pwdDb = admins.get(0).getLoginPwd();
         if (!StringUtils.equalsIgnoreCase(pwdDb, loginPwd)) {
             throw new CustomException(RESPONSE_CODE_ENUM.ACCONAME_OR_ACCOPASS_ERROR);
         }
