@@ -13,15 +13,17 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, wine_custom_id, wine_custom_element_id, bg_img, mask_img, bottom_img, create_date, 
-        modify_date
+        WineCustomElementContent.id as id, WineCustomElementContent.wine_custom_id as wine_custom_id, 
+        WineCustomElementContent.wine_custom_element_id as wine_custom_element_id, WineCustomElementContent.bg_img as bg_img, 
+        WineCustomElementContent.mask_img as mask_img, WineCustomElementContent.bottom_img as bottom_img, 
+        WineCustomElementContent.create_date as create_date, WineCustomElementContent.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineCustomElementContentMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from b_wine_custom_element_content
-        where id = #{id}
+        from b_wine_custom_element_content WineCustomElementContent
+        where WineCustomElementContent.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomElementContent" >
@@ -67,28 +69,28 @@
     <select id="selectList" resultMap="wineCustomElementContentMap" >
         select 
         <include refid="table_column" />
-        from b_wine_custom_element_content
+        from b_wine_custom_element_content WineCustomElementContent
         <where >
             <if test="wineCustomId != null" >
-                and null.wine_custom_id = #{wineCustomId}
+                and WineCustomElementContent.wine_custom_id = #{wineCustomId}
             </if>
             <if test="wineCustomElementId != null" >
-                and null.wine_custom_element_id = #{wineCustomElementId}
+                and WineCustomElementContent.wine_custom_element_id = #{wineCustomElementId}
             </if>
             <if test="bgImg != null and bgImg != ''" >
-                and null.bg_img = #{bgImg}
+                and WineCustomElementContent.bg_img = #{bgImg}
             </if>
             <if test="maskImg != null and maskImg != ''" >
-                and null.mask_img = #{maskImg}
+                and WineCustomElementContent.mask_img = #{maskImg}
             </if>
             <if test="bottomImg != null and bottomImg != ''" >
-                and null.bottom_img = #{bottomImg}
+                and WineCustomElementContent.bottom_img = #{bottomImg}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and WineCustomElementContent.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and WineCustomElementContent.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

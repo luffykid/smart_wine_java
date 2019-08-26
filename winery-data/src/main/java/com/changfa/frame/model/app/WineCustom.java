@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  */
 public class WineCustom extends BaseEntity {
 
-    private static final long serialVersionUID = 445906737984176128L;
+    private static final long serialVersionUID = 445926912032768000L;
 
     /** 酒庄ID */
     private Long wineryId;

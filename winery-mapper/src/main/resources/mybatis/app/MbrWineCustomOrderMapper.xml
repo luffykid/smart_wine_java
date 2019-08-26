@@ -22,17 +22,21 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_id, mbr_id, custom_total_cnt, pay_total_amt, pay_real_amt, order_status, 
-        shipping_detail_addr, shipping_province_id, shipping_city_id, shipping_county_id, 
-        shipping_person_name, shipping_person_phone, transaction_no, order_no, create_date, 
-        modify_date
+        MbrWineCustomOrder.id as id, MbrWineCustomOrder.winery_id as winery_id, MbrWineCustomOrder.mbr_id as mbr_id, 
+        MbrWineCustomOrder.custom_total_cnt as custom_total_cnt, MbrWineCustomOrder.pay_total_amt as pay_total_amt, 
+        MbrWineCustomOrder.pay_real_amt as pay_real_amt, MbrWineCustomOrder.order_status as order_status, 
+        MbrWineCustomOrder.shipping_detail_addr as shipping_detail_addr, MbrWineCustomOrder.shipping_province_id as shipping_province_id, 
+        MbrWineCustomOrder.shipping_city_id as shipping_city_id, MbrWineCustomOrder.shipping_county_id as shipping_county_id, 
+        MbrWineCustomOrder.shipping_person_name as shipping_person_name, MbrWineCustomOrder.shipping_person_phone as shipping_person_phone, 
+        MbrWineCustomOrder.transaction_no as transaction_no, MbrWineCustomOrder.order_no as order_no, 
+        MbrWineCustomOrder.create_date as create_date, MbrWineCustomOrder.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrWineCustomOrderMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom_order
-        where id = #{id}
+        from m_mbr_wine_custom_order MbrWineCustomOrder
+        where MbrWineCustomOrder.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomOrder" >
@@ -109,55 +113,55 @@
     <select id="selectList" resultMap="mbrWineCustomOrderMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom_order
+        from m_mbr_wine_custom_order MbrWineCustomOrder
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and MbrWineCustomOrder.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and MbrWineCustomOrder.mbr_id = #{mbrId}
             </if>
             <if test="customTotalCnt != null" >
-                and null.custom_total_cnt = #{customTotalCnt}
+                and MbrWineCustomOrder.custom_total_cnt = #{customTotalCnt}
             </if>
             <if test="payTotalAmt != null" >
-                and null.pay_total_amt = #{payTotalAmt}
+                and MbrWineCustomOrder.pay_total_amt = #{payTotalAmt}
             </if>
             <if test="payRealAmt != null" >
-                and null.pay_real_amt = #{payRealAmt}
+                and MbrWineCustomOrder.pay_real_amt = #{payRealAmt}
             </if>
             <if test="orderStatus != null" >
-                and null.order_status = #{orderStatus}
+                and MbrWineCustomOrder.order_status = #{orderStatus}
             </if>
             <if test="shippingDetailAddr != null and shippingDetailAddr != ''" >
-                and null.shipping_detail_addr = #{shippingDetailAddr}
+                and MbrWineCustomOrder.shipping_detail_addr = #{shippingDetailAddr}
             </if>
             <if test="shippingProvinceId != null" >
-                and null.shipping_province_id = #{shippingProvinceId}
+                and MbrWineCustomOrder.shipping_province_id = #{shippingProvinceId}
             </if>
             <if test="shippingCityId != null" >
-                and null.shipping_city_id = #{shippingCityId}
+                and MbrWineCustomOrder.shipping_city_id = #{shippingCityId}
             </if>
             <if test="shippingCountyId != null" >
-                and null.shipping_county_id = #{shippingCountyId}
+                and MbrWineCustomOrder.shipping_county_id = #{shippingCountyId}
             </if>
             <if test="shippingPersonName != null and shippingPersonName != ''" >
-                and null.shipping_person_name = #{shippingPersonName}
+                and MbrWineCustomOrder.shipping_person_name = #{shippingPersonName}
             </if>
             <if test="shippingPersonPhone != null and shippingPersonPhone != ''" >
-                and null.shipping_person_phone = #{shippingPersonPhone}
+                and MbrWineCustomOrder.shipping_person_phone = #{shippingPersonPhone}
             </if>
             <if test="transactionNo != null and transactionNo != ''" >
-                and null.transaction_no = #{transactionNo}
+                and MbrWineCustomOrder.transaction_no = #{transactionNo}
             </if>
             <if test="orderNo != null and orderNo != ''" >
-                and null.order_no = #{orderNo}
+                and MbrWineCustomOrder.order_no = #{orderNo}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and MbrWineCustomOrder.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and MbrWineCustomOrder.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

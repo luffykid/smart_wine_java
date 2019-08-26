@@ -12,15 +12,17 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_wine_custom_order_id, order_status, status_date, order_record_remark, create_date, 
-        modify_date
+        MbrWineCustomOrderRecord.id as id, MbrWineCustomOrderRecord.mbr_wine_custom_order_id as mbr_wine_custom_order_id, 
+        MbrWineCustomOrderRecord.order_status as order_status, MbrWineCustomOrderRecord.status_date as status_date, 
+        MbrWineCustomOrderRecord.order_record_remark as order_record_remark, MbrWineCustomOrderRecord.create_date as create_date, 
+        MbrWineCustomOrderRecord.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrWineCustomOrderRecordMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom_order_record
-        where id = #{id}
+        from m_mbr_wine_custom_order_record MbrWineCustomOrderRecord
+        where MbrWineCustomOrderRecord.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomOrderRecord" >
@@ -63,25 +65,25 @@
     <select id="selectList" resultMap="mbrWineCustomOrderRecordMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom_order_record
+        from m_mbr_wine_custom_order_record MbrWineCustomOrderRecord
         <where >
             <if test="mbrWineCustomOrderId != null" >
-                and null.mbr_wine_custom_order_id = #{mbrWineCustomOrderId}
+                and MbrWineCustomOrderRecord.mbr_wine_custom_order_id = #{mbrWineCustomOrderId}
             </if>
             <if test="orderStatus != null" >
-                and null.order_status = #{orderStatus}
+                and MbrWineCustomOrderRecord.order_status = #{orderStatus}
             </if>
             <if test="statusDate != null" >
-                and null.status_date = #{statusDate}
+                and MbrWineCustomOrderRecord.status_date = #{statusDate}
             </if>
             <if test="orderRecordRemark != null and orderRecordRemark != ''" >
-                and null.order_record_remark = #{orderRecordRemark}
+                and MbrWineCustomOrderRecord.order_record_remark = #{orderRecordRemark}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and MbrWineCustomOrderRecord.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and MbrWineCustomOrderRecord.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

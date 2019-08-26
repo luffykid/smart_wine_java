@@ -17,15 +17,19 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, wine_custom_id, wine_custom_element_id, mbr_wine_custom_id, mbr_id, bg_img, mask_img, 
-        preview_img, bottom_img, print_img, create_date, modify_date
+        MbrWineCustomDetail.id as id, MbrWineCustomDetail.wine_custom_id as wine_custom_id, 
+        MbrWineCustomDetail.wine_custom_element_id as wine_custom_element_id, MbrWineCustomDetail.mbr_wine_custom_id as mbr_wine_custom_id, 
+        MbrWineCustomDetail.mbr_id as mbr_id, MbrWineCustomDetail.bg_img as bg_img, MbrWineCustomDetail.mask_img as mask_img, 
+        MbrWineCustomDetail.preview_img as preview_img, MbrWineCustomDetail.bottom_img as bottom_img, 
+        MbrWineCustomDetail.print_img as print_img, MbrWineCustomDetail.create_date as create_date, 
+        MbrWineCustomDetail.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrWineCustomDetailMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom_detail
-        where id = #{id}
+        from m_mbr_wine_custom_detail MbrWineCustomDetail
+        where MbrWineCustomDetail.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomDetail" >
@@ -85,40 +89,40 @@
     <select id="selectList" resultMap="mbrWineCustomDetailMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom_detail
+        from m_mbr_wine_custom_detail MbrWineCustomDetail
         <where >
             <if test="wineCustomId != null" >
-                and null.wine_custom_id = #{wineCustomId}
+                and MbrWineCustomDetail.wine_custom_id = #{wineCustomId}
             </if>
             <if test="wineCustomElementId != null" >
-                and null.wine_custom_element_id = #{wineCustomElementId}
+                and MbrWineCustomDetail.wine_custom_element_id = #{wineCustomElementId}
             </if>
             <if test="mbrWineCustomId != null" >
-                and null.mbr_wine_custom_id = #{mbrWineCustomId}
+                and MbrWineCustomDetail.mbr_wine_custom_id = #{mbrWineCustomId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and MbrWineCustomDetail.mbr_id = #{mbrId}
             </if>
             <if test="bgImg != null and bgImg != ''" >
-                and null.bg_img = #{bgImg}
+                and MbrWineCustomDetail.bg_img = #{bgImg}
             </if>
             <if test="maskImg != null and maskImg != ''" >
-                and null.mask_img = #{maskImg}
+                and MbrWineCustomDetail.mask_img = #{maskImg}
             </if>
             <if test="previewImg != null and previewImg != ''" >
-                and null.preview_img = #{previewImg}
+                and MbrWineCustomDetail.preview_img = #{previewImg}
             </if>
             <if test="bottomImg != null and bottomImg != ''" >
-                and null.bottom_img = #{bottomImg}
+                and MbrWineCustomDetail.bottom_img = #{bottomImg}
             </if>
             <if test="printImg != null and printImg != ''" >
-                and null.print_img = #{printImg}
+                and MbrWineCustomDetail.print_img = #{printImg}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and MbrWineCustomDetail.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and MbrWineCustomDetail.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

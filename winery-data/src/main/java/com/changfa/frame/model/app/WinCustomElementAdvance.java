@@ -15,7 +15,7 @@ import com.changfa.frame.model.common.BaseEntity;
  */
 public class WinCustomElementAdvance extends BaseEntity {
 
-    private static final long serialVersionUID = 445908906405789696L;
+    private static final long serialVersionUID = 445925740609798144L;
 
     /** 白酒定制元素内容ID */
     private Long winCustomElementContentId;

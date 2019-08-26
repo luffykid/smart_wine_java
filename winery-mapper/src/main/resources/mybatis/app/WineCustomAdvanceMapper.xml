@@ -14,15 +14,17 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, wine_custom_element_id, advance_name, advance_img, advance_remark, status, sort, 
-        create_date, modify_date
+        WineCustomAdvance.id as id, WineCustomAdvance.wine_custom_element_id as wine_custom_element_id, 
+        WineCustomAdvance.advance_name as advance_name, WineCustomAdvance.advance_img as advance_img, 
+        WineCustomAdvance.advance_remark as advance_remark, WineCustomAdvance.status as status, 
+        WineCustomAdvance.sort as sort, WineCustomAdvance.create_date as create_date, WineCustomAdvance.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineCustomAdvanceMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from b_wine_custom_advance
-        where id = #{id}
+        from b_wine_custom_advance WineCustomAdvance
+        where WineCustomAdvance.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomAdvance" >
@@ -71,31 +73,31 @@
     <select id="selectList" resultMap="wineCustomAdvanceMap" >
         select 
         <include refid="table_column" />
-        from b_wine_custom_advance
+        from b_wine_custom_advance WineCustomAdvance
         <where >
             <if test="wineCustomElementId != null" >
-                and null.wine_custom_element_id = #{wineCustomElementId}
+                and WineCustomAdvance.wine_custom_element_id = #{wineCustomElementId}
             </if>
             <if test="advanceName != null and advanceName != ''" >
-                and null.advance_name = #{advanceName}
+                and WineCustomAdvance.advance_name = #{advanceName}
             </if>
             <if test="advanceImg != null and advanceImg != ''" >
-                and null.advance_img = #{advanceImg}
+                and WineCustomAdvance.advance_img = #{advanceImg}
             </if>
             <if test="advanceRemark != null and advanceRemark != ''" >
-                and null.advance_remark = #{advanceRemark}
+                and WineCustomAdvance.advance_remark = #{advanceRemark}
             </if>
             <if test="status != null" >
-                and null.status = #{status}
+                and WineCustomAdvance.status = #{status}
             </if>
             <if test="sort != null" >
-                and null.sort = #{sort}
+                and WineCustomAdvance.sort = #{sort}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and WineCustomAdvance.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and WineCustomAdvance.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

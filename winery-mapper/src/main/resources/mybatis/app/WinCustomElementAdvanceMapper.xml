@@ -10,14 +10,16 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, win_custom_element_content_id, wine_custom_advance_id, create_date, modify_date
+        WinCustomElementAdvance.id as id, WinCustomElementAdvance.win_custom_element_content_id as win_custom_element_content_id, 
+        WinCustomElementAdvance.wine_custom_advance_id as wine_custom_advance_id, WinCustomElementAdvance.create_date as create_date, 
+        WinCustomElementAdvance.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="winCustomElementAdvanceMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from b_win_custom_element_advance
-        where id = #{id}
+        from b_win_custom_element_advance WinCustomElementAdvance
+        where WinCustomElementAdvance.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WinCustomElementAdvance" >
@@ -54,19 +56,19 @@
     <select id="selectList" resultMap="winCustomElementAdvanceMap" >
         select 
         <include refid="table_column" />
-        from b_win_custom_element_advance
+        from b_win_custom_element_advance WinCustomElementAdvance
         <where >
             <if test="winCustomElementContentId != null" >
-                and null.win_custom_element_content_id = #{winCustomElementContentId}
+                and WinCustomElementAdvance.win_custom_element_content_id = #{winCustomElementContentId}
             </if>
             <if test="wineCustomAdvanceId != null" >
-                and null.wine_custom_advance_id = #{wineCustomAdvanceId}
+                and WinCustomElementAdvance.wine_custom_advance_id = #{wineCustomAdvanceId}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and WinCustomElementAdvance.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and WinCustomElementAdvance.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

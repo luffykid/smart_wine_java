@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class MbrWineCustomOrderRecord extends BaseEntity {
 
-    private static final long serialVersionUID = 445916972861882368L;
+    private static final long serialVersionUID = 445919378110676992L;
 
     /** 订单ID */
     private Long mbrWineCustomOrderId;

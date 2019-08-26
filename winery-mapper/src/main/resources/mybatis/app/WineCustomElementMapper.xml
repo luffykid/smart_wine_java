@@ -13,15 +13,16 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, element_name, element_code, element_icon, element_status, sort, create_date, 
-        modify_date
+        WineCustomElement.id as id, WineCustomElement.element_name as element_name, WineCustomElement.element_code as element_code, 
+        WineCustomElement.element_icon as element_icon, WineCustomElement.element_status as element_status, 
+        WineCustomElement.sort as sort, WineCustomElement.create_date as create_date, WineCustomElement.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineCustomElementMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from b_wine_custom_element
-        where id = #{id}
+        from b_wine_custom_element WineCustomElement
+        where WineCustomElement.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomElement" >
@@ -67,28 +68,28 @@
     <select id="selectList" resultMap="wineCustomElementMap" >
         select 
         <include refid="table_column" />
-        from b_wine_custom_element
+        from b_wine_custom_element WineCustomElement
         <where >
             <if test="elementName != null and elementName != ''" >
-                and null.element_name = #{elementName}
+                and WineCustomElement.element_name = #{elementName}
             </if>
             <if test="elementCode != null and elementCode != ''" >
-                and null.element_code = #{elementCode}
+                and WineCustomElement.element_code = #{elementCode}
             </if>
             <if test="elementIcon != null and elementIcon != ''" >
-                and null.element_icon = #{elementIcon}
+                and WineCustomElement.element_icon = #{elementIcon}
             </if>
             <if test="elementStatus != null" >
-                and null.element_status = #{elementStatus}
+                and WineCustomElement.element_status = #{elementStatus}
             </if>
             <if test="sort != null" >
-                and null.sort = #{sort}
+                and WineCustomElement.sort = #{sort}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and WineCustomElement.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and WineCustomElement.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  */
 public class MbrWineCustom extends BaseEntity {
 
-    private static final long serialVersionUID = 445914963979010048L;
+    private static final long serialVersionUID = 445921611535613952L;
 
     /** 会员白酒定制订单 */
     private Long mbrWineCustomOrderId;

@@ -15,7 +15,7 @@ import com.changfa.frame.model.common.BaseEntity;
  */
 public class WineCustomAdvance extends BaseEntity {
 
-    private static final long serialVersionUID = 445907568812883968L;
+    private static final long serialVersionUID = 445926622344773632L;
 
     /** 定制元素ID */
     private Long wineCustomElementId;

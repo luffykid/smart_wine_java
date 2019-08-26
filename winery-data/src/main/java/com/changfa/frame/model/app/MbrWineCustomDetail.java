@@ -15,7 +15,7 @@ import com.changfa.frame.model.common.BaseEntity;
  */
 public class MbrWineCustomDetail extends BaseEntity {
 
-    private static final long serialVersionUID = 445914117060952064L;
+    private static final long serialVersionUID = 445923422875156480L;
 
     /** 酒定制ID */
     private Long wineCustomId;

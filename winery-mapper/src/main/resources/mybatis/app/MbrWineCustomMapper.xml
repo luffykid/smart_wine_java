@@ -18,15 +18,19 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_wine_custom_order_id, wine_custom_id, win_custom_id, winery_id, mbr_id, custom_cnt, 
-        custom_price, custom_total_amt, custom_name, sku_name, create_date, modify_date
+        MbrWineCustom.id as id, MbrWineCustom.mbr_wine_custom_order_id as mbr_wine_custom_order_id, 
+        MbrWineCustom.wine_custom_id as wine_custom_id, MbrWineCustom.win_custom_id as win_custom_id, 
+        MbrWineCustom.winery_id as winery_id, MbrWineCustom.mbr_id as mbr_id, MbrWineCustom.custom_cnt as custom_cnt, 
+        MbrWineCustom.custom_price as custom_price, MbrWineCustom.custom_total_amt as custom_total_amt, 
+        MbrWineCustom.custom_name as custom_name, MbrWineCustom.sku_name as sku_name, MbrWineCustom.create_date as create_date, 
+        MbrWineCustom.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrWineCustomMap" parameterType="java.lang.Long" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom
-        where id = #{id}
+        from m_mbr_wine_custom MbrWineCustom
+        where MbrWineCustom.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustom" >
@@ -89,43 +93,43 @@
     <select id="selectList" resultMap="mbrWineCustomMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_wine_custom
+        from m_mbr_wine_custom MbrWineCustom
         <where >
             <if test="mbrWineCustomOrderId != null" >
-                and null.mbr_wine_custom_order_id = #{mbrWineCustomOrderId}
+                and MbrWineCustom.mbr_wine_custom_order_id = #{mbrWineCustomOrderId}
             </if>
             <if test="wineCustomId != null" >
-                and null.wine_custom_id = #{wineCustomId}
+                and MbrWineCustom.wine_custom_id = #{wineCustomId}
             </if>
             <if test="winCustomId != null" >
-                and null.win_custom_id = #{winCustomId}
+                and MbrWineCustom.win_custom_id = #{winCustomId}
             </if>
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and MbrWineCustom.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and MbrWineCustom.mbr_id = #{mbrId}
             </if>
             <if test="customCnt != null" >
-                and null.custom_cnt = #{customCnt}
+                and MbrWineCustom.custom_cnt = #{customCnt}
             </if>
             <if test="customPrice != null" >
-                and null.custom_price = #{customPrice}
+                and MbrWineCustom.custom_price = #{customPrice}
             </if>
             <if test="customTotalAmt != null" >
-                and null.custom_total_amt = #{customTotalAmt}
+                and MbrWineCustom.custom_total_amt = #{customTotalAmt}
             </if>
             <if test="customName != null and customName != ''" >
-                and null.custom_name = #{customName}
+                and MbrWineCustom.custom_name = #{customName}
             </if>
             <if test="skuName != null" >
-                and null.sku_name = #{skuName}
+                and MbrWineCustom.sku_name = #{skuName}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and MbrWineCustom.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and MbrWineCustom.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
