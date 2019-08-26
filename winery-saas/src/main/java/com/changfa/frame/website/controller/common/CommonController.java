@@ -45,7 +45,6 @@ public class CommonController extends BaseController {
      *
      * @param loginName 登录用户名称
      * @param loginPwd  登录密码
-     * @param phoneCode 手机号验证码
      * @return
      */
     @ApiOperation(value = "用户登录并返回token", notes = "用户登录并返回token", httpMethod = "POST")
@@ -55,9 +54,9 @@ public class CommonController extends BaseController {
             @ApiImplicitParam(name = "phoneCode", value = "手机验证码", dataType = "String")
     })
     @PostMapping(value = "/login")
-    public Map<String, Object> login(String loginName, String loginPwd, String phoneCode) {
+    public Map<String, Object> login(String loginName, String loginPwd) {
         // 参数校验
-        if (StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd) || StringUtils.isBlank(phoneCode)) {
+        if (StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd)) {
             throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
         }
 
