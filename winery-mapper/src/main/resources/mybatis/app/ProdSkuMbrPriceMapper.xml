@@ -84,4 +84,14 @@
         from s_prod_sku_mbr_price where prod_sku_id =#{id}
     </select>
 
+    <delete id="deleteByProdSkuId" parameterType="java.lang.Long">
+        delete from s_prod_sku_mbr_price where prod_sku_id =#{id}
+    </delete>
+
+    <select id="findProdSkuMbrPriceListByProdSkuId" parameterType="java.lang.Long" resultMap="prodSkuMbrPriceMap">
+        select
+        <include refid="table_column"/>
+        from s_prod_sku_mbr_price where prod_sku_id =#{id}
+    </select>
+
 </mapper>

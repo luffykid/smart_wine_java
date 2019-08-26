@@ -9,6 +9,8 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
+import java.util.List;
+
 /**
  * 酒庄酒表
  * @version 1.0 2019-08-24
@@ -35,10 +37,72 @@ public class WineryWine extends BaseEntity {
     2：禁用 */
     private Integer status;
 
+    public enum STATUS_ENUM {
+        XJ(0, "新建"),
+        QY(1, "启用"),
+        JY(2, "禁用");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static STATUS_ENUM getEnum(Integer value) {
+            for (STATUS_ENUM queryDayEnum : STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
     /**
      * 关联产品数量
      */
     private Integer relationCount;
+
+
+    /**
+     * 关联产品id
+     */
+    private List<WineryWineProd> wineryWineProdList;
 
 
     /**
@@ -106,16 +170,17 @@ public class WineryWine extends BaseEntity {
     public Integer getStatus() {
         return status;
     }
-    
+
     /**
      * 设置状态
-    0：新建
-    1：启用
-    2：禁用
-        */
+     0：新建
+     1：启用
+     2：禁用
+     */
     public void setStatus(Integer status) {
         this.status = status;
     }
+
 
     /**
      * 获取关联产品总数量
@@ -130,4 +195,20 @@ public class WineryWine extends BaseEntity {
     public void setRelationCount(Integer relationCount) {
         this.relationCount = relationCount;
     }
+
+    /**
+     * 获取关联产品id
+     */
+    public List<WineryWineProd> getWineryWineProdList() {
+        return wineryWineProdList;
+    }
+
+    /**
+     * 设置关联产品id
+     */
+    public void setWineryWineProdList(List<WineryWineProd> wineryWineProdList) {
+        this.wineryWineProdList = wineryWineProdList;
+    }
+
+
 }

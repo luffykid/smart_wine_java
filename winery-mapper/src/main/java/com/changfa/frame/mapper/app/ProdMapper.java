@@ -22,4 +22,8 @@ public interface ProdMapper extends BaseMapper<Prod, Long> {
     int deleteByid(Long id);
 
     List<Prod> findProdByLikeName(String prodName, Long lableType);
+
+    int add(Prod prod);
+
+    int updateProd(Prod prod);
 }

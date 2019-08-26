@@ -4,7 +4,7 @@
     <resultMap id="prodSkuMap" type="com.changfa.frame.model.app.ProdSku" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="prod_id" property="prodId" jdbcType="BIGINT" />
-        <result column="sku_name" property="skuName" jdbcType="BIGINT" />
+        <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
         <result column="sku_status" property="skuStatus" jdbcType="INTEGER" />
         <result column="sku_stock_cnt" property="skuStockCnt" jdbcType="BIGINT" />
         <result column="fragrance_type" property="fragranceType" jdbcType="VARCHAR" />
@@ -40,7 +40,7 @@
         insert into s_prod_sku (id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type, alcohol_cnt, sku_weight,
             sku_capacity, sku_sell_price, sku_market_price, sell_total_cnt, sort, 
             is_integral, integral_amt, integral_cnt, is_del, create_date, modify_date)
-        values (#{id}, #{prodId}, #{skuName}, #{skuStatus}, #{skuStockCnt}, #{fragranceType}, #{alcoholCnt} #{skuWeight},
+        values (#{id}, #{prodId}, #{skuName}, #{skuStatus}, #{skuStockCnt}, #{fragranceType}, #{alcoholCnt}, #{skuWeight},
             #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort}, 
             #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
     </insert>
@@ -180,7 +180,7 @@
     </select>
 
     <update id="updateSkuStatusByProdId">
-        update s_prod_sku set skuStatus =#{skuStatus} where prod_id = #{id}
+        update s_prod_sku set sku_status =#{skuStatus} where prod_id = #{id}
     </update>
 
     <select id="selectProdSkuStatusByProdId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.ProdSku">
@@ -193,9 +193,22 @@
         update s_prod_sku set sku_status = #{skuStatus} where id =#{id}
     </update>
 
-    <update id="deleteProdSku" parameterType="java.lang.Long">
+    <update id="deleteProdSku">
         update s_prod_sku set is_del = 1 where id =#{id}
     </update>
+
+    <insert id="add" parameterType="com.changfa.frame.model.app.ProdSku" >
+        insert into s_prod_sku (id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type, alcohol_cnt, sku_weight,
+            sku_capacity, sku_sell_price, sku_market_price, sell_total_cnt, sort,
+            is_integral, integral_amt, integral_cnt, is_del, create_date, modify_date)
+        values (#{id}, #{prodId}, #{skuName}, #{skuStatus}, #{skuStockCnt}, #{fragranceType}, #{alcoholCnt}, #{skuWeight},
+            #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort},
+            #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
+    </insert>
+
+
+
+
 
 
 </mapper>

@@ -33,21 +33,21 @@ public interface ProdService extends BaseService<Prod, Long> {
      * @param pageInfo 分页对象
      * @return List<Prod>
      */
-    List<Prod> getProdList(PageInfo pageInfo);
+    PageInfo<Prod> getProdList(PageInfo pageInfo);
 
     /**
      * 添加产品
-     * @param curAdmin 当前用户
+     * @param admin 当前用户
      * @param prod  产品添加对象
      */
-    void addProd(Admin curAdmin, Prod prod);
+    void addProd(Admin admin, Prod prod);
 
     /**
      * 产品下架  同时下架有关商品sku
      * @param id 产品id
      * @param skuStatus 上下架参数  sku状态 0：未上架 1：已上架
      */
-    void updateProdStatus(Long id, Integer skuStatus);
+    void updateProdStatus(Long id,Integer skuStatus);
 
     /**
      * 查询产品详情
@@ -130,6 +130,6 @@ public interface ProdService extends BaseService<Prod, Long> {
      * @param pageInfo
      * @return
      */
-    List<ProdSku> getProdSkuList(Long id,PageInfo pageInfo);
+    PageInfo<ProdSku> getProdSkuList(Long id,PageInfo pageInfo);
 }
  

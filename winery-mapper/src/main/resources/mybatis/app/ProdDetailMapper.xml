@@ -7,7 +7,7 @@
         <result column="detail_title" property="detailTitle" jdbcType="VARCHAR" />
         <result column="detail_brief" property="detailBrief" jdbcType="VARCHAR" />
         <result column="detail_img" property="detailImg" jdbcType="VARCHAR" />
-        <result column="detail_status" property="detailStatus" jdbcType="INTEGER" />
+        <result column="detail_status" property="DETAIL_STATUS" jdbcType="INTEGER" />
         <result column="sort" property="sort" jdbcType="INTEGER" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
@@ -140,7 +140,16 @@
     </delete>
     
     <update id="deleteProdDetailImg" parameterType="java.lang.Long">
-        update s_prod_detail set detail_img = null where prod_id =#{id}
+        update s_prod_detail set detail_img = null where id =#{id}
     </update>
+
+    <insert id="add" parameterType="com.changfa.frame.model.app.ProdDetail" >
+        insert into s_prod_detail (id, prod_id, detail_title, detail_brief, detail_img,
+            sort, create_date, modify_date)
+        values (#{id}, #{prodId}, #{detailTitle}, #{detailBrief}, #{detailImg},
+            #{sort}, #{createDate}, #{modifyDate})
+    </insert>
+
+
 
 </mapper>

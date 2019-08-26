@@ -16,4 +16,5 @@ public interface WineryWineMapper extends BaseMapper<WineryWine, Long> {
 
     List<WineryWine> getWineryWineList();
 
+    List<WineryWine> getWineryWineListByName(String name, Integer status);
 }

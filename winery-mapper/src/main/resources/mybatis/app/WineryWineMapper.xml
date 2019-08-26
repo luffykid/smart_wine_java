@@ -92,10 +92,16 @@
         </where>
     </select>
 
-    <select id="getWineryWineList" resultType="com.changfa.frame.model.app.WineryWine">
+    <select id="getWineryWineList" resultMap="wineryWineMap">
         select
         <include refid="table_column"/>
-        from b_winery_wine where status = 1
+        from b_winery_wine
+    </select>
+
+    <select id="getWineryWineListByName" resultMap="wineryWineMap">
+        select
+        <include refid="table_column"/>
+        from b_winery_wine where status = #{status} and name like concat(concat('%',#{name}),'%')
     </select>
 
 </mapper>

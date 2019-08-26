@@ -136,7 +136,7 @@
         from b_winery_sight where sight_name = #{sightName}
     </select>
 
-    <select id="selectWinerySightList" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.WinerySight">
+    <select id="selectWinerySightList" parameterType="java.lang.Long" resultMap="winerySightMap">
         select
         <include refid="table_column"/>
         from b_winery_sight where winery_id =#{wineryId} order by create_date desc
@@ -160,5 +160,46 @@
             #{latitude}, #{longitude}, #{likeTotalCnt}, #{shareTotalCnt}, #{createDate},
             #{modifyDate}, #{isSign})
     </insert>
+
+    <update id="updateWinerySight" parameterType="com.changfa.frame.model.app.WinerySight" >
+        update b_winery_sight
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="sightName != null and sightName != ''" >
+                sight_name = #{sightName},
+            </if>
+                sight_icon = #{sightIcon},
+            <if test="sightDetail != null" >
+                sight_detail = #{sightDetail},
+            </if>
+            <if test="coverImg != null and coverImg != ''" >
+                cover_img = #{coverImg},
+            </if>
+            <if test="latitude != null" >
+                latitude = #{latitude},
+            </if>
+            <if test="longitude != null" >
+                longitude = #{longitude},
+            </if>
+            <if test="likeTotalCnt != null" >
+                like_total_cnt = #{likeTotalCnt},
+            </if>
+            <if test="shareTotalCnt != null" >
+                share_total_cnt = #{shareTotalCnt},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+            <if test="isSign != null" >
+                is_sign = #{isSign},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
 </mapper>

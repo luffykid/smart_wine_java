@@ -17,4 +17,8 @@ public interface WinerySightImgMapper extends BaseMapper<WinerySightImg, Long> {
     List<String> findScenicImgById(Long id);
 
     int deleteWinerySightImgById(Long id);
+
+    List<WinerySightImg> findListByWinerySightId(Long id);
+
+    int deleteByWinerySightId(Long id);
 }

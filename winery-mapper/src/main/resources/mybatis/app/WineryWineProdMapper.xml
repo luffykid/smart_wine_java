@@ -85,7 +85,7 @@
         </where>
     </select>
 
-    <select id="getProdListByWinerWineId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.WineryWineProd">
+    <select id="getProdListByWinerWineId" parameterType="java.lang.Long" resultMap="wineryWineProdMap">
         select
         <include refid="table_column"/>
         from b_winery_wine_prod where winery_wine_id =#{wineryWineId}

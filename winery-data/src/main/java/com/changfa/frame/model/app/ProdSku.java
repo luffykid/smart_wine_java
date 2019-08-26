@@ -24,12 +24,68 @@ public class ProdSku extends BaseEntity {
     private Long prodId;
 
     /** 商品sku名称 */
-    private Long skuName;
+    private String skuName;
 
     /** sku状态
     0：未上架
     1：已上架 */
     private Integer skuStatus;
+
+    public enum SKU_STATUS_ENUM {
+        WSJ(0, "未上架"),
+        YSJ(1, "已上架");
+
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        SKU_STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static SKU_STATUS_ENUM getEnum(Integer value) {
+            for (SKU_STATUS_ENUM queryDayEnum : SKU_STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
 
     /** 库存 */
     private Long skuStockCnt;
@@ -94,17 +150,17 @@ public class ProdSku extends BaseEntity {
     /**
      * 获取商品sku名称
     */
-    public Long getSkuName() {
+    public String getSkuName() {
         return skuName;
     }
     
     /**
      * 设置商品sku名称
     */
-    public void setSkuName(Long skuName) {
+    public void setSkuName(String skuName) {
         this.skuName = skuName;
     }
-    
+
     /**
      * 获取sku状态
     0：未上架
