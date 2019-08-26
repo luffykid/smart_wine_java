@@ -57,10 +57,10 @@ public interface MemberService extends BaseService<Member, Long> {
      * @param userIcon 头像
      * @param nickName 名称
      * @param birthday 生日
-     * @param sex      性别
+     * @param gender      性别
      * @param phone    电话
      */
-    void updateMember(Long mbrId, String userIcon, String nickName, String birthday, String sex, String phone);
+    void updateMember(Long mbrId, String userIcon, String nickName, String birthday, Integer gender, String phone);
 
     /**
      * 根据openId查询会员

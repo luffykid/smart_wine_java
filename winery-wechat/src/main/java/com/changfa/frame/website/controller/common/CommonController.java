@@ -2,12 +2,16 @@ package com.changfa.frame.website.controller.common;
 
 import com.changfa.frame.core.redis.RedisClient;
 import com.changfa.frame.core.redis.RedisConsts;
+import com.changfa.frame.model.app.MbrWechat;
 import com.changfa.frame.model.app.Member;
+import com.changfa.frame.service.mybatis.app.MbrWechatService;
 import com.changfa.frame.service.mybatis.app.MemberService;
+import com.changfa.frame.service.mybatis.common.SMSService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * @author 公共控制器【公共接口】
+ * @author 公共接口
  * @date 2019-08-24 14:06
  */
-@Api(value = "公共控制器接口", tags = "公共控制器接口")
+@Api(value = "公共接口", tags = "公共接口")
 @RestController("wxMiniCommonController")
 @RequestMapping("/wxMini/common")
 public class CommonController extends BaseController {
@@ -35,6 +40,12 @@ public class CommonController extends BaseController {
 
     @Autowired
     private RedisClient redisClient;
+
+    @Resource(name = "SMSServiceImpl")
+    private SMSService smsService;
+
+    @Resource(name = "mbrWechatServiceImpl")
+    private MbrWechatService mbrWechatService;
 
     /**
      * 会员登录
@@ -83,7 +94,7 @@ public class CommonController extends BaseController {
     /**
      * 保存微信用户返回信息
      *
-     * @param paramMap 用户信息
+     * @param mbrWechat 微信用户信息
      * @return
      */
     @ApiOperation(value = "保存微信用户返回信息", notes = "保存微信用户返回信息", httpMethod = "POST")
@@ -91,8 +102,18 @@ public class CommonController extends BaseController {
             @ApiImplicitParam(name = "paramMap", value = "参数集合", dataType = "String")
     })
     @PostMapping(value = "/saveWxUserInfo")
-    public Map<String, Object> saveWxUserInfo(Map paramMap) {
-        log.info(paramMap.toString());
+    public Map<String, Object> saveWxUserInfo(MbrWechat mbrWechat, HttpServletRequest request) {
+        // 获取当前用户
+        Member curMember = getCurMember(request);
+        MbrWechat mbrWechatTemp = new MbrWechat();
+        mbrWechatTemp.setMbrId(curMember.getId());
+        List<MbrWechat> mbrWechats = mbrWechatService.selectList(mbrWechat);
+        mbrWechat.setMbrId(curMember.getId());
+        if (CollectionUtils.isEmpty(mbrWechats)) {
+            mbrWechatService.save(mbrWechat);
+        }else {
+            mbrWechatService.update(mbrWechat);
+        }
         return getResult(null);
     }
 
@@ -108,10 +129,19 @@ public class CommonController extends BaseController {
     })
     @GetMapping(value = "/getPhoneCode")
     public Map<String, Object> getPhoneCode(String phone) {
-        log.info("手机号{}", phone);
-        // 手机验证码
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("phoneCode", RandomStringUtils.randomAlphanumeric(6));
-        return getResult(returnMap);
+        // 查看redis中是否存在该手机号获取的验证码
+        if (StringUtils.isNotBlank(redisClient.getString(RedisConsts.WXMEMBER_MOBILECODE_LIMIT_KEY + phone))) {
+            throw new CustomException(RESPONSE_CODE_ENUM.CAPTCHA_EXIST);
+        }
+
+        // 放入redis
+        String captcha = RandomStringUtils.randomNumeric(6);
+        redisClient.setAndExpire(RedisConsts.WXMEMBER_MOBILE_CAPTCHA + phone, captcha, RedisConsts.WXMEMBER_MOBILE_CAPTCHA_EXPIRE);
+        smsService.sendAliSMSForFGeneral(phone, captcha);
+
+        // 初始化返回参数
+        Map<String, Object> resultMap = new HashMap();
+        resultMap.put("success", true);
+        return getResult(resultMap);
     }
 }

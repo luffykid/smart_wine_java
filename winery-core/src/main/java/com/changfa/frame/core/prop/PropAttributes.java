@@ -23,4 +23,13 @@ public class PropAttributes {
     public static final String THIRDPARTY_WX_MINI_APPSECRET = "thirdParty.weChat.mini.appSecret";
     public static final String THIRDPARTY_WX_MINI_PAYKEY = "thirdParty.weChat.mini.payKey";
     /****************************** 酒庄小程序端 START ******************************/
+
+    /****************************** 阿里大于短信服务配置 START ******************************/
+    public static final String THIRDPARTY_SMS_SERVERURL = "thirdParty.sms.serverUrl";
+    public static final String THIRDPARTY_SMS_APPKEY = "thirdParty.sms.appKey";
+    public static final String THIRDPARTY_SMS_APPSECRET = "thirdParty.sms.appSecret";
+    public static final String THIRDPARTY_SMS_SIGNNATURE = "thirdParty.sms.signature";
+    public static final String THIRDPARTY_SMS_TEMPLATE_GENERAL = "thirdParty.sms.template.general";
+    /****************************** 阿里大于短信服务配置 END ******************************/
+
 }

@@ -3,7 +3,7 @@
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-14 Created
+ * 2019-08-26 Created
  */
 package com.changfa.frame.model.app;
 
@@ -13,146 +13,191 @@ import java.util.Date;
 
 /**
  * 会员微信表
- * @version 1.0 2019-08-14
+ *
+ * @version 1.0 2019-08-26
  */
 public class MbrWechat extends BaseEntity {
 
-    private static final long serialVersionUID = 441543498722705408L;
+    private static final long serialVersionUID = 445891252152434688L;
 
-    /** 用户ID */
-    private Integer mbrId;
+    /**
+     * 用户ID
+     */
+    private Long mbrId;
 
-    /** 会员昵称 */
+    /**
+     * 会员昵称
+     */
     private String nickName;
 
-    /** 身份证号 */
-    private String idNo;
+    /**
+     * 性别
+     * 0：未知
+     * 1：男
+     * 2：女
+     */
+    private Integer gender;
 
-    /** 会员等级ID */
-    private Integer memberLevel;
+    /**
+     * 省份
+     */
+    private String province;
 
-    /** 会员生日 */
+    /**
+     * 城市
+     */
+    private String city;
+
+    /**
+     * 县
+     */
+    private String country;
+
+    /**
+     * 头像
+     */
+    private String avatarUrl;
+
+    /**
+     * 开放平台编号
+     */
+    private String unionid;
+
+    /**
+     * 生日
+     */
     private Date birthday;
 
-    /** 性别 */
-    private String sex;
 
-    /** 年龄 */
-    private Integer age;
-
-    /** 酒庄ID（新增） */
-    private Long wineryId;
-
-    
     /**
      * 获取用户ID
-    */
-    public Integer getMbrId() {
+     */
+    public Long getMbrId() {
         return mbrId;
     }
-    
+
     /**
      * 设置用户ID
-    */
-    public void setMbrId(Integer mbrId) {
+     */
+    public void setMbrId(Long mbrId) {
         this.mbrId = mbrId;
     }
-    
+
     /**
      * 获取会员昵称
-    */
+     */
     public String getNickName() {
         return nickName;
     }
-    
+
     /**
      * 设置会员昵称
-    */
+     */
     public void setNickName(String nickName) {
         this.nickName = nickName == null ? null : nickName.trim();
     }
-    
+
     /**
-     * 获取身份证号
-    */
-    public String getIdNo() {
-        return idNo;
+     * 获取性别
+     * 0：未知
+     * 1：男
+     * 2：女
+     */
+    public Integer getGender() {
+        return gender;
     }
-    
+
     /**
-     * 设置身份证号
-    */
-    public void setIdNo(String idNo) {
-        this.idNo = idNo == null ? null : idNo.trim();
+     * 设置性别
+     * 0：未知
+     * 1：男
+     * 2：女
+     */
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
-    
+
     /**
-     * 获取会员等级ID
-    */
-    public Integer getMemberLevel() {
-        return memberLevel;
+     * 获取省份
+     */
+    public String getProvince() {
+        return province;
     }
-    
+
     /**
-     * 设置会员等级ID
-    */
-    public void setMemberLevel(Integer memberLevel) {
-        this.memberLevel = memberLevel;
+     * 设置省份
+     */
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
     }
-    
+
     /**
-     * 获取会员生日
-    */
+     * 获取城市
+     */
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     * 设置城市
+     */
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    /**
+     * 获取县
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * 设置县
+     */
+    public void setCountry(String country) {
+        this.country = country == null ? null : country.trim();
+    }
+
+    /**
+     * 获取头像
+     */
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    /**
+     * 设置头像
+     */
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
+    }
+
+    /**
+     * 获取开放平台编号
+     */
+    public String getUnionid() {
+        return unionid;
+    }
+
+    /**
+     * 设置开放平台编号
+     */
+    public void setUnionid(String unionid) {
+        this.unionid = unionid == null ? null : unionid.trim();
+    }
+
+    /**
+     * 获取生日
+     */
     public Date getBirthday() {
         return birthday;
     }
-    
+
     /**
-     * 设置会员生日
-    */
+     * 设置生日
+     */
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
-    }
-    
-    /**
-     * 获取性别
-    */
-    public String getSex() {
-        return sex;
-    }
-    
-    /**
-     * 设置性别
-    */
-    public void setSex(String sex) {
-        this.sex = sex == null ? null : sex.trim();
-    }
-    
-    /**
-     * 获取年龄
-    */
-    public Integer getAge() {
-        return age;
-    }
-    
-    /**
-     * 设置年龄
-    */
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-    
-    /**
-     * 获取酒庄ID（新增）
-    */
-    public Long getWineryId() {
-        return wineryId;
-    }
-    
-    /**
-     * 设置酒庄ID（新增）
-    */
-    public void setWineryId(Long wineryId) {
-        this.wineryId = wineryId;
     }
 }

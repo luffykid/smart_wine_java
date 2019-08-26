@@ -94,10 +94,10 @@ public class MemberController extends BaseController {
     }
     )
     @RequestMapping(value = "/update", method = RequestMethod.GET)
-    public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, String sex, String phone) {
+    public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, Integer gender, String phone) {
         Member member = getCurMember(request);
         try {
-            memberServiceImpl.updateMember(member.getId(), userIcon, nickName, birthday, sex, phone);
+            memberServiceImpl.updateMember(member.getId(), userIcon, nickName, birthday, gender, phone);
         } catch (Exception e) {
             log.info("此处有错误:{}", e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);

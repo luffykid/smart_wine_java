@@ -99,23 +99,23 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
      */
     @Transactional
     @Override
-    public void updateMember(Long mbrId, String userIcon, String nickName, String birthday, String sex, String phone) {
+    public void updateMember(Long mbrId, String userIcon, String nickName, String birthday, Integer gender, String phone) {
         Member member = memberMapper.getById(mbrId);
         member.setNickName(nickName);
         member.setPhone(phone);
         memberMapper.update(member);
-        List<MbrWechat> mbrWechats = mbrWechatMapper.selectListByMbrIdAndWineryId(member.getId(), member.getWineryId());
+        List<MbrWechat> mbrWechats = mbrWechatMapper.selectListByMbrIdAndWineryId(member.getId());
         if (mbrWechats.size() == 0) {
             MbrWechat mbrWechat = new MbrWechat();
             mbrWechat.setNickName(nickName);
             mbrWechat.setBirthday(new Date(birthday));
-            mbrWechat.setSex(sex);
+            mbrWechat.setGender(gender);
             mbrWechatMapper.save(mbrWechat);
         } else {
             MbrWechat mbrWechat = mbrWechats.get(0);
             mbrWechat.setNickName(nickName);
             mbrWechat.setBirthday(new Date(birthday));
-            mbrWechat.setSex(sex);
+            mbrWechat.setGender(gender);
             mbrWechatMapper.update(mbrWechat);
         }
     }

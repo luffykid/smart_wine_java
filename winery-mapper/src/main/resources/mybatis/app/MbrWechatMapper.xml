@@ -3,32 +3,37 @@
 <mapper namespace="com.changfa.frame.mapper.app.MbrWechatMapper" >
     <resultMap id="mbrWechatMap" type="com.changfa.frame.model.app.MbrWechat" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="mbr_id" property="mbrId" jdbcType="INTEGER" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
         <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
-        <result column="id_no" property="idNo" jdbcType="VARCHAR" />
-        <result column="member_level" property="memberLevel" jdbcType="INTEGER" />
-        <result column="birthday" property="birthday" jdbcType="DATE" />
-        <result column="sex" property="sex" jdbcType="CHAR" />
-        <result column="age" property="age" jdbcType="INTEGER" />
-        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="province" property="province" jdbcType="VARCHAR" />
+        <result column="city" property="city" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
+        <result column="unionId" property="unionid" jdbcType="VARCHAR" />
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_id, nick_name, id_no, member_level, birthday, sex, age, winery_id
+        mw.id as id, mw.mbr_id as mbr_id, mw.nick_name as nick_name, mw.gender as gender,
+        mw.province as province, mw.city as city, mw.country as country, mw.avatar_url as avatar_url,
+        mw.unionId as unionId, mw.birthday as birthday, mw.create_date as create_date, mw.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrWechatMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_wechat
-        where id = #{id}
+        from m_mbr_wechat mw
+        where mw.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWechat" >
-        insert into m_mbr_wechat (id, mbr_id, nick_name, id_no, member_level, birthday, sex, 
-            age, winery_id)
-        values (#{id}, #{mbrId}, #{nickName}, #{idNo}, #{memberLevel}, #{birthday}, #{sex}, 
-            #{age}, #{wineryId})
+        insert into m_mbr_wechat (id, mbr_id, nick_name, gender, province, city, country,
+            avatar_url, unionId, create_date, modify_date)
+        values (#{id}, #{mbrId}, #{nickName}, #{gender}, #{province}, #{city}, #{country},
+            #{avatarUrl}, #{unionid}, #{birthday}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrWechat" >
@@ -40,23 +45,32 @@
             <if test="nickName != null and nickName != ''" >
                 nick_name = #{nickName},
             </if>
-            <if test="idNo != null and idNo != ''" >
-                id_no = #{idNo},
+            <if test="gender != null" >
+                gender = #{gender},
             </if>
-            <if test="memberLevel != null" >
-                member_level = #{memberLevel},
+            <if test="province != null and province != ''" >
+                province = #{province},
+            </if>
+            <if test="city != null and city != ''" >
+                city = #{city},
+            </if>
+            <if test="country != null and country != ''" >
+                country = #{country},
+            </if>
+            <if test="avatarUrl != null and avatarUrl != ''" >
+                avatar_url = #{avatarUrl},
+            </if>
+            <if test="unionid != null and unionid != ''" >
+                unionId = #{unionid},
             </if>
             <if test="birthday != null" >
                 birthday = #{birthday},
             </if>
-            <if test="sex != null" >
-                sex = #{sex},
+             <if test="createDate != null" >
+                create_date = #{createDate},
             </if>
-            <if test="age != null" >
-                age = #{age},
-            </if>
-            <if test="wineryId != null" >
-                winery_id = #{wineryId},
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
             </if>
         </set>
         where id = #{id}
@@ -68,33 +82,42 @@
     </delete>
 
     <select id="selectList" resultMap="mbrWechatMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_wechat
+        from m_mbr_wechat mw
         <where >
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mw.mbr_id = #{mbrId}
             </if>
             <if test="nickName != null and nickName != ''" >
-                and null.nick_name = #{nickName}
+                and mw.nick_name = #{nickName}
             </if>
-            <if test="idNo != null and idNo != ''" >
-                and null.id_no = #{idNo}
+            <if test="gender != null" >
+                and mw.gender = #{gender}
             </if>
-            <if test="memberLevel != null" >
-                and null.member_level = #{memberLevel}
+            <if test="province != null and province != ''" >
+                and mw.province = #{province}
+            </if>
+            <if test="city != null and city != ''" >
+                and mw.city = #{city}
+            </if>
+            <if test="country != null and country != ''" >
+                and mw.country = #{country}
+            </if>
+            <if test="avatarUrl != null and avatarUrl != ''" >
+                and mw.avatar_url = #{avatarUrl}
+            </if>
+            <if test="unionid != null and unionid != ''" >
+                and mw.unionId = #{unionid}
             </if>
             <if test="birthday != null" >
-                and null.birthday = #{birthday}
+                and mw.birthday = #{birthday}
             </if>
-            <if test="sex != null" >
-                and null.sex = #{sex}
+            <if test="createDate != null" >
+                and mw.create_date = #{createDate}
             </if>
-            <if test="age != null" >
-                and null.age = #{age}
-            </if>
-            <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+            <if test="modifyDate != null" >
+                and mw.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -102,6 +125,7 @@
     <select id="selectListByMbrIdAndWineryId" resultMap="mbrWechatMap">
         select
         <include refid="table_column" />
-        from m_mbr_wechat where mbr_id = #{mbrId} and winery_id = #{wineryId}
+        from m_mbr_wechat where mbr_id = #{mbrId}
     </select>
+
 </mapper>

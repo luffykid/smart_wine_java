@@ -20,5 +20,5 @@ public interface MbrWechatMapper extends BaseMapper<MbrWechat, Long> {
      * @param mbrId
      * @return
      */
-    List<MbrWechat> selectListByMbrIdAndWineryId(@Param("mbrId") Long mbrId, @Param("wineryId") Long wineryId);
+    List<MbrWechat> selectListByMbrIdAndWineryId(@Param("mbrId") Long mbrId);
 }
