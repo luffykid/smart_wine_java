@@ -35,7 +35,7 @@ public class MbrStoreOrderItem extends BaseEntity {
     private Integer prodSkuCnt;
 
     /** 商品SKU 名称 */
-    private Long skuName;
+    private String skuName;
 
     /** sku市场价 */
     private BigDecimal skuMarketPrice;
@@ -136,14 +136,14 @@ public class MbrStoreOrderItem extends BaseEntity {
     /**
      * 获取商品SKU 名称
     */
-    public Long getSkuName() {
+    public String getSkuName() {
         return skuName;
     }
     
     /**
      * 设置商品SKU 名称
     */
-    public void setSkuName(Long skuName) {
+    public void setSkuName(String skuName) {
         this.skuName = skuName;
     }
     
