@@ -186,7 +186,7 @@
     </select>
 
     <select id="selectStoreList" parameterType="Long" resultType="java.util.Map">
-        select o.total_increase_weight,o.total_org_weight,o.total_remain_weight,i.sku_name from m_mbr_store_order o
+        select o.id,o.total_increase_weight,o.total_org_weight,o.total_remain_weight,i.sku_name from m_mbr_store_order o
         inner join m_mbr_store_order_item i on o.id = i.mbr_store_order_id
         where o.order_status = 4 and o.mbr_id=#{mbrId}
     </select>
