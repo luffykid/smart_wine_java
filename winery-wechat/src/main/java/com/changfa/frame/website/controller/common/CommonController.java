@@ -50,8 +50,9 @@ public class CommonController extends BaseController {
     })
     @PostMapping(value = "/login")
     public Map<String, Object> login(String phone, String phoneCode, HttpServletRequest request) {
+        log.info("******* 登录接口{}:{}", phone, phoneCode);
         // 参数校验
-        if (StringUtils.isBlank(phone) || StringUtils.isBlank(phoneCode) ) {
+        if (StringUtils.isBlank(phone) || StringUtils.isBlank(phoneCode)) {
             throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
         }
         Member curMember = getCurMember(request);
@@ -64,7 +65,7 @@ public class CommonController extends BaseController {
         }
 
         // 账户手机号不一致
-        if (StringUtils.equalsIgnoreCase(curMember.getPhone(), phone)) {
+        if (!StringUtils.equalsIgnoreCase(curMember.getPhone(), phone)) {
             throw new CustomException(RESPONSE_CODE_ENUM.ACCT_PHONE_NO_SAME);
         }
 
@@ -76,7 +77,7 @@ public class CommonController extends BaseController {
         // 返回登录token
         HashMap<Object, Object> resultMap = new HashMap<>();
         resultMap.put("token", token);
-        return getResult(null);
+        return getResult(resultMap);
     }
 
     /**
@@ -107,7 +108,7 @@ public class CommonController extends BaseController {
     })
     @GetMapping(value = "/getPhoneCode")
     public Map<String, Object> getPhoneCode(String phone) {
-        log.info("手机号{}",phone);
+        log.info("手机号{}", phone);
         // 手机验证码
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("phoneCode", RandomStringUtils.randomAlphanumeric(6));
