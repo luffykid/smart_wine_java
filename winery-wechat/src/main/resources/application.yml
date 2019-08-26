@@ -3,6 +3,8 @@ server:
   address: localhost
   port: 8080
   sessionTimeout: 3000
+  tomcat:
+    uri-encoding: UTF-8
 
 # ***************** 属性文件配置 开始 ******************************** #
 system:
@@ -63,6 +65,13 @@ spring:
       max-file-size: 512MB
       max-request-size: 512MB
       enabled: true
+
+  #***************** Http请求编码配置 开始 ********************************#
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: utf-8
 
 # ***************** mybatis配置 开始 ******************************** #
 mybatis:
