@@ -89,43 +89,43 @@
     <select id="selectList" resultMap="winerySightMap" >
         select
         <include refid="table_column" />
-        from b_winery_sight
+        from b_winery_sight ws
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and ws.winery_id = #{wineryId}
             </if>
             <if test="sightName != null and sightName != ''" >
-                and null.sight_name = #{sightName}
+                and ws.sight_name = #{sightName}
             </if>
             <if test="sightIcon != null and sightIcon != ''" >
-                and null.sight_icon = #{sightIcon}
+                and ws.sight_icon = #{sightIcon}
             </if>
             <if test="sightDetail != null" >
-                and null.sight_detail = #{sightDetail}
+                and ws.sight_detail = #{sightDetail}
             </if>
             <if test="coverImg != null and coverImg != ''" >
-                and null.cover_img = #{coverImg}
+                and ws.cover_img = #{coverImg}
             </if>
             <if test="latitude != null" >
-                and null.latitude = #{latitude}
+                and ws.latitude = #{latitude}
             </if>
             <if test="longitude != null" >
-                and null.longitude = #{longitude}
+                and ws.longitude = #{longitude}
             </if>
             <if test="likeTotalCnt != null" >
-                and null.like_total_cnt = #{likeTotalCnt}
+                and ws.like_total_cnt = #{likeTotalCnt}
             </if>
             <if test="shareTotalCnt != null" >
-                and null.share_total_cnt = #{shareTotalCnt}
+                and ws.share_total_cnt = #{shareTotalCnt}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and ws.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and ws.modify_date = #{modifyDate}
             </if>
             <if test="isSign != null" >
-                and null.is_sign = #{isSign}
+                and ws.is_sign = #{isSign}
             </if>
         </where>
     </select>

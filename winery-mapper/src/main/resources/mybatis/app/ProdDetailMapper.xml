@@ -71,31 +71,31 @@
     <select id="selectList" resultMap="prodDetailMap" >
         select 
         <include refid="table_column" />
-        from s_prod_detail
+        from s_prod_detail pd
         <where >
             <if test="prodId != null" >
-                and null.prod_id = #{prodId}
+                and pd.prod_id = #{prodId}
             </if>
             <if test="detailTitle != null and detailTitle != ''" >
-                and null.detail_title = #{detailTitle}
+                and pd.detail_title = #{detailTitle}
             </if>
             <if test="detailBrief != null and detailBrief != ''" >
-                and null.detail_brief = #{detailBrief}
+                and pd.detail_brief = #{detailBrief}
             </if>
             <if test="detailImg != null and detailImg != ''" >
-                and null.detail_img = #{detailImg}
+                and pd.detail_img = #{detailImg}
             </if>
             <if test="detailStatus != null" >
-                and null.detail_status = #{detailStatus}
+                and pd.detail_status = #{detailStatus}
             </if>
             <if test="sort != null" >
-                and null.sort = #{sort}
+                and pd.sort = #{sort}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and pd.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and pd.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

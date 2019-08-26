@@ -114,61 +114,61 @@
     <select id="selectList" resultMap="prodSkuMap" >
         select 
         <include refid="table_column" />
-        from s_prod_sku
+        from s_prod_sku ps
         <where >
             <if test="prodId != null" >
-                and null.prod_id = #{prodId}
+                and ps.prod_id = #{prodId}
             </if>
             <if test="skuName != null" >
-                and null.sku_name = #{skuName}
+                and ps.sku_name = #{skuName}
             </if>
             <if test="skuStatus != null" >
-                and null.sku_status = #{skuStatus}
+                and ps.sku_status = #{skuStatus}
             </if>
             <if test="skuStockCnt != null" >
-                and null.sku_stock_cnt = #{skuStockCnt}
+                and ps.sku_stock_cnt = #{skuStockCnt}
             </if>
             <if test="fragranceType != null" >
-                fragrance_type = #{fragranceType},
+                and ps.fragrance_type = #{fragranceType},
             </if>
             <if test="alcoholCnt != null" >
-                alcohol_cnt = #{alcoholCnt},
+                and ps.alcohol_cnt = #{alcoholCnt},
             </if>
             <if test="skuWeight != null" >
-                and null.sku_weight = #{skuWeight}
+                and ps.sku_weight = #{skuWeight}
             </if>
             <if test="skuCapacity != null" >
-                and null.sku_capacity = #{skuCapacity}
+                and ps.sku_capacity = #{skuCapacity}
             </if>
             <if test="skuSellPrice != null" >
-                and null.sku_sell_price = #{skuSellPrice}
+                and ps.sku_sell_price = #{skuSellPrice}
             </if>
             <if test="skuMarketPrice != null" >
-                and null.sku_market_price = #{skuMarketPrice}
+                and ps.sku_market_price = #{skuMarketPrice}
             </if>
             <if test="sellTotalCnt != null" >
-                and null.sell_total_cnt = #{sellTotalCnt}
+                and ps.sell_total_cnt = #{sellTotalCnt}
             </if>
             <if test="sort != null" >
-                and null.sort = #{sort}
+                and ps.sort = #{sort}
             </if>
             <if test="isIntegral != null" >
-                and null.is_integral = #{isIntegral}
+                and ps.is_integral = #{isIntegral}
             </if>
             <if test="integralAmt != null" >
-                and null.integral_amt = #{integralAmt}
+                and ps.integral_amt = #{integralAmt}
             </if>
             <if test="integralCnt != null" >
-                and null.integral_cnt = #{integralCnt}
+                and ps.integral_cnt = #{integralCnt}
             </if>
             <if test="isDel != null" >
-                and null.is_del = #{isDel}
+                and ps.is_del = #{isDel}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and ps.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and ps.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -205,10 +205,5 @@
             #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort},
             #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
     </insert>
-
-
-
-
-
 
 </mapper>

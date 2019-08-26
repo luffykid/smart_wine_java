@@ -62,25 +62,25 @@
     <select id="selectList" resultMap="winerySightImgMap" >
         select
         <include refid="table_column" />
-        from b_winery_sight_img
+        from b_winery_sight_img wsi
         <where >
             <if test="winerySightId != null" >
-                and null.winery_sight_id = #{winerySightId}
+                and wsi.winery_sight_id = #{winerySightId}
             </if>
             <if test="imgName != null and imgName != ''" >
-                and null.img_name = #{imgName}
+                and wsi.img_name = #{imgName}
             </if>
             <if test="imgAddr != null and imgAddr != ''" >
-                and null.img_addr = #{imgAddr}
+                and wsi.img_addr = #{imgAddr}
             </if>
             <if test="imgRemark != null and imgRemark != ''" >
-                and null.img_remark = #{imgRemark}
+                and wsi.img_remark = #{imgRemark}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and wsi.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and wsi.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

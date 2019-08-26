@@ -66,28 +66,28 @@
     <select id="selectList" resultMap="wineryWineMap" >
         select 
         <include refid="table_column" />
-        from b_winery_wine
+        from b_winery_wine ww
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and ww.winery_id = #{wineryId}
             </if>
             <if test="name != null and name != ''" >
-                and null.name = #{name}
+                and ww.name = #{name}
             </if>
             <if test="coverImg != null and coverImg != ''" >
-                and null.cover_img = #{coverImg}
+                and ww.cover_img = #{coverImg}
             </if>
             <if test="totalSellCnt != null" >
-                and null.total_sell_cnt = #{totalSellCnt}
+                and ww.total_sell_cnt = #{totalSellCnt}
             </if>
             <if test="status != null" >
-                and null.status = #{status}
+                and ww.status = #{status}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and ww.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and ww.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -103,5 +103,10 @@
         <include refid="table_column"/>
         from b_winery_wine where status = #{status} and name like concat(concat('%',#{name}),'%')
     </select>
+
+    <update id="updateWineryWineStatus" >
+        update b_winery_wine set status = #{status} where  id =#{id}
+    </update>
+
 
 </mapper>

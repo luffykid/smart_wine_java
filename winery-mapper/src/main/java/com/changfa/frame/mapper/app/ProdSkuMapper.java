@@ -28,5 +28,4 @@ public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
 
     int add(ProdSku prodSku);
 
-
 }

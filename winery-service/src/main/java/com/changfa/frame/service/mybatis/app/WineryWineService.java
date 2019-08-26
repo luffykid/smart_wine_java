@@ -10,6 +10,7 @@
  */
 package com.changfa.frame.service.mybatis.app;
 
+import com.changfa.frame.model.app.ProdSku;
 import com.changfa.frame.model.app.WineryWine;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
@@ -46,5 +47,39 @@ public interface WineryWineService extends BaseService<WineryWine, Long> {
      * @param wineryId  当前酒庄id
      */
     void addWineryWine(WineryWine wineryWine, Long wineryId);
+
+    /**
+     * 编辑酒庄酒
+     * @param wineryWine 酒庄酒对象
+     */
+    void updateWineryWine(WineryWine wineryWine,Long wineryId);
+
+    /**
+     * 酒庄酒上下架
+     * @param id 酒庄酒id
+     * @param status 上下架参数
+     * @return Boolean
+     */
+    Boolean wineryWineOut(Long id, Integer status);
+
+    /**
+     * 获取酒庄酒详情
+     * @param id 酒庄酒id
+     * @return WineryWine
+     */
+    WineryWine getwineryWine(Long id);
+
+    /**
+     * 获取产品列表
+     * @return List<ProdSku>
+     */
+    List<ProdSku> getProdList();
+
+    /**
+     * 删除酒庄酒
+     * @param id
+     * @return boolean
+     */
+    boolean deleteWineryWine(Long id);
 }
  

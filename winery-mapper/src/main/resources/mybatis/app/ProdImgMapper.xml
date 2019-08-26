@@ -66,28 +66,28 @@
     <select id="selectList" resultMap="prodImgMap" >
         select 
         <include refid="table_column" />
-        from s_prod_img
+        from s_prod_img pi
         <where >
             <if test="prodId != null" >
-                and null.prod_id = #{prodId}
+                and pi.prod_id = #{prodId}
             </if>
             <if test="imgName != null and imgName != ''" >
-                and null.img_name = #{imgName}
+                and pi.img_name = #{imgName}
             </if>
             <if test="imgAddrr != null and imgAddrr != ''" >
-                and null.img_addrr = #{imgAddrr}
+                and pi.img_addrr = #{imgAddrr}
             </if>
             <if test="imgRemark != null and imgRemark != ''" >
-                and null.img_remark = #{imgRemark}
+                and pi.img_remark = #{imgRemark}
             </if>
             <if test="sort != null" >
-                and null.sort = #{sort}
+                and pi.sort = #{sort}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and pi.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and pi.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

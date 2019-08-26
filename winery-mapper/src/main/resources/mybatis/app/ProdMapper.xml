@@ -110,58 +110,58 @@
     <select id="selectList" resultMap="prodMap" >
         select 
         <include refid="table_column" />
-        from s_prod
+        from s_prod p
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and p.winery_id = #{wineryId}
             </if>
             <if test="prodCategoryId != null" >
-                and null.prod_category_id = #{prodCategoryId}
+                and p.prod_category_id = #{prodCategoryId}
             </if>
             <if test="lableType != null" >
-                and null.lable_type = #{lableType}
+                and p.lable_type = #{lableType}
             </if>
             <if test="prodName != null and prodName != ''" >
-                and null.prod_name = #{prodName}
+                and p.prod_name = #{prodName}
             </if>
             <if test="prodTitle != null and prodTitle != ''" >
-                and null.prod_title = #{prodTitle}
+                and p.prod_title = #{prodTitle}
             </if>
             <if test="prodCode != null and prodCode != ''" >
-                and null.prod_code = #{prodCode}
+                and p.prod_code = #{prodCode}
             </if>
             <if test="totalStockCnt != null" >
-                and null.total_stock_cnt = #{totalStockCnt}
+                and p.total_stock_cnt = #{totalStockCnt}
             </if>
             <if test="listImg != null and listImg != ''" >
-                and null.list_img = #{listImg}
+                and p.list_img = #{listImg}
             </if>
             <if test="descri != null" >
-                and null.descri = #{descri}
+                and p.descri = #{descri}
             </if>
             <if test="isLimit != null" >
-                and null.is_limit = #{isLimit}
+                and p.is_limit = #{isLimit}
             </if>
             <if test="limitCount != null" >
-                and null.limit_count = #{limitCount}
+                and p.limit_count = #{limitCount}
             </if>
             <if test="prodStatus != null" >
-                and null.prod_status = #{prodStatus}
+                and p.prod_status = #{prodStatus}
             </if>
             <if test="isRecommend != null" >
-                and null.is_recommend = #{isRecommend}
+                and p.is_recommend = #{isRecommend}
             </if>
             <if test="adminId != null" >
-                and null.admin_id = #{adminId}
+                and p.admin_id = #{adminId}
             </if>
             <if test="isDel != null" >
-                is_del = #{isDel}
+                and p.is_del = #{isDel}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and p.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and p.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -242,5 +242,9 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="getProdNameList" resultMap="prodMap">
+        select id,prod_name from s_prod where prod_status =1 and is_del =0
+    </select>
 
 </mapper>

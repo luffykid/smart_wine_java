@@ -101,52 +101,52 @@
     <select id="selectList" resultMap="wineryMap" >
         select
         <include refid="table_column" />
-        from b_winery
+        from b_winery w
         <where >
             <if test="name != null and name != ''" >
-                and null.NAME = #{name}
+                and w.NAME = #{name}
             </if>
             <if test="logo != null and logo != ''" >
-                and null.logo = #{logo}
+                and w.logo = #{logo}
             </if>
             <if test="loadingImg != null and loadingImg != ''" >
-                and null.loading_img = #{loadingImg}
+                and w.loading_img = #{loadingImg}
             </if>
             <if test="status != null" >
-                and null.STATUS = #{status}
+                and w.STATUS = #{status}
             </if>
             <if test="statusTime != null" >
-                and null.status_time = #{statusTime}
+                and w.status_time = #{statusTime}
             </if>
             <if test="aLatitude != null" >
-                and null.a_latitude = #{aLatitude}
+                and w.a_latitude = #{aLatitude}
             </if>
             <if test="aLongitude != null" >
-                and null.a_longitude = #{aLongitude}
+                and w.a_longitude = #{aLongitude}
             </if>
             <if test="bLatitude != null" >
-                and null.b_latitude = #{bLatitude}
+                and w.b_latitude = #{bLatitude}
             </if>
             <if test="bLongitude != null" >
-                and null.b_longitude = #{bLongitude}
+                and w.b_longitude = #{bLongitude}
             </if>
             <if test="cLatitude != null" >
-                and null.c_latitude = #{cLatitude}
+                and w.c_latitude = #{cLatitude}
             </if>
             <if test="cLongitude != null" >
-                and null.c_longitude = #{cLongitude}
+                and w.c_longitude = #{cLongitude}
             </if>
             <if test="dLatitude != null" >
-                and null.d_latitude = #{dLatitude}
+                and w.d_latitude = #{dLatitude}
             </if>
             <if test="dLongitude != null" >
-                and null.d_longitude = #{dLongitude}
+                and w.d_longitude = #{dLongitude}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and w.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and w.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,8 +49,9 @@ public class WineryWineController extends BaseController {
     @ApiOperation(value = "查询酒庄酒列表",notes = "查询酒庄酒列表")
     @RequestMapping(value = "/getWineryWineList", method = RequestMethod.GET)
     public Map<String, Object> getWineryWineList(PageInfo pageInfo){
-        if(wineryWineService.getWineryWineList(pageInfo).getList().size() > 0){
-            return getResult(wineryWineService.getWineryWineList(pageInfo));
+        PageInfo<WineryWine> list = wineryWineService.getWineryWineList(pageInfo);
+        if(list != null && list.getList().size() > 0){
+            return getResult(list);
         }
         return getResult("未查询到产品");
 
@@ -79,10 +81,10 @@ public class WineryWineController extends BaseController {
     @ApiOperation(value = "新建酒庄酒",notes = "新建酒庄酒")
     @ApiImplicitParams(@ApiImplicitParam(name = "wineryWine", value = "酒庄酒对象", dataType = "WineryWine"))
     @RequestMapping(value = "/addWineryWine", method = RequestMethod.POST)
-    public Map<String, Object> addWineryWine(@RequestBody WineryWine wineryWine/*, HttpServletRequest request*/){
-        //Admin admin = getCurAdmin(request);
+    public Map<String, Object> addWineryWine(@RequestBody WineryWine wineryWine, HttpServletRequest request){
+        Admin admin = getCurAdmin(request);
         try{
-            wineryWineService.addWineryWine(wineryWine,/*admin.getWineryId()*/1L);
+            wineryWineService.addWineryWine(wineryWine,admin.getWineryId());
         }catch (Exception e){
             log.info("此处有错误:{}",e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.ADD_FAILED);
@@ -90,40 +92,77 @@ public class WineryWineController extends BaseController {
         return getResult("添加成功");
     }
 
-
-
-
+    /**
+     * 获取产品列表
+     * @return Map<String, Object>
+     */
+    @ApiOperation(value = "获取产品列表",notes = "获取产品列表")
+    @RequestMapping(value = "/getProdList", method = RequestMethod.GET)
+    public Map<String, Object> getProdList(){
+            return getResult(wineryWineService.getProdList());
+    }
 
     /**
-     * 产品规格下架
+     * 获取酒庄酒详情
      * @param id 产品规格id
      * @return Map<String, Object>
      */
-   /* @ApiOperation(value = "产品规格下架",notes = "产品规格下架")
-    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "产品规格id", dataType = "Long"),
-            @ApiImplicitParam(name = "skuStatus", value = "下上架参数", dataType = "Integer")})
-    @RequestMapping(value = "/prodSkuOut", method = RequestMethod.POST)
-    public Map<String, Object> ProdSkuOut(Long id,Integer skuStatus){
-        if(prodService.updateProdSkuStatus(id,skuStatus)){
-            return getResult("下架成功");
+    @ApiOperation(value = "获取酒庄酒详情",notes = "获取酒庄酒详情")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "酒庄酒id", dataType = "Long"))
+    @RequestMapping(value = "/getwineryWine", method = RequestMethod.GET)
+    public Map<String, Object> getwineryWine(Long id){
+        return getResult(wineryWineService.getwineryWine(id));
+    }
+
+    /**
+     * 编辑酒庄酒
+     * @param wineryWine 酒庄酒对象
+     * @return Map<String,Object>
+     */
+    @ApiOperation(value = "编辑酒庄酒",notes = "编辑酒庄酒")
+    @ApiImplicitParams(@ApiImplicitParam(name = "wineryWine", value = "酒庄酒对象", dataType = "WineryWine"))
+    @RequestMapping(value = "/updateWineryWine", method = RequestMethod.POST)
+    public Map<String, Object> updateWineryWine(@RequestBody WineryWine wineryWine){
+        try{
+            wineryWineService.updateWineryWine(wineryWine,1L);
+        }catch (Exception e){
+            log.info("此处有错误:{}",e.getMessage());
+            throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
+        }
+        return getResult("修改成功");
+    }
+
+
+    /**
+     * 酒庄酒上下架
+     * @param id 酒庄酒id
+     * @return Map<String, Object>
+     */
+   @ApiOperation(value = "酒庄酒上下架",notes = "酒庄酒上下架")
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "酒庄酒id", dataType = "Long"),
+            @ApiImplicitParam(name = "status", value = "下上架参数", dataType = "Integer")})
+    @RequestMapping(value = "/wineryWineOut", method = RequestMethod.POST)
+    public Map<String, Object> wineryWineOut(Long id,Integer status){
+        if(wineryWineService.wineryWineOut(id,status)){
+            return getResult("操作成功");
         }
         throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
-    }*/
+    }
 
     /**
-     * 删除产品规格
+     * 删除酒庄酒
      * @param id 产品规格id
      * @return Map<String, Object>
      */
-   /* @ApiOperation(value = "删除产品规格",notes = "删除产品规格")
-    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品规格id", dataType = "Long"))
-    @RequestMapping(value = "/deleteProdSku", method = RequestMethod.POST)
-    public Map<String, Object> deleteProdSku(Long id){
-        if(prodService.deleteProdSku(id)){
+    @ApiOperation(value = "删除酒庄酒",notes = "删除酒庄酒")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "酒庄酒id", dataType = "Long"))
+    @RequestMapping(value = "/deleteWineryWine", method = RequestMethod.POST)
+    public Map<String, Object> deleteWineryWine(Long id){
+        if(wineryWineService.deleteWineryWine(id)){
             return getResult("删除成功");
         }
         throw new CustomException(RESPONSE_CODE_ENUM.DELETE_FAILED);
-    }*/
+    }
 
     /**
      * 上传文件到临时库

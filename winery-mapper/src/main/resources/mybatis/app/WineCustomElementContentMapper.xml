@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCustomElementContentMapper" >
+    <resultMap id="wineCustomElementContentMap" type="com.changfa.frame.model.app.WineCustomElementContent" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="wine_custom_id" property="wineCustomId" jdbcType="BIGINT" />
+        <result column="wine_custom_element_id" property="wineCustomElementId" jdbcType="BIGINT" />
+        <result column="bg_img" property="bgImg" jdbcType="VARCHAR" />
+        <result column="mask_img" property="maskImg" jdbcType="VARCHAR" />
+        <result column="bottom_img" property="bottomImg" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, wine_custom_id, wine_custom_element_id, bg_img, mask_img, bottom_img, create_date, 
+        modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCustomElementContentMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_wine_custom_element_content
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomElementContent" >
+        insert into b_wine_custom_element_content (id, wine_custom_id, wine_custom_element_id, bg_img, mask_img, bottom_img, 
+            create_date, modify_date)
+        values (#{id}, #{wineCustomId}, #{wineCustomElementId}, #{bgImg}, #{maskImg}, #{bottomImg}, 
+            #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCustomElementContent" >
+        update b_wine_custom_element_content
+        <set >
+            <if test="wineCustomId != null" >
+                wine_custom_id = #{wineCustomId},
+            </if>
+            <if test="wineCustomElementId != null" >
+                wine_custom_element_id = #{wineCustomElementId},
+            </if>
+            <if test="bgImg != null and bgImg != ''" >
+                bg_img = #{bgImg},
+            </if>
+            <if test="maskImg != null and maskImg != ''" >
+                mask_img = #{maskImg},
+            </if>
+            <if test="bottomImg != null and bottomImg != ''" >
+                bottom_img = #{bottomImg},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_custom_element_content
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCustomElementContentMap" >
+        select 
+        <include refid="table_column" />
+        from b_wine_custom_element_content wcec
+        <where >
+            <if test="wineCustomId != null" >
+                and wcec.wine_custom_id = #{wineCustomId}
+            </if>
+            <if test="wineCustomElementId != null" >
+                and wcec.wine_custom_element_id = #{wineCustomElementId}
+            </if>
+            <if test="bgImg != null and bgImg != ''" >
+                and wcec.bg_img = #{bgImg}
+            </if>
+            <if test="maskImg != null and maskImg != ''" >
+                and wcec.mask_img = #{maskImg}
+            </if>
+            <if test="bottomImg != null and bottomImg != ''" >
+                and wcec.bottom_img = #{bottomImg}
+            </if>
+            <if test="createDate != null" >
+                and wcec.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and wcec.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

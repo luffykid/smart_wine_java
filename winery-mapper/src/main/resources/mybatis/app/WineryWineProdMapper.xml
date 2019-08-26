@@ -62,25 +62,25 @@
     <select id="selectList" resultMap="wineryWineProdMap" >
         select 
         <include refid="table_column" />
-        from b_winery_wine_prod
+        from b_winery_wine_prod wwp
         <where >
             <if test="wineryWineId != null" >
-                and null.winery_wine_id = #{wineryWineId}
+                and wwp.winery_wine_id = #{wineryWineId}
             </if>
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and wwp.winery_id = #{wineryId}
             </if>
             <if test="prodId != null" >
-                and null.prod_id = #{prodId}
+                and wwp.prod_id = #{prodId}
             </if>
             <if test="totalSellCnt != null" >
-                and null.total_sell_cnt = #{totalSellCnt}
+                and wwp.total_sell_cnt = #{totalSellCnt}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and wwp.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and wwp.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -90,5 +90,15 @@
         <include refid="table_column"/>
         from b_winery_wine_prod where winery_wine_id =#{wineryWineId}
     </select>
+
+    <select id="getByWineryWineById" parameterType="java.lang.Long" resultMap="wineryWineProdMap">
+        select
+        <include refid="table_column"/>
+        from b_winery_wine_prod  where winery_wine_id =#{id}
+    </select>
+
+    <delete id="deleteWineryWineById" parameterType="java.lang.Long">
+        delete from b_winery_wine_prod where winery_wine_id =#{id}
+    </delete>
 
 </mapper>

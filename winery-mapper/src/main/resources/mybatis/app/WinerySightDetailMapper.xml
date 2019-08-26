@@ -89,43 +89,43 @@
     <select id="selectList" resultMap="winerySightDetailMap" >
         select
         <include refid="table_column" />
-        from b_winery_sight_detail
+        from b_winery_sight_detail wsd
         <where >
             <if test="winerySightId != null" >
-                and null.winery_sight_id = #{winerySightId}
+                and wsd.winery_sight_id = #{winerySightId}
             </if>
             <if test="wineryActivityId != null" >
-                and null.winery_activity_id = #{wineryActivityId}
+                and wsd.winery_activity_id = #{wineryActivityId}
             </if>
             <if test="prodId != null" >
-                prod_id = #{prodId},
+                and wsd.prod_id = #{prodId},
             </if>
             <if test="prodSkuId != null" >
-                and null.prod_sku_id = #{prodSkuId}
+                and wsd.prod_sku_id = #{prodSkuId}
             </if>
             <if test="wineryVoucherId != null" >
-                and null.winery_voucher_id = #{wineryVoucherId}
+                and wsd.winery_voucher_id = #{wineryVoucherId}
             </if>
             <if test="detailTitle != null and detailTitle != ''" >
-                and null.detail_title = #{detailTitle}
+                and wsd.detail_title = #{detailTitle}
             </if>
             <if test="detailBrief != null and detailBrief != ''" >
-                and null.detail_brief = #{detailBrief}
+                and wsd.detail_brief = #{detailBrief}
             </if>
             <if test="detailImg != null and detailImg != ''" >
-                and null.detail_img = #{detailImg}
+                and wsd.detail_img = #{detailImg}
             </if>
             <if test="detailStatus != null" >
-                and null.detail_status = #{detailStatus}
+                and wsd.detail_status = #{detailStatus}
             </if>
             <if test="sort != null" >
-                and null.sort = #{sort}
+                and wsd.sort = #{sort}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and wsd.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and wsd.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

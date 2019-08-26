@@ -16,4 +16,8 @@ import java.util.List;
 public interface WineryWineProdMapper extends BaseMapper<WineryWineProd, Long> {
 
     List<WineryWineProd> getProdListByWinerWineId(@Param("wineryWineId") Long wineryWineId);
+
+    List<WineryWineProd> getByWineryWineById(Long id);
+
+    int deleteWineryWineById(Long id);
 }

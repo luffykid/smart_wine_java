@@ -58,22 +58,22 @@
     <select id="selectList" resultMap="prodSkuMbrPriceMap" >
         select 
         <include refid="table_column" />
-        from s_prod_sku_mbr_price
+        from s_prod_sku_mbr_price psmp
         <where >
             <if test="prodSkuId != null" >
-                and null.prod_sku_id = #{prodSkuId}
+                and psmp.prod_sku_id = #{prodSkuId}
             </if>
             <if test="mbrLevelId != null" >
-                and null.mbr_level_id = #{mbrLevelId}
+                and psmp.mbr_level_id = #{mbrLevelId}
             </if>
             <if test="mbrLevelPrice != null" >
-                and null.mbr_level_price = #{mbrLevelPrice}
+                and psmp.mbr_level_price = #{mbrLevelPrice}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and psmp.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and psmp.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
