@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrWineCustomOrderMapper" >
+    <resultMap id="mbrWineCustomOrderMap" type="com.changfa.frame.model.app.MbrWineCustomOrder" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="custom_total_cnt" property="customTotalCnt" jdbcType="INTEGER" />
+        <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
+        <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="shipping_detail_addr" property="shippingDetailAddr" jdbcType="VARCHAR" />
+        <result column="shipping_province_id" property="shippingProvinceId" jdbcType="BIGINT" />
+        <result column="shipping_city_id" property="shippingCityId" jdbcType="BIGINT" />
+        <result column="shipping_county_id" property="shippingCountyId" jdbcType="BIGINT" />
+        <result column="shipping_person_name" property="shippingPersonName" jdbcType="VARCHAR" />
+        <result column="shipping_person_phone" property="shippingPersonPhone" jdbcType="VARCHAR" />
+        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, winery_id, mbr_id, custom_total_cnt, pay_total_amt, pay_real_amt, order_status, 
+        shipping_detail_addr, shipping_province_id, shipping_city_id, shipping_county_id, 
+        shipping_person_name, shipping_person_phone, transaction_no, order_no, create_date, 
+        modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrWineCustomOrderMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_wine_custom_order
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomOrder" >
+        insert into m_mbr_wine_custom_order (id, winery_id, mbr_id, custom_total_cnt, pay_total_amt, pay_real_amt, 
+            order_status, shipping_detail_addr, shipping_province_id, shipping_city_id, 
+            shipping_county_id, shipping_person_name, shipping_person_phone, transaction_no, 
+            order_no, create_date, modify_date)
+        values (#{id}, #{wineryId}, #{mbrId}, #{customTotalCnt}, #{payTotalAmt}, #{payRealAmt}, 
+            #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId}, #{shippingCityId}, 
+            #{shippingCountyId}, #{shippingPersonName}, #{shippingPersonPhone}, #{transactionNo}, 
+            #{orderNo}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrWineCustomOrder" >
+        update m_mbr_wine_custom_order
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="customTotalCnt != null" >
+                custom_total_cnt = #{customTotalCnt},
+            </if>
+            <if test="payTotalAmt != null" >
+                pay_total_amt = #{payTotalAmt},
+            </if>
+            <if test="payRealAmt != null" >
+                pay_real_amt = #{payRealAmt},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="shippingDetailAddr != null and shippingDetailAddr != ''" >
+                shipping_detail_addr = #{shippingDetailAddr},
+            </if>
+            <if test="shippingProvinceId != null" >
+                shipping_province_id = #{shippingProvinceId},
+            </if>
+            <if test="shippingCityId != null" >
+                shipping_city_id = #{shippingCityId},
+            </if>
+            <if test="shippingCountyId != null" >
+                shipping_county_id = #{shippingCountyId},
+            </if>
+            <if test="shippingPersonName != null and shippingPersonName != ''" >
+                shipping_person_name = #{shippingPersonName},
+            </if>
+            <if test="shippingPersonPhone != null and shippingPersonPhone != ''" >
+                shipping_person_phone = #{shippingPersonPhone},
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                transaction_no = #{transactionNo},
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                order_no = #{orderNo},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_wine_custom_order
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrWineCustomOrderMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_wine_custom_order
+        <where >
+            <if test="wineryId != null" >
+                and null.winery_id = #{wineryId}
+            </if>
+            <if test="mbrId != null" >
+                and null.mbr_id = #{mbrId}
+            </if>
+            <if test="customTotalCnt != null" >
+                and null.custom_total_cnt = #{customTotalCnt}
+            </if>
+            <if test="payTotalAmt != null" >
+                and null.pay_total_amt = #{payTotalAmt}
+            </if>
+            <if test="payRealAmt != null" >
+                and null.pay_real_amt = #{payRealAmt}
+            </if>
+            <if test="orderStatus != null" >
+                and null.order_status = #{orderStatus}
+            </if>
+            <if test="shippingDetailAddr != null and shippingDetailAddr != ''" >
+                and null.shipping_detail_addr = #{shippingDetailAddr}
+            </if>
+            <if test="shippingProvinceId != null" >
+                and null.shipping_province_id = #{shippingProvinceId}
+            </if>
+            <if test="shippingCityId != null" >
+                and null.shipping_city_id = #{shippingCityId}
+            </if>
+            <if test="shippingCountyId != null" >
+                and null.shipping_county_id = #{shippingCountyId}
+            </if>
+            <if test="shippingPersonName != null and shippingPersonName != ''" >
+                and null.shipping_person_name = #{shippingPersonName}
+            </if>
+            <if test="shippingPersonPhone != null and shippingPersonPhone != ''" >
+                and null.shipping_person_phone = #{shippingPersonPhone}
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                and null.transaction_no = #{transactionNo}
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                and null.order_no = #{orderNo}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

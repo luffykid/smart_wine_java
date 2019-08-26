@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCustomAdvanceMapper" >
+    <resultMap id="wineCustomAdvanceMap" type="com.changfa.frame.model.app.WineCustomAdvance" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="wine_custom_element_id" property="wineCustomElementId" jdbcType="BIGINT" />
+        <result column="advance_name" property="advanceName" jdbcType="VARCHAR" />
+        <result column="advance_img" property="advanceImg" jdbcType="VARCHAR" />
+        <result column="advance_remark" property="advanceRemark" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, wine_custom_element_id, advance_name, advance_img, advance_remark, status, sort, 
+        create_date, modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCustomAdvanceMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_wine_custom_advance
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomAdvance" >
+        insert into b_wine_custom_advance (id, wine_custom_element_id, advance_name, advance_img, advance_remark, 
+            status, sort, create_date, modify_date)
+        values (#{id}, #{wineCustomElementId}, #{advanceName}, #{advanceImg}, #{advanceRemark}, 
+            #{status}, #{sort}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCustomAdvance" >
+        update b_wine_custom_advance
+        <set >
+            <if test="wineCustomElementId != null" >
+                wine_custom_element_id = #{wineCustomElementId},
+            </if>
+            <if test="advanceName != null and advanceName != ''" >
+                advance_name = #{advanceName},
+            </if>
+            <if test="advanceImg != null and advanceImg != ''" >
+                advance_img = #{advanceImg},
+            </if>
+            <if test="advanceRemark != null and advanceRemark != ''" >
+                advance_remark = #{advanceRemark},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_custom_advance
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCustomAdvanceMap" >
+        select 
+        <include refid="table_column" />
+        from b_wine_custom_advance
+        <where >
+            <if test="wineCustomElementId != null" >
+                and null.wine_custom_element_id = #{wineCustomElementId}
+            </if>
+            <if test="advanceName != null and advanceName != ''" >
+                and null.advance_name = #{advanceName}
+            </if>
+            <if test="advanceImg != null and advanceImg != ''" >
+                and null.advance_img = #{advanceImg}
+            </if>
+            <if test="advanceRemark != null and advanceRemark != ''" >
+                and null.advance_remark = #{advanceRemark}
+            </if>
+            <if test="status != null" >
+                and null.status = #{status}
+            </if>
+            <if test="sort != null" >
+                and null.sort = #{sort}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

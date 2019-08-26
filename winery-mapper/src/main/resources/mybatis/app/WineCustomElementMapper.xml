@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCustomElementMapper" >
+    <resultMap id="wineCustomElementMap" type="com.changfa.frame.model.app.WineCustomElement" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="element_name" property="elementName" jdbcType="VARCHAR" />
+        <result column="element_code" property="elementCode" jdbcType="VARCHAR" />
+        <result column="element_icon" property="elementIcon" jdbcType="VARCHAR" />
+        <result column="element_status" property="elementStatus" jdbcType="INTEGER" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        id, element_name, element_code, element_icon, element_status, sort, create_date, 
+        modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCustomElementMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_wine_custom_element
+        where id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomElement" >
+        insert into b_wine_custom_element (id, element_name, element_code, element_icon, element_status, 
+            sort, create_date, modify_date)
+        values (#{id}, #{elementName}, #{elementCode}, #{elementIcon}, #{elementStatus}, 
+            #{sort}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCustomElement" >
+        update b_wine_custom_element
+        <set >
+            <if test="elementName != null and elementName != ''" >
+                element_name = #{elementName},
+            </if>
+            <if test="elementCode != null and elementCode != ''" >
+                element_code = #{elementCode},
+            </if>
+            <if test="elementIcon != null and elementIcon != ''" >
+                element_icon = #{elementIcon},
+            </if>
+            <if test="elementStatus != null" >
+                element_status = #{elementStatus},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_custom_element
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCustomElementMap" >
+        select 
+        <include refid="table_column" />
+        from b_wine_custom_element
+        <where >
+            <if test="elementName != null and elementName != ''" >
+                and null.element_name = #{elementName}
+            </if>
+            <if test="elementCode != null and elementCode != ''" >
+                and null.element_code = #{elementCode}
+            </if>
+            <if test="elementIcon != null and elementIcon != ''" >
+                and null.element_icon = #{elementIcon}
+            </if>
+            <if test="elementStatus != null" >
+                and null.element_status = #{elementStatus}
+            </if>
+            <if test="sort != null" >
+                and null.sort = #{sort}
+            </if>
+            <if test="createDate != null" >
+                and null.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and null.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

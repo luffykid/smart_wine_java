@@ -85,8 +85,4 @@ management:
   endpoint:
     shutdown:
       enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: *
 # *************用于自动化部署时，通过命令关闭springboot项目************
