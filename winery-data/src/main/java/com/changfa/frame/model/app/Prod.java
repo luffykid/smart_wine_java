@@ -30,6 +30,61 @@ public class Prod extends BaseEntity {
     2：封坛酒 */
     private Integer lableType;
 
+    public enum LABLE_TYPE_ENUM {
+        PTJ(1, "普通酒"),
+        FTJ(2, "封坛酒");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        LABLE_TYPE_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static LABLE_TYPE_ENUM getEnum(Integer value) {
+            for (LABLE_TYPE_ENUM queryDayEnum : LABLE_TYPE_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
     /** 商品名称 */
     private String prodName;
 
@@ -60,6 +115,62 @@ public class Prod extends BaseEntity {
     0：禁用
     1：启用 */
     private Integer prodStatus;
+
+    public enum PROD_STATUS_ENUM {
+        JY(0, "禁用"),
+        QY(1, "启用");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        PROD_STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static PROD_STATUS_ENUM getEnum(Integer value) {
+            for (PROD_STATUS_ENUM queryDayEnum : PROD_STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
 
     /** 是否推荐
     0：否
@@ -106,25 +217,7 @@ public class Prod extends BaseEntity {
     public void setProdCategoryId(Integer prodCategoryId) {
         this.prodCategoryId = prodCategoryId;
     }
-    
-    /**
-     * 获取标签类型
-    1：普通酒
-    2：封坛酒
-    */
-    public Integer getLableType() {
-        return lableType;
-    }
-    
-    /**
-     * 设置标签类型
-    1：普通酒
-    2：封坛酒
-    */
-    public void setLableType(Integer lableType) {
-        this.lableType = lableType;
-    }
-    
+
     /**
      * 获取商品名称
     */
@@ -240,24 +333,7 @@ public class Prod extends BaseEntity {
     public void setLimitCount(Integer limitCount) {
         this.limitCount = limitCount;
     }
-    
-    /**
-     * 获取状态
-    0：禁用
-    1：启用
-    */
-    public Integer getProdStatus() {
-        return prodStatus;
-    }
-    
-    /**
-     * 设置状态
-    0：禁用
-    1：启用
-    */
-    public void setProdStatus(Integer prodStatus) {
-        this.prodStatus = prodStatus;
-    }
+
     
     /**
      * 获取是否推荐
@@ -317,5 +393,40 @@ public class Prod extends BaseEntity {
      1：是*/
     public void setDel(Boolean del) {
         isDel = del;
+    }
+
+
+    /**
+     * 获取状态
+     * 0：禁用
+     * 1：启用
+     */
+    public Integer getProdStatus() {
+        return prodStatus;
+    }
+
+    /**
+     * 设置状态
+     * 0：禁用
+     * 1：启用
+     */
+    public void setProdStatus(Integer prodStatus) {
+        this.prodStatus = prodStatus;
+    }
+
+    /** 获取标签类型
+     1：普通酒
+     2：封坛酒 */
+
+    public Integer getLableType() {
+        return lableType;
+    }
+
+    /** 设置标签类型
+     1：普通酒
+     2：封坛酒 */
+
+    public void setLableType(Integer lableType) {
+        this.lableType = lableType;
     }
 }

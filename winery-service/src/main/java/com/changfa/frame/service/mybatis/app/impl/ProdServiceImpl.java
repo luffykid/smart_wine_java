@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 
+
 /**
  * 类名称:prodServiceImpl
  * 类描述:商品管理Service实现
@@ -51,25 +52,25 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      * @return List<Prod>
      */
     @Override
-    public List<Prod> getProdList(PageInfo pageInfo) {
+    public PageInfo<Prod> getProdList(PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return (List<Prod>) new PageInfo(prodMapper.findProdList());
+        return new PageInfo(prodMapper.findProdList());
     }
 
     /**
      * 添加产品
-     * @param curAdmin 当前用户对象
+     * @param admin 当前用户对象
      * @param prod 产品添加对象
      */
     @Override
     @Transactional
-    public void addProd(Admin curAdmin, Prod prod) {
+    public void addProd(Admin admin, Prod prod) {
         prod.setId(IDUtil.getId());
-        prod.setWineryId(curAdmin.getWineryId());
-        prod.setAdminId(curAdmin.getId());
-        prod.setProdStatus(1); // 默认启用
+        prod.setWineryId(admin.getWineryId());
+        prod.setAdminId(admin.getId());
+        prod.setProdStatus(Prod.LABLE_TYPE_ENUM.PTJ.getValue());
         prod.setCreateDate(new Date());
         prod.setModifyDate(new Date());
         prodMapper.save(prod);
@@ -78,7 +79,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
                 prodDetail.setId(IDUtil.getId());
                 prodDetail.setProdId(prod.getId());
                 prodDetail.setDetailImg(FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH)); //TEST_FILE_CP_PATH 产品图片存放路径
-                prodDetail.setDetailStatus(0);
+                prodDetail.setDetailStatus(ProdDetail.DETAIL_STATUS_ENUM.JY.getValue());
                 prodDetail.setCreateDate(new Date());
                 prodDetail.setModifyDate(new Date());
                 prodDetailMapper.save(prodDetail);
@@ -118,14 +119,15 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     @Override
     @Transactional
     public void updateProd(Prod prod) {
-        prodMapper.update(prod);
+        prod.setModifyDate(new Date());
+        prodMapper.updateProd(prod);
         prodDetailMapper.deleteByProdId(prod.getId());
         if(prod.getProdDetailList() != null && prod.getProdDetailList().size() >0){
             for (ProdDetail prodDetail : prod.getProdDetailList()) {
                 prodDetail.setId(IDUtil.getId());
                 prodDetail.setProdId(prod.getId());
                 prodDetail.setDetailImg(FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH)); //TEST_FILE_CP_PATH 产品图片存放路径
-                prodDetail.setDetailStatus(0);
+                prodDetail.setDetailStatus(ProdDetail.DETAIL_STATUS_ENUM.JY.getValue());
                 prodDetail.setCreateDate(new Date());
                 prodDetail.setModifyDate(new Date());
                 prodDetailMapper.save(prodDetail);
@@ -156,9 +158,10 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         Long  status = 0L;
         List<ProdSku> prodSkuList = prodSkuMapper.selectProdSkuStatusByProdId(id,status);
         if(prodSkuList != null && prodSkuList.size() > 0){
-            return (prodMapper.deleteByid(id) > 0 ? true : false);
+            return  false;
         }
-        return  false;
+        return (prodMapper.deleteByid(id) > 0 ? true : false);
+
 
     }
 
@@ -185,7 +188,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         prodSku.setSkuWeight(prodSku.getSkuCapacity()); //重量和容量一比一
         prodSku.setCreateDate(new Date());
         prodSku.setModifyDate(new Date());
-        prodSkuMapper.save(prodSku);
+        prodSkuMapper.add(prodSku);
         if(prodSku.getIsIntegral()){
             for (ProdSkuMbrPrice prodSkuMbrPrice:prodSku.getProdSkuMbrPriceList()) {
                 prodSkuMbrPrice.setId(IDUtil.getId());
@@ -253,10 +256,18 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         prodSku.setModifyDate(new Date());
         prodSkuMapper.update(prodSku);
         if(prodSku.getIsIntegral()){
-            for (ProdSkuMbrPrice prodSkuMbrPrice :prodSku.getProdSkuMbrPriceList()) {
-                prodSkuMbrPrice.setModifyDate(new Date());
-                prodSkuMbrPriceMapper.update(prodSkuMbrPrice);
+            List<ProdSkuMbrPrice> prodSkuMbrPriceList = prodSkuMbrPriceMapper.findProdSkuMbrPriceListByProdSkuId(prodSku.getId());
+            if(prodSkuMbrPriceList != null && prodSkuMbrPriceList.size() > 0){
+                prodSkuMbrPriceMapper.deleteByProdSkuId(prodSku.getId());
             }
+            for (ProdSkuMbrPrice prodSkuMbrPrice :prodSku.getProdSkuMbrPriceList()) {
+                prodSkuMbrPrice.setId(IDUtil.getId());
+                prodSkuMbrPrice.setProdSkuId(prodSku.getProdId());
+                prodSkuMbrPrice.setCreateDate(new Date());
+                prodSkuMbrPrice.setModifyDate(new Date());
+                prodSkuMbrPriceMapper.save(prodSkuMbrPrice);
+            }
+
         }
     }
 
@@ -267,11 +278,11 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      * @return
      */
     @Override
-    public List<ProdSku> getProdSkuList(Long id ,PageInfo pageInfo) {
+    public PageInfo<ProdSku> getProdSkuList(Long id ,PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return (List<ProdSku>) new PageInfo(prodSkuMapper.getByProdId(id));
+        return new PageInfo(prodSkuMapper.getByProdId(id));
     }
 
 }

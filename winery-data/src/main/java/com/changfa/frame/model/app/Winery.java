@@ -43,6 +43,61 @@ public class Winery extends BaseEntity {
      */
     private Integer status;
 
+    public enum STATUS_ENUM {
+
+        ZC(0, "昨天"),
+        JY(1, "今天");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static STATUS_ENUM getEnum(Integer value) {
+            for (STATUS_ENUM queryDayEnum : STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
     /**
      * 状态时间
      */
@@ -81,7 +136,7 @@ public class Winery extends BaseEntity {
     /**
      * d点经度
      */
-    private Long dLatitude;
+    private BigDecimal dLatitude;
 
     /**
      * d点纬度
@@ -250,14 +305,14 @@ public class Winery extends BaseEntity {
     /**
      * 获取d点经度
      */
-    public Long getdLatitude() {
+    public BigDecimal getdLatitude() {
         return dLatitude;
     }
 
     /**
      * 设置d点经度
      */
-    public void setdLatitude(Long dLatitude) {
+    public void setdLatitude(BigDecimal dLatitude) {
         this.dLatitude = dLatitude;
     }
 

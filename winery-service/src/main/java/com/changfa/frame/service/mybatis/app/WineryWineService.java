@@ -30,6 +30,21 @@ public interface WineryWineService extends BaseService<WineryWine, Long> {
      * @param pageInfo 分页对象
      * @return List<WineryWine>
      */
-    List<WineryWine> getWineryWineList(PageInfo pageInfo);
+    PageInfo<WineryWine> getWineryWineList(PageInfo pageInfo);
+
+    /**
+     * 搜索酒庄酒
+     * @param name 酒庄酒名称
+     * @param status 状态
+     * @return
+     */
+    PageInfo<WineryWine> findWindery(PageInfo pageInfo, String name, Integer status);
+
+    /**
+     * 新建酒庄酒
+     * @param wineryWine 酒庄酒对象
+     * @param wineryId  当前酒庄id
+     */
+    void addWineryWine(WineryWine wineryWine, Long wineryId);
 }
  

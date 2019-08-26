@@ -123,10 +123,10 @@
         </where>
     </select>
 
-    <select id="getMbrLevelList" resultType="com.changfa.frame.model.app.MbrLevel">
+    <select id="getMbrLevelList" resultMap="mbrLevelMap">
         select
         <include refid="table_column"/>
-        from m_mbr_level status = 'A'  order by  modify_date desc
+        from m_mbr_level WHERE  status = 'A'  order by  modify_date desc
     </select>
 
 </mapper>

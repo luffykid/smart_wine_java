@@ -21,4 +21,6 @@ public interface ProdDetailMapper extends BaseMapper<ProdDetail, Long> {
     int deleteByProdId(Long id);
 
     int deleteProdDetailImg(Long id);
+
+    int add(ProdDetail prodDetail);
 }

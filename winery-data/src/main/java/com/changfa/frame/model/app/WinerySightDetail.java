@@ -66,6 +66,62 @@ public class WinerySightDetail extends BaseEntity {
      */
     private Integer detailStatus;
 
+    public enum DETAIL_STATUS_ENUM {
+        XJ(0, "新建"),
+        QY(1, "启用"),
+        JY(2, "禁用");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        DETAIL_STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static DETAIL_STATUS_ENUM getEnum(Integer value) {
+            for (DETAIL_STATUS_ENUM queryDayEnum : DETAIL_STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
     /**
      * 详情排序
      */

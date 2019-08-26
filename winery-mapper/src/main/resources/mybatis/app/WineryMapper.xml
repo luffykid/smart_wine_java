@@ -3,10 +3,10 @@
 <mapper namespace="com.changfa.frame.mapper.app.WineryMapper" >
     <resultMap id="wineryMap" type="com.changfa.frame.model.app.Winery" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="NAME" property="name" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
         <result column="logo" property="logo" jdbcType="VARCHAR" />
         <result column="loading_img" property="loadingImg" jdbcType="VARCHAR" />
-        <result column="STATUS" property="status" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
         <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
         <result column="a_latitude" property="aLatitude" jdbcType="DECIMAL" />
         <result column="a_longitude" property="aLongitude" jdbcType="DECIMAL" />
@@ -14,7 +14,7 @@
         <result column="b_longitude" property="bLongitude" jdbcType="DECIMAL" />
         <result column="c_latitude" property="cLatitude" jdbcType="DECIMAL" />
         <result column="c_longitude" property="cLongitude" jdbcType="DECIMAL" />
-        <result column="d_latitude" property="dLatitude" jdbcType="BIGINT" />
+        <result column="d_latitude" property="dLatitude" jdbcType="DECIMAL" />
         <result column="d_longitude" property="dLongitude" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
