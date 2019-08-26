@@ -78,7 +78,7 @@ public class CommonController extends BaseController {
 
         // 设置redis中的token
         String redisTokenKey = RedisConsts.ADMIN_ACCTNAME + loginName;
-        String token = RandomStringUtils.random(10) + loginName;
+        String token = RandomStringUtils.randomNumeric(10) + loginName;
         redisClient.setAndExpire(redisTokenKey, token, RedisConsts.ADMIN_ACCTNAME_EXPIRE);
 
         // 如果返回对象信息，可以为简单类型、复合类型[Object、Map、List、model实体等]
