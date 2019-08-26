@@ -2,6 +2,7 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false" >
     <!-- 定义日志路径、级别 -->
     <property name="LOG_DIR" value="/Users/wyy/Documents/00.project_log" />
+    <property name="project.artifactId" value="winery-wechat" />
 
     <!-- 打印日志到控制台 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
