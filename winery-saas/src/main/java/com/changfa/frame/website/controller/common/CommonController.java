@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public class CommonController extends BaseController {
     @Autowired
     private RedisClient redisClient;
 
+    @Resource(name = "adminServiceImpl")
     private AdminService adminService;
 
     /**
@@ -50,11 +52,11 @@ public class CommonController extends BaseController {
     @ApiOperation(value = "用户登录并返回token", notes = "用户登录并返回token", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "loginName", value = "登录用户名称", dataType = "String"),
-            @ApiImplicitParam(name = "loginPwd", value = "登录密码", dataType = "String"),
-            @ApiImplicitParam(name = "phoneCode", value = "手机验证码", dataType = "String")
+            @ApiImplicitParam(name = "loginPwd", value = "登录密码", dataType = "String")
     })
     @PostMapping(value = "/login")
     public Map<String, Object> login(String loginName, String loginPwd) {
+        log.info("***** 登录接口 ********* {},{}",loginName,loginPwd);
         // 参数校验
         if (StringUtils.isBlank(loginName) || StringUtils.isBlank(loginPwd)) {
             throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);

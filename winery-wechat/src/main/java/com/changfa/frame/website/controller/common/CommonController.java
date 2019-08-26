@@ -71,7 +71,7 @@ public class CommonController extends BaseController {
 
         // 设置redis中的token
         String redisTokenKey = RedisConsts.WXMINI_OPENID + curMember.getOpenId();
-        String token = RandomStringUtils.random(10) + phone;
+        String token = RandomStringUtils.randomNumeric(10) + phone;
         redisClient.setAndExpire(redisTokenKey, token, RedisConsts.WXMINI_OPENID_EXPIRE);
 
         // 返回登录token

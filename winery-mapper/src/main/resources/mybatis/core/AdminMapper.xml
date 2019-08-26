@@ -89,43 +89,43 @@
     <select id="selectList" resultMap="adminMap" >
         select
         <include refid="table_column" />
-        from c_admin
+        from c_admin a
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and a.winery_id = #{wineryId}
             </if>
             <if test="loginName != null and loginName != ''" >
-                and null.login_name = #{loginName}
+                and a.login_name = #{loginName}
             </if>
             <if test="userName != null and userName != ''" >
-                and null.user_name = #{userName}
+                and a.user_name = #{userName}
             </if>
             <if test="loginPwd != null and loginPwd != ''" >
-                and null.login_pwd = #{loginPwd}
+                and a.login_pwd = #{loginPwd}
             </if>
             <if test="mobile != null and mobile != ''" >
-                and null.mobile = #{mobile}
+                and a.mobile = #{mobile}
             </if>
             <if test="email != null and email != ''" >
-                and null.email = #{email}
+                and a.email = #{email}
             </if>
             <if test="status != null" >
-                and null.STATUS = #{status}
+                and a.STATUS = #{status}
             </if>
             <if test="loginFailCnt != null" >
-                and null.login_fail_cnt = #{loginFailCnt}
+                and a.login_fail_cnt = #{loginFailCnt}
             </if>
             <if test="isLocked != null" >
-                and null.is_locked = #{isLocked}
+                and a.is_locked = #{isLocked}
             </if>
             <if test="lockedDate != null" >
-                and null.locked_date = #{lockedDate}
+                and a.locked_date = #{lockedDate}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and a.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and a.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

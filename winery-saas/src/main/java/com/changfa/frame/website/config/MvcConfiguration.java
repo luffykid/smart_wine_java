@@ -72,8 +72,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
         //3处理中文乱码问题
         List<MediaType> fastMediaTypes = new ArrayList<>();
+        fastMediaTypes.add(MediaType.APPLICATION_JSON);
         fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         fastMediaTypes.add(MediaType.TEXT_HTML);
+        fastMediaTypes.add(MediaType.MULTIPART_FORM_DATA);
 
         //4.在convert中添加配置信息.
         fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
@@ -115,7 +117,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 令牌拦截器
-        registry.addInterceptor(new SettingInterceptor()).addPathPatterns("/wxMini/**");
+        registry.addInterceptor(new SettingInterceptor()).addPathPatterns("/admin/**");
         registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/admin/auth/**");
     }
 
