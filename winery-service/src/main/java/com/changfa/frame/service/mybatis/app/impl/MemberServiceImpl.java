@@ -1,7 +1,9 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.mapper.app.MbrIntegralDetailMapper;
 import com.changfa.frame.mapper.app.MbrWechatMapper;
 import com.changfa.frame.mapper.app.MemberMapper;
+import com.changfa.frame.model.app.MbrIntegralDetail;
 import com.changfa.frame.model.app.MbrWechat;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MemberService;
@@ -30,6 +32,8 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     private MemberMapper memberMapper;
     @Autowired
     private MbrWechatMapper mbrWechatMapper;
+    @Autowired
+    private MbrIntegralDetailMapper mbrIntegralDetailMapper;
 
     /**
      * 根据手机号查询会员
@@ -51,6 +55,21 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
      */
     @Override
     public PageInfo getSubList(Long mbrId, PageInfo pageInfo) {
+        if (pageInfo != null) {
+            PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        }
+        MbrIntegralDetail mbrIntegralDetail = new MbrIntegralDetail();
+        mbrIntegralDetail.setMbrId(mbrId);
+        return new PageInfo(mbrIntegralDetailMapper.selectList(mbrIntegralDetail));
+    }
+
+    /**
+     * 获取会员积分列表
+     *
+     * @return
+     */
+    @Override
+    public PageInfo getIntegralList(Long mbrId, PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }

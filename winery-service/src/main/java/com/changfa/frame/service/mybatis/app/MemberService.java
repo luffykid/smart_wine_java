@@ -3,7 +3,11 @@ package com.changfa.frame.service.mybatis.app;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +36,12 @@ public interface MemberService extends BaseService<Member, Long> {
      */
     PageInfo getSubList(Long mbrId, PageInfo pageInfo);
 
+    /**
+     * 获取会员积分列表
+     *
+     * @return
+     */
+    PageInfo getIntegralList(Long mbrId, PageInfo pageInfo);
     /**
      * 获取招募会员数据统计
      *

@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,6 +66,18 @@ public class MemberController extends BaseController {
         return getResult(returnMap);
     }
 
+    /**
+     * 获取会员积分列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取会员积分列表", notes = "获取会员积分列表")
+    @RequestMapping(value = "/getIntegralList", method = RequestMethod.GET)
+    public Map<String, Object> getIntegralList(HttpServletRequest request, PageInfo pageInfo) {
+        Member member = getCurMember(request);
+        PageInfo list = memberServiceImpl.getIntegralList(member.getId(), pageInfo);
+        return getResult(list);
+    }
 
     /**
      * 修改个人信息
@@ -91,4 +104,5 @@ public class MemberController extends BaseController {
         }
         return getResult(new HashMap<>());
     }
+
 }
