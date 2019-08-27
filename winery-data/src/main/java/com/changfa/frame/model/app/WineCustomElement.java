@@ -27,10 +27,67 @@ public class WineCustomElement extends BaseEntity {
     private String elementIcon;
 
     /** 元素状态
-0：新建
-1：启用
-2：禁用 */
+    0：新建
+    1：启用
+    2：禁用 */
     private Integer elementStatus;
+
+    public enum ELEMENT_STATUS_ENUM {
+        XJ(0, "新建"),
+        QY(1, "启用"),
+        JY(2, "禁用");
+
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        ELEMENT_STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static ELEMENT_STATUS_ENUM getEnum(Integer value) {
+            for (ELEMENT_STATUS_ENUM queryDayEnum : ELEMENT_STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
 
     /** 元素排序 */
     private Integer sort;
@@ -80,9 +137,9 @@ public class WineCustomElement extends BaseEntity {
     
     /**
      * 获取元素状态
-0：新建
-1：启用
-2：禁用
+    0：新建
+    1：启用
+    2：禁用
     */
     public Integer getElementStatus() {
         return elementStatus;
@@ -90,9 +147,9 @@ public class WineCustomElement extends BaseEntity {
     
     /**
      * 设置元素状态
-0：新建
-1：启用
-2：禁用
+    0：新建
+    1：启用
+    2：禁用
     */
     public void setElementStatus(Integer elementStatus) {
         this.elementStatus = elementStatus;

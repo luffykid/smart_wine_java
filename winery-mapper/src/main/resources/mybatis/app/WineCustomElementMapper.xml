@@ -93,4 +93,8 @@
         </where>
     </select>
 
+    <select id="getElementNameById" parameterType="java.lang.Long" resultType="string">
+        select element_name from b_wine_custom_element where id =#{id}
+    </select>
+
 </mapper>

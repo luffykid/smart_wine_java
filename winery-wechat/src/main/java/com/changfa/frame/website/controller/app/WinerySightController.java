@@ -61,7 +61,6 @@ public class WinerySightController extends BaseController {
     @ApiOperation(value = "查询所有景点", notes = "查询酒庄所有景点")
     @RequestMapping(value = "/getWinerySightList", method = RequestMethod.POST)
     public Map<String, Object> getWinerySightList(HttpServletRequest request) {
-        //AdminUser curAdmin = getCurAdmin(request);
         Member curMember = getCurMember(request);
         Map<String, Object> returnMap = winerySightService.findSignSight(curMember);
         if (returnMap.isEmpty()) {

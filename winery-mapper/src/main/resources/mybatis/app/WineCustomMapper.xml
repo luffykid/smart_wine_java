@@ -123,4 +123,10 @@
         </where>
     </select>
 
+    <select id="getWineCustomList" resultMap="wineCustomMap">
+        select
+        <include refid="table_column"/>
+        from b_wine_custom  where custom_status != 1  order by create_date  desc
+    </select>
+
 </mapper>

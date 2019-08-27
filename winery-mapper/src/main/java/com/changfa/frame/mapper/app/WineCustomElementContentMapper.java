@@ -10,6 +10,11 @@ package com.changfa.frame.mapper.app;
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WineCustomElementContent;
 
+import java.util.List;
+
 public interface WineCustomElementContentMapper extends BaseMapper<WineCustomElementContent, Long> {
 
+    WineCustomElementContent getWineCustomElementContentByWineCustomId(Long id);
+
+    List<WineCustomElementContent> getListByWineCustomId(Long id);
 }
