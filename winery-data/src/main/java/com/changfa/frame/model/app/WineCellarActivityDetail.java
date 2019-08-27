@@ -7,6 +7,8 @@
  */
 package com.changfa.frame.model.app;
 
+import com.changfa.frame.model.common.BaseEntity;
+
 /**
  * 酒庄活动详情
  * @version 1.0 2019-08-27
