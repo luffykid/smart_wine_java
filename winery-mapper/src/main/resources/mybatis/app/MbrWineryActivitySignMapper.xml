@@ -71,31 +71,31 @@
     <select id="selectList" resultMap="mbrWineryActivitySignMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_winery_activity_sign
+        from m_mbr_winery_activity_sign mbrWineryActivitySign
         <where >
             <if test="wineryActivityId != null" >
-                and null.winery_activity_id = #{wineryActivityId}
+                and mbrWineryActivitySign.winery_activity_id = #{wineryActivityId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mbrWineryActivitySign.mbr_id = #{mbrId}
             </if>
             <if test="mbrActStatus != null" >
-                and null.mbr_act_status = #{mbrActStatus}
+                and mbrWineryActivitySign.mbr_act_status = #{mbrActStatus}
             </if>
             <if test="signUpDate != null" >
-                and null.sign_up_date = #{signUpDate}
+                and mbrWineryActivitySign.sign_up_date = #{signUpDate}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mbrWineryActivitySign.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mbrWineryActivitySign.modify_date = #{modifyDate}
             </if>
             <if test="signInDate != null" >
-                and null.sign_in_date = #{signInDate}
+                and mbrWineryActivitySign.sign_in_date = #{signInDate}
             </if>
             <if test="signOffDate != null" >
-                and null.sign_off_date = #{signOffDate}
+                and mbrWineryActivitySign.sign_off_date = #{signOffDate}
             </if>
         </where>
     </select>

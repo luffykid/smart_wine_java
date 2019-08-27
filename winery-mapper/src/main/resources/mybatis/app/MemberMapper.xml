@@ -116,61 +116,61 @@
     <select id="selectList" resultMap="memberMap" >
         select
         <include refid="table_column" />
-        from m_member
+        from m_member member
         <where >
             <if test="mbrLevelId != null" >
-                and null.mbr_level_id = #{mbrLevelId}
+                and member.mbr_level_id = #{mbrLevelId}
             </if>
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and member.winery_id = #{wineryId}
             </if>
             <if test="token != null and token != ''" >
-                and null.token = #{token}
+                and member.token = #{token}
             </if>
             <if test="nickName != null and nickName != ''" >
-                and null.nick_name = #{nickName}
+                and member.nick_name = #{nickName}
             </if>
             <if test="phone != null and phone != ''" >
-                and null.phone = #{phone}
+                and member.phone = #{phone}
             </if>
             <if test="wechat != null and wechat != ''" >
-                and null.wechat = #{wechat}
+                and member.wechat = #{wechat}
             </if>
             <if test="openId != null and openId != ''" >
-                and null.open_id = #{openId}
+                and member.open_id = #{openId}
             </if>
             <if test="userIcon != null and userIcon != ''" >
-                and null.user_icon = #{userIcon}
+                and member.user_icon = #{userIcon}
             </if>
             <if test="status != null" >
-                and null.STATUS = #{status}
+                and member.STATUS = #{status}
             </if>
             <if test="statusTime != null" >
-                and null.status_time = #{statusTime}
+                and member.status_time = #{statusTime}
             </if>
             <if test="totalIntegral != null" >
-                and null.total_integral = #{totalIntegral}
+                and member.total_integral = #{totalIntegral}
             </if>
             <if test="totalStoreRemain != null" >
-                and null.total_store_remain = #{totalStoreRemain}
+                and member.total_store_remain = #{totalStoreRemain}
             </if>
             <if test="totalStoreIncrement != null" >
-                and null.total_store_increment = #{totalStoreIncrement}
+                and member.total_store_increment = #{totalStoreIncrement}
             </if>
             <if test="marketQrCode != null and marketQrCode != ''" >
-                and null.market_qr_code = #{marketQrCode}
+                and member.market_qr_code = #{marketQrCode}
             </if>
             <if test="marketPid != null" >
-                and null.market_pid = #{marketPid}
+                and member.market_pid = #{marketPid}
             </if>
             <if test="acctBalance != null" >
-                and null.acct_balance = #{acctBalance}
+                and member.acct_balance = #{acctBalance}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and member.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and member.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

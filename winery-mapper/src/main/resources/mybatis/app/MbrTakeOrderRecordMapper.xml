@@ -67,28 +67,28 @@
     <select id="selectList" resultMap="mbrTakeOrderRecordMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_take_order_record
+        from m_mbr_take_order_record mbrTakeOrderRecord
         <where >
             <if test="mbrTakeOrderId != null" >
-                and null.mbr_take_order_id = #{mbrTakeOrderId}
+                and mbrTakeOrderRecord.mbr_take_order_id = #{mbrTakeOrderId}
             </if>
             <if test="orderStatus != null" >
-                and null.order_status = #{orderStatus}
+                and mbrTakeOrderRecord.order_status = #{orderStatus}
             </if>
             <if test="orderRemark != null and orderRemark != ''" >
-                and null.order_remark = #{orderRemark}
+                and mbrTakeOrderRecord.order_remark = #{orderRemark}
             </if>
             <if test="auditAdminId != null" >
-                and null.audit_admin_id = #{auditAdminId}
+                and mbrTakeOrderRecord.audit_admin_id = #{auditAdminId}
             </if>
             <if test="auditDate != null" >
-                and null.audit_date = #{auditDate}
+                and mbrTakeOrderRecord.audit_date = #{auditDate}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mbrTakeOrderRecord.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mbrTakeOrderRecord.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

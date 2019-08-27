@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineryAdjustAdvanceMapper" >
+    <resultMap id="wineryAdjustAdvanceMap" type="com.changfa.frame.model.app.WineryAdjustAdvance" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_adjust_wine_id" property="wineryAdjustWineId" jdbcType="BIGINT" />
+        <result column="advance_name" property="advanceName" jdbcType="VARCHAR" />
+        <result column="advance_img" property="advanceImg" jdbcType="VARCHAR" />
+        <result column="advance_remark" property="advanceRemark" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        wineryAdjustAdvance.id as id, wineryAdjustAdvance.winery_adjust_wine_id as winery_adjust_wine_id, 
+        wineryAdjustAdvance.advance_name as advance_name, wineryAdjustAdvance.advance_img as advance_img, 
+        wineryAdjustAdvance.advance_remark as advance_remark, wineryAdjustAdvance.status as status, 
+        wineryAdjustAdvance.sort as sort, wineryAdjustAdvance.create_date as create_date, 
+        wineryAdjustAdvance.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineryAdjustAdvanceMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_winery_adjust_advance wineryAdjustAdvance
+        where wineryAdjustAdvance.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineryAdjustAdvance" >
+        insert into b_winery_adjust_advance (id, winery_adjust_wine_id, advance_name, advance_img, advance_remark, 
+            status, sort, create_date, modify_date)
+        values (#{id}, #{wineryAdjustWineId}, #{advanceName}, #{advanceImg}, #{advanceRemark}, 
+            #{status}, #{sort}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineryAdjustAdvance" >
+        update b_winery_adjust_advance
+        <set >
+            <if test="wineryAdjustWineId != null" >
+                winery_adjust_wine_id = #{wineryAdjustWineId},
+            </if>
+            <if test="advanceName != null and advanceName != ''" >
+                advance_name = #{advanceName},
+            </if>
+            <if test="advanceImg != null and advanceImg != ''" >
+                advance_img = #{advanceImg},
+            </if>
+            <if test="advanceRemark != null and advanceRemark != ''" >
+                advance_remark = #{advanceRemark},
+            </if>
+            <if test="status != null" >
+                status = #{status},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_winery_adjust_advance
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineryAdjustAdvanceMap" >
+        select 
+        <include refid="table_column" />
+        from b_winery_adjust_advance wineryAdjustAdvance
+        <where >
+            <if test="wineryAdjustWineId != null" >
+                and wineryAdjustAdvance.winery_adjust_wine_id = #{wineryAdjustWineId}
+            </if>
+            <if test="advanceName != null and advanceName != ''" >
+                and wineryAdjustAdvance.advance_name = #{advanceName}
+            </if>
+            <if test="advanceImg != null and advanceImg != ''" >
+                and wineryAdjustAdvance.advance_img = #{advanceImg}
+            </if>
+            <if test="advanceRemark != null and advanceRemark != ''" >
+                and wineryAdjustAdvance.advance_remark = #{advanceRemark}
+            </if>
+            <if test="status != null" >
+                and wineryAdjustAdvance.status = #{status}
+            </if>
+            <if test="sort != null" >
+                and wineryAdjustAdvance.sort = #{sort}
+            </if>
+            <if test="createDate != null" >
+                and wineryAdjustAdvance.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and wineryAdjustAdvance.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

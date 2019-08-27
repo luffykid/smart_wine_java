@@ -123,64 +123,64 @@
     <select id="selectList" resultMap="mbrStoreOrderMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_store_order
+        from m_mbr_store_order mbrStoreOrder
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and mbrStoreOrder.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mbrStoreOrder.mbr_id = #{mbrId}
             </if>
             <if test="wineCellarActivityId != null" >
-                and null.wine_cellar_activity_id = #{wineCellarActivityId}
+                and mbrStoreOrder.wine_cellar_activity_id = #{wineCellarActivityId}
             </if>
             <if test="payMode != null" >
-                and null.pay_mode = #{payMode}
+                and mbrStoreOrder.pay_mode = #{payMode}
             </if>
             <if test="prodTotalCnt != null" >
-                and null.prod_total_cnt = #{prodTotalCnt}
+                and mbrStoreOrder.prod_total_cnt = #{prodTotalCnt}
             </if>
             <if test="payTotalAmt != null" >
-                and null.pay_total_amt = #{payTotalAmt}
+                and mbrStoreOrder.pay_total_amt = #{payTotalAmt}
             </if>
             <if test="payRealAmt != null" >
-                and null.pay_real_amt = #{payRealAmt}
+                and mbrStoreOrder.pay_real_amt = #{payRealAmt}
             </if>
             <if test="payIntegralCnt != null" >
-                and null.pay_integral_cnt = #{payIntegralCnt}
+                and mbrStoreOrder.pay_integral_cnt = #{payIntegralCnt}
             </if>
             <if test="orderStatus != null" >
-                and null.order_status = #{orderStatus}
+                and mbrStoreOrder.order_status = #{orderStatus}
             </if>
             <if test="totalOrgWeight != null" >
-                and null.total_org_weight = #{totalOrgWeight}
+                and mbrStoreOrder.total_org_weight = #{totalOrgWeight}
             </if>
             <if test="totalOrgCapacity != null" >
-                and null.total_org_capacity = #{totalOrgCapacity}
+                and mbrStoreOrder.total_org_capacity = #{totalOrgCapacity}
             </if>
             <if test="totalIncreaseWeight != null" >
-                and null.total_increase_weight = #{totalIncreaseWeight}
+                and mbrStoreOrder.total_increase_weight = #{totalIncreaseWeight}
             </if>
             <if test="totalIncreaseCapacity != null" >
-                and null.total_increase_capacity = #{totalIncreaseCapacity}
+                and mbrStoreOrder.total_increase_capacity = #{totalIncreaseCapacity}
             </if>
             <if test="totalRemainWeight != null" >
-                and null.total_remain_weight = #{totalRemainWeight}
+                and mbrStoreOrder.total_remain_weight = #{totalRemainWeight}
             </if>
             <if test="totalRemainCapacity != null" >
-                and null.total_remain_capacity = #{totalRemainCapacity}
+                and mbrStoreOrder.total_remain_capacity = #{totalRemainCapacity}
             </if>
             <if test="transactionNo != null and transactionNo != ''" >
-                and null.transaction_no = #{transactionNo}
+                and mbrStoreOrder.transaction_no = #{transactionNo}
             </if>
             <if test="orderNo != null and orderNo != ''" >
-                and null.order_no = #{orderNo}
+                and mbrStoreOrder.order_no = #{orderNo}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mbrStoreOrder.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mbrStoreOrder.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
