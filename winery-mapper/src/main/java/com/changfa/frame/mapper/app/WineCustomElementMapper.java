@@ -11,4 +11,5 @@ import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WineCustomElement;
 
 public interface WineCustomElementMapper extends BaseMapper<WineCustomElement, Long> {
+
 }

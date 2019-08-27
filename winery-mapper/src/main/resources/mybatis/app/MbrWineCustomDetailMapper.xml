@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrWineCustomDetailMapper" >
+    <resultMap id="mbrWineCustomDetailMap" type="com.changfa.frame.model.app.MbrWineCustomDetail" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="wine_custom_id" property="wineCustomId" jdbcType="BIGINT" />
+        <result column="wine_custom_element_id" property="wineCustomElementId" jdbcType="BIGINT" />
+        <result column="mbr_wine_custom_id" property="mbrWineCustomId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="bg_img" property="bgImg" jdbcType="VARCHAR" />
+        <result column="mask_img" property="maskImg" jdbcType="VARCHAR" />
+        <result column="preview_img" property="previewImg" jdbcType="VARCHAR" />
+        <result column="bottom_img" property="bottomImg" jdbcType="VARCHAR" />
+        <result column="print_img" property="printImg" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        MbrWineCustomDetail.id as id, MbrWineCustomDetail.wine_custom_id as wine_custom_id, 
+        MbrWineCustomDetail.wine_custom_element_id as wine_custom_element_id, MbrWineCustomDetail.mbr_wine_custom_id as mbr_wine_custom_id, 
+        MbrWineCustomDetail.mbr_id as mbr_id, MbrWineCustomDetail.bg_img as bg_img, MbrWineCustomDetail.mask_img as mask_img, 
+        MbrWineCustomDetail.preview_img as preview_img, MbrWineCustomDetail.bottom_img as bottom_img, 
+        MbrWineCustomDetail.print_img as print_img, MbrWineCustomDetail.create_date as create_date, 
+        MbrWineCustomDetail.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrWineCustomDetailMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_wine_custom_detail MbrWineCustomDetail
+        where MbrWineCustomDetail.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomDetail" >
+        insert into m_mbr_wine_custom_detail (id, wine_custom_id, wine_custom_element_id, mbr_wine_custom_id, mbr_id, 
+            bg_img, mask_img, preview_img, bottom_img, print_img, create_date, 
+            modify_date)
+        values (#{id}, #{wineCustomId}, #{wineCustomElementId}, #{mbrWineCustomId}, #{mbrId}, 
+            #{bgImg}, #{maskImg}, #{previewImg}, #{bottomImg}, #{printImg}, #{createDate}, 
+            #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrWineCustomDetail" >
+        update m_mbr_wine_custom_detail
+        <set >
+            <if test="wineCustomId != null" >
+                wine_custom_id = #{wineCustomId},
+            </if>
+            <if test="wineCustomElementId != null" >
+                wine_custom_element_id = #{wineCustomElementId},
+            </if>
+            <if test="mbrWineCustomId != null" >
+                mbr_wine_custom_id = #{mbrWineCustomId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="bgImg != null and bgImg != ''" >
+                bg_img = #{bgImg},
+            </if>
+            <if test="maskImg != null and maskImg != ''" >
+                mask_img = #{maskImg},
+            </if>
+            <if test="previewImg != null and previewImg != ''" >
+                preview_img = #{previewImg},
+            </if>
+            <if test="bottomImg != null and bottomImg != ''" >
+                bottom_img = #{bottomImg},
+            </if>
+            <if test="printImg != null and printImg != ''" >
+                print_img = #{printImg},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_wine_custom_detail
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrWineCustomDetailMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_wine_custom_detail MbrWineCustomDetail
+        <where >
+            <if test="wineCustomId != null" >
+                and MbrWineCustomDetail.wine_custom_id = #{wineCustomId}
+            </if>
+            <if test="wineCustomElementId != null" >
+                and MbrWineCustomDetail.wine_custom_element_id = #{wineCustomElementId}
+            </if>
+            <if test="mbrWineCustomId != null" >
+                and MbrWineCustomDetail.mbr_wine_custom_id = #{mbrWineCustomId}
+            </if>
+            <if test="mbrId != null" >
+                and MbrWineCustomDetail.mbr_id = #{mbrId}
+            </if>
+            <if test="bgImg != null and bgImg != ''" >
+                and MbrWineCustomDetail.bg_img = #{bgImg}
+            </if>
+            <if test="maskImg != null and maskImg != ''" >
+                and MbrWineCustomDetail.mask_img = #{maskImg}
+            </if>
+            <if test="previewImg != null and previewImg != ''" >
+                and MbrWineCustomDetail.preview_img = #{previewImg}
+            </if>
+            <if test="bottomImg != null and bottomImg != ''" >
+                and MbrWineCustomDetail.bottom_img = #{bottomImg}
+            </if>
+            <if test="printImg != null and printImg != ''" >
+                and MbrWineCustomDetail.print_img = #{printImg}
+            </if>
+            <if test="createDate != null" >
+                and MbrWineCustomDetail.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and MbrWineCustomDetail.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

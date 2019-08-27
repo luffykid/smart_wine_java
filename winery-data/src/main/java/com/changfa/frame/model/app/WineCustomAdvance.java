@@ -131,4 +131,5 @@ public class WineCustomAdvance extends BaseEntity {
     public void setSort(Integer sort) {
         this.sort = sort;
     }
+
 }

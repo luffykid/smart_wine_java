@@ -11,4 +11,5 @@ import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WineCustomAdvance;
 
 public interface WineCustomAdvanceMapper extends BaseMapper<WineCustomAdvance, Long> {
+
 }

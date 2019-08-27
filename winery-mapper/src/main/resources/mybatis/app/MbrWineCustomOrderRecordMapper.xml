@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrWineCustomOrderRecordMapper" >
+    <resultMap id="mbrWineCustomOrderRecordMap" type="com.changfa.frame.model.app.MbrWineCustomOrderRecord" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="mbr_wine_custom_order_id" property="mbrWineCustomOrderId" jdbcType="BIGINT" />
+        <result column="order_status" property="orderStatus" jdbcType="BIGINT" />
+        <result column="status_date" property="statusDate" jdbcType="TIMESTAMP" />
+        <result column="order_record_remark" property="orderRecordRemark" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        MbrWineCustomOrderRecord.id as id, MbrWineCustomOrderRecord.mbr_wine_custom_order_id as mbr_wine_custom_order_id, 
+        MbrWineCustomOrderRecord.order_status as order_status, MbrWineCustomOrderRecord.status_date as status_date, 
+        MbrWineCustomOrderRecord.order_record_remark as order_record_remark, MbrWineCustomOrderRecord.create_date as create_date, 
+        MbrWineCustomOrderRecord.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrWineCustomOrderRecordMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_wine_custom_order_record MbrWineCustomOrderRecord
+        where MbrWineCustomOrderRecord.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomOrderRecord" >
+        insert into m_mbr_wine_custom_order_record (id, mbr_wine_custom_order_id, order_status, status_date, order_record_remark, 
+            create_date, modify_date)
+        values (#{id}, #{mbrWineCustomOrderId}, #{orderStatus}, #{statusDate}, #{orderRecordRemark}, 
+            #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrWineCustomOrderRecord" >
+        update m_mbr_wine_custom_order_record
+        <set >
+            <if test="mbrWineCustomOrderId != null" >
+                mbr_wine_custom_order_id = #{mbrWineCustomOrderId},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="statusDate != null" >
+                status_date = #{statusDate},
+            </if>
+            <if test="orderRecordRemark != null and orderRecordRemark != ''" >
+                order_record_remark = #{orderRecordRemark},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_wine_custom_order_record
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrWineCustomOrderRecordMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_wine_custom_order_record MbrWineCustomOrderRecord
+        <where >
+            <if test="mbrWineCustomOrderId != null" >
+                and MbrWineCustomOrderRecord.mbr_wine_custom_order_id = #{mbrWineCustomOrderId}
+            </if>
+            <if test="orderStatus != null" >
+                and MbrWineCustomOrderRecord.order_status = #{orderStatus}
+            </if>
+            <if test="statusDate != null" >
+                and MbrWineCustomOrderRecord.status_date = #{statusDate}
+            </if>
+            <if test="orderRecordRemark != null and orderRecordRemark != ''" >
+                and MbrWineCustomOrderRecord.order_record_remark = #{orderRecordRemark}
+            </if>
+            <if test="createDate != null" >
+                and MbrWineCustomOrderRecord.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and MbrWineCustomOrderRecord.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -11,4 +11,5 @@ import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WinCustomElementAdvance;
 
 public interface WinCustomElementAdvanceMapper extends BaseMapper<WinCustomElementAdvance, Long> {
+
 }

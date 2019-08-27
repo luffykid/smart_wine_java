@@ -102,4 +102,5 @@ public class WineCustomElementContent extends BaseEntity {
     public void setBottomImg(String bottomImg) {
         this.bottomImg = bottomImg == null ? null : bottomImg.trim();
     }
+
 }
