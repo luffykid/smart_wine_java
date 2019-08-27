@@ -66,28 +66,28 @@
     <select id="selectList" resultMap="wineryMasterMap" >
         select 
         <include refid="table_column" />
-        from b_winery_master
+        from b_winery_master wineryMaster
         <where >
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and wineryMaster.mbr_id = #{mbrId}
             </if>
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and wineryMaster.winery_id = #{wineryId}
             </if>
             <if test="masterType != null" >
-                and null.master_type = #{masterType}
+                and wineryMaster.master_type = #{masterType}
             </if>
             <if test="masterName != null and masterName != ''" >
-                and null.master_name = #{masterName}
+                and wineryMaster.master_name = #{masterName}
             </if>
             <if test="masterDetail != null and masterDetail != ''" >
-                and null.master_detail = #{masterDetail}
+                and wineryMaster.master_detail = #{masterDetail}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and wineryMaster.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and wineryMaster.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

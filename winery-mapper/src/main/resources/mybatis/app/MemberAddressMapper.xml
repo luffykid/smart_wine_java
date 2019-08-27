@@ -89,43 +89,43 @@
     <select id="selectList" resultMap="memberAddressMap" >
         select 
         <include refid="table_column" />
-        from m_member_address
+        from m_member_address memberAddress
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and memberAddress.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and memberAddress.mbr_id = #{mbrId}
             </if>
             <if test="contact != null and contact != ''" >
-                and null.contact = #{contact}
+                and memberAddress.contact = #{contact}
             </if>
             <if test="phone != null and phone != ''" >
-                and null.phone = #{phone}
+                and memberAddress.phone = #{phone}
             </if>
             <if test="province != null" >
-                and null.province = #{province}
+                and memberAddress.province = #{province}
             </if>
             <if test="city != null" >
-                and null.city = #{city}
+                and memberAddress.city = #{city}
             </if>
             <if test="country != null" >
-                and null.country = #{country}
+                and memberAddress.country = #{country}
             </if>
             <if test="detailAddress != null and detailAddress != ''" >
-                and null.detail_address = #{detailAddress}
+                and memberAddress.detail_address = #{detailAddress}
             </if>
             <if test="fullAddress != null and fullAddress != ''" >
-                and null.full_address = #{fullAddress}
+                and memberAddress.full_address = #{fullAddress}
             </if>
             <if test="isDefault != null" >
-                and null.is_default = #{isDefault}
+                and memberAddress.is_default = #{isDefault}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and memberAddress.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and memberAddress.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

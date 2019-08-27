@@ -108,55 +108,55 @@
     <select id="selectList" resultMap="mbrStoreOrderItemMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_store_order_item
+        from m_mbr_store_order_item mbrStoreOrderItem
         <where >
             <if test="mbrStoreOrderId != null" >
-                and null.mbr_store_order_id = #{mbrStoreOrderId}
+                and mbrStoreOrderItem.mbr_store_order_id = #{mbrStoreOrderId}
             </if>
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and mbrStoreOrderItem.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mbrStoreOrderItem.mbr_id = #{mbrId}
             </if>
             <if test="prodSkuId != null" >
-                and null.prod_sku_id = #{prodSkuId}
+                and mbrStoreOrderItem.prod_sku_id = #{prodSkuId}
             </if>
             <if test="prodSkuCnt != null" >
-                and null.prod_sku_cnt = #{prodSkuCnt}
+                and mbrStoreOrderItem.prod_sku_cnt = #{prodSkuCnt}
             </if>
             <if test="skuName != null" >
-                and null.sku_name = #{skuName}
+                and mbrStoreOrderItem.sku_name = #{skuName}
             </if>
             <if test="skuMarketPrice != null" >
-                and null.sku_market_price = #{skuMarketPrice}
+                and mbrStoreOrderItem.sku_market_price = #{skuMarketPrice}
             </if>
             <if test="skuSellPrice != null" >
-                and null.sku_sell_price = #{skuSellPrice}
+                and mbrStoreOrderItem.sku_sell_price = #{skuSellPrice}
             </if>
             <if test="skuMbrPrice != null" >
-                and null.sku_mbr_price = #{skuMbrPrice}
+                and mbrStoreOrderItem.sku_mbr_price = #{skuMbrPrice}
             </if>
             <if test="isIntegral != null" >
-                and null.is_integral = #{isIntegral}
+                and mbrStoreOrderItem.is_integral = #{isIntegral}
             </if>
             <if test="integralAmt != null" >
-                and null.integral_amt = #{integralAmt}
+                and mbrStoreOrderItem.integral_amt = #{integralAmt}
             </if>
             <if test="integralCnt != null" >
-                and null.integral_cnt = #{integralCnt}
+                and mbrStoreOrderItem.integral_cnt = #{integralCnt}
             </if>
             <if test="skuWeight != null" >
-                and null.sku_weight = #{skuWeight}
+                and mbrStoreOrderItem.sku_weight = #{skuWeight}
             </if>
             <if test="skuCapacity != null" >
-                and null.sku_capacity = #{skuCapacity}
+                and mbrStoreOrderItem.sku_capacity = #{skuCapacity}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mbrStoreOrderItem.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mbrStoreOrderItem.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

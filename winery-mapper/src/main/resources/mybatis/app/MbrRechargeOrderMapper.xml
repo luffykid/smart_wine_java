@@ -66,28 +66,28 @@
     <select id="selectList" resultMap="mbrRechargeOrderMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_recharge_order
+        from m_mbr_recharge_order mbrRechargeOrder
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and mbrRechargeOrder.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mbrRechargeOrder.mbr_id = #{mbrId}
             </if>
             <if test="payTotalAmt != null" >
-                and null.pay_total_amt = #{payTotalAmt}
+                and mbrRechargeOrder.pay_total_amt = #{payTotalAmt}
             </if>
             <if test="payRealAmt != null" >
-                and null.pay_real_amt = #{payRealAmt}
+                and mbrRechargeOrder.pay_real_amt = #{payRealAmt}
             </if>
             <if test="orderStatus != null" >
-                and null.order_status = #{orderStatus}
+                and mbrRechargeOrder.order_status = #{orderStatus}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mbrRechargeOrder.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mbrRechargeOrder.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

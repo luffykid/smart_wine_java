@@ -23,7 +23,7 @@
     <select id="getById" resultMap="areaMap" parameterType="java.lang.Integer" >
         select 
         <include refid="table_column" />
-        from c_area
+        from c_area area
         where id = #{id}
     </select>
 
@@ -79,37 +79,37 @@
     <select id="selectList" resultMap="areaMap" >
         select 
         <include refid="table_column" />
-        from c_area
+        from c_area area
         <where >
             <if test="name != null and name != ''" >
-                and null.name = #{name}
+                and area.name = #{name}
             </if>
             <if test="sname != null and sname != ''" >
-                and null.sname = #{sname}
+                and area.sname = #{sname}
             </if>
             <if test="code != null and code != ''" >
-                and null.code = #{code}
+                and area.code = #{code}
             </if>
             <if test="type != null and type != ''" >
-                and null.type = #{type}
+                and area.type = #{type}
             </if>
             <if test="parentId != null" >
-                and null.parent_id = #{parentId}
+                and area.parent_id = #{parentId}
             </if>
             <if test="sortPosition != null" >
-                and null.sort_position = #{sortPosition}
+                and area.sort_position = #{sortPosition}
             </if>
             <if test="longitude != null" >
-                and null.longitude = #{longitude}
+                and area.longitude = #{longitude}
             </if>
             <if test="latitude != null" >
-                and null.latitude = #{latitude}
+                and area.latitude = #{latitude}
             </if>
             <if test="fullName != null and fullName != ''" >
-                and null.full_name = #{fullName}
+                and area.full_name = #{fullName}
             </if>
             <if test="remarks != null and remarks != ''" >
-                and null.remarks = #{remarks}
+                and area.remarks = #{remarks}
             </if>
         </where>
     </select>

@@ -71,31 +71,31 @@
     <select id="selectList" resultMap="mbrIntegralDetailMap" >
         select 
         <include refid="table_column" />
-        from m_mbr_integral_detail
+        from m_mbr_integral_detail mbrIntegralDetail
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and mbrIntegralDetail.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mbrIntegralDetail.mbr_id = #{mbrId}
             </if>
             <if test="actionType != null" >
-                and null.action_type = #{actionType}
+                and mbrIntegralDetail.action_type = #{actionType}
             </if>
             <if test="pointType != null" >
-                and null.point_type = #{pointType}
+                and mbrIntegralDetail.point_type = #{pointType}
             </if>
             <if test="integralValue != null" >
-                and null.integral_value = #{integralValue}
+                and mbrIntegralDetail.integral_value = #{integralValue}
             </if>
             <if test="latestPoint != null" >
-                and null.latest_point = #{latestPoint}
+                and mbrIntegralDetail.latest_point = #{latestPoint}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mbrIntegralDetail.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mbrIntegralDetail.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

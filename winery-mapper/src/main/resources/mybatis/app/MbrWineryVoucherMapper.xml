@@ -112,58 +112,58 @@
     <select id="selectList" resultMap="mbrWineryVoucherMap" >
         select 
         <include refid="table_column" />
-        from b_mbr_winery_voucher
+        from b_mbr_winery_voucher mbrWineryVoucher
         <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and mbrWineryVoucher.winery_id = #{wineryId}
             </if>
             <if test="wineryVoucherInstId != null" >
-                and null.winery_voucher_inst_id = #{wineryVoucherInstId}
+                and mbrWineryVoucher.winery_voucher_inst_id = #{wineryVoucherInstId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mbrWineryVoucher.mbr_id = #{mbrId}
             </if>
             <if test="name != null and name != ''" >
-                and null.name = #{name}
+                and mbrWineryVoucher.name = #{name}
             </if>
             <if test="type != null" >
-                and null.type = #{type}
+                and mbrWineryVoucher.type = #{type}
             </if>
             <if test="voucherAmt != null" >
-                and null.voucher_amt = #{voucherAmt}
+                and mbrWineryVoucher.voucher_amt = #{voucherAmt}
             </if>
             <if test="voucherDiscount != null" >
-                and null.voucher_discount = #{voucherDiscount}
+                and mbrWineryVoucher.voucher_discount = #{voucherDiscount}
             </if>
             <if test="prodSkuId != null" >
-                and null.prod_sku_id = #{prodSkuId}
+                and mbrWineryVoucher.prod_sku_id = #{prodSkuId}
             </if>
             <if test="enableType != null" >
-                and null.enable_type = #{enableType}
+                and mbrWineryVoucher.enable_type = #{enableType}
             </if>
             <if test="enableAmt != null" >
-                and null.enable_amt = #{enableAmt}
+                and mbrWineryVoucher.enable_amt = #{enableAmt}
             </if>
             <if test="quantityLimitCnt != null" >
-                and null.quantity_limit_cnt = #{quantityLimitCnt}
+                and mbrWineryVoucher.quantity_limit_cnt = #{quantityLimitCnt}
             </if>
             <if test="effectiveBeginDate != null" >
-                and null.effective_begin_date = #{effectiveBeginDate}
+                and mbrWineryVoucher.effective_begin_date = #{effectiveBeginDate}
             </if>
             <if test="effectiveEndDate != null" >
-                and null.effective_end_date = #{effectiveEndDate}
+                and mbrWineryVoucher.effective_end_date = #{effectiveEndDate}
             </if>
             <if test="useScope != null" >
-                and null.use_scope = #{useScope}
+                and mbrWineryVoucher.use_scope = #{useScope}
             </if>
             <if test="voucherCnt != null" >
-                and null.voucher_cnt = #{voucherCnt}
+                and mbrWineryVoucher.voucher_cnt = #{voucherCnt}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mbrWineryVoucher.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mbrWineryVoucher.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
