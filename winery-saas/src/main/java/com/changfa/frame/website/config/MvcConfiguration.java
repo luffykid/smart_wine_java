@@ -109,6 +109,13 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+    /********************************* 需要注入Bean的拦截器 开始****************************/
+    @Bean
+    public TokenInterceptor TokenInterceptor() {
+        return new TokenInterceptor();
+    }
+    /********************************* 需要注入Bean的拦截器 结束****************************/
+
     /**
      * 注册拦截器
      *
