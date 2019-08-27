@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,8 +35,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      */
     public static final String REQUEST_HEADER_OPENID_KEY = "request-header-openID";
 
-
-    @Autowired
+    @Resource(name = "redisClient")
     private RedisClient redisClient;
 
     /**

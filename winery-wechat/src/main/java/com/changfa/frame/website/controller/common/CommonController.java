@@ -38,7 +38,7 @@ public class CommonController extends BaseController {
     @Resource(name = "memberServiceImpl")
     private MemberService memberService;
 
-    @Autowired
+    @Resource(name = "redisClient")
     private RedisClient redisClient;
 
     @Resource(name = "SMSServiceImpl")
