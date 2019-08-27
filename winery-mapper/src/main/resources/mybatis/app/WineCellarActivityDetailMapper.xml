@@ -114,5 +114,6 @@
         inner join s_prod_sku s on d.prod_sku_id = s.id
         inner join s_prod_img i on i.prod_id = d.prod_id
         where d.wine_cellar_activity_id=#{wineCellarActivityId}
+        order by d.sort asc
     </select>
 </mapper>

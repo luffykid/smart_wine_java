@@ -36,10 +36,12 @@ public class MbrRechargeOrderServiceImpl extends BaseServiceImpl<MbrRechargeOrde
         mbrRechargeOrder.setPayTotalAmt(payTotalAmt);
         mbrRechargeOrder.setPayRealAmt(payRealAmt);
         mbrRechargeOrder.setOrderStatus(1);
+        mbrRechargeOrder.setCreateDate(new Date());
         mbrRechargeOrderMapper.save(mbrRechargeOrder);
         MbrRechargeOrderRecord mbrRechargeOrderRecord = new MbrRechargeOrderRecord();
         mbrRechargeOrderRecord.setMbrRechargeOrderId(mbrRechargeOrder.getId());
         mbrRechargeOrderRecord.setOrderStatus(1);
+        mbrRechargeOrderRecord.setCreateDate(new Date());
         mbrRechargeOrderRecordMapper.save(mbrRechargeOrderRecord);
     }
 
