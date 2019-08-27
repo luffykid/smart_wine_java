@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCellarMapper" >
+    <resultMap id="wineCellarMap" type="com.changfa.frame.model.app.WineCellar" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_sight_id" property="winerySightId" jdbcType="BIGINT" />
+        <result column="cellar_name" property="cellarName" jdbcType="VARCHAR" />
+        <result column="cellar_cover_img" property="cellarCoverImg" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        c.id as id, c.winery_sight_id as winery_sight_id, c.cellar_name as cellar_name, c.cellar_cover_img as cellar_cover_img, 
+        c.create_date as create_date, c.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCellarMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar c
+        where c.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCellar" >
+        insert into b_wine_cellar (id, winery_sight_id, cellar_name, cellar_cover_img, create_date, 
+            modify_date)
+        values (#{id}, #{winerySightId}, #{cellarName}, #{cellarCoverImg}, #{createDate}, 
+            #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCellar" >
+        update b_wine_cellar
+        <set >
+            <if test="winerySightId != null" >
+                winery_sight_id = #{winerySightId},
+            </if>
+            <if test="cellarName != null and cellarName != ''" >
+                cellar_name = #{cellarName},
+            </if>
+            <if test="cellarCoverImg != null and cellarCoverImg != ''" >
+                cellar_cover_img = #{cellarCoverImg},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_cellar
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCellarMap" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar c
+        <where >
+            <if test="winerySightId != null" >
+                and c.winery_sight_id = #{winerySightId}
+            </if>
+            <if test="cellarName != null and cellarName != ''" >
+                and c.cellar_name = #{cellarName}
+            </if>
+            <if test="cellarCoverImg != null and cellarCoverImg != ''" >
+                and c.cellar_cover_img = #{cellarCoverImg}
+            </if>
+            <if test="createDate != null" >
+                and c.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and c.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>
