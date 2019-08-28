@@ -28,4 +28,6 @@ public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
 
     int add(ProdSku prodSku);
 
+    String getProdNameBySkuId(Long prodSkuId);
+
 }

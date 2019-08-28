@@ -129,4 +129,15 @@
         from b_wine_custom  where custom_status != 1  order by create_date  desc
     </select>
 
+    <select id="getWineCustomListByName" parameterType="string" resultMap="wineCustomMap">
+
+        select a.*,b.elementName from  b_wine_custom a left join
+        (select wcec.wine_custom_id id,group_concat(wce.element_name) elementName
+        from b_wine_custom_element_content wcec join b_wine_custom_element wce
+        on wcec.wine_custom_element_id = wce.id and wcec.wine_custom_id
+        in(select id from b_wine_custom where custom_name like concat(concat('%',#{customName}),'%'))
+        group by wcec.wine_custom_id) b on a.id = b.id
+
+    </select>
+
 </mapper>

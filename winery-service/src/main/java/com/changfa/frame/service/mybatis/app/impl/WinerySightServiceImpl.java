@@ -51,6 +51,9 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     @Autowired
     private  MbrSightSignMapper mbrSightSignMapper;
 
+    @Autowired
+    private  WinerySightMbrLikeMapper winerySightMbrLikeMapper;
+
 
     /**
      * 查询景点列表
@@ -247,13 +250,49 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     /**
      * 景点点赞
      * @param id 景点id
+     * @param curMember 当前用户
      * @return boolean
      */
     @Override
-    public boolean scenicLike(Long id) {
+    public boolean scenicLike(Long id,Member curMember) {
+        WinerySightMbrLike winerySightMbrLike = winerySightMbrLikeMapper.getByWinerySightId(id, curMember.getId());
         WinerySight  winerySight = winerySightMapper.selectWinerySightByWineryId(id);
+        if(winerySightMbrLike!= null && winerySightMbrLike.getLikeStatus() == 1){ //如果已点赞 就取消点赞
+            winerySight.setLikeTotalCnt(winerySight.getLikeTotalCnt()-1L);
+            winerySightMapper.updateSightLike(winerySight);
+            return winerySightMbrLikeMapper.updateLikeStatusById(winerySightMbrLike.getId(),0) >0 ? true: false;
+        }
+        if(winerySightMbrLike!= null && winerySightMbrLike.getLikeStatus() == 0){ //如果未点赞 就增加点赞
+            winerySight.setLikeTotalCnt(winerySight.getLikeTotalCnt()+1L);
+            winerySightMapper.updateSightLike(winerySight);
+            return winerySightMbrLikeMapper.updateLikeStatusById(winerySightMbrLike.getId(),1) >0 ? true: false;
+        }
+        WinerySightMbrLike winerySightMbrLikevo = new WinerySightMbrLike(); //如果初次点赞 就添加点赞记录
+        winerySightMbrLikevo.setId(IDUtil.getId());
+        winerySightMbrLikevo.setMbrId(curMember.getId());
+        winerySightMbrLikevo.setWineryId(curMember.getWineryId());
+        winerySightMbrLikevo.setWinerySightId(winerySight.getId());
+        winerySightMbrLikevo.setLikeStatus(1);
+        winerySightMbrLikevo.setCreateDate(new Date());
+        winerySightMbrLikevo.setModifyDate(new Date());
+        winerySightMbrLikeMapper.save(winerySightMbrLikevo);
         winerySight.setLikeTotalCnt(winerySight.getLikeTotalCnt()+1L);
-       return winerySightMapper.updateSightLike(winerySight) > 0 ? true : false;
+        return  winerySightMapper.updateSightLike(winerySight)>0 ? true: false;
+    }
+
+    /**
+     * 查询是否点赞
+     * @param id 景点id
+     * @param userid 用户id
+     * @return int
+     */
+    @Override
+    public int findScenicLike(Long id, Long userid) {
+        WinerySightMbrLike winerySightMbrLike = winerySightMbrLikeMapper.getByWinerySightId(id, userid);
+        if(winerySightMbrLike!= null &&winerySightMbrLike.getLikeStatus() == 1){
+            return 1;
+        }
+        return 0;
     }
 
 

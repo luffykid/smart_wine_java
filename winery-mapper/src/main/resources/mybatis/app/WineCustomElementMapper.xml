@@ -97,4 +97,14 @@
         select element_name from b_wine_custom_element where id =#{id}
     </select>
 
+    <select id="getElementNameByWineCustomId" parameterType="java.lang.Long" resultType="string">
+       select group_concat(wce.element_name) element_name
+       from b_wine_custom_element_content wcec join b_wine_custom_element wce
+       on wcec.wine_custom_element_id = wce.id and wcec.wine_custom_id = #{id}
+    </select>
+
+    <select id="getElementNameByIdCustomName" parameterType="string" resultType="map">
+    select element_name from b_wine_custom_element
+    </select>
+
 </mapper>

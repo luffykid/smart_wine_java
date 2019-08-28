@@ -12,10 +12,18 @@ public interface WineCustomService extends BaseService<WineCustom, Long> {
 
     /**
      * 获取定制酒列表
-     * @param pageInfo
-     * @return
+     * @param pageInfo 分页对象
+     * @return PageInfo<WineCustom>
      */
-    List<WineCustom> getWineCustom(PageInfo pageInfo);
+    PageInfo<WineCustom> getWineCustom(PageInfo pageInfo);
+
+    /**
+     * 搜索定制酒
+     * @param wineCustom 定制酒对象
+     * @param pageInfo  分页对象
+     * @return  PageInfo<WineCustom>
+     */
+    PageInfo<WineCustom> selectWineCustom(WineCustom wineCustom, PageInfo pageInfo);
 
     /**
      *

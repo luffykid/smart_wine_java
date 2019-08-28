@@ -95,13 +95,29 @@ public class WinerySightController extends BaseController {
     @ApiOperation(value = "景点点赞", notes = "景点点赞")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点id", dataType = "Long"))
     @RequestMapping(value = "/scenicLike", method = RequestMethod.POST)
-    public Map<String, Object> scenicLike(@RequestParam("id") Long id) {
-        if (winerySightService.scenicLike(id)) {
-            return getResult("点赞成功");
+    public Map<String, Object> scenicLike(@RequestParam("id") Long id,HttpServletRequest request) {
+        Member curMember = getCurMember(request);
+        if (winerySightService.scenicLike(id,curMember)) {
+            return getResult("操作成功");
         }
         throw new CustomException(RESPONSE_CODE_ENUM.PARAMETER_ERROR);
+    }
+
+    /**
+     * 查询是否点赞
+     *
+     * @param id 景点id
+     * @return Map<String, Object>
+     */
+    @ApiOperation(value = "查询是否点赞", notes = "查询是否点赞")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "查询是否点赞", dataType = "Long"))
+    @RequestMapping(value = "/findScenicLike", method = RequestMethod.POST)
+    public Map<String, Object> findScenicLike(@RequestParam("id") Long id,HttpServletRequest request) {
+        Member curMember = getCurMember(request);
+        return getResult(winerySightService.findScenicLike(id,curMember.getId()));
 
     }
+
 
 
 }

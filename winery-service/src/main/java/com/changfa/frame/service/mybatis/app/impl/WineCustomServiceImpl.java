@@ -4,6 +4,7 @@ import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.WineCustomService;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,25 +50,62 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
      * @return List<WineCustom>
      */
     @Override
-    public List<WineCustom> getWineCustom(PageInfo pageInfo) {
+    public PageInfo<WineCustom> getWineCustom(PageInfo pageInfo) {
+        if (pageInfo != null) {
+            PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        }
         List<WineCustom> wineCustomList = wineCustomMapper.getWineCustomList(); //获取定制酒列表
         List<WineCustom> wineCustoms =  new ArrayList<WineCustom>();
         if(wineCustomList != null && wineCustomList.size() > 0){
-            List<String>  ElementNames =  new  ArrayList<String>();
             for (WineCustom wineCustom : wineCustomList) {
-                ProdSku prodSku = prodSkuMapper.getById(wineCustom.getProdSkuId());
-                wineCustom.setProdName(prodMapper.getById(prodSku.getProdId()).getProdName()); //通过SkuId获取 ProdName
-                //通过定制酒id获取WineCustomElementContent集合
-                List<WineCustomElementContent> wineCustomElementContentList = wineCustomElementContentMapper.getListByWineCustomId(wineCustom.getId());
-                for (WineCustomElementContent wineCustomElementContent : wineCustomElementContentList) { //循环集合
-                    ElementNames.add(wineCustomElementMapper.getElementNameById(wineCustomElementContent.getWineCustomElementId())); //通过元素id获取元素name
-                }
-                wineCustom.setElementName(ElementNames);//把元素name放入对象
+                wineCustom.setProdName(prodSkuMapper.getProdNameBySkuId(wineCustom.getProdSkuId())); //通过SkuId获取 ProdName
+                String elementName = wineCustomElementMapper.getElementNameByWineCustomId(wineCustom.getId());
+                wineCustom.setElementName(elementName);
                 wineCustoms.add(wineCustom);//把对象添加到集合
             }
         }
-        return wineCustoms; //返回集合
+        return new PageInfo(wineCustoms); //返回集合
     }
+
+    /**
+     * 搜索酒庄酒
+     * @param wineCustom 定制酒对象
+     * @param pageInfo  分页对象
+     * @return
+     */
+    @Override
+    public PageInfo<WineCustom> selectWineCustom(WineCustom wineCustom, PageInfo pageInfo) {
+        List<WineCustom> wineCustomLists = new ArrayList<WineCustom>();      //临时存储集合
+        List<WineCustom> returnWineCustomList = new ArrayList<WineCustom>(); //最终返回集合
+        List<WineCustom> wineCustomList1 = wineCustomMapper.getWineCustomListByName(wineCustom.getCustomName()); //通过模糊查询获取所有模板对象以及对应元素
+        if(wineCustom.getCustomStatus()!=null){  //如果状态不为空，就循环匹配状态一样的对象数据，添加到临时集合中
+            for (WineCustom wineCustom1:wineCustomList1) {
+                if(wineCustom1.getCustomStatus().equals(wineCustom.getCustomStatus())){
+                    wineCustomLists.add(wineCustom1);
+                }
+            }
+        }else{
+            for (WineCustom wineCustom1:wineCustomList1) {//如果为空，就全部添加到临时集合中
+                wineCustomLists.add(wineCustom1);
+            }
+        }
+        if(wineCustom.getWineCustomElementList()!=null && wineCustom.getWineCustomElementList().size()>0){ //如果传过来的元素不为空
+            for (WineCustomElement wineCustomElement:wineCustom.getWineCustomElementList()) {
+                for (WineCustom wineCustom1:wineCustomLists) { ////就循环临时集合，匹配元素连接结果字段中 （临时集合对象中的字段） 所包含的 对象数据，放入最终返回集合
+                    if(wineCustom1.getElementName().indexOf(wineCustomElement.getElementName())!=-1){
+                        returnWineCustomList.add(wineCustom1);
+                    }
+                }
+            }
+        }else {
+            for (WineCustom wineCustom1:wineCustomLists) { //如果传过来的元素为空，就循环临时集合 存入最返回集合
+                returnWineCustomList.add(wineCustom1);
+            }
+        }
+
+        return  new PageInfo(returnWineCustomList); //返回最终集合
+    }
+
 
     /**
      *

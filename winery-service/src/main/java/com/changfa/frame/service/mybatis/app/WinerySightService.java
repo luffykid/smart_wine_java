@@ -93,6 +93,15 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
     /**
      * 景点点赞
      * @param id
+     * @param curMember 当前用户
      */
-    boolean scenicLike(Long id);
+    boolean scenicLike(Long id,Member curMember);
+
+    /**
+     * 查询是否点赞
+     * @param id 景点id
+     * @param userid 用户id
+     * @return
+     */
+    int findScenicLike(Long id, Long userid);
 }
