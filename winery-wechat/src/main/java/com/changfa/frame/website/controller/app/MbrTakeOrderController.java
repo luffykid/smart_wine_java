@@ -1,7 +1,9 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.model.app.MbrStoreOrderItem;
 import com.changfa.frame.model.app.MbrTakeOrder;
 import com.changfa.frame.model.app.Member;
+import com.changfa.frame.service.mybatis.app.MbrStoreOrderService;
 import com.changfa.frame.service.mybatis.app.MbrTakeOrderService;
 import com.changfa.frame.service.mybatis.app.impl.MbrTakeOrderServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +37,8 @@ public class MbrTakeOrderController extends BaseController {
 
     @Resource(name = "mbrTakeOrderServiceImpl")
     private MbrTakeOrderService mbrTakeOrderServiceImpl;
+    @Resource
+    private MbrStoreOrderService mbrStoreOrderServiceImpl;
     /**
      * 获取荣誉庄主列表
      *
@@ -58,7 +63,7 @@ public class MbrTakeOrderController extends BaseController {
      */
     @ApiOperation(value = "获取存酒取酒订单详细信息", notes = "获取存酒取酒订单详细信息")
     @ApiImplicitParams(
-            @ApiImplicitParam(name = "id", value = "id", dataType = "Long"))
+            @ApiImplicitParam(name = "id", value = "取酒订单id", dataType = "Long"))
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id) {
 
@@ -66,7 +71,11 @@ public class MbrTakeOrderController extends BaseController {
         if (mbrTakeOrder == null){
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
-        return getResult(mbrTakeOrder);
+        List<MbrStoreOrderItem> list = mbrStoreOrderServiceImpl.getMbrStoreOrderItemByStoreId(mbrTakeOrder.getMbrStoreOrderId());
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("mbrTakeOrder",mbrTakeOrder);
+        returnMap.put("sku_name",list.get(0).getSkuName());
+        return getResult(returnMap);
     }
 
     /**
@@ -84,12 +93,13 @@ public class MbrTakeOrderController extends BaseController {
     @RequestMapping(value = "/takeInPerson", method = RequestMethod.GET)
     public Map<String, Object> takeInPerson(HttpServletRequest request, Long mbrStoreOrderId, BigDecimal takeWeight) {
         Member member = getCurMember(request);
+        Long takeOrderId;
         try{
-            mbrTakeOrderServiceImpl.takeInPerson(mbrStoreOrderId, takeWeight);
+            takeOrderId = mbrTakeOrderServiceImpl.takeInPerson(mbrStoreOrderId, takeWeight);
         }catch (Exception e){
             log.info("此处有错误:{}", "错误信息");
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
         }
-        return getResult(new HashMap<>());
+        return getResult(takeOrderId);
     }
 }
