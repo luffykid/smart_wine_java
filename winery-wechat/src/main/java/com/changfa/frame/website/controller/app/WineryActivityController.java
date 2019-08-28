@@ -34,6 +34,7 @@ public class WineryActivityController extends BaseController {
     private WineryActivityService wineryActivityServiceImpl;
     @Resource(name = "mbrWineryActivitySignServiceImpl")
     private MbrWineryActivitySignService mbrWineryActivitySignServiceImpl;
+
     /**
      * 获取未结束活动列表
      *

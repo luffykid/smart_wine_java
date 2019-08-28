@@ -1,9 +1,7 @@
 package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.model.app.Member;
-import com.changfa.frame.model.app.WineCellar;
 import com.changfa.frame.model.app.WineCellarActivity;
-import com.changfa.frame.model.app.WineCellarActivityDetail;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityDetailService;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -46,7 +44,7 @@ public class WineCellarActivityController extends BaseController {
     public Map<String, Object> getList(HttpServletRequest request, PageInfo pageInfo) {
         Member member = getCurMember(request);
         WineCellarActivity wineCellarActivity = new WineCellarActivity();
-        wineCellarActivity.setActStatus(2);
+         wineCellarActivity.setActStatus(2);
         PageInfo list = wineCellarActivityServiceImpl.selectList(wineCellarActivity, pageInfo);
         return getResult(list);
     }
@@ -106,7 +104,4 @@ public class WineCellarActivityController extends BaseController {
         Member member = getCurMember(request);
         return getResult(wineCellarActivityDetailServiceImpl.getPrePayDetail(id));
     }
-
-
-
 }
