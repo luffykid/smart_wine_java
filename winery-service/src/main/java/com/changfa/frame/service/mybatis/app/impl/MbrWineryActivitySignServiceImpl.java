@@ -4,6 +4,7 @@ import com.changfa.frame.core.exception.CustomException;
 import com.changfa.frame.mapper.app.MbrWineryActivitySignMapper;
 import com.changfa.frame.model.app.MbrWineryActivitySign;
 import com.changfa.frame.service.mybatis.app.MbrWineryActivitySignService;
+import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,12 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
      * @return
      */
     @Override
-    public boolean singUp(Long wineryActivityId, Long mbrId){
+    public boolean signUp(Long wineryActivityId, Long mbrId){
         Integer countOne = mbrWineryActivitySignMapper.selectSignUpOne(wineryActivityId);
         Integer countTwo = mbrWineryActivitySignMapper.selectSignUpTwo(wineryActivityId, mbrId);
         if (countOne == 1){
             if (countTwo == 0){
-                mbrWineryActivitySignMapper.singIn(wineryActivityId, mbrId);
+                mbrWineryActivitySignMapper.signUp(IDUtil.getId(), wineryActivityId, mbrId);
                 return true;
             }
         }
@@ -37,10 +38,10 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
      * @return
      */
     @Override
-    public boolean singIn(Long wineryActivityId, Long mbrId){
+    public boolean signIn(Long wineryActivityId, Long mbrId){
         Integer count = mbrWineryActivitySignMapper.selectSignIn(wineryActivityId, mbrId);
         if (count == 1){
-            mbrWineryActivitySignMapper.singUp(wineryActivityId, mbrId);
+            mbrWineryActivitySignMapper.signIn(wineryActivityId, mbrId);
             return true;
         }
         return false;
@@ -52,10 +53,10 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
      * @return
      */
     @Override
-    public boolean singOff(Long wineryActivityId, Long mbrId){
+    public boolean signOff(Long wineryActivityId, Long mbrId){
         Integer count = mbrWineryActivitySignMapper.selectSignOff(wineryActivityId, mbrId);
         if (count == 1){
-            mbrWineryActivitySignMapper.singOff(wineryActivityId, mbrId);
+            mbrWineryActivitySignMapper.signOff(wineryActivityId, mbrId);
             return true;
         }
         return false;

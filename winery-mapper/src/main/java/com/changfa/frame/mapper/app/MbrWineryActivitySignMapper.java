@@ -35,7 +35,7 @@ public interface MbrWineryActivitySignMapper extends BaseMapper<MbrWineryActivit
      *
      * @return
      */
-    public void singUp(@Param("wineryActivityId") Long wineryActivityId,@Param("mbrId") Long mbrId);
+    public void signUp(@Param("id") Long id, @Param("wineryActivityId") Long wineryActivityId,@Param("mbrId") Long mbrId);
 
     /**
      * 活动签到数量
@@ -48,7 +48,7 @@ public interface MbrWineryActivitySignMapper extends BaseMapper<MbrWineryActivit
      *
      * @return
      */
-    public void singIn(@Param("wineryActivityId") Long wineryActivityId,@Param("mbrId") Long mbrId);
+    public void signIn(@Param("wineryActivityId") Long wineryActivityId,@Param("mbrId") Long mbrId);
 
     /**
      * 活动签退数量
@@ -61,5 +61,5 @@ public interface MbrWineryActivitySignMapper extends BaseMapper<MbrWineryActivit
      *
      * @return
      */
-    public void singOff(@Param("wineryActivityId") Long wineryActivityId,@Param("mbrId") Long mbrId);
+    public void signOff(@Param("wineryActivityId") Long wineryActivityId,@Param("mbrId") Long mbrId);
 }

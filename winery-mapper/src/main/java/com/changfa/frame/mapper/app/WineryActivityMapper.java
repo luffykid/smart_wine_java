@@ -15,8 +15,8 @@ import java.util.List;
 public interface WineryActivityMapper extends BaseMapper<WineryActivity, Long> {
 
     /**
-     * 获取未结束活动列表
+     * 获取未开始活动列表
      * @return
      */
-    List<WineryActivity> selectNoEndList();
+    List<WineryActivity> getNoStartList();
 }

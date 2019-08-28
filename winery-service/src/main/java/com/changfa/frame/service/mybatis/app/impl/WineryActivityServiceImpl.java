@@ -16,14 +16,14 @@ public class WineryActivityServiceImpl extends BaseServiceImpl<WineryActivity, L
     @Autowired
     private WineryActivityMapper wineryActivityMapper;
     /**
-     * 获取未结束活动列表
+     * 获取未开始活动列表
      * @return
      */
     @Override
-    public PageInfo<WineryActivity> getNoEndList(PageInfo pageInfo) {
+    public PageInfo<WineryActivity> getNoStartList(PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(wineryActivityMapper.selectNoEndList());
+        return new PageInfo(wineryActivityMapper.getNoStartList());
     }
 }

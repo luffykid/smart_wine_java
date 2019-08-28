@@ -5,6 +5,7 @@ import com.changfa.frame.mapper.app.MbrRechargeOrderRecordMapper;
 import com.changfa.frame.model.app.MbrRechargeOrder;
 import com.changfa.frame.model.app.MbrRechargeOrderRecord;
 import com.changfa.frame.service.mybatis.app.MbrRechargeOrderService;
+import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class MbrRechargeOrderServiceImpl extends BaseServiceImpl<MbrRechargeOrde
     @Override
     public void recharge(Long mbrId, Long wineryId, BigDecimal payTotalAmt, BigDecimal payRealAmt) {
         MbrRechargeOrder mbrRechargeOrder = new MbrRechargeOrder();
+        mbrRechargeOrder.setId(IDUtil.getId());
         mbrRechargeOrder.setMbrId(mbrId);
         mbrRechargeOrder.setWineryId(wineryId);
         mbrRechargeOrder.setPayTotalAmt(payTotalAmt);
@@ -39,6 +41,7 @@ public class MbrRechargeOrderServiceImpl extends BaseServiceImpl<MbrRechargeOrde
         mbrRechargeOrder.setCreateDate(new Date());
         mbrRechargeOrderMapper.save(mbrRechargeOrder);
         MbrRechargeOrderRecord mbrRechargeOrderRecord = new MbrRechargeOrderRecord();
+        mbrRechargeOrderRecord.setId(IDUtil.getId());
         mbrRechargeOrderRecord.setMbrRechargeOrderId(mbrRechargeOrder.getId());
         mbrRechargeOrderRecord.setOrderStatus(1);
         mbrRechargeOrderRecord.setCreateDate(new Date());
