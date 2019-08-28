@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 景点管理serviceImpl
@@ -238,6 +235,9 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     public Map<String, Object> findSightImageText(Long id) {
         Map<String, Object>  map = new HashMap<>();
         List<WinerySightDetail> winerySightDetailList = winerySightDetailMapper.findSightImageTextByWinerySightId(id);
+        for (WinerySightDetail winerySightDetail:winerySightDetailList) {
+            winerySightDetail.setProdSku(prodSkuMapper.getProdNameBySkuIdLike(winerySightDetail.getProdSkuId()));
+        }
         List<String> scenicImg = winerySightImgMapper.findScenicImgById(id); // 查询景点图片
         if(winerySightDetailList.size() > 0 && winerySightDetailList != null && scenicImg.size() > 0 && scenicImg != null){
             map.put("winerySightDetail",winerySightDetailList);

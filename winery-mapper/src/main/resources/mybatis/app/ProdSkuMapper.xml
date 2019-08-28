@@ -210,4 +210,10 @@
         select p.prod_name from s_prod_sku ps left join s_prod p on ps.prod_id = p.id where ps.id =#{prodSkuId}
     </select>
 
+    <select id="getProdNameBySkuIdLike" parameterType="java.lang.Long" resultMap="prodSkuMap">
+        select ps.*,p.prod_name prodName from b_winery_sight_detail wsd
+        join s_prod_sku ps on wsd.prod_sku_id = ps.id
+        join s_prod p on ps.prod_id = p.id where ps.id =#{prodSkuId}
+    </select>
+
 </mapper>

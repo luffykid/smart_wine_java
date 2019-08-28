@@ -30,4 +30,5 @@ public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
 
     String getProdNameBySkuId(Long prodSkuId);
 
+    ProdSku getProdNameBySkuIdLike(Long prodSkuId);
 }
