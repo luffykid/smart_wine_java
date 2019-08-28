@@ -4,6 +4,7 @@ import com.changfa.frame.model.app.MbrTakeOrder;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.MemberAddress;
 import com.changfa.frame.service.mybatis.app.MemberAddressService;
+import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -56,6 +58,7 @@ public class MemberAddressController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public Map<String, Object> add(MemberAddress memberAddress, HttpServletRequest request) {
         Member member = getCurMember(request);
+        memberAddress.setId(IDUtil.getId());
         memberAddress.setMbrId(member.getId());
         try {
             memberAddressServiceImpl.save(memberAddress);
@@ -75,7 +78,7 @@ public class MemberAddressController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public Map<String, Object> update(MemberAddress memberAddress, HttpServletRequest request) {
         Member member = getCurMember(request);
-        memberAddress.setMbrId(member.getId());
+        memberAddress.setModifyDate(new Date());
         try {
             memberAddressServiceImpl.update(memberAddress);
         }catch (Exception e){

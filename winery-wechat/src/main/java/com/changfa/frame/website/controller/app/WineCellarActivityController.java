@@ -1,8 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.model.app.Member;
-import com.changfa.frame.model.app.WineCellarActivity;
-import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityDetailService;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityService;
 import com.changfa.frame.website.controller.common.BaseController;

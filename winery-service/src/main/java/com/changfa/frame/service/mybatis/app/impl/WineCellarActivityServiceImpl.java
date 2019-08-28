@@ -11,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,7 @@ public class WineCellarActivityServiceImpl extends BaseServiceImpl<WineCellarAct
      * @param mbrId
      * @param wineryId
      */
+    @Transactional
     @Override
     public void thumbup(Long wineCellarActivityId, Long mbrId, Long wineryId) {
         WineCellarActivityLike wineCellarActivityLike = new WineCellarActivityLike();
