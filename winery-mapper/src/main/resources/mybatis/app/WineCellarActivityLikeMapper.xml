@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCellarActivityLikeMapper" >
+    <resultMap id="wineCellarActivityLikeMap" type="com.changfa.frame.model.app.WineCellarActivityLike" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="wine_cellar_activity_id" property="wineCellarActivityId" jdbcType="BIGINT" />
+        <result column="winery_Id" property="wineryId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="like_status" property="likeStatus" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        l.id as id, l.wine_cellar_activity_id as wine_cellar_activity_id, l.winery_Id as winery_Id, 
+        l.mbr_id as mbr_id, l.like_status as like_status, l.create_date as create_date, l.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCellarActivityLikeMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar_activity_like l
+        where l.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCellarActivityLike" >
+        insert into b_wine_cellar_activity_like (id, wine_cellar_activity_id, winery_Id, mbr_id, like_status, create_date, 
+            modify_date)
+        values (#{id}, #{wineCellarActivityId}, #{wineryId}, #{mbrId}, #{likeStatus}, #{createDate}, 
+            #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCellarActivityLike" >
+        update b_wine_cellar_activity_like
+        <set >
+            <if test="wineCellarActivityId != null" >
+                wine_cellar_activity_id = #{wineCellarActivityId},
+            </if>
+            <if test="wineryId != null" >
+                winery_Id = #{wineryId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="likeStatus != null" >
+                like_status = #{likeStatus},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_cellar_activity_like
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCellarActivityLikeMap" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar_activity_like l
+        <where >
+            <if test="wineCellarActivityId != null" >
+                and l.wine_cellar_activity_id = #{wineCellarActivityId}
+            </if>
+            <if test="wineryId != null" >
+                and l.winery_Id = #{wineryId}
+            </if>
+            <if test="mbrId != null" >
+                and l.mbr_id = #{mbrId}
+            </if>
+            <if test="likeStatus != null" >
+                and l.like_status = #{likeStatus}
+            </if>
+            <if test="createDate != null" >
+                and l.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and l.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

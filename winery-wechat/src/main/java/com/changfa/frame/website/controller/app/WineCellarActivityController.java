@@ -2,6 +2,7 @@ package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.WineCellarActivity;
+import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityDetailService;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -43,9 +44,7 @@ public class WineCellarActivityController extends BaseController {
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     public Map<String, Object> getList(HttpServletRequest request, PageInfo pageInfo) {
         Member member = getCurMember(request);
-        WineCellarActivity wineCellarActivity = new WineCellarActivity();
-         wineCellarActivity.setActStatus(2);
-        PageInfo list = wineCellarActivityServiceImpl.selectList(wineCellarActivity, pageInfo);
+        PageInfo list = wineCellarActivityServiceImpl.getSecList(member.getId(), pageInfo);
         return getResult(list);
     }
 
@@ -56,15 +55,17 @@ public class WineCellarActivityController extends BaseController {
      */
     @ApiOperation(value = "活动点赞", notes = "活动点赞")
     @ApiImplicitParams(
-            @ApiImplicitParam(name = "id", value = "活动id", dataType = "Long"))
-    @RequestMapping(value = "/thumbup", method = RequestMethod.GET)
-    public Map<String, Object> thumbup(Long id, HttpServletRequest request) {
+            @ApiImplicitParam(name = "wineCellarActivityId", value = "活动id", dataType = "Long")
+    )
+    @RequestMapping(value = "/thumbup")
+    public Map<String, Object> thumbup(Long wineCellarActivityId, HttpServletRequest request) {
         Member member = getCurMember(request);
-        WineCellarActivity wineCellarActivity = new WineCellarActivity();
-        wineCellarActivity.setId(id);
-        wineCellarActivity.setLikeTotalCnt(wineCellarActivity.getLikeTotalCnt() + 1);
+        Long wineryId = getCurWineryId();
+        if (member == null){
+            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
+        }
         try {
-            wineCellarActivityServiceImpl.update(wineCellarActivity);
+            wineCellarActivityServiceImpl.thumbup(wineCellarActivityId, member.getId(), wineryId);
         }catch (Exception e){
             log.info("此处有错误:{}", "点赞失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
@@ -83,7 +84,7 @@ public class WineCellarActivityController extends BaseController {
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
-        WineCellarActivity wineCellarActivity = wineCellarActivityServiceImpl.getById(id);
+        Map wineCellarActivity = wineCellarActivityServiceImpl.selectSecById(id, member.getId());
         List<Map> list = wineCellarActivityDetailServiceImpl.getProdSkuList(id);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("wineCellarActivity",wineCellarActivity);
