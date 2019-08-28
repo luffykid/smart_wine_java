@@ -14,7 +14,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,6 +79,16 @@ public class CommonController extends BaseController {
             throw new CustomException(RESPONSE_CODE_ENUM.ACCT_PHONE_NO_SAME);
         }
 
+        // 判断验证码是否一致
+        Object redisPhoneCodeObj = redisClient.get(RedisConsts.WXMEMBER_MOBILE_CAPTCHA + phone);
+        if (redisPhoneCodeObj == null) {
+            throw new CustomException(RESPONSE_CODE_ENUM.CAPTCHA_CODE_INVALID);
+        }
+        String redisPhoneCode = String.valueOf(redisPhoneCodeObj);
+        if (!StringUtils.equalsIgnoreCase(redisPhoneCode,phoneCode)) {
+            throw new CustomException(RESPONSE_CODE_ENUM.CAPTCHA_CODE_ERROR);
+        }
+
         // 设置redis中的token
         String redisTokenKey = RedisConsts.WXMINI_OPENID + curMember.getOpenId();
         String token = RandomStringUtils.randomNumeric(10) + phone;
@@ -111,7 +120,7 @@ public class CommonController extends BaseController {
         mbrWechat.setMbrId(curMember.getId());
         if (CollectionUtils.isEmpty(mbrWechats)) {
             mbrWechatService.save(mbrWechat);
-        }else {
+        } else {
             mbrWechatService.update(mbrWechat);
         }
         return getResult(null);

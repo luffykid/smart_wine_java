@@ -45,25 +45,26 @@ public class DemoController extends BaseController {
     @RequestMapping(value = "/updateSysConfig", method = RequestMethod.GET)
     public Map<String, Object> updateSysConfig(Setting setting) {
         // 测试Setting获取
-        System.out.println(SettingUtils.get().getCopyRight());
+//        System.out.println(SettingUtils.get().getCopyRight());
 
         // 正常Service层调用，控制层不能直接调用DAO层
-        systemConfigService.set(setting);
+//        systemConfigService.set(setting);
 
         // controller层异常方式
-        if (true) {
-            // 必要的地方打印日志【日志使用占位符方式，如果打印堆栈信息，可以使用ExceptionUtils】
-            log.info("此处有错误:{}", "错误信息");
-
-            // 如果需要返回错误提示【框架中错误返回均以全局异常处理】
-            throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
-        }
+//        if (true) {
+//            // 必要的地方打印日志【日志使用占位符方式，如果打印堆栈信息，可以使用ExceptionUtils】
+//            log.info("此处有错误:{}", "错误信息");
+//
+//            // 如果需要返回错误提示【框架中错误返回均以全局异常处理】
+//            throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
+//        }
 
         // 如果返回对象信息，可以为简单类型、复合类型[Object、Map、List、model实体等]
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("name", "小栗子");
         returnMap.put("model实体类", new Setting());
         returnMap.put("集合", new ArrayList<String>());
+        returnMap.put("数字", 1231312L);
         return getResult(returnMap);
     }
 
