@@ -361,10 +361,16 @@ public class ProdSku extends BaseEntity {
         isDel = del;
     }
 
+    /**
+     * 获取产品规格会员价对象
+     */
     public List<ProdSkuMbrPrice> getProdSkuMbrPriceList() {
         return prodSkuMbrPriceList;
     }
 
+    /**
+     * 设置产品规格会员价对象
+     */
     public void setProdSkuMbrPriceList(List<ProdSkuMbrPrice> prodSkuMbrPriceList) {
         this.prodSkuMbrPriceList = prodSkuMbrPriceList;
     }

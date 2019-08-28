@@ -8,9 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0
  * @date 2019/08/9
  */
+@Component
 public class TokenInterceptor extends HandlerInterceptorAdapter {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -34,8 +37,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      */
     public static final String REQUEST_HEADER_OPENID_KEY = "request-header-openID";
 
-
-    @Autowired
+    @Resource(name = "redisClient")
     private RedisClient redisClient;
 
     /**
@@ -73,6 +75,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 //
 //        // 重置token时间
 //        redisClient.setAndExpire(RedisConsts.WXMINI_OPENID + openId, headerToken, RedisConsts.WXMINI_OPENID_EXPIRE);
+
         return true;
     }
 

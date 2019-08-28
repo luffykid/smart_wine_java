@@ -109,6 +109,25 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+
+    /********************************* 需要注入Bean的拦截器 开始****************************/
+    /**
+     * 令牌拦截器
+     */
+    @Bean
+    public TokenInterceptor TokenInterceptor() {
+        return new TokenInterceptor();
+    }
+
+    /**
+     * 设置拦截器
+     */
+    @Bean
+    public SettingInterceptor SettingInterceptor() {
+        return new SettingInterceptor();
+    }
+    /********************************* 需要注入Bean的拦截器 结束****************************/
+
     /**
      * 注册拦截器
      *
@@ -117,8 +136,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 令牌拦截器
-        registry.addInterceptor(new SettingInterceptor()).addPathPatterns("/wxMini/**");
-        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/wxMini/auth/**");
+        registry.addInterceptor(SettingInterceptor()).addPathPatterns("/wxMini/**");
+        registry.addInterceptor(TokenInterceptor()).addPathPatterns("/wxMini/auth/**");
     }
 
     /**

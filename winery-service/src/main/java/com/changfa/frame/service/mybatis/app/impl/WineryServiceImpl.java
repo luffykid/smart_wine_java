@@ -1,5 +1,7 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.file.FilePathConsts;
+import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.mapper.app.WineryMapper;
 import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.model.app.Winery;
@@ -43,6 +45,7 @@ public class WineryServiceImpl extends BaseServiceImpl<Winery, Long> implements 
     @Transactional
     public void addWineryLocation(Winery winery, Long wineryId) {
         winery.setId(wineryId);
+        winery.setMapBottom(FileUtil.copyNFSByFileName(winery.getMapBottom(), FilePathConsts.TEST_FILE_CP_PATH));
         winery.setModifyDate(new Date());
         wineryMapper.update(winery);
     }

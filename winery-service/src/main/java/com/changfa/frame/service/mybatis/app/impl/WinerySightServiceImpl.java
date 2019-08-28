@@ -195,7 +195,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
 
     /**
      * wx/查询酒庄信息
-     * @param curAdmin  当前用户
+     * @param member  当前用户
      * @return Winery
      */
     @Override
@@ -205,7 +205,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
 
     /**
      * 查询全部景点，和已签到景点
-     * @param curAdmin   当前用户
+     * @param member   当前用户
      * @return Map<String, Object>
      * K：景点对象集合        V：winerySightList
      * K：已签到景点id集合    V：SightSignIdList
@@ -217,12 +217,10 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
         Map<String, Object>  map = new HashMap<>();
         List<WinerySight> winerySightList = winerySightMapper.selectWinerySightList(member.getWineryId()); // 获取酒庄所有景点信息
         List<String> SightSignIdList = mbrSightSignMapper.findMbrSightSign(member.getId()); //获取已签到信息
-        if(winerySightList.size() > 0 && winerySightList != null && SightSignIdList.size() >0 && SightSignIdList != null){
-            map.put("WinerySight",winerySightList);
-            map.put("SightSignId",SightSignIdList);
-            map.put("WinerySightCount",winerySightList.size());
-            map.put("SightSignIdCount",SightSignIdList.size());
-        }
+        map.put("winerySightList",winerySightList);
+        map.put("SightSignIdList",SightSignIdList);
+        map.put("WinerySightCount",winerySightList.size());
+        map.put("SightSignIdCount",SightSignIdList.size());
         return map;
     }
 

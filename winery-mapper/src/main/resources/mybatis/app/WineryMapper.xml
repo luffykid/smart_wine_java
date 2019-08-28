@@ -16,13 +16,14 @@
         <result column="c_longitude" property="cLongitude" jdbcType="DECIMAL" />
         <result column="d_latitude" property="dLatitude" jdbcType="DECIMAL" />
         <result column="d_longitude" property="dLongitude" jdbcType="DECIMAL" />
+        <result column="map_bottom" property="mapBottom" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
         id, NAME, logo, loading_img, STATUS, status_time, a_latitude, a_longitude, b_latitude,
-        b_longitude, c_latitude, c_longitude, d_latitude, d_longitude, create_date, modify_date
+        b_longitude, c_latitude, c_longitude, d_latitude, d_longitude,map_bottom, create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="wineryMap" parameterType="java.lang.Long" >
@@ -35,10 +36,10 @@
     <insert id="save" parameterType="com.changfa.frame.model.app.Winery" >
         insert into b_winery (id, NAME, logo, loading_img, STATUS, status_time, a_latitude,
             a_longitude, b_latitude, b_longitude, c_latitude, c_longitude, d_latitude,
-            d_longitude, create_date, modify_date)
+            d_longitude,map_bottom, create_date, modify_date)
         values (#{id}, #{name}, #{logo}, #{loadingImg}, #{status}, #{statusTime}, #{aLatitude},
             #{aLongitude}, #{bLatitude}, #{bLongitude}, #{cLatitude}, #{cLongitude}, #{dLatitude},
-            #{dLongitude}, #{createDate}, #{modifyDate})
+            #{dLongitude},#{mapBottom}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.Winery" >
@@ -82,6 +83,9 @@
             </if>
             <if test="dLongitude != null" >
                 d_longitude = #{dLongitude},
+            </if>
+            <if test="mapBottom != null" >
+                map_bottom = #{mapBottom},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -141,6 +145,9 @@
             </if>
             <if test="dLongitude != null" >
                 and w.d_longitude = #{dLongitude}
+            </if>
+            <if test="mapBottom != null" >
+                and w.map_bottom = #{mapBottom}
             </if>
             <if test="createDate != null" >
                 and w.create_date = #{createDate}

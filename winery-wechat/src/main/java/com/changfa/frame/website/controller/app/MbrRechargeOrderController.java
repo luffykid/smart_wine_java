@@ -35,7 +35,7 @@ public class MbrRechargeOrderController extends BaseController {
      * @return
      */
     @ApiOperation(value = "会员新建充值订单", notes = "会员新建充值订单")
-    @RequestMapping(value = "/recharge ", method = RequestMethod.GET)
+    @RequestMapping(value = "/recharge", method = RequestMethod.GET)
     public Map<String, Object> recharge(BigDecimal payTotalAmt, BigDecimal payRealAmt, HttpServletRequest request) {
         Member member = getCurMember(request);
         Long wineryId = getCurWineryId();

@@ -9,19 +9,19 @@ public interface MbrWineryActivitySignService extends BaseService<MbrWineryActiv
      *
      * @return
      */
-    public boolean singUp(Long wineryActivityId, Long mbrId);
+    public boolean signUp(Long wineryActivityId, Long mbrId);
 
     /**
      * 活动签到
      *
      * @return
      */
-    public boolean singIn(Long wineryActivityId, Long mbrId);
+    public boolean signIn(Long wineryActivityId, Long mbrId);
 
     /**
      * 活动签退
      *
      * @return
      */
-    public boolean singOff(Long wineryActivityId, Long mbrId);
+    public boolean signOff(Long wineryActivityId, Long mbrId);
 }

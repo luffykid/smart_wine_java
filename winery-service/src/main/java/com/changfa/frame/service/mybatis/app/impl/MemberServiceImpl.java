@@ -58,9 +58,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        MbrIntegralDetail mbrIntegralDetail = new MbrIntegralDetail();
-        mbrIntegralDetail.setMbrId(mbrId);
-        return new PageInfo(mbrIntegralDetailMapper.selectList(mbrIntegralDetail));
+        return new PageInfo(memberMapper.selectSubList(mbrId));
     }
 
     /**
@@ -73,7 +71,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(memberMapper.selectSubList(mbrId));
+        MbrIntegralDetail mbrIntegralDetail = new MbrIntegralDetail();
+        mbrIntegralDetail.setMbrId(mbrId);
+        return new PageInfo(mbrIntegralDetailMapper.selectList(mbrIntegralDetail));
     }
 
     /**

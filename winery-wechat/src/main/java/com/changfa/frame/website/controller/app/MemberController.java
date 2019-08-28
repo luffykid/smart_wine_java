@@ -62,7 +62,7 @@ public class MemberController extends BaseController {
         Member member = getCurMember(request);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("list", memberServiceImpl.getSubList(member.getId(), pageInfo));
-        returnMap.put("other", memberServiceImpl.getSubList(member.getId(), pageInfo));
+        returnMap.put("other", memberServiceImpl.getSubStatis(member.getId()));
         return getResult(returnMap);
     }
 

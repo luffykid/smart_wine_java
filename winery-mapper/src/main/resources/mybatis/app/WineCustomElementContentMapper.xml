@@ -96,4 +96,16 @@
         </where>
     </select>
 
+    <select id="getWineCustomElementContentByWineCustomId" parameterType="java.lang.Long" resultMap="wineCustomElementContentMap">
+        select
+        <include refid="table_column"/>
+        from b_wine_custom_element_content where wine_custom_id =#{id}
+    </select>
+
+    <select id="getListByWineCustomId" parameterType="java.lang.Long" resultMap="wineCustomElementContentMap">
+        select
+        <include refid="table_column"/>
+        from b_wine_custom_element_content where wine_custom_id =#{id}
+    </select>
+
 </mapper>

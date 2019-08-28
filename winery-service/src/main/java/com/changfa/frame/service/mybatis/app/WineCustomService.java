@@ -4,10 +4,18 @@ import com.changfa.frame.model.app.WineCustom;
 import com.changfa.frame.model.app.WineCustomAdvance;
 import com.changfa.frame.model.app.WineCustomElementContent;
 import com.changfa.frame.service.mybatis.common.BaseService;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
 public interface WineCustomService extends BaseService<WineCustom, Long> {
+
+    /**
+     * 获取定制酒列表
+     * @param pageInfo
+     * @return
+     */
+    List<WineCustom> getWineCustom(PageInfo pageInfo);
 
     /**
      *

@@ -91,11 +91,11 @@
         </where>
     </select>
     
-   <!-- <select id="selectNoStartList" resultMap="wineryActivityMap">
+    <select id="selectNoStartList" resultMap="wineryActivityMap">
         select
         <include refid="table_column" />
         from b_winery_activity where act_end_date <![CDATA[ >= ]]> now()
-    </select>-->
+    </select>
 
 
 </mapper>

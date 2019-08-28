@@ -35,15 +35,15 @@ public class WineryActivityController extends BaseController {
     @Resource(name = "mbrWineryActivitySignServiceImpl")
     private MbrWineryActivitySignService mbrWineryActivitySignServiceImpl;
     /**
-     * 获取未结束活动列表
+     * 获取未开始活动列表
      *
      * @return
      */
-    @ApiOperation(value = "获取未结束活动列表", notes = "获取未开始活动列表")
-    @RequestMapping(value = "/getNoEndList", method = RequestMethod.GET)
-    public Map<String, Object> getNoEndList(PageInfo pageInfo) {
+    @ApiOperation(value = "获取未开始活动列表", notes = "获取未开始活动列表")
+    @RequestMapping(value = "/getNoStartList", method = RequestMethod.GET)
+    public Map<String, Object> getNoStartList(PageInfo pageInfo) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(pageInfo));
+        resultMap.put("list", wineryActivityServiceImpl.getNoStartList(pageInfo));
         return getResult(resultMap);
     }
 
@@ -55,10 +55,10 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动报名", notes = "活动报名")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/singUp", method = RequestMethod.GET)
-    public void singUp(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signUp", method = RequestMethod.GET)
+    public void signUp(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.singUp(wineryActivityId, member.getId());
+        boolean flag = mbrWineryActivitySignServiceImpl.signUp(wineryActivityId, member.getId());
         if (!flag){
             log.info("此处有错误:{}", "活动报名失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
@@ -73,10 +73,10 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动签到", notes = "活动签到")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/singIn", method = RequestMethod.GET)
-    public void singIn(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signIn", method = RequestMethod.GET)
+    public void signIn(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.singIn(wineryActivityId, member.getId());
+        boolean flag = mbrWineryActivitySignServiceImpl.signIn(wineryActivityId, member.getId());
         {
             log.info("此处有错误:{}", "活动签到失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
@@ -92,10 +92,10 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动签退", notes = "活动签退")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/singOff", method = RequestMethod.GET)
-    public void singOff(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signOff", method = RequestMethod.GET)
+    public void signOff(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.singOff(wineryActivityId, member.getId());
+        boolean flag = mbrWineryActivitySignServiceImpl.signOff(wineryActivityId, member.getId());
         {
             log.info("此处有错误:{}", "活动签退失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);

@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 定制酒
@@ -40,10 +41,67 @@ public class WineCustom extends BaseEntity {
     private String customStateImg;
 
     /** 定制状态
-1：新建
-2：发布
-3：取消发布 */
+    1：新建
+    2：发布
+    3：取消发布 */
     private Integer customStatus;
+
+    public enum CUSTOM_STATUS_ENUM {
+        XJ(1, "新建"),
+        FB(2, "发布"),
+        QXFB(3, "取消发布");
+
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        CUSTOM_STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static CUSTOM_STATUS_ENUM getEnum(Integer value) {
+            for (CUSTOM_STATUS_ENUM queryDayEnum : CUSTOM_STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
 
     /** 定制价格 */
     private BigDecimal customPrice;
@@ -51,132 +109,137 @@ public class WineCustom extends BaseEntity {
     /** 销售总数量 */
     private Integer sellTotalCnt;
 
+    /** 酒名称*/
+    private String  prodName;
 
+   /** 定制元素*/
+   private List<String> elementName;
+    
     /**
      * 获取酒庄ID
     */
     public Long getWineryId() {
         return wineryId;
     }
-
+    
     /**
      * 设置酒庄ID
     */
     public void setWineryId(Long wineryId) {
         this.wineryId = wineryId;
     }
-
+    
     /**
      * 获取商品SKU ID
     */
     public Long getProdSkuId() {
         return prodSkuId;
     }
-
+    
     /**
      * 设置商品SKU ID
     */
     public void setProdSkuId(Long prodSkuId) {
         this.prodSkuId = prodSkuId;
     }
-
+    
     /**
      * 获取商品SKU名称
     */
     public String getSkuName() {
         return skuName;
     }
-
+    
     /**
      * 设置商品SKU名称
     */
     public void setSkuName(String skuName) {
         this.skuName = skuName == null ? null : skuName.trim();
     }
-
+    
     /**
      * 获取定制名称
     */
     public String getCustomName() {
         return customName;
     }
-
+    
     /**
      * 设置定制名称
     */
     public void setCustomName(String customName) {
         this.customName = customName == null ? null : customName.trim();
     }
-
+    
     /**
      * 获取封面图
     */
     public String getCustomCoverImg() {
         return customCoverImg;
     }
-
+    
     /**
      * 设置封面图
     */
     public void setCustomCoverImg(String customCoverImg) {
         this.customCoverImg = customCoverImg == null ? null : customCoverImg.trim();
     }
-
+    
     /**
      * 获取定制说明图
     */
     public String getCustomStateImg() {
         return customStateImg;
     }
-
+    
     /**
      * 设置定制说明图
     */
     public void setCustomStateImg(String customStateImg) {
         this.customStateImg = customStateImg == null ? null : customStateImg.trim();
     }
-
+    
     /**
      * 获取定制状态
-1：新建
-2：发布
-3：取消发布
+    1：新建
+    2：发布
+    3：取消发布
     */
     public Integer getCustomStatus() {
         return customStatus;
     }
-
+    
     /**
      * 设置定制状态
-1：新建
-2：发布
-3：取消发布
+    1：新建
+    2：发布
+    3：取消发布
     */
     public void setCustomStatus(Integer customStatus) {
         this.customStatus = customStatus;
     }
-
+    
     /**
      * 获取定制价格
     */
     public BigDecimal getCustomPrice() {
         return customPrice;
     }
-
+    
     /**
      * 设置定制价格
     */
     public void setCustomPrice(BigDecimal customPrice) {
         this.customPrice = customPrice;
     }
-
+    
     /**
      * 获取销售总数量
     */
     public Integer getSellTotalCnt() {
         return sellTotalCnt;
     }
-
+    
     /**
      * 设置销售总数量
     */
@@ -184,4 +247,31 @@ public class WineCustom extends BaseEntity {
         this.sellTotalCnt = sellTotalCnt;
     }
 
+    /**
+     * 获取酒名称
+     */
+    public String getProdName() {
+        return prodName;
+    }
+
+    /**
+     * 设置酒名称
+     */
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    /**
+     * 获取定制元素
+     */
+    public List getElementName() {
+        return elementName;
+    }
+
+    /**
+     * 设置定制元素
+     */
+    public void setElementName(List elementName) {
+        this.elementName = elementName;
+    }
 }

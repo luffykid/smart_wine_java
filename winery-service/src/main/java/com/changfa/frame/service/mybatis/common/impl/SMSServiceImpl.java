@@ -60,7 +60,7 @@ public class SMSServiceImpl implements SMSService {
             @Override
             public void run() {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("smsCode", smsCode);
+                map.put("code", smsCode);
                 try {
                     sendAliSMS(toPhone, map, PropConfig.getProperty(PropAttributes.THIRDPARTY_SMS_TEMPLATE_GENERAL));
                 } catch (Exception e) {

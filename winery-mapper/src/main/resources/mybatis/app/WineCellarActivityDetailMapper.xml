@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCellarActivityDetailMapper" >
+    <resultMap id="wineCellarActivityDetailMap" type="com.changfa.frame.model.app.WineCellarActivityDetail" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="wine_cellar_activity_id" property="wineCellarActivityId" jdbcType="BIGINT" />
+        <result column="prod_id" property="prodId" jdbcType="BIGINT" />
+        <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
+        <result column="winery_voucher_id" property="wineryVoucherId" jdbcType="BIGINT" />
+        <result column="present_type" property="presentType" jdbcType="INTEGER" />
+        <result column="present_remark" property="presentRemark" jdbcType="VARCHAR" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        d.id as id, d.wine_cellar_activity_id as wine_cellar_activity_id, d.prod_id as prod_id, 
+        d.prod_sku_id as prod_sku_id, d.winery_voucher_id as winery_voucher_id, d.present_type as present_type, 
+        d.present_remark as present_remark, d.sort as sort, d.create_date as create_date, 
+        d.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCellarActivityDetailMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar_activity_detail d
+        where d.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCellarActivityDetail" >
+        insert into b_wine_cellar_activity_detail (id, wine_cellar_activity_id, prod_id, prod_sku_id, winery_voucher_id, 
+            present_type, present_remark, sort, create_date, modify_date)
+        values (#{id}, #{wineCellarActivityId}, #{prodId}, #{prodSkuId}, #{wineryVoucherId}, 
+            #{presentType}, #{presentRemark}, #{sort}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCellarActivityDetail" >
+        update b_wine_cellar_activity_detail
+        <set >
+            <if test="wineCellarActivityId != null" >
+                wine_cellar_activity_id = #{wineCellarActivityId},
+            </if>
+            <if test="prodId != null" >
+                prod_id = #{prodId},
+            </if>
+            <if test="prodSkuId != null" >
+                prod_sku_id = #{prodSkuId},
+            </if>
+            <if test="wineryVoucherId != null" >
+                winery_voucher_id = #{wineryVoucherId},
+            </if>
+            <if test="presentType != null" >
+                present_type = #{presentType},
+            </if>
+            <if test="presentRemark != null and presentRemark != ''" >
+                present_remark = #{presentRemark},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_cellar_activity_detail
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCellarActivityDetailMap" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar_activity_detail d
+        <where >
+            <if test="wineCellarActivityId != null" >
+                and d.wine_cellar_activity_id = #{wineCellarActivityId}
+            </if>
+            <if test="prodId != null" >
+                and d.prod_id = #{prodId}
+            </if>
+            <if test="prodSkuId != null" >
+                and d.prod_sku_id = #{prodSkuId}
+            </if>
+            <if test="wineryVoucherId != null" >
+                and d.winery_voucher_id = #{wineryVoucherId}
+            </if>
+            <if test="presentType != null" >
+                and d.present_type = #{presentType}
+            </if>
+            <if test="presentRemark != null and presentRemark != ''" >
+                and d.present_remark = #{presentRemark}
+            </if>
+            <if test="sort != null" >
+                and d.sort = #{sort}
+            </if>
+            <if test="createDate != null" >
+                and d.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and d.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectProdSkuList" parameterType="Long" resultType="java.util.HashMap">
+        select d.id,s.sku_name,s.sku_sell_price,i.img_addrr,d.present_type from b_wine_cellar_activity_detail d
+        inner join s_prod_sku s on d.prod_sku_id = s.id
+        inner join s_prod_img i on i.prod_id = d.prod_id
+        where d.wine_cellar_activity_id=#{wineCellarActivityId}
+        order by d.sort asc
+    </select>
+</mapper>
