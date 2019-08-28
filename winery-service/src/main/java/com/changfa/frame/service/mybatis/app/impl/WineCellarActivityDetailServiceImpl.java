@@ -23,4 +23,15 @@ public class WineCellarActivityDetailServiceImpl extends BaseServiceImpl<WineCel
     public List<Map> getProdSkuList(Long wineCellarActivityId) {
         return wineCellarActivityDetailMapper.selectProdSkuList(wineCellarActivityId);
     }
+
+    /**
+     * 活动订单预支付详情
+     * @param id
+     * @return
+     */
+    @Override
+    public Map getPrePayDetail(Long id) {
+        return wineCellarActivityDetailMapper.getPrePayDetail(id);
+    }
+
 }

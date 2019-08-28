@@ -1,9 +1,12 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.core.util.OrderNoUtil;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrStoreOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,5 +44,26 @@ public class MbrStoreOrderController extends BaseController {
         returnMap.put("list", mbrStoreOrderServiceImpl.getStoreList(member.getId()));
         return getResult(returnMap);
     }
+
+    /**
+     * 生成储酒订单
+     *
+     * @return
+     */
+    @ApiOperation(value = "生成储酒订单", notes = "生成储酒订单")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "dId", value = "酒庄活动详情id", dataType = "Long"),
+            @ApiImplicitParam(name = "sId", value = "商品skuId", dataType = "Long")
+    })
+    @RequestMapping(value = "/buildOrder", method = RequestMethod.GET)
+    public Map<String, Object> buildOrder(Long dId, Long sId, HttpServletRequest request) {
+        Member member = getCurMember(request);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("totalStoreRemain", member.getTotalStoreRemain());
+        returnMap.put("totalStoreIncrement", member.getTotalStoreIncrement());
+        returnMap.put("list", mbrStoreOrderServiceImpl.getStoreList(member.getId()));
+        return getResult(returnMap);
+    }
+
 
 }
