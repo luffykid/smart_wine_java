@@ -35,15 +35,15 @@ public class WineryActivityController extends BaseController {
     @Resource(name = "mbrWineryActivitySignServiceImpl")
     private MbrWineryActivitySignService mbrWineryActivitySignServiceImpl;
     /**
-     * 获取未开始活动列表
+     * 获取未结束活动列表
      *
      * @return
      */
-    @ApiOperation(value = "获取未开始活动列表", notes = "获取未开始活动列表")
-    @RequestMapping(value = "/getNoStartList", method = RequestMethod.GET)
-    public Map<String, Object> getNoStartList(PageInfo pageInfo) {
+    @ApiOperation(value = "获取未结束活动列表", notes = "获取未结束活动列表")
+    @RequestMapping(value = "/getNoEndList", method = RequestMethod.GET)
+    public Map<String, Object> getNoEndList(PageInfo pageInfo) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("list", wineryActivityServiceImpl.getNoStartList(pageInfo));
+        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(pageInfo));
         return getResult(resultMap);
     }
 

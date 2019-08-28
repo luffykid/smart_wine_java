@@ -15,4 +15,11 @@ public interface WineCellarActivityDetailService extends BaseService<WineCellarA
      * @return
      */
     public List<Map> getProdSkuList(@Param("wineCellarActivityId") Long wineCellarActivityId);
+
+    /**
+     * 活动订单预支付详情
+     * @param id
+     * @return
+     */
+    public Map getPrePayDetail(@Param("id") Long id);
 }

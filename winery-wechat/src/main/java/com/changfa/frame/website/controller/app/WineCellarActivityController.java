@@ -93,5 +93,20 @@ public class WineCellarActivityController extends BaseController {
         return getResult(returnMap);
     }
 
+    /**
+     * 活动订单预支付
+     *
+     * @return
+     */
+    @ApiOperation(value = "活动订单预支付", notes = "活动订单预支付")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "id", value = "酒庄活动详情id", dataType = "Long"))
+    @RequestMapping(value = "/prePayDetail", method = RequestMethod.GET)
+    public Map<String, Object> prePayDetail(Long id, HttpServletRequest request) {
+        Member member = getCurMember(request);
+        return getResult(wineCellarActivityDetailServiceImpl.getPrePayDetail(id));
+    }
+
+
 
 }
