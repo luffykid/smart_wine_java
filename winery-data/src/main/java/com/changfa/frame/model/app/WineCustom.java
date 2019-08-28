@@ -16,6 +16,8 @@ import java.math.BigDecimal;
  * @version 1.0 2019-08-26
  */
 public class WineCustom extends BaseEntity {
+    /** 空对象 用于selectList方法查询所有WineCustom*/
+    public static final WineCustom NULL = new WineCustom();
 
     private static final long serialVersionUID = 445866094628962304L;
 

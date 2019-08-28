@@ -20,6 +20,13 @@
         where id = #{id}
     </select>
 
+    <select id="getByWineCustomElementContentId" resultMap="winCustomElementAdvanceMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from b_win_custom_element_advance
+        where win_custom_element_content_id = #{win_custom_element_content_id}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.WinCustomElementAdvance" >
         insert into b_win_custom_element_advance (id, win_custom_element_content_id, wine_custom_advance_id, create_date, 
             modify_date)

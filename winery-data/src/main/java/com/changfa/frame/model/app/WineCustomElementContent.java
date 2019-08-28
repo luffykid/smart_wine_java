@@ -32,7 +32,25 @@ public class WineCustomElementContent extends BaseEntity {
     /** 底版图 */
     private String bottomImg;
 
-    
+    /** 定制元素*/
+    private WineCustomElement wineCustomElement;
+
+    /**
+     * 获取定制元素
+     * @return
+     */
+    public WineCustomElement getWineCustomElement() {
+        return wineCustomElement;
+    }
+
+    /**
+     * 设置定制元素
+     * @param wineCustomElement
+     */
+    public void setWineCustomElement(WineCustomElement wineCustomElement) {
+        this.wineCustomElement = wineCustomElement;
+    }
+
     /**
      * 获取酒定制ID
     */

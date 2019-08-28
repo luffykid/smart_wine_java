@@ -10,6 +10,9 @@
         <result column="bottom_img" property="bottomImg" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <association property="wineCustomElement"
+                     select="com.changfa.frame.mapper.app.WineCustomElementMapper.getById"
+                     column="wine_custom_element_id"/>
     </resultMap>
 
     <sql id="table_column" >
