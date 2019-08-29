@@ -80,7 +80,7 @@
     <logger name="com.changfa.frame"/>
 
     <!-- 日志根 -->
-    <root level="INFO">
+    <root level="debug">
         <appender-ref ref="stdout"/>
         <appender-ref ref="E"/>
         <appender-ref ref="I"/>
