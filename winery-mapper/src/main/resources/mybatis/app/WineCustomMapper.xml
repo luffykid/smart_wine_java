@@ -140,4 +140,10 @@
 
     </select>
 
+    <select id="getWineCustomContianProd" parameterType="java.lang.Long" resultMap="wineCustomMap">
+        select wc.*,p.id prodId,p.prod_name prodName from b_wine_custom wc
+        join s_prod_sku ps on wc.prod_sku_id = ps.id
+        join s_prod p on ps.prod_id = p.id where  wc.id = #{id}
+    </select>
+
 </mapper>

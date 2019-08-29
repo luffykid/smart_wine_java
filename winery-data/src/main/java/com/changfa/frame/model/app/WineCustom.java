@@ -109,14 +109,21 @@ public class WineCustom extends BaseEntity {
     /** 销售总数量 */
     private Integer sellTotalCnt;
 
-    /** 酒名称*/
+    /** 商品名称*/
     private String  prodName;
+
+    /** 商品id*/
+    private String  prodId;
 
     /** 定制元素*/
     private String elementName;
 
     /**元素对象*/
     private List<WineCustomElement> wineCustomElementList;
+
+    /**定制元素内容对象*/
+    private List<WineCustomElementContent> wineCustomElementContentList;
+    ;
 
     /**
      * 获取酒庄ID
@@ -251,14 +258,14 @@ public class WineCustom extends BaseEntity {
     }
 
     /**
-     * 获取酒名称
+     * 获商品名称
      */
     public String getProdName() {
         return prodName;
     }
 
     /**
-     * 设置酒名称
+     * 设置商品名称
      */
     public void setProdName(String prodName) {
         this.prodName = prodName;
@@ -290,5 +297,33 @@ public class WineCustom extends BaseEntity {
      */
     public void setWineCustomElementList(List<WineCustomElement> wineCustomElementList) {
         this.wineCustomElementList = wineCustomElementList;
+    }
+
+    /**
+     * 获取定制元素内容对象
+     */
+    public List<WineCustomElementContent> getWineCustomElementContentList() {
+        return wineCustomElementContentList;
+    }
+
+    /**
+     * 设置定制元素内容对象
+     */
+    public void setWineCustomElementContentList(List<WineCustomElementContent> wineCustomElementContentList) {
+        this.wineCustomElementContentList = wineCustomElementContentList;
+    }
+
+    /**
+     * 获取商品id
+     */
+    public String getProdId() {
+        return prodId;
+    }
+
+    /**
+     * 设置商品id
+     */
+    public void setProdId(String prodId) {
+        this.prodId = prodId;
     }
 }

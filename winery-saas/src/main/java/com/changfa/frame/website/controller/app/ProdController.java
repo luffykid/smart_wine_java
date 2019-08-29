@@ -40,13 +40,17 @@ public class ProdController extends BaseController {
 
    /**
      * 查询产品列表
-     * @param pageInfo 分页对象
+     * @param pageNum  分页参数
+    * @param pageSize
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询产品列表",notes = "查询产品列表")
     @RequestMapping(value = "/getProdList", method = RequestMethod.GET)
-    public Map<String, Object> getProdList(PageInfo pageInfo){
-        return getResult(prodService.getProdList(pageInfo));
+    public Map<String, Object> getProdList(int pageNum,int pageSize){
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        return getResult(prodService.getProdList(pageInfo).getList());
     }
 
     /**
@@ -162,14 +166,18 @@ public class ProdController extends BaseController {
 
     /**
      * 通过产品id 查询产品规格列表
-     * @param pageInfo 分页对象
+     * @param pageNum 分页参数
+     * @param pageSize
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询产品规格列表",notes = "查询产品规格列表")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"))
     @RequestMapping(value = "/getProdSkuList", method = RequestMethod.GET)
-    public Map<String, Object> getProdSkuList(Long id,PageInfo pageInfo){
-        return getResult(prodService.getProdSkuList(id,pageInfo));
+    public Map<String, Object> getProdSkuList(Long id,int pageNum,int pageSize){
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        return getResult(prodService.getProdSkuList(id,pageInfo).getList());
     }
 
 
