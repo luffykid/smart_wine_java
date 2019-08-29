@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,7 +121,7 @@ public class CommonController extends BaseController {
         mbrWechat.setMbrId(curMember.getId());
         if (CollectionUtils.isEmpty(mbrWechats)) {
             mbrWechatService.save(mbrWechat);
-        } else {
+        }else {
             mbrWechatService.update(mbrWechat);
         }
         return getResult(null);

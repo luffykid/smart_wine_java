@@ -40,6 +40,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     @Resource(name = "redisClient")
     private RedisClient redisClient;
 
+
     /**
      * 请求前预处理TOKEN判断
      * todo 仅做TOKEN简单校验，未做JWT签名及鉴权
@@ -52,8 +53,8 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("********** 进入登录拦截 **************");
-        //        // 取出token
+//        log.info("********** 进入登录拦截 **************");
+//        // 取出token
 //        String headerToken = request.getHeader(REQUEST_HEADER_TOKEN_KEY);
 //
 //        // 取出登陆账号

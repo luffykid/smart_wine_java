@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 微信签名使用
  */
-public class WeChat implements Serializable {
+public class WeChatSignature implements Serializable {
 
     //微信加密签名
     private String signature;
