@@ -75,10 +75,11 @@ public class MbrStoreOrderController extends BaseController {
     @ApiOperation(value = "生成储酒订单", notes = "生成储酒订单")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dId", value = "酒庄活动详情id", dataType = "Long"),
-            @ApiImplicitParam(name = "sId", value = "商品skuId", dataType = "Long")
+            @ApiImplicitParam(name = "sId", value = "商品skuId", dataType = "Long"),
+            @ApiImplicitParam(name = "prodTotalCnt", value = "商品数量", dataType = "Integer")
     })
     @RequestMapping(value = "/buildOrder", method = RequestMethod.GET)
-    public Map<String, Object> buildOrder(Long dId, Long sId, HttpServletRequest request) {
+    public Map<String, Object> buildOrder(Long dId, Long sId, Integer prodTotalCnt, HttpServletRequest request) {
         Member member = getCurMember(request);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("totalStoreRemain", member.getTotalStoreRemain());

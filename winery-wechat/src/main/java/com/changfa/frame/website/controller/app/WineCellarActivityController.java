@@ -94,6 +94,18 @@ public class WineCellarActivityController extends BaseController {
     }
 
     /**
+     * 获取商品详情
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取商品详情", notes = "获取商品详情")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "id", value = "prodSkuId", dataType = "Long"))
+    @RequestMapping(value = "/selectProdSkuDetail", method = RequestMethod.GET)
+    public Map<String, Object> selectProdSkuDetail(Long id){
+        return getResult(wineCellarActivityDetailServiceImpl.getProdSkuDetail(id));
+    }
+    /**
      * 活动订单预支付
      *
      * @return

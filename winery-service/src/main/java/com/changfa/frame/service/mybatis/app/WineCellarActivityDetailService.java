@@ -2,7 +2,7 @@ package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.model.app.WineCellarActivityDetail;
 import com.changfa.frame.service.mybatis.common.BaseService;
-import org.apache.ibatis.annotations.Param;
+
 
 import java.util.List;
 import java.util.Map;
@@ -14,12 +14,19 @@ public interface WineCellarActivityDetailService extends BaseService<WineCellarA
      * @param wineCellarActivityId
      * @return
      */
-    public List<Map> getProdSkuList(@Param("wineCellarActivityId") Long wineCellarActivityId);
+    public List<Map> getProdSkuList(Long wineCellarActivityId);
 
     /**
      * 活动订单预支付详情
      * @param id
      * @return
      */
-    public Map getPrePayDetail(@Param("id") Long id);
+    public Map getPrePayDetail(Long id);
+
+    /**
+     * 获取商品详情
+     * @param id
+     * @return
+     */
+    public Map getProdSkuDetail(Long id);
 }
