@@ -45,6 +45,22 @@ public class WineryMaster extends BaseEntity {
      */
     private String masterDetail;
 
+    /*************************** 扩展字段 ***************************/
+    /**
+     * 会员昵称
+     */
+    private String mbrNickName;
+
+    /**
+     * 会员头像
+     */
+    private String mbrUserIco;
+
+    /**
+     * 会员等级名称
+     */
+    private String mbrLevelName;
+
 
     /**
      * 获取会员ID
@@ -118,5 +134,47 @@ public class WineryMaster extends BaseEntity {
      */
     public void setMasterDetail(String masterDetail) {
         this.masterDetail = masterDetail == null ? null : masterDetail.trim();
+    }
+
+    /**
+     * 获取会员昵称
+     */
+    public String getMbrNickName() {
+        return mbrNickName;
+    }
+
+    /**
+     * 设置会员昵称
+     */
+    public void setMbrNickName(String mbrNickName) {
+        this.mbrNickName = mbrNickName;
+    }
+
+    /**
+     * 获取会员用户信息
+     */
+    public String getMbrUserIco() {
+        return mbrUserIco;
+    }
+
+    /**
+     * 设置会员用户信息
+     */
+    public void setMbrUserIco(String mbrUserIco) {
+        this.mbrUserIco = mbrUserIco;
+    }
+
+    /**
+     * 获取会员等级名称
+     */
+    public String getMbrLevelName() {
+        return mbrLevelName;
+    }
+
+    /**
+     * 设置会员等级名称
+     */
+    public void setMbrLevelName(String mbrLevelName) {
+        this.mbrLevelName = mbrLevelName;
     }
 }

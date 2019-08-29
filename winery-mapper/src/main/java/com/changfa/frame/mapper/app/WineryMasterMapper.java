@@ -18,13 +18,16 @@ public interface WineryMasterMapper extends BaseMapper<WineryMaster, Long> {
 
     /**
      * 获取荣誉庄主列表
+     *
      * @return
      */
-    public List<Map> selectHonourWineryList();
+    List<WineryMaster> selectHonourWineryList();
 
     /**
      * 获取荣誉庄主详情
+     *
+     * @param id 根据ID查询荣誉庄主
      * @return
      */
-    public Map selectHonourWineryDetail(@Param("id") Long id);
+    WineryMaster selectHonourWineryDetail(@Param("id") Long id);
 }

@@ -1,14 +1,11 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.MbrTakeOrder;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.MemberAddress;
 import com.changfa.frame.service.mybatis.app.MemberAddressService;
-import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -19,13 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 会员地址接口
- *
  */
 @Api(value = "会员地址接口", tags = "会员地址接口")
 @RestController("wxMiniMemberAddressController")
@@ -64,12 +59,12 @@ public class MemberAddressController extends BaseController {
             @ApiImplicitParam(name = "isDefault", value = "是否默认地址", dataType = "Boolean")
     })
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public Map<String, Object> add(String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault, HttpServletRequest request) {
+    public Map<String, Object> add(String contact, String phone, String provinceCode, String cityCode, String countryCode, String detailAddress, Boolean isDefault, HttpServletRequest request) {
         Member member = getCurMember(request);
 
         try {
             memberAddressServiceImpl.add(contact, phone, provinceCode, cityCode, countryCode, detailAddress, isDefault);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info("此处有错误:{}", "插入数据失败");
             throw new CustomException(RESPONSE_CODE_ENUM.INSERT_EXIST);
         }
@@ -97,7 +92,7 @@ public class MemberAddressController extends BaseController {
         Member member = getCurMember(request);
         try {
             memberAddressServiceImpl.modify(id, contact, phone, provinceCode, cityCode, countryCode, detailAddress, isDefault);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info("此处有错误:{}", "修改数据失败");
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
         }
@@ -115,7 +110,7 @@ public class MemberAddressController extends BaseController {
         Member member = getCurMember(request);
         try {
             memberAddressServiceImpl.delete(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info("此处有错误:{}", "删除数据失败");
             throw new CustomException(RESPONSE_CODE_ENUM.DELETE_EXIST);
         }

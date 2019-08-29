@@ -32,7 +32,7 @@ public class WineryMasterServiceImpl extends BaseServiceImpl<WineryMaster, Long>
     }
 
     @Override
-    public Map getHonourWineryDetail(Long id) {
+    public WineryMaster getHonourWineryDetail(Long id) {
         return wineryMasterMapper.selectHonourWineryDetail(id);
     }
 }
