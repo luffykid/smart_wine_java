@@ -55,18 +55,18 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
      * @return List<WineCustom>
      */
     @Override
-    public PageInfo<WineCustom> getWineCustomList(PageInfo pageInfo) {
+    public PageInfo<WineCustom> getWineCustomList(WineCustom wineCustom,PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        List<WineCustom> wineCustomList = wineCustomMapper.getWineCustomList(); //获取定制酒列表
+        List<WineCustom> wineCustomList = wineCustomMapper.getWineCustomList(wineCustom); //获取定制酒列表
         List<WineCustom> wineCustoms =  new ArrayList<WineCustom>();
         if(wineCustomList != null && wineCustomList.size() > 0){
-            for (WineCustom wineCustom : wineCustomList) {
-                wineCustom.setProdName(prodSkuMapper.getProdNameBySkuId(wineCustom.getProdSkuId())); //通过SkuId获取 ProdName
-                String elementName = wineCustomElementMapper.getElementNameByWineCustomId(wineCustom.getId());
-                wineCustom.setElementName(elementName);
-                wineCustoms.add(wineCustom);//把对象添加到集合
+            for (WineCustom wineCustomvo : wineCustomList) {
+                wineCustomvo.setProdName(prodSkuMapper.getProdNameBySkuId(wineCustomvo.getProdSkuId())); //通过SkuId获取 ProdName
+                String elementName = wineCustomElementMapper.getElementNameByWineCustomId(wineCustomvo.getId());
+                wineCustomvo.setElementName(elementName);
+                wineCustoms.add(wineCustomvo);//把对象添加到集合
             }
         }
         return new PageInfo(wineCustoms); //返回集合

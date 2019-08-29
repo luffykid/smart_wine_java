@@ -16,7 +16,7 @@ public interface WinerySightMapper extends BaseMapper<WinerySight, Long> {
 
     WinerySight getByName(String sightName);
 
-    List<WinerySight> selectWinerySightList(Long wineryId);
+    List<WinerySight> selectWinerySightList(WinerySight winerySight);
 
     int updateSightLike(WinerySight winerySight);
 

@@ -46,7 +46,7 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
      * @param pageInfo 分页对象
      * @return List<WinerySight>
      */
-    PageInfo<WinerySight> findWinerySightList(Admin curAdmin, PageInfo pageInfo);
+    PageInfo<WinerySight> findWinerySightList(WinerySight winerySight,Admin curAdmin, PageInfo pageInfo);
 
     /**
      * 添加景点图文

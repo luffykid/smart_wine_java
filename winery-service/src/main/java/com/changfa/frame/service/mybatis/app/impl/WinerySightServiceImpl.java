@@ -59,11 +59,11 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      * @return List<WinerySight>
      */
     @Override
-    public PageInfo<WinerySight> findWinerySightList(Admin curAdmin, PageInfo pageInfo) {
+    public PageInfo<WinerySight> findWinerySightList(WinerySight winerySight,Admin curAdmin, PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(winerySightMapper.selectWinerySightList(curAdmin.getWineryId()));
+        return new PageInfo(winerySightMapper.selectWinerySightList(winerySight));
     }
 
     /**
@@ -225,7 +225,8 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     @Override
     public Map<String, Object> findSignSight(Member member) {
         Map<String, Object>  map = new HashMap<>();
-        List<WinerySight> winerySightList = winerySightMapper.selectWinerySightList(member.getWineryId()); // 获取酒庄所有景点信息
+        WinerySight winerySight = new WinerySight();
+        List<WinerySight> winerySightList = winerySightMapper.selectWinerySightList(winerySight); // 获取酒庄所有景点信息
         List<String> SightSignIdList = mbrSightSignMapper.findMbrSightSign(member.getId()); //获取已签到信息
         map.put("winerySightList",winerySightList);
         map.put("SightSignIdList",SightSignIdList);

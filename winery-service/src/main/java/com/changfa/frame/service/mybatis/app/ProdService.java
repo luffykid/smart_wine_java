@@ -33,7 +33,7 @@ public interface ProdService extends BaseService<Prod, Long> {
      * @param pageInfo 分页对象
      * @return List<Prod>
      */
-    PageInfo<Prod> getProdList(Prod prod,PageInfo pageInfo);
+    PageInfo getProdList(Prod prod,PageInfo pageInfo);
 
     /**
      * 添加产品

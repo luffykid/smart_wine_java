@@ -49,8 +49,10 @@ public class ProdController extends BaseController {
     @RequestMapping(value = "/getProdList", method = RequestMethod.GET)
     public Map<String, Object> getProdList(Prod prod,int pageNum,int pageSize){
         PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        PageInfo prodList = prodService.getProdList(prod, pageInfo);
         Map<String, Object> returnMap = new HashMap<>();
-        PageInfo<Prod> prodList = prodService.getProdList(prod, pageInfo);
         returnMap.put("产品对象列表",prodList.getList());
         returnMap.put("pageNum",prodList.getPageNum());
         returnMap.put("pageSize",prodList.getPageSize());

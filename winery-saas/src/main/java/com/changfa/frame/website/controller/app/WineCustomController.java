@@ -49,12 +49,13 @@ public class WineCustomController extends BaseController {
      * @return Map<String, Object>
      */
     @ApiOperation(value = "获取定制酒列表",notes = "获取定制酒列表")
+    @ApiImplicitParams(@ApiImplicitParam(name = "wineCustom", value = "定制酒对象", dataType = "WineCustom"))
     @RequestMapping(value = "/getWineCustomList", method = RequestMethod.GET)
-    public Map<String, Object> getWineCustomList(int pageNum,int pageSize){
+    public Map<String, Object> getWineCustomList(WineCustom wineCustom,int pageNum,int pageSize){
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
-        return getResult(wineCustomService.getWineCustomList(pageInfo).getList());
+        return getResult(wineCustomService.getWineCustomList(wineCustom,pageInfo).getList());
     }
 
     /**
@@ -75,7 +76,7 @@ public class WineCustomController extends BaseController {
      * @return Map<String, Object>
      */
     @ApiOperation(value = "搜索定制酒",notes = "搜索定制酒")
-    @ApiImplicitParams(@ApiImplicitParam(name = "wineCustom", value = "定制酒对象", dataType = "WineCustomController"))
+    @ApiImplicitParams(@ApiImplicitParam(name = "wineCustom", value = "定制酒对象", dataType = "WineCustom"))
     @RequestMapping(value = "/selectWineCustom", method = RequestMethod.POST)
     public Map<String, Object> selectWineCustom(@RequestBody WineCustom wineCustom, int pageNum,int pageSize){
         PageInfo pageInfo = new PageInfo();

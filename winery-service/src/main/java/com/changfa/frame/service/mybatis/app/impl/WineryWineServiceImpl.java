@@ -48,16 +48,16 @@ public class WineryWineServiceImpl extends BaseServiceImpl<WineryWine, Long> imp
      * @return
      */
     @Override
-    public PageInfo<WineryWine> getWineryWineList(PageInfo pageInfo) {
+    public PageInfo<WineryWine> getWineryWineList(WineryWine wineryWine,PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
         List<WineryWine> wineryWineListContainProdNum = new ArrayList<WineryWine>();
         List<WineryWine> wineryWineList = wineryWineMapper.getWineryWineList();
         if(wineryWineList != null && wineryWineList.size() > 0){
-            for (WineryWine wineryWine : wineryWineList) {
-                wineryWine.setRelationCount(wineryWineProdMapper.getProdListByWinerWineId(wineryWine.getId()).size());
-                wineryWineListContainProdNum.add(wineryWine);
+            for (WineryWine wineryWinevo : wineryWineList) {
+                wineryWinevo.setRelationCount(wineryWineProdMapper.getProdListByWinerWineId(wineryWinevo.getId()).size());
+                wineryWineListContainProdNum.add(wineryWinevo);
             }
         }
         return new PageInfo(wineryWineListContainProdNum);
