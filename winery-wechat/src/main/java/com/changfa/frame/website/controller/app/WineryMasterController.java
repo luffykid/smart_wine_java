@@ -39,9 +39,8 @@ public class WineryMasterController extends BaseController {
     @ApiOperation(value = "获取荣誉庄主列表", notes = "获取荣誉庄主列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     public Map<String, Object> getList(PageInfo pageInfo) {
-        PageInfo masterPageInfo = wineryMasterServiceImpl.selectList(new WineryMaster(), pageInfo);
-        List mbrMasters = masterPageInfo.getList();
-        return getResult(mbrMasters);
+        PageInfo list = wineryMasterServiceImpl.selectList(new WineryMaster(), pageInfo);
+        return getResult(list);
     }
 
     /**
@@ -55,7 +54,6 @@ public class WineryMasterController extends BaseController {
             @ApiImplicitParam(name = "id", value = "id", dataType = "Long"))
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id) {
-        WineryMaster wineryMaster = wineryMasterServiceImpl.getById(id);
-        return getResult(wineryMaster);
+        return getResult(wineryMasterServiceImpl.getHonourWineryDetail(id));
     }
 }
