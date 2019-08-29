@@ -42,9 +42,12 @@ public class WineryActivityController extends BaseController {
      */
     @ApiOperation(value = "获取未结束活动列表", notes = "获取未结束活动列表")
     @RequestMapping(value = "/getNoEndList", method = RequestMethod.GET)
-    public Map<String, Object> getNoEndList(PageInfo pageInfo) {
+    public Map<String, Object> getNoEndList(int pageNum, int pageSize) {
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(pageInfo));
+        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(pageInfo).getList());
         return getResult(resultMap);
     }
 

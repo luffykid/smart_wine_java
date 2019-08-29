@@ -38,9 +38,12 @@ public class WineryMasterController extends BaseController {
      */
     @ApiOperation(value = "获取荣誉庄主列表", notes = "获取荣誉庄主列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
-    public Map<String, Object> getList(PageInfo pageInfo) {
-        PageInfo list = wineryMasterServiceImpl.selectList(new WineryMaster(), pageInfo);
-        return getResult(list);
+    public Map<String, Object> getList(int pageSize, int pageNum) {
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = wineryMasterServiceImpl.getHonourWineryList(pageInfo);
+        return getResult(pageInfo.getList());
     }
 
     /**

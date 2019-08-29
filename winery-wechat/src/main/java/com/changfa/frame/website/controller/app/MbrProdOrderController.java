@@ -52,10 +52,13 @@ public class MbrProdOrderController extends BaseController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "orderStatus", value = "订单状态", dataType = "Integer"))
     @RequestMapping(value = "/getListByType", method = RequestMethod.GET)
-    public Map<String, Object> getListByType(Integer orderStatus, PageInfo pageInfo, HttpServletRequest request) {
+    public Map<String, Object> getListByType(Integer orderStatus, int pageSize,int pageNum, HttpServletRequest request) {
         Member member = getCurMember(request);
-        PageInfo<MbrProdOrder> list = mbrProdOrderServiceImpl.getListByType(member.getId(), orderStatus, pageInfo);
-        return getResult(list);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = mbrProdOrderServiceImpl.getListByType(member.getId(), orderStatus, pageInfo);
+        return getResult(pageInfo.getList());
     }
 
 }

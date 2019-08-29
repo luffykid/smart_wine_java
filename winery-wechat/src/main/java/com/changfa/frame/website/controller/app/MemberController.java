@@ -68,10 +68,13 @@ public class MemberController extends BaseController {
      */
     @ApiOperation(value = "获取招募会员列表", notes = "获取招募会员列表")
     @RequestMapping(value = "/getSubList", method = RequestMethod.GET)
-    public Map<String, Object> getSubList(HttpServletRequest request, PageInfo pageInfo) {
+    public Map<String, Object> getSubList(HttpServletRequest request, int pageSize, int pageNum) {
         Member member = getCurMember(request);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("list", memberServiceImpl.getSubList(member.getId(), pageInfo));
+        returnMap.put("list", memberServiceImpl.getSubList(member.getId(), pageInfo).getList());
         returnMap.put("other", memberServiceImpl.getSubStatis(member.getId()));
         return getResult(returnMap);
     }
@@ -83,12 +86,15 @@ public class MemberController extends BaseController {
      */
     @ApiOperation(value = "获取会员积分", notes = "获取会员积分")
     @RequestMapping(value = "/getIntegral", method = RequestMethod.GET)
-    public Map<String, Object> getIntegral(HttpServletRequest request, PageInfo pageInfo) {
+    public Map<String, Object> getIntegral(HttpServletRequest request, int pageSize, int pageNum) {
         Member member = getCurMember(request);
-        PageInfo list = memberServiceImpl.getIntegralList(member.getId(), pageInfo);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = memberServiceImpl.getIntegralList(member.getId(), pageInfo);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("totalIntegral", member.getTotalIntegral());
-        returnMap.put("list", list);
+        returnMap.put("list", pageInfo.getList());
         return getResult(returnMap);
     }
 

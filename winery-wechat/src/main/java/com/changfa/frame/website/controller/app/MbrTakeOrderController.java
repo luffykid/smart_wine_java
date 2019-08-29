@@ -48,9 +48,12 @@ public class MbrTakeOrderController extends BaseController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "mbrStoreOrderId", value = "会员储酒订单ID", dataType = "Long"))
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
-    public Map<String, Object> getList(Long mbrStoreOrderId, PageInfo pageInfo) {
+    public Map<String, Object> getList(Long mbrStoreOrderId, int pageSize,int pageNum) {
         // 查询数据集合
         Map<String, List<MbrTakeOrder>> returnMap = new LinkedHashMap<>();
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
         PageInfo<MbrTakeOrder> orderPageInfo = mbrTakeOrderServiceImpl.getListByMbrStoreOrderId(mbrStoreOrderId, pageInfo);
         List<MbrTakeOrder> takeOrders = orderPageInfo.getList();
         if (CollectionUtils.isEmpty(takeOrders)) {
