@@ -1,13 +1,9 @@
-package com.changfa.frame.website.event;
+package com.changfa.frame.model.event;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import static org.junit.Assert.*;
 
 public class DomainEventPublisherTest {
 

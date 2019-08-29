@@ -1,6 +1,6 @@
-package com.changfa.frame.website.event.order;
+package com.changfa.frame.model.event.order;
 
-import com.changfa.frame.website.event.DomainEvent;
+import com.changfa.frame.model.event.DomainEvent;
 
 import java.util.Date;
 

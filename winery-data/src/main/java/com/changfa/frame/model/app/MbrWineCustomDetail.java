@@ -44,7 +44,19 @@ public class MbrWineCustomDetail extends BaseEntity {
     /** 打印图 */
     private String printImg;
 
-    
+    /**
+     *  可定制元素内容id
+     */
+    private Long wineCustomElementContentId;
+
+    public Long getWineCustomElementContentId() {
+        return wineCustomElementContentId;
+    }
+
+    public void setWineCustomElementContentId(Long wineCustomElementContentId) {
+        this.wineCustomElementContentId = wineCustomElementContentId;
+    }
+
     /**
      * 获取酒定制ID
     */

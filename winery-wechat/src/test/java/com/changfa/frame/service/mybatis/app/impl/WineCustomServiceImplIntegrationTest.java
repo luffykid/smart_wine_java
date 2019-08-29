@@ -1,5 +1,6 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.util.OrderNoUtil;
 import com.changfa.frame.model.app.WineCustom;
 import com.changfa.frame.model.app.WineCustomAdvance;
 import com.changfa.frame.model.app.WineCustomElementContent;

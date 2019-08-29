@@ -1,4 +1,4 @@
-package com.changfa.frame.website.event;
+package com.changfa.frame.model.event;
 
 import java.util.Date;
 

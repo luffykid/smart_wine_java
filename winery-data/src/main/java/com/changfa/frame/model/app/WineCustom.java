@@ -40,6 +40,17 @@ public class WineCustom extends BaseEntity {
     /** 定制说明图 */
     private String customStateImg;
 
+    /** 商品ID */
+    private Long prodId;
+
+    public Long getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(Long prodId) {
+        this.prodId = prodId;
+    }
+
     /** 定制状态
     1：新建
     2：发布

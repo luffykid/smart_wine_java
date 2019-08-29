@@ -25,9 +25,6 @@ public class MbrWineCustom extends BaseEntity {
     /** 白酒定制ID */
     private Long wineCustomId;
 
-    /** 白酒定制ID */
-    private Long winCustomId;
-
     /** 酒庄ID */
     private Long wineryId;
 
@@ -47,7 +44,7 @@ public class MbrWineCustom extends BaseEntity {
     private String customName;
 
     /** 商品SKU 名称 */
-    private Long skuName;
+    private String skuName;
 
     
     /**
@@ -77,20 +74,7 @@ public class MbrWineCustom extends BaseEntity {
     public void setWineCustomId(Long wineCustomId) {
         this.wineCustomId = wineCustomId;
     }
-    
-    /**
-     * 获取白酒定制ID
-    */
-    public Long getWinCustomId() {
-        return winCustomId;
-    }
-    
-    /**
-     * 设置白酒定制ID
-    */
-    public void setWinCustomId(Long winCustomId) {
-        this.winCustomId = winCustomId;
-    }
+
     
     /**
      * 获取酒庄ID
@@ -179,14 +163,14 @@ public class MbrWineCustom extends BaseEntity {
     /**
      * 获取商品SKU 名称
     */
-    public Long getSkuName() {
+    public String getSkuName() {
         return skuName;
     }
     
     /**
      * 设置商品SKU 名称
     */
-    public void setSkuName(Long skuName) {
+    public void setSkuName(String skuName) {
         this.skuName = skuName;
     }
 }

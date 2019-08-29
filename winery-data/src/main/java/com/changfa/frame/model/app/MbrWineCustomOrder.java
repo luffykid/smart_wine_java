@@ -8,8 +8,12 @@
 package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
+import com.changfa.frame.model.event.DomainEventPublisher;
+import com.changfa.frame.model.event.order.OrderCreatedEvent;
+import com.sun.mail.imap.protocol.ID;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 会员白酒定制订单
@@ -67,7 +71,102 @@ public class MbrWineCustomOrder extends BaseEntity {
     /** 订单号【系统生成单号】 */
     private String orderNo;
 
-    
+    /**
+     *  订单状态
+     * 0：新建订单
+     * 1：未支付（已生成预支付ID）
+     * 2：已取消（取消订单）
+     * 3：已支付（用户完成支付）
+     * 4：支付成功（回调通知成功）
+     * 5：支付失败（回调通知失败）
+     */
+    public enum Status {
+
+        NEW_ORDER(0, "新建订单"),
+        UNPAID(1, "未支付"),
+        CANCEL(2, "已取消"),
+        PAID(3, "已支付"),
+        PAY_SUCCESS(4, "支付成功"),
+        PAY_FAILED(5, "支付失败");
+
+        // 枚举值
+        private Integer value;
+
+        // 枚举值名称
+        private String name;
+
+        Status(Integer value, String name) {
+
+            this.value = value;
+            this.name = name;
+
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    /**
+     * 创建定制酒订单
+     * @param publisher
+     * @param mbrWineCustom
+     * @param mbrWineCustomOrderId
+     * @param orderNo
+     * @throws NullPointerException 如果publisher或者mbrWineCustom,mbrWineCustomOrderId对象为null
+     * @throws IllegalArgumentException 如果orderNo传入为null或者为空串
+     * @return 新建的定制酒订单
+     */
+
+    public static MbrWineCustomOrder createOrder(DomainEventPublisher publisher,
+                                                 MbrWineCustom mbrWineCustom,
+                                                 Long mbrWineCustomOrderId,
+                                                 String orderNo) {
+
+        checkValidate(publisher, mbrWineCustom, mbrWineCustomOrderId, orderNo);
+
+        MbrWineCustomOrder order = new MbrWineCustomOrder();
+        order.setId(mbrWineCustomOrderId);
+        order.setOrderNo(orderNo);
+        order.setCreateDate(new Date());
+        order.setModifyDate(new Date());
+
+        order.setPayTotalAmt(mbrWineCustom.getCustomTotalAmt());
+        order.setPayRealAmt(mbrWineCustom.getCustomTotalAmt());
+
+        order.setMbrId(mbrWineCustom.getMbrId());
+        order.setOrderStatus(0);
+
+        //发布新建定制酒订单事件
+        publisher.publish(new OrderCreatedEvent(mbrWineCustomOrderId));
+
+        return order;
+    }
+
+    private static void checkValidate(DomainEventPublisher publisher,
+                                      MbrWineCustom mbrWineCustom,
+                                      Long mbrWineCustomOrderId,
+                                      String orderNo) {
+
+        if (publisher == null)
+            throw new NullPointerException("publisher must not be null!");
+
+        if (mbrWineCustom == null)
+            throw new NullPointerException("mbrWineCustom must not be null!");
+
+        if (mbrWineCustomOrderId == null)
+            throw new NullPointerException("mbrWineCustomOrderId must not be null!");
+
+        if (orderNo == null || "".equals(orderNo))
+            throw new IllegalArgumentException("orderNo must not be null or an empty string!");
+
+    }
+
+
     /**
      * 获取酒庄ID
     */
@@ -275,4 +374,9 @@ public class MbrWineCustomOrder extends BaseEntity {
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
+
+    /**
+     * 创建新订单，并且发布订单状态改变事件
+     */
+
 }

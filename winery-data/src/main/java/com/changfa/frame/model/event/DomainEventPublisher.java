@@ -1,4 +1,4 @@
-package com.changfa.frame.website.event;
+package com.changfa.frame.model.event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ public class DomainEventPublisher {
 
     }
 
-    public void subcribe(DomainEventSubscriber<DomainEvent> domainEventDomainEventSubscriber) {
+    public <T extends DomainEvent> void subcribe(DomainEventSubscriber<T> domainEventDomainEventSubscriber) {
 
         this.subscribers.add(domainEventDomainEventSubscriber);
 
