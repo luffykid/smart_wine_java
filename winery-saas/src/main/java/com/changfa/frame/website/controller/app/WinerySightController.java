@@ -42,13 +42,14 @@ public class WinerySightController extends BaseController {
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询景点列表",notes = "查询景点列表")
+    @ApiImplicitParams(@ApiImplicitParam(name = "winerySight", value = "景点添加对象", dataType = "WinerySight"))
     @RequestMapping(value = "/getWinerySightList", method = RequestMethod.GET)
-    public Map<String, Object> getWinerySightList(HttpServletRequest request,int pageNum,int pageSize){
+    public Map<String, Object> getWinerySightList(HttpServletRequest request,WinerySight winerySight, int pageNum,int pageSize){
         Admin curAdmin = getCurAdmin(request);
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
-        PageInfo<WinerySight> winerySightList =winerySightService.findWinerySightList(curAdmin,pageInfo);
+        PageInfo<WinerySight> winerySightList =winerySightService.findWinerySightList(winerySight,curAdmin,pageInfo);
         if (winerySightList.getList().size() == 0 && winerySightList == null){
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
