@@ -10,6 +10,11 @@
         <result column="master_detail" property="masterDetail" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <!-- 扩展字段 -->
+        <result column="mbr_nick_name" property="mbrNickName" jdbcType="VARCHAR" />
+        <result column="mbr_user_ico" property="mbrUserIco" jdbcType="VARCHAR" />
+        <result column="mbr_level_name" property="mbrLevelName" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="table_column" >
@@ -91,15 +96,25 @@
             </if>
         </where>
     </select>
-    
-    <select id="selectHonourWineryList" resultType="java.util.HashMap">
-        select m.*,e.nick_name,e.user_icon,l.descri from b_winery_master m
+
+    <!-- 查询荣誉庄主列表 -->
+    <select id="selectHonourWineryList" resultMap="wineryMasterMap">
+        select
+            m.*,e.nick_name as mbr_nick_name,
+            e.user_icon as mbr_user_ico,
+            l.name as mbr_level_name
+        from b_winery_master m
         inner join m_member e on m.mbr_id=e.id
         left join m_mbr_level l on l.id =e.mbr_level_id
     </select>
 
-    <select id="selectHonourWineryDetail" parameterType="Long" resultType="java.util.HashMap">
-        select m.*,e.nick_name,e.user_icon,l.descri from b_winery_master m
+    <!-- 根据ID查询荣誉庄主 -->
+    <select id="selectHonourWineryDetail" parameterType="Long" resultMap="wineryMasterMap">
+        select
+            m.*,e.nick_name as mbr_nick_name,
+            e.user_icon as mbr_user_ico,
+            l.name as mbr_level_name
+        from b_winery_master m
         inner join m_member e on m.mbr_id=e.id
         left join m_mbr_level l on l.id =e.mbr_level_id
         where m.id=#{id}

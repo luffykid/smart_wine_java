@@ -1,5 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.model.app.WineryMaster;
 import com.changfa.frame.service.mybatis.app.WineryMasterService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.github.pagehelper.PageInfo;
@@ -17,7 +18,6 @@ import java.util.Map;
 
 /**
  * 荣誉庄主接口
- *
  */
 @Api(value = "荣誉庄主接口", tags = "荣誉庄主接口")
 @RestController("wxMiniWineryMasterController")
@@ -26,6 +26,7 @@ public class WineryMasterController extends BaseController {
 
     @Resource(name = "wineryMasterServiceImpl")
     private WineryMasterService wineryMasterServiceImpl;
+
     /**
      * 获取荣誉庄主列表
      *
@@ -34,7 +35,7 @@ public class WineryMasterController extends BaseController {
     @ApiOperation(value = "获取荣誉庄主列表", notes = "获取荣誉庄主列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     public Map<String, Object> getList(int pageSize, int pageNum) {
-        PageInfo pageInfo = new PageInfo();
+        PageInfo<WineryMaster> pageInfo = new PageInfo();
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
         pageInfo = wineryMasterServiceImpl.getHonourWineryList(pageInfo);

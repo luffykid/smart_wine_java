@@ -5,8 +5,11 @@ import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.core.weChat.WeChatMiniUtil;
 import com.changfa.frame.core.weChat.WeChatPayUtil;
+import com.changfa.frame.model.app.WineryMaster;
 import com.changfa.frame.service.mybatis.app.SystemConfigService;
+import com.changfa.frame.service.mybatis.app.WineryMasterService;
 import com.changfa.frame.website.utils.SettingUtils;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,11 +36,37 @@ import java.util.Map;
  */
 @Api(value = "Demo编码范例", tags = "Demo编码范例")
 @RestController("wxMiniDemoController")
-@RequestMapping("/wxMini/auth/demo")
+@RequestMapping("/wxMini/anon/demo")
 public class DemoController extends BaseController {
 
     // service层必须是接口、实现类方式，Spring为面向接口编程
+    @Resource(name = "systemConfigServiceImpl")
     private SystemConfigService systemConfigService;
+
+    @Resource(name = "wineryMasterServiceImpl")
+    private WineryMasterService wineryMasterService;
+
+    /**
+     * 测试分页查询
+     *
+     * @param pageNum  页码
+     * @param PageSize 每夜条数
+     * @return
+     */
+    @ApiOperation(value = "普通接口书写范例", notes = "普通接口书写范例", httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum", value = "页码", dataType = "Integer"),
+            @ApiImplicitParam(name = "PageSize", value = "每页条数", dataType = "Integer")
+    })
+    @RequestMapping(value = "/testPageInfo", method = RequestMethod.GET)
+    public Map<String, Object> testPageInfo(Integer pageNum, Integer PageSize) {
+        PageInfo<WineryMaster> wineryMasterPageInfo = new PageInfo<>();
+        wineryMasterPageInfo.setPageNum(1);
+        wineryMasterPageInfo.setPageSize(2);
+        PageInfo<WineryMaster> pageInfo = wineryMasterService.selectList(new WineryMaster(), wineryMasterPageInfo);
+        List<WineryMaster> list = pageInfo.getList();
+        return getResult(list);
+    }
 
     /**
      * 普通控制器接口书写规范
@@ -90,7 +121,7 @@ public class DemoController extends BaseController {
         String fileUrl = FileUtil.copyNFSByFileName(orgFileName, FilePathConsts.TEST_FILE_PATH);
 
         // 3、如果是编辑页面，需要先删除原图片
-        //FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
+//        FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
 
         // 4、如果是直接图片上传到NFS服务器，返回文件NFS访问URL
         String nfsUrl = FileUtil.getNFSUrl(testFile, FilePathConsts.TEST_FILE_PATH);
