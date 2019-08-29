@@ -3,6 +3,7 @@ package com.changfa.frame.website.controller.common;
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.core.setting.Setting;
+import com.changfa.frame.core.weChat.WeChatMiniUtil;
 import com.changfa.frame.core.weChat.WeChatPayUtil;
 import com.changfa.frame.service.mybatis.app.SystemConfigService;
 import com.changfa.frame.website.utils.SettingUtils;
@@ -109,6 +110,18 @@ public class DemoController extends BaseController {
                 "/paymentNotify/async_notify/MBR_LEVEL_ORDER.jhtml", "测试订单", request);
 
         return getResult(returnMap);
+    }
+
+    /**
+     * 测试生成永久小程序二维码
+     */
+    @ApiOperation(value = "测试微信支付统一下单", notes = "测试微信支付统一下单", httpMethod = "POST")
+    @PostMapping(value = "/wxMiniQrCode")
+    public Map<String, Object> wxMiniQrCode() {
+        // 返回小程序二维码图片服务器地址【主要用于：景点签到，会员邀请】
+        String miniQrCodeImg = WeChatMiniUtil.getMiniQrCodeImg("123123", "page/qrcode", 300, null, false);
+
+        return getResult(miniQrCodeImg);
     }
 
 }

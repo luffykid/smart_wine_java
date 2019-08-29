@@ -1,8 +1,8 @@
-package com.changfa.frame.core.weChat;
+package com.changfa.frame.core.weChat.util;
 
 import com.changfa.frame.core.prop.PropAttributes;
 import com.changfa.frame.core.prop.PropConfig;
-import com.changfa.frame.core.weChat.pojo.WeChat;
+import com.changfa.frame.core.weChat.pojo.WeChatSignature;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -22,7 +22,7 @@ public class WeChatSignUtil {
      * @param wechat 微信pojo
      * @return
      */
-    public static boolean checkSign(String token, WeChat wechat) {
+    public static boolean checkSign(String token, WeChatSignature wechat) {
 
         String[] arr = new String[]{token, wechat.getTimestamp(), wechat.getNonce()};
         Arrays.sort(arr);

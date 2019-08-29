@@ -6,6 +6,7 @@ import com.changfa.frame.core.prop.PropAttributes;
 import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.core.util.HttpUtil;
 import com.changfa.frame.core.weChat.util.WXPayXmlUtil;
+import com.changfa.frame.core.weChat.util.WeChatSignUtil;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
