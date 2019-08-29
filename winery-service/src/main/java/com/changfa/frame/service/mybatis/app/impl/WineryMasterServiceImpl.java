@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("wineryMasterServiceImpl")
 public class WineryMasterServiceImpl extends BaseServiceImpl<WineryMaster, Long> implements WineryMasterService {
@@ -28,5 +29,10 @@ public class WineryMasterServiceImpl extends BaseServiceImpl<WineryMaster, Long>
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
         return new PageInfo(wineryMasterMapper.selectHonourWineryList());
+    }
+
+    @Override
+    public Map getHonourWineryDetail(Long id) {
+        return wineryMasterMapper.selectHonourWineryDetail(id);
     }
 }
