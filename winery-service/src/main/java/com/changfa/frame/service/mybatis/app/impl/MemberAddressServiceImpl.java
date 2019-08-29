@@ -90,7 +90,7 @@ public class MemberAddressServiceImpl extends BaseServiceImpl<MemberAddress, Lon
         memberAddress.setDetailAddress(detailAddress);
         memberAddress.setIsDefault(isDefault);
         memberAddress.setFullAddress(areaOfProvince.getName()+areOfCity.getName()+areaOfcountry.getName()+detailAddress);
-        memberAddress.setCreateDate(new Date());
+        memberAddress.setModifyDate(new Date());
         memberAddressMapper.update(memberAddress);
     }
 
