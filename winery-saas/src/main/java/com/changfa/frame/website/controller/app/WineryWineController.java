@@ -43,12 +43,16 @@ public class WineryWineController extends BaseController {
 
     /**
      * 查询酒庄酒列表
-     * @param pageInfo 分页对象
+     * @param pageNum 分页对象
+     * @param pageSize 分页参数
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询酒庄酒列表",notes = "查询酒庄酒列表")
     @RequestMapping(value = "/getWineryWineList", method = RequestMethod.GET)
-    public Map<String, Object> getWineryWineList(PageInfo pageInfo){
+    public Map<String, Object> getWineryWineList(int pageNum,int pageSize){
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
         PageInfo<WineryWine> list = wineryWineService.getWineryWineList(pageInfo);
         if(list != null && list.getList().size() > 0){
             return getResult(list);

@@ -40,10 +40,13 @@ public class WineCellarActivityController extends BaseController {
      */
     @ApiOperation(value = "获取酒庄活动列表", notes = "获取酒庄活动列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
-    public Map<String, Object> getList(HttpServletRequest request, PageInfo pageInfo) {
+    public Map<String, Object> getList(HttpServletRequest request, int pageSize,int pageNum) {
         Member member = getCurMember(request);
-        PageInfo list = wineCellarActivityServiceImpl.getSecList(member.getId(), pageInfo);
-        return getResult(list);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = wineCellarActivityServiceImpl.getSecList(member.getId(), pageInfo);
+        return getResult(pageInfo.getList());
     }
 
     /**
@@ -90,6 +93,18 @@ public class WineCellarActivityController extends BaseController {
         return getResult(returnMap);
     }
 
+    /**
+     * 获取商品详情
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取商品详情", notes = "获取商品详情")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "id", value = "prodSkuId", dataType = "Long"))
+    @RequestMapping(value = "/selectProdSkuDetail", method = RequestMethod.GET)
+    public Map<String, Object> selectProdSkuDetail(Long id){
+        return getResult(wineCellarActivityDetailServiceImpl.getProdSkuDetail(id));
+    }
     /**
      * 活动订单预支付
      *

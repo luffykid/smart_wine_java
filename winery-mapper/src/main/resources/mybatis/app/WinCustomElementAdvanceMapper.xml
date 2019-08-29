@@ -77,4 +77,19 @@
             </if>
         </where>
     </select>
+
+    <insert id="saveList">
+        insert into b_win_custom_element_advance (<include refid="table_column"/>)
+        values
+        <foreach collection="winCustomElementAdvanceList" item="model" separator=",">
+            (#{model.id},#{model.winCustomElementContentId},#{model.wineCustomAdvanceId},#{model.createDate},#{model.modifyDate})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByWineCustomElementContentIdList" parameterType="java.util.List">
+        delete from b_win_custom_element_advance where 1 > 2 or win_custom_element_content_id in 
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

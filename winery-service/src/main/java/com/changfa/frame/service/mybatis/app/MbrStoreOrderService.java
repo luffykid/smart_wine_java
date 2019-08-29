@@ -22,4 +22,12 @@ public interface MbrStoreOrderService extends BaseService<MbrStoreOrder, Long> {
      * @return
      */
     public List<MbrStoreOrderItem> getMbrStoreOrderItemByStoreId(Long mbrStoreOrderId);
+
+
+    /**
+     * 生成储酒订单
+     *
+     * @return
+     */
+    public void buildOrder(Long wineryId, Long mbrId, Long dId, Long sId, Integer prodTotalCnt);
 }

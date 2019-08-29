@@ -1,16 +1,21 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.file.FilePathConsts;
+import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.WineCustomService;
+import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.mail.imap.protocol.ID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +55,7 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
      * @return List<WineCustom>
      */
     @Override
-    public PageInfo<WineCustom> getWineCustom(PageInfo pageInfo) {
+    public PageInfo<WineCustom> getWineCustomList(PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
@@ -75,9 +80,33 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
      */
     @Override
     public PageInfo<WineCustom> selectWineCustom(WineCustom wineCustom, PageInfo pageInfo) {
-        List<WineCustom> wineCustomLists = new ArrayList<WineCustom>();      //临时存储集合
+        List<WineCustom> wineCustomLists =  new ArrayList<WineCustom>();      //临时存储集合
         List<WineCustom> returnWineCustomList = new ArrayList<WineCustom>(); //最终返回集合
         List<WineCustom> wineCustomList1 = wineCustomMapper.getWineCustomListByName(wineCustom.getCustomName()); //通过模糊查询获取所有模板对象以及对应元素
+        wineCustomLists = screenCustomStatus(wineCustom,wineCustomList1,wineCustomLists);
+        if(wineCustom.getWineCustomElementList()!=null && wineCustom.getWineCustomElementList().size()>0){ //如果传过来的元素不为空
+            returnWineCustomList = containElementName(wineCustomLists,wineCustom,returnWineCustomList);
+        }else {
+            for (WineCustom wineCustom1:wineCustomLists) { //如果传过来的元素为空，就循环临时集合 存入最返回集合
+                returnWineCustomList.add(wineCustom1);
+            }
+        }
+        return  new PageInfo(returnWineCustomList); //返回最终集合
+    }
+
+
+    public List<WineCustom> containElementName(List<WineCustom> wineCustomLists,WineCustom wineCustom,List<WineCustom> returnWineCustomList){
+        for (WineCustomElement wineCustomElement:wineCustom.getWineCustomElementList()) {
+            for (WineCustom wineCustom1:wineCustomLists) { ////就循环临时集合，匹配元素连接结果字段中 （临时集合对象中的字段） 所包含的 对象数据，放入最终返回集合
+                if(wineCustom1.getElementName().indexOf(wineCustomElement.getElementName())!=-1){
+                    returnWineCustomList.add(wineCustom1);
+                }
+            }
+        }
+        return returnWineCustomList;
+    }
+
+    public List<WineCustom> screenCustomStatus(WineCustom wineCustom,List<WineCustom> wineCustomList1,List<WineCustom> wineCustomLists){
         if(wineCustom.getCustomStatus()!=null){  //如果状态不为空，就循环匹配状态一样的对象数据，添加到临时集合中
             for (WineCustom wineCustom1:wineCustomList1) {
                 if(wineCustom1.getCustomStatus().equals(wineCustom.getCustomStatus())){
@@ -89,23 +118,8 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
                 wineCustomLists.add(wineCustom1);
             }
         }
-        if(wineCustom.getWineCustomElementList()!=null && wineCustom.getWineCustomElementList().size()>0){ //如果传过来的元素不为空
-            for (WineCustomElement wineCustomElement:wineCustom.getWineCustomElementList()) {
-                for (WineCustom wineCustom1:wineCustomLists) { ////就循环临时集合，匹配元素连接结果字段中 （临时集合对象中的字段） 所包含的 对象数据，放入最终返回集合
-                    if(wineCustom1.getElementName().indexOf(wineCustomElement.getElementName())!=-1){
-                        returnWineCustomList.add(wineCustom1);
-                    }
-                }
-            }
-        }else {
-            for (WineCustom wineCustom1:wineCustomLists) { //如果传过来的元素为空，就循环临时集合 存入最返回集合
-                returnWineCustomList.add(wineCustom1);
-            }
-        }
-
-        return  new PageInfo(returnWineCustomList); //返回最终集合
+        return wineCustomLists;
     }
-
 
     /**
      *
@@ -154,6 +168,7 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
 
     }
 
+
     private void checkValid(Long wineCustomId, WineCustomElementContent wineCustomElementContent) {
 
         if (wineCustomElementContent == null)
@@ -182,6 +197,124 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
         winCustomElementAdvance.setWinCustomElementContentId(wineCustomElementContent.getId());
 
         return winCustomElementAdvance;
+    }
+
+    /**
+     * 定制酒上下架
+     * @param wineCustom 定制酒对象
+     * @return boolean
+     */
+    @Override
+    public boolean updateWineCustomStatus(WineCustom wineCustom) {
+        return wineCustomMapper.update(wineCustom) > 0 ? true : false;
+    }
+
+    /**
+     * 定制酒删除
+     * @param id 定制酒id
+     * @return boolean
+     */
+    @Override
+    public boolean deleteWineCustom(Long id) {
+        List<Long> wineCustomElementContentId = wineCustomElementContentMapper.getIdListByWineCustomId(id);
+        wineCustomElementContentMapper.deleteById(wineCustomElementContentId);
+        return wineCustomMapper.delete(id) > 0 ? true : false;
+    }
+
+    /**
+     * 查询所有元素
+     * @return List<WineCustomElement>
+     */
+    @Override
+    public List<WineCustomElement> getWineCustomElement() {
+        return wineCustomElementMapper.getwineCustomElementList();
+    }
+
+    /**
+     * 添加定制酒
+     * @param wineCustom 酒庄酒对象
+     * @param wineryId
+     */
+    @Override
+    public void addWineCustom(WineCustom wineCustom,Long wineryId) {
+        wineCustom.setId(IDUtil.getId());
+        wineCustom.setWineryId(wineryId);
+        wineCustom.setCreateDate(new Date());
+        wineCustom.setModifyDate(new Date());
+        wineCustomMapper.save(wineCustom);
+        saveWineCustomElementContentAndwinCustomElementAdvance(wineCustom);
+
+    }
+
+    /**
+     * 获取定制酒详情
+     * @param id 定制酒id
+     * @return WineCustomElement
+     */
+    @Override
+    public WineCustom getWineCustom(Long id) {
+        WineCustom  wineCustom = wineCustomMapper.getWineCustomContianProd(id);
+        wineCustom.setWineCustomElementContentList(wineCustomElementContentMapper.getListByWineCustomId(wineCustom.getId()));
+        wineCustom.setWineCustomElementList(wineCustomElementMapper.getCustomElementListByWineCustomId(id));
+        return null;
+    }
+
+    /**
+     * 修改酒庄酒信息
+     * @param wineCustom
+     */
+    @Override
+    public void updateWineCustom(WineCustom wineCustom) {
+        wineCustom.setModifyDate(new Date());
+        wineCustomMapper.update(wineCustom);
+        List<WineCustomElementContent>  wineCustomElementContentList = wineCustomElementContentMapper.getListByWineCustomId(wineCustom.getId());
+        List<Long> wineCustomElementContentIdList = new ArrayList<Long>();
+        for (WineCustomElementContent wineCustomElementContent:wineCustomElementContentList) {
+            wineCustomElementContentIdList.add(wineCustomElementContent.getId());
+        }
+        winCustomElementAdvanceMapper.deleteByWineCustomElementContentIdList(wineCustomElementContentIdList);
+        wineCustomElementContentMapper.deleteByWineCustomId(wineCustom.getId());
+        saveWineCustomElementContentAndwinCustomElementAdvance(wineCustom);
+    }
+
+
+    // 取到预制图表信息  填充定制元素内容  保存填充定制元素内容  保存 结合预制图表信息和定制元素内容信息 到winCustomElementAdvance表
+    public void saveWineCustomElementContentAndwinCustomElementAdvance(WineCustom wineCustom){
+        List<WineCustomElementContent> wineCustomElementContentList = wineCustom.getWineCustomElementContentList();// 获取页面传过来的定制元素内容
+        if(wineCustomElementContentList != null && wineCustomElementContentList.size() > 0 ){
+            List<Long> wineCustomElementIdList = new ArrayList<Long>();
+            for (WineCustomElementContent wineCustomElementContent:wineCustomElementContentList) { // 如果不为空 循环拿到 定制元素id
+                wineCustomElementIdList.add(wineCustomElementContent.getWineCustomElementId());
+            }
+            List<WineCustomAdvance> wineCustomAdvanceList = wineCustomAdvanceMapper.getWineCustomAdvanceList(wineCustomElementIdList); // 通过元素id集合 获取预制图信息
+            List<WinCustomElementAdvance> winCustomElementAdvanceList = new ArrayList<WinCustomElementAdvance>(); // winCustomElementAdvance表 需要添加的集合
+
+            for (WineCustomElementContent wineCustomElementContent:wineCustomElementContentList) {  // 循环定制元素内容 填充其他数据
+
+                wineCustomElementContent.setId(IDUtil.getId());
+                wineCustomElementContent.setBgImg(FileUtil.copyNFSByFileName(wineCustomElementContent.getBgImg(), FilePathConsts.TEST_FILE_PATH));
+                wineCustomElementContent.setMaskImg(FileUtil.copyNFSByFileName(wineCustomElementContent.getMaskImg(), FilePathConsts.TEST_FILE_PATH));
+                wineCustomElementContent.setBottomImg(FileUtil.copyNFSByFileName(wineCustomElementContent.getBottomImg(), FilePathConsts.TEST_FILE_PATH));
+                wineCustomElementContent.setCreateDate(new Date());
+                wineCustomElementContent.setModifyDate(new Date());
+                wineCustomElementContent.setWineCustomId(wineCustom.getId());
+
+                for (WineCustomAdvance wineCustomAdvance:wineCustomAdvanceList) { // 循环预制图信息
+                    if(wineCustomAdvance.getWineCustomElementId().equals(wineCustomElementContent.getWineCustomElementId())){ // 判断 如果预制图信息中的元素ID 等于 定制元素内容中的元素id
+                        WinCustomElementAdvance winCustomElementAdvance = new WinCustomElementAdvance(); // 就新建对象 填充数据
+                        winCustomElementAdvance.setId(IDUtil.getId());
+                        winCustomElementAdvance.setWinCustomElementContentId(wineCustomElementContent.getId()); // 定制元素内容表id
+                        winCustomElementAdvance.setWineCustomAdvanceId(wineCustomAdvance.getId()); // 预制图信息表 id
+                        winCustomElementAdvance.setCreateDate(new Date());
+                        winCustomElementAdvance.setModifyDate(new Date());
+                        winCustomElementAdvanceList.add(winCustomElementAdvance); // 添加集合中
+                    }
+                }
+
+            }
+            wineCustomElementContentMapper.saveList(wineCustomElementContentList); // 保存定制元素内容集合
+            winCustomElementAdvanceMapper.saveList(winCustomElementAdvanceList); // 保存winCustomElementAdvance表数据
+        }
     }
 
 }

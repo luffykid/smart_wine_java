@@ -52,11 +52,11 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      * @return List<Prod>
      */
     @Override
-    public PageInfo<Prod> getProdList(PageInfo pageInfo) {
+    public PageInfo<Prod> getProdList(Prod prod,PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(prodMapper.findProdList());
+        return new PageInfo(prodMapper.selectListLikeName(prod));
     }
 
     /**

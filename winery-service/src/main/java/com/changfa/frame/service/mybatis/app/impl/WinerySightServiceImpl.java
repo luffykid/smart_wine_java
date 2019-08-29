@@ -9,6 +9,7 @@ import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,18 +118,19 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
         winerySight.setCreateDate(new Date());
         winerySight.setModifyDate(new Date());
         winerySightMapper.addWinerySight(winerySight);
-        WinerySight winerySightv = winerySightMapper.getByName(winerySight.getSightName());
-        if (winerySight.getScenicImg() != null && winerySight.getScenicImg().size() > 0){
-            for (String scenicImg : winerySight.getScenicImg()) {
-                WinerySightImg winerySightImg = new WinerySightImg();
+        List<WinerySightImg> winerySightImgList = new ArrayList<WinerySightImg>();
+        if (winerySight.getWinerySightImgList() != null && winerySight.getWinerySightImgList().size() > 0){
+            for (WinerySightImg winerySightImg : winerySight.getWinerySightImgList()) {
                 winerySightImg.setId(IDUtil.getId());
-                winerySightImg.setWinerySightId(winerySightv.getId());
-                winerySightImg.setImgName(scenicImg);
-                winerySightImg.setImgAddr(FileUtil.copyNFSByFileName(scenicImg, FilePathConsts.TEST_FILE_PATH));
+                winerySightImg.setWinerySightId(winerySight.getId());
+                winerySightImg.setImgAddr(FileUtil.copyNFSByFileName(winerySightImg.getImgName(), FilePathConsts.TEST_FILE_PATH));
                 winerySightImg.setCreateDate(new Date());
-                winerySightImgMapper.save(winerySightImg);
+                winerySightImg.setModifyDate(new Date());
+                winerySightImgList.add(winerySightImg);
             }
+            winerySightImgMapper.saveList(winerySightImgList);
         }
+
 
     }
 
@@ -142,9 +144,9 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     @Override
     public WinerySight findWinerySight(Long id) {
         WinerySight winerySight = winerySightMapper.getById(id);// 查询景点信息
-        List<String> scenicImg = winerySightImgMapper.findScenicImgById(winerySight.getId()); // 查询景点图片
+        List<WinerySightImg> scenicImg = winerySightImgMapper.findScenicImgById(winerySight.getId()); // 查询景点图片
         if( scenicImg != null && scenicImg.size() > 0){
-            winerySight.setScenicImg(scenicImg);
+            winerySight.setWinerySightImgList(scenicImg);
         }
         return winerySight;
     }
@@ -156,14 +158,22 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     @Override
     @Transactional
     public void updateWinerySight(WinerySight winerySight) {
-        if(winerySight.getScenicImg() != null){
-            winerySight.setSightIcon(FileUtil.copyNFSByFileName(winerySight.getSightIcon(), FilePathConsts.TEST_FILE_PATH));
+       /* WinerySight winerySight1 = winerySightMapper.getById(winerySight.getId()); // 获取老地址
+        if(winerySight.getSightIcon()== null && winerySight.getSightIcon().equals("")){
+
         }
-        if(winerySight.getCoverImg() != null){
-            winerySight.setCoverImg(FileUtil.copyNFSByFileName(winerySight.getCoverImg(),FilePathConsts.TEST_FILE_PATH));
+        winerySight.setSightIcon(null);
+        if(winerySight.getCoverImg()== null && winerySight.getCoverImg().equals("")){
+            if(!StringUtils.equals(winerySight1.getCoverImg(), winerySight.getCoverImg())){
+                String  newFileUrl = FileUtil.copyNFSByFileName(winerySight.getCoverImg(), FilePathConsts.TEST_FILE_PATH);
+                FileUtil.deleteNFSByFileUrl(winerySight1.getCoverImg(),newFileUrl);
+                winerySight.setCoverImg(newFileUrl);
+            }
         }
+
         winerySight.setModifyDate(new Date());
         winerySightMapper.updateWinerySight(winerySight);
+
         if(winerySightImgMapper.findListByWinerySightId(winerySight.getId()).size() >0 ){
             winerySightImgMapper.deleteByWinerySightId(winerySight.getId());
         }
@@ -177,7 +187,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
                 winerySightImg.setCreateDate(new Date());
                 winerySightImgMapper.save(winerySightImg);
             }
-        }
+        }*/
     }
 
     /**
@@ -233,7 +243,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      */
     @Override
     public Map<String, Object> findSightImageText(Long id) {
-        Map<String, Object>  map = new HashMap<>();
+        /*Map<String, Object>  map = new HashMap<>();
         List<WinerySightDetail> winerySightDetailList = winerySightDetailMapper.findSightImageTextByWinerySightId(id);
         for (WinerySightDetail winerySightDetail:winerySightDetailList) {
             winerySightDetail.setProdSku(prodSkuMapper.getProdNameBySkuIdLike(winerySightDetail.getProdSkuId()));
@@ -243,7 +253,8 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
             map.put("winerySightDetail",winerySightDetailList);
             map.put("scenicImg",scenicImg);
         }
-        return map;
+        return map;*/
+        return null;
     }
 
 
@@ -293,6 +304,23 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
             return 1;
         }
         return 0;
+    }
+
+
+
+    /**
+     * 根据原文件、新文件地址删除NFS上文件
+     *
+     * @param orgFileUrl 原文件地址
+     * @param newFileUrl 新文件地址
+     */
+    public String bijiao(String orgFileUrl,String newFileUrl){
+        if(!StringUtils.equals(orgFileUrl, newFileUrl)){
+            String  newFileUrlvo = FileUtil.copyNFSByFileName(newFileUrl, FilePathConsts.TEST_FILE_PATH);
+            FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
+            return newFileUrlvo;
+        }
+        return null;
     }
 
 

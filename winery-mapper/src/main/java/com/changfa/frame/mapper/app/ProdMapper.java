@@ -29,4 +29,6 @@ public interface ProdMapper extends BaseMapper<Prod, Long> {
     int updateProd(Prod prod);
 
     List<ProdSku> getProdNameList();
+
+    List<Prod> selectListLikeName(Prod prod);
 }

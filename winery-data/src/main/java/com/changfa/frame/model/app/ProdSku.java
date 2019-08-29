@@ -133,7 +133,7 @@ public class ProdSku extends BaseEntity {
      */
     private List<ProdSkuMbrPrice> prodSkuMbrPriceList;
 
-    /**酒庄名称*/
+    /**商品名称*/
     private String prodName;
 
     /**
@@ -379,14 +379,14 @@ public class ProdSku extends BaseEntity {
     }
 
     /**
-     * 获取酒庄名称
+     * 获取商品名称
      */
     public String getProdName() {
         return prodName;
     }
 
     /**
-     * 设置酒庄名称
+     * 设置商品名称
      */
     public void setProdName(String prodName) {
         this.prodName = prodName;

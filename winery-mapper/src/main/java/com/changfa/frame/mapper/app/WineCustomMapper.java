@@ -17,4 +17,6 @@ public interface WineCustomMapper extends BaseMapper<WineCustom, Long> {
     List<WineCustom> getWineCustomList();
 
     List<WineCustom> getWineCustomListByName(String customName);
+
+    WineCustom getWineCustomContianProd(Long id);
 }

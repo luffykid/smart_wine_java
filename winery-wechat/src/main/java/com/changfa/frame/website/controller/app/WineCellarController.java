@@ -36,7 +36,7 @@ public class WineCellarController extends BaseController {
      */
     @ApiOperation(value = "获取云酒窖列表", notes = "获取云酒窖列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
-    public Map<String, Object> getList(HttpServletRequest request, PageInfo pageInfo) {
+    public Map<String, Object> getList(HttpServletRequest request) {
         Member member = getCurMember(request);
         WineCellar wineCellar = new WineCellar();
         List list = wineCellarServiceImpl.selectList(wineCellar);

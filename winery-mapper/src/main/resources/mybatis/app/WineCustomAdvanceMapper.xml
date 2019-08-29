@@ -100,4 +100,12 @@
         </where>
     </select>
 
+    <select id="getWineCustomAdvanceList" resultMap="wineCustomAdvanceMap">
+        select <include refid="table_column"/>
+        from b_wine_custom_advance where wine_custom_element_id in
+        <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>

@@ -21,16 +21,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 类名称:ProdController
- * 类描述:商品管理Controller
+ * 类描述:产品管理Controller
  * 创建人:wy
  * 创建时间:2019/8/23 14:13
  * Version 1.0
  */
-@Api(value = "酒庄管理",tags = "酒庄管理")
+@Api(value = "产品管理",tags = "产品管理")
 @RestController("adminProdController")
 @RequestMapping("/admin/auth/Prod")
 public class ProdController extends BaseController {
@@ -40,13 +41,21 @@ public class ProdController extends BaseController {
 
    /**
      * 查询产品列表
-     * @param pageInfo 分页对象
+     * @param pageNum  分页参数
+    * @param pageSize
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询产品列表",notes = "查询产品列表")
     @RequestMapping(value = "/getProdList", method = RequestMethod.GET)
-    public Map<String, Object> getProdList(PageInfo pageInfo){
-        return getResult(prodService.getProdList(pageInfo));
+    public Map<String, Object> getProdList(Prod prod,int pageNum,int pageSize){
+        PageInfo pageInfo = new PageInfo();
+        Map<String, Object> returnMap = new HashMap<>();
+        PageInfo<Prod> prodList = prodService.getProdList(prod, pageInfo);
+        returnMap.put("产品对象列表",prodList.getList());
+        returnMap.put("pageNum",prodList.getPageNum());
+        returnMap.put("pageSize",prodList.getPageSize());
+        returnMap.put("total",prodList.getTotal());
+        return getResult(returnMap);
     }
 
     /**
@@ -162,14 +171,18 @@ public class ProdController extends BaseController {
 
     /**
      * 通过产品id 查询产品规格列表
-     * @param pageInfo 分页对象
+     * @param pageNum 分页参数
+     * @param pageSize
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询产品规格列表",notes = "查询产品规格列表")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"))
     @RequestMapping(value = "/getProdSkuList", method = RequestMethod.GET)
-    public Map<String, Object> getProdSkuList(Long id,PageInfo pageInfo){
-        return getResult(prodService.getProdSkuList(id,pageInfo));
+    public Map<String, Object> getProdSkuList(Long id,int pageNum,int pageSize){
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        return getResult(prodService.getProdSkuList(id,pageInfo).getList());
     }
 
 

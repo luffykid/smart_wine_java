@@ -28,4 +28,11 @@ public interface WineCellarActivityDetailMapper extends BaseMapper<WineCellarAct
      * @return
      */
     public Map getPrePayDetail(@Param("id") Long id);
+
+    /**
+     * 获取商品详情
+     * @param id
+     * @return
+     */
+    public Map selectProdSkuDetail(@Param("id") Long id);
 }
