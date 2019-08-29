@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,8 +39,9 @@ public class WineryMasterController extends BaseController {
     @ApiOperation(value = "获取荣誉庄主列表", notes = "获取荣誉庄主列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     public Map<String, Object> getList(PageInfo pageInfo) {
-        PageInfo list = wineryMasterServiceImpl.selectList(new WineryMaster(), pageInfo);
-        return getResult(list);
+        PageInfo masterPageInfo = wineryMasterServiceImpl.selectList(new WineryMaster(), pageInfo);
+        List mbrMasters = masterPageInfo.getList();
+        return getResult(mbrMasters);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.changfa.frame.website.config;
 
+import com.alibaba.fastjson.PropertyNamingStrategy;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -19,6 +20,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.*;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -74,6 +76,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 SerializerFeature.WriteNullStringAsEmpty,
                 SerializerFeature.DisableCircularReferenceDetect,
                 SerializerFeature.WriteNullListAsEmpty,
+                SerializerFeature.BrowserCompatible,
                 SerializerFeature.WriteDateUseDateFormat);
         // 设置编码
         fastJsonConfig.setCharset(Charset.forName("UTF-8"));
@@ -84,6 +87,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
         serializeConfig.put(BigInteger.class, ToStringSerializer.instance);
         serializeConfig.put(Long.class, ToStringSerializer.instance);
         serializeConfig.put(Long.TYPE, ToStringSerializer.instance);
+        serializeConfig.setPropertyNamingStrategy( PropertyNamingStrategy.CamelCase);
         fastJsonConfig.setSerializeConfig(serializeConfig);
 
         //3处理中文乱码问题
