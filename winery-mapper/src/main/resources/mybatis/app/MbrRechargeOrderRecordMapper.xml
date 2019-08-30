@@ -10,14 +10,15 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_recharge_order_id, order_status, create_date, modify_date
+        mror.id as id, mror.mbr_recharge_order_id as mbr_recharge_order_id, mror.order_status as order_status,
+        mror.create_date as create_date, mror.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrRechargeOrderRecordMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_recharge_order_record
-        where id = #{id}
+        from m_mbr_recharge_order_record mror
+        where mror.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrRechargeOrderRecord" >
@@ -52,21 +53,21 @@
     </delete>
 
     <select id="selectList" resultMap="mbrRechargeOrderRecordMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_recharge_order_record mbrRechargeOrderRecord
+        from m_mbr_recharge_order_record mror
         <where >
             <if test="mbrRechargeOrderId != null" >
-                and mbrRechargeOrderRecord.mbr_recharge_order_id = #{mbrRechargeOrderId}
+                and mror.mbr_recharge_order_id = #{mbrRechargeOrderId}
             </if>
             <if test="orderStatus != null" >
-                and mbrRechargeOrderRecord.order_status = #{orderStatus}
+                and mror.order_status = #{orderStatus}
             </if>
             <if test="createDate != null" >
-                and mbrRechargeOrderRecord.create_date = #{createDate}
+                and mror.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and mbrRechargeOrderRecord.modify_date = #{modifyDate}
+                and mror.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

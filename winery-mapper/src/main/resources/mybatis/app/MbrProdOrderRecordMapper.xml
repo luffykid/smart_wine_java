@@ -11,20 +11,21 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_prod_order_id, order_status, order_remark, create_date, modify_date
+        mpor.id as id, mpor.mbr_prod_order_id as mbr_prod_order_id, mpor.order_status as order_status,
+        mpor.order_remark as order_remark, mpor.create_date as create_date, mpor.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrProdOrderRecordMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_prod_order_record
-        where id = #{id}
+        from m_mbr_prod_order_record mpor
+        where mpor.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrderRecord" >
-        insert into m_mbr_prod_order_record (id, mbr_prod_order_id, order_status, order_remark, create_date, 
+        insert into m_mbr_prod_order_record (id, mbr_prod_order_id, order_status, order_remark, create_date,
             modify_date)
-        values (#{id}, #{mbrProdOrderId}, #{orderStatus}, #{orderRemark}, #{createDate}, 
+        values (#{id}, #{mbrProdOrderId}, #{orderStatus}, #{orderRemark}, #{createDate},
             #{modifyDate})
     </insert>
 
@@ -56,24 +57,24 @@
     </delete>
 
     <select id="selectList" resultMap="mbrProdOrderRecordMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_prod_order_record
+        from m_mbr_prod_order_record mpor
         <where >
             <if test="mbrProdOrderId != null" >
-                and null.mbr_prod_order_id = #{mbrProdOrderId}
+                and mpor.mbr_prod_order_id = #{mbrProdOrderId}
             </if>
             <if test="orderStatus != null" >
-                and null.order_status = #{orderStatus}
+                and mpor.order_status = #{orderStatus}
             </if>
             <if test="orderRemark != null and orderRemark != ''" >
-                and null.order_remark = #{orderRemark}
+                and mpor.order_remark = #{orderRemark}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mpor.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mpor.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
