@@ -48,12 +48,12 @@ public class ProdController extends BaseController {
     @ApiOperation(value = "查询产品列表",notes = "查询产品列表")
     @RequestMapping(value = "/getProdList", method = RequestMethod.GET)
     public Map<String, Object> getProdList(Prod prod,int pageNum,int pageSize){
-        PageInfo pageInfo = new PageInfo();
-        pageInfo.setPageNum(pageNum);
-        pageInfo.setPageSize(pageSize);
-        PageInfo prodList = prodService.getProdList(prod, pageInfo);
+        PageInfo<Prod> prodPageInfo = new PageInfo<>();
+        prodPageInfo.setPageNum(pageNum);
+        prodPageInfo.setPageSize(pageSize);
+        PageInfo prodList = prodService.getProdList(prod, prodPageInfo);
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("产品对象列表",prodList.getList());
+        returnMap.put("prodList",prodList.getList());
         returnMap.put("pageNum",prodList.getPageNum());
         returnMap.put("pageSize",prodList.getPageSize());
         returnMap.put("total",prodList.getTotal());
