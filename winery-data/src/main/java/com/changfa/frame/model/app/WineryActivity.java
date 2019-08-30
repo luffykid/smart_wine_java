@@ -3,7 +3,7 @@
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-23 Created
+ * 2019-08-30 Created
  */
 package com.changfa.frame.model.app;
 
@@ -12,12 +12,12 @@ import com.changfa.frame.model.common.BaseEntity;
 import java.util.Date;
 
 /**
- * 
- * @version 1.0 2019-08-23
+ * 酒庄活动
+ * @version 1.0 2019-08-30
  */
 public class WineryActivity extends BaseEntity {
 
-    private static final long serialVersionUID = 444644820263108608L;
+    private static final long serialVersionUID = 447274608001810432L;
 
     /** 酒庄ID */
     private Long wineryId;
@@ -58,12 +58,40 @@ public class WineryActivity extends BaseEntity {
     /** 活动状态1：新疆2：启用3：禁用 */
     private Integer actStatus;
 
+    /** 是否可报名0：不可报名1：可报名 */
+    private Boolean isSign;
+
+    /** 活动省份ID */
+    private Long activityProvinceId;
+
+    /** 活动市ID */
+    private Long activityCityId;
+
+    /** 活动县ID */
+    private Long activityCountyId;
+
+    /** 活动详细地址 */
+    private String activityDetailAddr;
+
+    /** 活动地址全称 */
+    private String activityFullAddr;
+
+
     /******************************* 扩展字段*********************************/
     /** 点赞状态0:为点赞 1:点赞**/
     private Integer likeStatus;
 
     /**会员活动状态 0:未报名 1：已报名 2：已签到 3：已签退 **/
     private Integer mbrActStatus;
+
+
+    public Integer getLikeStatus() {
+        return likeStatus;
+    }
+
+    public void setLikeStatus(Integer likeStatus) {
+        this.likeStatus = likeStatus;
+    }
 
     public Integer getMbrActStatus() {
         return mbrActStatus;
@@ -73,14 +101,6 @@ public class WineryActivity extends BaseEntity {
         this.mbrActStatus = mbrActStatus;
     }
 
-    public Integer getLikeStatus() {
-        return likeStatus;
-    }
-
-    public void setLikeStatus(Integer likeStatus) {
-        this.likeStatus = likeStatus;
-    }
-    
     /**
      * 获取酒庄ID
     */
@@ -261,5 +281,89 @@ public class WineryActivity extends BaseEntity {
     */
     public void setActStatus(Integer actStatus) {
         this.actStatus = actStatus;
+    }
+    
+    /**
+     * 获取是否可报名0：不可报名1：可报名
+    */
+    public Boolean getIsSign() {
+        return isSign;
+    }
+    
+    /**
+     * 设置是否可报名0：不可报名1：可报名
+    */
+    public void setIsSign(Boolean isSign) {
+        this.isSign = isSign;
+    }
+    
+    /**
+     * 获取活动省份ID
+    */
+    public Long getActivityProvinceId() {
+        return activityProvinceId;
+    }
+    
+    /**
+     * 设置活动省份ID
+    */
+    public void setActivityProvinceId(Long activityProvinceId) {
+        this.activityProvinceId = activityProvinceId;
+    }
+    
+    /**
+     * 获取活动市ID
+    */
+    public Long getActivityCityId() {
+        return activityCityId;
+    }
+    
+    /**
+     * 设置活动市ID
+    */
+    public void setActivityCityId(Long activityCityId) {
+        this.activityCityId = activityCityId;
+    }
+    
+    /**
+     * 获取活动县ID
+    */
+    public Long getActivityCountyId() {
+        return activityCountyId;
+    }
+    
+    /**
+     * 设置活动县ID
+    */
+    public void setActivityCountyId(Long activityCountyId) {
+        this.activityCountyId = activityCountyId;
+    }
+    
+    /**
+     * 获取活动详细地址
+    */
+    public String getActivityDetailAddr() {
+        return activityDetailAddr;
+    }
+    
+    /**
+     * 设置活动详细地址
+    */
+    public void setActivityDetailAddr(String activityDetailAddr) {
+        this.activityDetailAddr = activityDetailAddr == null ? null : activityDetailAddr.trim();
+    }
+    
+    /**
+     * 获取活动地址全称
+    */
+    public String getActivityFullAddr() {
+        return activityFullAddr;
+    }
+    
+    /**
+     * 设置活动地址全称
+    */
+    public void setActivityFullAddr(String activityFullAddr) {
+        this.activityFullAddr = activityFullAddr == null ? null : activityFullAddr.trim();
     }
 }
