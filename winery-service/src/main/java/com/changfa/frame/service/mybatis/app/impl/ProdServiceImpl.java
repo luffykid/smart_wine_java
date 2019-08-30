@@ -343,6 +343,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      */
     @Override
     public void handleNotifyOfProdOrder(String outTradeNo, String transactionId, Date payDate) {
+        //
 
     }
 }
