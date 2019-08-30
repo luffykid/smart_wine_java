@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.changfa.frame.mapper.app.WineryActivityMapper" >
     <resultMap id="wineryActivityMap" type="com.changfa.frame.model.app.WineryActivity" >
-        <result column="id" property="id" jdbcType="LONGVARCHAR" />
+        <id column="id" property="id" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="act_title" property="actTitle" jdbcType="VARCHAR" />
         <result column="act_cover_img" property="actCoverImg" jdbcType="VARCHAR" />
@@ -15,38 +15,53 @@
         <result column="like_total_cnt" property="likeTotalCnt" jdbcType="INTEGER" />
         <result column="share_total_cnt" property="shareTotalCnt" jdbcType="INTEGER" />
         <result column="sign_total_cnt" property="signTotalCnt" jdbcType="BIGINT" />
+        <result column="act_status" property="actStatus" jdbcType="INTEGER" />
+        <result column="is_sign" property="isSign" jdbcType="TINYINT" />
+        <result column="activity_province_id" property="activityProvinceId" jdbcType="BIGINT" />
+        <result column="activity_city_id" property="activityCityId" jdbcType="BIGINT" />
+        <result column="activity_county_id" property="activityCountyId" jdbcType="BIGINT" />
+        <result column="activity_detail_addr" property="activityDetailAddr" jdbcType="VARCHAR" />
+        <result column="activity_full_addr" property="activityFullAddr" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
-        <result column="act_status" property="actStatus" jdbcType="INTEGER" />
 
         <!-- 扩展字段 -->
-        <result column="like_status" property="likeStatus" jdbcType="VARCHAR" />
-        <result column="mbr_act_status" property="mbrActStatus" jdbcType="VARCHAR"/>
+        <result column="like_status" property="likeStatus" jdbcType="INTEGER" />
+        <result column="mbr_act_status" property="mbrActStatus" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_id, act_title, act_cover_img, is_platform, act_type, sign_start_date, sign_end_date,act_start_date,act_end_date,like_total_cnt,share_total_cnt,sign_total_cnt,create_date,modify_date,act_status
+        l.id as id, l.winery_id as winery_id, l.act_title as act_title, l.act_cover_img as act_cover_img, 
+        l.is_platform as is_platform, l.act_type as act_type, l.sign_start_date as sign_start_date, 
+        l.sign_end_date as sign_end_date, l.act_start_date as act_start_date, l.act_end_date as act_end_date, 
+        l.like_total_cnt as like_total_cnt, l.share_total_cnt as share_total_cnt, l.sign_total_cnt as sign_total_cnt, 
+        l.act_status as act_status, l.is_sign as is_sign, l.activity_province_id as activity_province_id, 
+        l.activity_city_id as activity_city_id, l.activity_county_id as activity_county_id, 
+        l.activity_detail_addr as activity_detail_addr, l.activity_full_addr as activity_full_addr, 
+        l.create_date as create_date, l.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineryActivityMap" parameterType="java.lang.Long" >
-        select
+        select 
         <include refid="table_column" />
-        from b_winery_activity a
-        where a.id = #{id}
+        from b_winery_activity l
+        where l.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineryActivity" >
         insert into b_winery_activity (id, winery_id, act_title, act_cover_img, is_platform, act_type, 
             sign_start_date, sign_end_date, act_start_date, act_end_date, like_total_cnt, 
-            share_total_cnt, sign_total_cnt, create_date, modify_date, act_status
-            )
+            share_total_cnt, sign_total_cnt, act_status, is_sign, activity_province_id, 
+            activity_city_id, activity_county_id, activity_detail_addr, activity_full_addr, 
+            create_date, modify_date)
         values (#{id}, #{wineryId}, #{actTitle}, #{actCoverImg}, #{isPlatform}, #{actType}, 
             #{signStartDate}, #{signEndDate}, #{actStartDate}, #{actEndDate}, #{likeTotalCnt}, 
-            #{shareTotalCnt}, #{signTotalCnt}, #{createDate}, #{modifyDate}, #{actStatus}
-            )
+            #{shareTotalCnt}, #{signTotalCnt}, #{actStatus}, #{isSign}, #{activityProvinceId}, 
+            #{activityCityId}, #{activityCountyId}, #{activityDetailAddr}, #{activityFullAddr}, 
+            #{createDate}, #{modifyDate})
     </insert>
 
-    <update id="update" parameterType="com.changfa.frame.model.app.WineryActivityLike" >
+    <update id="update" parameterType="com.changfa.frame.model.app.WineryActivity" >
         update b_winery_activity
         <set >
             <if test="wineryId != null" >
@@ -85,74 +100,113 @@
             <if test="signTotalCnt != null" >
                 sign_total_cnt = #{signTotalCnt},
             </if>
+            <if test="actStatus != null" >
+                act_status = #{actStatus},
+            </if>
+            <if test="isSign != null" >
+                is_sign = #{isSign},
+            </if>
+            <if test="activityProvinceId != null" >
+                activity_province_id = #{activityProvinceId},
+            </if>
+            <if test="activityCityId != null" >
+                activity_city_id = #{activityCityId},
+            </if>
+            <if test="activityCountyId != null" >
+                activity_county_id = #{activityCountyId},
+            </if>
+            <if test="activityDetailAddr != null and activityDetailAddr != ''" >
+                activity_detail_addr = #{activityDetailAddr},
+            </if>
+            <if test="activityFullAddr != null and activityFullAddr != ''" >
+                activity_full_addr = #{activityFullAddr},
+            </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
             </if>
             <if test="modifyDate != null" >
                 modify_date = #{modifyDate},
             </if>
-            <if test="actStatus != null" >
-                act_status = #{actStatus}
-            </if>
         </set>
         where id = #{id}
     </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_winery_activity
+        where id = #{id}
+    </delete>
+
     <select id="selectList" resultMap="wineryActivityMap" >
         select 
         <include refid="table_column" />
-        from b_winery_activity wineryActivity
+        from b_winery_activity l
         <where >
-            <if test="id != null" >
-                and wineryActivity.id = #{id}
-            </if>
             <if test="wineryId != null" >
-                and wineryActivity.winery_id = #{wineryId}
+                and l.winery_id = #{wineryId}
             </if>
             <if test="actTitle != null and actTitle != ''" >
-                and wineryActivity.act_title = #{actTitle}
+                and l.act_title = #{actTitle}
             </if>
             <if test="actCoverImg != null and actCoverImg != ''" >
-                and wineryActivity.act_cover_img = #{actCoverImg}
+                and l.act_cover_img = #{actCoverImg}
             </if>
             <if test="isPlatform != null" >
-                and wineryActivity.is_platform = #{isPlatform}
+                and l.is_platform = #{isPlatform}
             </if>
             <if test="actType != null" >
-                and wineryActivity.act_type = #{actType}
+                and l.act_type = #{actType}
             </if>
             <if test="signStartDate != null" >
-                and wineryActivity.sign_start_date = #{signStartDate}
+                and l.sign_start_date = #{signStartDate}
             </if>
             <if test="signEndDate != null" >
-                and wineryActivity.sign_end_date = #{signEndDate}
+                and l.sign_end_date = #{signEndDate}
             </if>
             <if test="actStartDate != null" >
-                and wineryActivity.act_start_date = #{actStartDate}
+                and l.act_start_date = #{actStartDate}
             </if>
             <if test="actEndDate != null" >
-                and wineryActivity.act_end_date = #{actEndDate}
+                and l.act_end_date = #{actEndDate}
             </if>
             <if test="likeTotalCnt != null" >
-                and wineryActivity.like_total_cnt = #{likeTotalCnt}
+                and l.like_total_cnt = #{likeTotalCnt}
             </if>
             <if test="shareTotalCnt != null" >
-                and wineryActivity.share_total_cnt = #{shareTotalCnt}
+                and l.share_total_cnt = #{shareTotalCnt}
             </if>
             <if test="signTotalCnt != null" >
-                and wineryActivity.sign_total_cnt = #{signTotalCnt}
-            </if>
-            <if test="createDate != null" >
-                and wineryActivity.create_date = #{createDate}
-            </if>
-            <if test="modifyDate != null" >
-                and wineryActivity.modify_date = #{modifyDate}
+                and l.sign_total_cnt = #{signTotalCnt}
             </if>
             <if test="actStatus != null" >
-                and wineryActivity.act_status = #{actStatus}
+                and l.act_status = #{actStatus}
+            </if>
+            <if test="isSign != null" >
+                and l.is_sign = #{isSign}
+            </if>
+            <if test="activityProvinceId != null" >
+                and l.activity_province_id = #{activityProvinceId}
+            </if>
+            <if test="activityCityId != null" >
+                and l.activity_city_id = #{activityCityId}
+            </if>
+            <if test="activityCountyId != null" >
+                and l.activity_county_id = #{activityCountyId}
+            </if>
+            <if test="activityDetailAddr != null and activityDetailAddr != ''" >
+                and l.activity_detail_addr = #{activityDetailAddr}
+            </if>
+            <if test="activityFullAddr != null and activityFullAddr != ''" >
+                and l.activity_full_addr = #{activityFullAddr}
+            </if>
+            <if test="createDate != null" >
+                and l.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and l.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
-    
+
     <select id="selectNoEndList" parameterType="Long" resultMap="wineryActivityMap">
         select a.*,ifnull(s.mbr_act_status,0) mbr_act_status from b_winery_activity a
         left join m_mbr_winery_activity_sign s on a.id=s.winery_activity_id and s.mbr_id=#{mbrId}
@@ -179,4 +233,5 @@
         where a.act_status=2 and s.mbr_id=#{mbrId}
         order by a.act_end_date desc
     </select>
+
 </mapper>

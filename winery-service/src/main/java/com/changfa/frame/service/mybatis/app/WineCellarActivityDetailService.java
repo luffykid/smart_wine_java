@@ -28,5 +28,5 @@ public interface WineCellarActivityDetailService extends BaseService<WineCellarA
      * @param id
      * @return
      */
-    Map getProdSkuDetail(Long id);
+    List<Map> getProdSkuDetail(Long id);
 }

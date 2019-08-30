@@ -102,8 +102,8 @@ public class WineCellarActivityController extends BaseController {
     @ApiOperation(value = "获取商品详情", notes = "获取商品详情")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "id", value = "prodSkuId", dataType = "Long"))
-    @RequestMapping(value = "/selectProdSkuDetail", method = RequestMethod.GET)
-    public Map<String, Object> selectProdSkuDetail(Long id){
+    @RequestMapping(value = "/getProdSkuDetail", method = RequestMethod.GET)
+    public Map<String, Object> getProdSkuDetail(Long id){
         return getResult(wineCellarActivityDetailServiceImpl.getProdSkuDetail(id));
     }
     /**

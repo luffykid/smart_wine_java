@@ -149,7 +149,7 @@ public abstract class BaseController {
 //        }
 
         /************ 开发环境中使用 ****************/
-        Member member = memberService.getById(1L);
+        Member member = memberService.getByOpenId("o1tUJ42W_-5d0DTBB-lI-S7ukgow");
 
         return member;
     }

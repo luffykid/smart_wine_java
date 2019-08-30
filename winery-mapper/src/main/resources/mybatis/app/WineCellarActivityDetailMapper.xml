@@ -110,7 +110,7 @@
     </select>
 
     <select id="selectProdSkuList" parameterType="Long" resultType="java.util.HashMap">
-        select d.id,s.sku_name,s.sku_sell_price,i.img_addrr,d.present_type from b_wine_cellar_activity_detail d
+        select d.id,s.sku_name skuName,s.sku_sell_price skuSellPrice,i.img_addrr imgAddrr,d.present_type presentType from b_wine_cellar_activity_detail d
         inner join s_prod_sku s on d.prod_sku_id = s.id
         inner join s_prod_img i on i.prod_id = d.prod_id
         where d.wine_cellar_activity_id=#{wineCellarActivityId}
@@ -118,14 +118,14 @@
     </select>
 
     <select id="selectProdSkuDetail" parameterType="Long" resultType="java.util.HashMap">
-        select s.sku_name,d.* from s_prod_sku s
+        select s.sku_name skuName,d.id,d.prod_id prodId,d.detail_title detailTitle,d.detail_brief detailBrief,d.detail_img detailImg from s_prod_sku s
         inner join s_prod_detail d on s.prod_id =d.prod_id
-        where s.id = #{id}
+        where s.id = #{id} and d.detail_status=2
         order by d.sort
     </select>
 
     <select id="getPrePayDetail" parameterType="Long" resultType="java.util.HashMap">
-        select d.id dId,d.present_remark,s.id sId, s.sku_name,s.sku_sell_price,s.alcohol_cnt,s.fragrance_type from b_wine_cellar_activity_detail d
+        select d.id dId,d.present_remark presentRemark,s.id sId, s.sku_name skuName,s.sku_sell_price skuSellPrice,s.alcohol_cnt alcoholCnt,s.fragrance_type fragranceType from b_wine_cellar_activity_detail d
         inner join s_prod_sku s on d.prod_sku_id=s.id
         where d.id=#{id}
     </select>

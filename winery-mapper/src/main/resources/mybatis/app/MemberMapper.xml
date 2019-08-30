@@ -5,13 +5,11 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="mbr_level_id" property="mbrLevelId" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
-        <result column="token" property="token" jdbcType="VARCHAR" />
-        <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+        <result column="mbr_name" property="mbrName" jdbcType="VARCHAR" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
-        <result column="wechat" property="wechat" jdbcType="VARCHAR" />
         <result column="open_id" property="openId" jdbcType="VARCHAR" />
         <result column="user_icon" property="userIcon" jdbcType="VARCHAR" />
-        <result column="STATUS" property="status" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
         <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
         <result column="total_integral" property="totalIntegral" jdbcType="DECIMAL" />
         <result column="total_store_remain" property="totalStoreRemain" jdbcType="DECIMAL" />
@@ -19,32 +17,42 @@
         <result column="market_qr_code" property="marketQrCode" jdbcType="VARCHAR" />
         <result column="market_pid" property="marketPid" jdbcType="BIGINT" />
         <result column="acct_balance" property="acctBalance" jdbcType="DECIMAL" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="return_amt" property="returnAmt" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <!-- 扩展字段 -->
+        <result column="level_name" property="levelName" jdbcType="VARCHAR" />
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_level_id, winery_id, token, nick_name, phone, wechat, open_id, user_icon,
-        STATUS, status_time, total_integral, total_store_remain, total_store_increment, market_qr_code,
-        market_pid, acct_balance, create_date, modify_date
+        mbr.id as id, mbr.mbr_level_id as mbr_level_id, mbr.winery_id as winery_id, mbr.mbr_name as mbr_name,
+        mbr.phone as phone, mbr.open_id as open_id, mbr.user_icon as user_icon, mbr.status as status,
+        mbr.status_time as status_time, mbr.total_integral as total_integral, mbr.total_store_remain as total_store_remain,
+        mbr.total_store_increment as total_store_increment, mbr.market_qr_code as market_qr_code,
+        mbr.market_pid as market_pid, mbr.acct_balance as acct_balance, mbr.age as age, mbr.gender as gender,
+        mbr.return_amt as return_amt, mbr.create_date as create_date, mbr.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="memberMap" parameterType="java.lang.Long" >
         select
         <include refid="table_column" />
-        from m_member
-        where id = #{id}
+        from m_member mbr
+        where mbr.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.Member" >
-        insert into m_member (id, mbr_level_id, winery_id, token, nick_name, phone, wechat,
-            open_id, user_icon, STATUS, status_time, total_integral, total_store_remain,
-            total_store_increment, market_qr_code, market_pid, acct_balance, create_date, modify_date
-            )
-        values (#{id}, #{mbrLevelId}, #{wineryId}, #{token}, #{nickName}, #{phone}, #{wechat},
-            #{openId}, #{userIcon}, #{status}, #{statusTime}, #{totalIntegral}, #{totalStoreRemain},
-            #{totalStoreIncrement}, #{marketQrCode}, #{marketPid}, #{acctBalance}, #{createDate}, #{modifyDate}
-            )
+        insert into m_member (id, mbr_level_id, winery_id, mbr_name, phone, open_id, user_icon,
+            status, status_time, total_integral, total_store_remain, total_store_increment,
+            market_qr_code, market_pid, acct_balance, age, gender, return_amt,
+            create_date, modify_date)
+        values (#{id}, #{mbrLevelId}, #{wineryId}, #{mbrName}, #{phone}, #{openId}, #{userIcon},
+            #{status}, #{statusTime}, #{totalIntegral}, #{totalStoreRemain}, #{totalStoreIncrement},
+            #{marketQrCode}, #{marketPid}, #{acctBalance}, #{age}, #{gender}, #{returnAmt},
+            #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.Member" >
@@ -56,17 +64,11 @@
             <if test="wineryId != null" >
                 winery_id = #{wineryId},
             </if>
-            <if test="token != null and token != ''" >
-                token = #{token},
-            </if>
-            <if test="nickName != null and nickName != ''" >
-                nick_name = #{nickName},
+            <if test="mbrName != null and mbrName != ''" >
+                mbr_name = #{mbrName},
             </if>
             <if test="phone != null and phone != ''" >
                 phone = #{phone},
-            </if>
-            <if test="wechat != null and wechat != ''" >
-                wechat = #{wechat},
             </if>
             <if test="openId != null and openId != ''" >
                 open_id = #{openId},
@@ -75,7 +77,7 @@
                 user_icon = #{userIcon},
             </if>
             <if test="status != null" >
-                STATUS = #{status},
+                status = #{status},
             </if>
             <if test="statusTime != null" >
                 status_time = #{statusTime},
@@ -98,6 +100,15 @@
             <if test="acctBalance != null" >
                 acct_balance = #{acctBalance},
             </if>
+            <if test="age != null" >
+                age = #{age},
+            </if>
+            <if test="gender != null" >
+                gender = #{gender},
+            </if>
+            <if test="returnAmt != null" >
+                return_amt = #{returnAmt},
+            </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
             </if>
@@ -116,61 +127,64 @@
     <select id="selectList" resultMap="memberMap" >
         select
         <include refid="table_column" />
-        from m_member member
+        from m_member mbr
         <where >
             <if test="mbrLevelId != null" >
-                and member.mbr_level_id = #{mbrLevelId}
+                and mbr.mbr_level_id = #{mbrLevelId}
             </if>
             <if test="wineryId != null" >
-                and member.winery_id = #{wineryId}
+                and mbr.winery_id = #{wineryId}
             </if>
-            <if test="token != null and token != ''" >
-                and member.token = #{token}
-            </if>
-            <if test="nickName != null and nickName != ''" >
-                and member.nick_name = #{nickName}
+            <if test="mbrName != null and mbrName != ''" >
+                and mbr.mbr_name = #{mbrName}
             </if>
             <if test="phone != null and phone != ''" >
-                and member.phone = #{phone}
-            </if>
-            <if test="wechat != null and wechat != ''" >
-                and member.wechat = #{wechat}
+                and mbr.phone = #{phone}
             </if>
             <if test="openId != null and openId != ''" >
-                and member.open_id = #{openId}
+                and mbr.open_id = #{openId}
             </if>
             <if test="userIcon != null and userIcon != ''" >
-                and member.user_icon = #{userIcon}
+                and mbr.user_icon = #{userIcon}
             </if>
             <if test="status != null" >
-                and member.STATUS = #{status}
+                and mbr.status = #{status}
             </if>
             <if test="statusTime != null" >
-                and member.status_time = #{statusTime}
+                and mbr.status_time = #{statusTime}
             </if>
             <if test="totalIntegral != null" >
-                and member.total_integral = #{totalIntegral}
+                and mbr.total_integral = #{totalIntegral}
             </if>
             <if test="totalStoreRemain != null" >
-                and member.total_store_remain = #{totalStoreRemain}
+                and mbr.total_store_remain = #{totalStoreRemain}
             </if>
             <if test="totalStoreIncrement != null" >
-                and member.total_store_increment = #{totalStoreIncrement}
+                and mbr.total_store_increment = #{totalStoreIncrement}
             </if>
             <if test="marketQrCode != null and marketQrCode != ''" >
-                and member.market_qr_code = #{marketQrCode}
+                and mbr.market_qr_code = #{marketQrCode}
             </if>
             <if test="marketPid != null" >
-                and member.market_pid = #{marketPid}
+                and mbr.market_pid = #{marketPid}
             </if>
             <if test="acctBalance != null" >
-                and member.acct_balance = #{acctBalance}
+                and mbr.acct_balance = #{acctBalance}
+            </if>
+            <if test="age != null" >
+                and mbr.age = #{age}
+            </if>
+            <if test="gender != null" >
+                and mbr.gender = #{gender}
+            </if>
+            <if test="returnAmt != null" >
+                and mbr.return_amt = #{returnAmt}
             </if>
             <if test="createDate != null" >
-                and member.create_date = #{createDate}
+                and mbr.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and member.modify_date = #{modifyDate}
+                and mbr.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -200,9 +214,13 @@
     <!-- 根据openId查询会员 -->
     <select id="selectByOpenId" resultMap="memberMap" parameterType="java.lang.String" >
         select
-        <include refid="table_column" />
-        from m_member
-        where open_id = #{openId}
+        <include refid="table_column" />,
+        ml.name as level_name,
+        mw.nick_name as nick_name
+        from m_member as mbr
+        left join m_mbr_level as ml on ml.id = mbr.mbr_level_id
+        left join m_mbr_wechat as mw on mw.mbr_id = mbr.id
+        where mbr.open_id = #{openId}
     </select>
 
 </mapper>
