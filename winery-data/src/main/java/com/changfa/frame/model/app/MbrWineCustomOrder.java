@@ -123,6 +123,7 @@ public class MbrWineCustomOrder extends BaseEntity {
      */
 
     public static MbrWineCustomOrder createOrder(DomainEventPublisher publisher,
+                                                 Long wineryId,
                                                  MbrWineCustom mbrWineCustom,
                                                  Long mbrWineCustomOrderId,
                                                  String orderNo) {
@@ -134,6 +135,7 @@ public class MbrWineCustomOrder extends BaseEntity {
         order.setOrderNo(orderNo);
         order.setCreateDate(new Date());
         order.setModifyDate(new Date());
+        order.setWineryId(wineryId);
 
         order.setPayTotalAmt(mbrWineCustom.getCustomTotalAmt());
         order.setPayRealAmt(mbrWineCustom.getCustomTotalAmt());

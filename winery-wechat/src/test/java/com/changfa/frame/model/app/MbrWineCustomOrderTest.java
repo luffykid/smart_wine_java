@@ -20,9 +20,11 @@ public class MbrWineCustomOrderTest {
         DomainEventPublisher publisher = Mockito.mock(DomainEventPublisher.class);
 
 
+
         MbrWineCustom mbrWineCustom = getFixtureMbrWineCustom();
 
         MbrWineCustomOrder order = MbrWineCustomOrder.createOrder(publisher,
+                                                                  Long.valueOf(9999),
                                                                   mbrWineCustom,
                                                                   IDUtil.getId(),
                                                                   OrderNoUtil.get());
@@ -56,6 +58,7 @@ public class MbrWineCustomOrderTest {
         MbrWineCustom mbrWineCustom = getFixtureMbrWineCustom();
 
        MbrWineCustomOrder.createOrder(publisher,
+                                      Long.valueOf(9999),
                                       mbrWineCustom,
                                       IDUtil.getId(),
                                       OrderNoUtil.get());

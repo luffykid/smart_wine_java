@@ -10,12 +10,14 @@ import com.changfa.frame.service.mybatis.app.MbrWineCustomOrderService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@Service("mbrWineCustomOrderServiceImpl")
 public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustomOrder, Long>
                                            implements MbrWineCustomOrderService {
 
@@ -39,16 +41,17 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public MbrWineCustomOrder PlaceAnOrder(Long mbrId,
+    public MbrWineCustomOrder PlaceAnOrder(Long wineryId,
+                                           Long mbrId,
                                            Long wineCustomId,
                                            Integer quantity,
                                            List<MbrWineCustomDetail> details) {
 
-        checkValidate(mbrId, wineCustomId, quantity, details);
+        checkValidate(wineryId, mbrId, wineCustomId, quantity, details);
 
         WineCustom wineCustom = wineCustomMapper.getById(wineCustomId);
 
-        MbrWineCustom mbrWineCustom = constructMbrWineCustom(wineCustom, quantity, mbrId);
+        MbrWineCustom mbrWineCustom = constructMbrWineCustom(wineryId, wineCustom, quantity, mbrId);
 
 
         //订阅新建定制酒订单事件
@@ -78,6 +81,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         // 创建定制酒订单
         MbrWineCustomOrder order = MbrWineCustomOrder.createOrder(publisher,
+                                                                  wineryId,
                                                                   mbrWineCustom,
                                                                   IDUtil.getId(),
                                                                   OrderNoUtil.get());
@@ -89,7 +93,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         SaveToRepository(order, mbrWineCustom, details);
 
-        return null;
+        return order;
     }
 
     private void SaveToRepository(MbrWineCustomOrder order,
@@ -104,11 +108,12 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
     }
 
-    private MbrWineCustom constructMbrWineCustom(WineCustom wineCustom, Integer quantity, Long mbrId) {
+    private MbrWineCustom constructMbrWineCustom(Long wineryId, WineCustom wineCustom, Integer quantity, Long mbrId) {
 
         MbrWineCustom mbrWineCustom = new MbrWineCustom();
         mbrWineCustom.setCreateDate(new Date());
         mbrWineCustom.setModifyDate(new Date());
+        mbrWineCustom.setWineryId(wineryId);
         mbrWineCustom.setCustomName(wineCustom.getCustomName());
         mbrWineCustom.setWineryId(wineCustom.getWineryId());
         mbrWineCustom.setSkuName(wineCustom.getSkuName());
@@ -124,7 +129,10 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
     }
 
-    private void checkValidate(Long mbrId, Long wineCustomId, Integer quantity, List<MbrWineCustomDetail> details) {
+    private void checkValidate(Long wineryId, Long mbrId, Long wineCustomId, Integer quantity, List<MbrWineCustomDetail> details) {
+
+        if (wineryId == null)
+            throw new NullPointerException("wineryId must not be null!");
 
         if (mbrId == null)
             throw new NullPointerException("mbrId must not be null!");
