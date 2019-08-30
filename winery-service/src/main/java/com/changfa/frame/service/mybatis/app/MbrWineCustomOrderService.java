@@ -17,12 +17,12 @@ public interface MbrWineCustomOrderService extends BaseService<MbrWineCustomOrde
      * @param details 自调酒的所有可定制元素的预览图快照
      * @return 定制酒订单
      */
-     MbrWineCustomOrder PlaceAnOrder(Long wineryId,
+     MbrWineCustomOrder placeAnOrder(Long wineryId,
                                      Long mbrId,
                                      Long wineCustomId,
                                      Integer quantity,
                                      List<MbrWineCustomDetail> details);
 
-     MbrWineCustomOrder PayForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId);
+     MbrWineCustomOrder payForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId);
 
 }

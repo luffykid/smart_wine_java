@@ -10,10 +10,13 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 import com.changfa.frame.model.event.DomainEventPublisher;
 import com.changfa.frame.model.event.order.OrderCreatedEvent;
+import com.changfa.frame.model.event.order.OrderStateChangedEvent;
 import com.sun.mail.imap.protocol.ID;
+import org.apache.ibatis.jdbc.Null;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 会员白酒定制订单
@@ -70,6 +73,38 @@ public class MbrWineCustomOrder extends BaseEntity {
 
     /** 订单号【系统生成单号】 */
     private String orderNo;
+
+    /** 预支付返回包*/
+    private Map<String, Object> unifiedOrderReturnMap;
+
+    public Map<String, Object> getUnifiedOrderReturnMap() {
+        return unifiedOrderReturnMap;
+    }
+
+    /** openId */
+    private String openId;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public void updateState(DomainEventPublisher publisher, Status status) {
+
+        if (status == null)
+            throw new NullPointerException("status must not be null!");
+
+        this.setOrderStatus(status.getValue());
+
+        publisher.publish(new OrderStateChangedEvent(this.getId(), status.getValue()));
+
+    }
+
+    public void setUnifiedOrderReturnMap(Map<String, Object> returnMap) {
+    }
 
     /**
      *  订单状态

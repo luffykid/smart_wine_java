@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +24,7 @@ public class MbrWineCustomOrderServiceImplIntegrationTest {
     @Autowired
     private MbrWineCustomOrderMapper mbrWineCustomOrderMapper;
 
+
     @Test
     public void testPlaceAnOrder() {
 
@@ -34,14 +34,31 @@ public class MbrWineCustomOrderServiceImplIntegrationTest {
         Long wineryId = Long.valueOf(9999);
         List<MbrWineCustomDetail> fixtureMbrWineCustomDetails = getFixtureMbrWineCustomDetails();
 
-        MbrWineCustomOrder order =
-            mbrWineCustomOrderService.PlaceAnOrder(wineryId, mbrId, wineCustomId, quantity, fixtureMbrWineCustomDetails);
+        MbrWineCustomOrder order = mbrWineCustomOrderService.placeAnOrder(wineryId, mbrId, wineCustomId, quantity, fixtureMbrWineCustomDetails);
 
         Assert.assertNotNull(order);
 
         MbrWineCustomOrder orderSaved = mbrWineCustomOrderMapper.getById(order.getId());
 
         Assert.assertNotNull(orderSaved);
+
+    }
+
+    @Test
+    public void testOrderStateTransformUnPaid() {
+
+
+        MbrWineCustomOrder unPaidOrder = mbrWineCustomOrderService.payForOrder(Long.valueOf(1234),
+                                                                               Long.valueOf(446980587345936384L),
+                                                                                Long.valueOf(447185632331038720L));
+
+        Assert.assertNotNull(unPaidOrder);
+        Assert.assertEquals(MbrWineCustomOrder.Status.UNPAID.getValue(), unPaidOrder.getOrderStatus());
+
+        MbrWineCustomOrder orderUpdated = mbrWineCustomOrderMapper.getById(unPaidOrder.getId());
+
+        Assert.assertNotNull(orderUpdated);
+        Assert.assertEquals(unPaidOrder.getOrderStatus(), orderUpdated.getOrderStatus());
 
     }
 

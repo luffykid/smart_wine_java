@@ -1,5 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.core.weChat.WeChatPayUtil;
 import com.changfa.frame.model.app.MbrWineCustom;
 import com.changfa.frame.model.app.MbrWineCustomDetail;
 import com.changfa.frame.model.app.MbrWineCustomOrder;
@@ -9,12 +10,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class MbrWineCustomOrderController extends BaseController {
     public Map<String, Object> placeAnOrder(@RequestBody MbrWineCustom mbrWineCustom) {
 
         MbrWineCustomOrder order =
-            mbrWineCustomOrderServiceImpl.PlaceAnOrder(mbrWineCustom.getWineryId(),
+            mbrWineCustomOrderServiceImpl.placeAnOrder(mbrWineCustom.getWineryId(),
                     mbrWineCustom.getMbrId(),
                     mbrWineCustom.getWineCustomId(),
                     mbrWineCustom.getCustomCnt(),
@@ -43,6 +42,26 @@ public class MbrWineCustomOrderController extends BaseController {
 
     }
 
+    @PutMapping("{id}/member/{mbrId}/memberAddress/{memberAddressId}")
+    public Map<String, Object> payForOrder(@PathVariable("id") Long mbrWineCustomOrderId,
+                                           @PathVariable("mbrId") Long mbrId,
+                                           @PathVariable("memberAddressId") Long memberAddressId,
+                                           HttpServletRequest request) {
 
+        MbrWineCustomOrder order = mbrWineCustomOrderServiceImpl.payForOrder(mbrId,
+                                                                        memberAddressId, mbrWineCustomOrderId);
+
+       /* Map<String, Object> returnMap = WeChatPayUtil.unifiedOrderOfWxMini(order.getOrderNo(),
+                                                                            order.getPayRealAmt(),
+                                                                            order.getOpenId(),
+                                                                            "",
+                                                                            "定制酒订单",
+                                                                            request);
+
+        order.setUnifiedOrderReturnMap(returnMap);*/
+
+        return getResult(order);
+
+    }
 
 }

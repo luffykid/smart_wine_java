@@ -1,14 +1,12 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.util.OrderNoUtil;
-import com.changfa.frame.core.weChat.WeChatPayUtil;
-import com.changfa.frame.core.weChat.util.WXPayXml;
-import com.changfa.frame.core.weChat.util.WXPayXmlUtil;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.model.event.DomainEventPublisher;
 import com.changfa.frame.model.event.DomainEventSubscriber;
 import com.changfa.frame.model.event.order.OrderCreatedEvent;
+import com.changfa.frame.model.event.order.OrderStateChangedEvent;
 import com.changfa.frame.service.mybatis.app.MbrWineCustomOrderService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
@@ -51,7 +49,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public MbrWineCustomOrder PlaceAnOrder(Long wineryId,
+    public MbrWineCustomOrder placeAnOrder(Long wineryId,
                                            Long mbrId,
                                            Long wineCustomId,
                                            Integer quantity,
@@ -106,8 +104,9 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         return order;
     }
 
+    @Transactional
     @Override
-    public MbrWineCustomOrder PayForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId) {
+    public MbrWineCustomOrder payForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId) {
 
         Member member = memberMapper.getById(mbrId);
 
@@ -118,6 +117,33 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         checkValidate(order, member, address);
 
         addShipInfoForTheOrder(order, address);
+
+        DomainEventPublisher publisher = DomainEventPublisher.newInstance();
+        publisher.subcribe(new DomainEventSubscriber<OrderStateChangedEvent>() {
+            @Override
+            public void handleEvent(OrderStateChangedEvent orderStateChangedEvent) {
+
+                MbrWineCustomOrderRecord record = new MbrWineCustomOrderRecord();
+                record.setId(IDUtil.getId());
+                record.setMbrWineCustomOrderId(orderStateChangedEvent.getMbrWineCustomOrderId());
+                record.setOrderStatus(Long.valueOf(orderStateChangedEvent.getUpdatedOrderState()));
+                record.setStatusDate(orderStateChangedEvent.occurredOn());
+                record.setCreateDate(new Date());
+                record.setModifyDate(new Date());
+
+                mbrWineCustomOrderRecordMapper.save(record);
+
+            }
+
+            @Override
+            public Class<OrderStateChangedEvent> subscribedToEventType() {
+                return OrderStateChangedEvent.class;
+            }
+        });
+
+        order.updateState(publisher, MbrWineCustomOrder.Status.UNPAID);
+
+        mbrWineCustomOrderMapper.update(order);
 
         return order;
 
