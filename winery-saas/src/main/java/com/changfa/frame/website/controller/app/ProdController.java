@@ -168,7 +168,7 @@ public class ProdController extends BaseController {
         if(prodService.deleteById(id)){
             return getResult("删除成功");
         }
-        return getResult("该产品规格未完全下架");
+        return getResult("该产品规格未完全删除");
     }
 
     /**
