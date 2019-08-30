@@ -23,7 +23,7 @@ public interface MemberAddressService extends BaseService<MemberAddress, Long> {
      * @param detailAddress
      * @param isDefault
      */
-    void add(String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
+    void add(Long mbrId, Long wineryId,String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
 
     /**
      * 修改管理地址

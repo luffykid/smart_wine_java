@@ -82,6 +82,7 @@ public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Lon
         mbrStoreOrderItem.setSkuName(prodSku.getSkuName());
         mbrStoreOrderItem.setSkuMarketPrice(prodSku.getSkuMarketPrice());
         mbrStoreOrderItem.setSkuSellPrice(prodSku.getSkuSellPrice());
+       // mbrStoreOrderItem.setSkuMbrPrice();
 
     }
 }

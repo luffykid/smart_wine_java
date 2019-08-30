@@ -11,7 +11,7 @@
         <result column="sku_name" property="skuName" jdbcType="BIGINT" />
         <result column="sku_market_price" property="skuMarketPrice" jdbcType="DECIMAL" />
         <result column="sku_sell_price" property="skuSellPrice" jdbcType="DECIMAL" />
-        <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="BIGINT" />
+        <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="DECIMAL" />
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
         <result column="integral_cnt" property="integralCnt" jdbcType="BIGINT" />

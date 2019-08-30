@@ -43,7 +43,7 @@ public class MbrStoreOrderItem extends BaseEntity {
     /** sku售卖价 */
     private BigDecimal skuSellPrice;
 
-    private Long skuMbrPrice;
+    private BigDecimal skuMbrPrice;
 
     /** 是否支持积分支付
 0：不支持积分支付
@@ -175,11 +175,11 @@ public class MbrStoreOrderItem extends BaseEntity {
         this.skuSellPrice = skuSellPrice;
     }
     
-    public Long getSkuMbrPrice() {
+    public BigDecimal getSkuMbrPrice() {
         return skuMbrPrice;
     }
     
-    public void setSkuMbrPrice(Long skuMbrPrice) {
+    public void setSkuMbrPrice(BigDecimal skuMbrPrice) {
         this.skuMbrPrice = skuMbrPrice;
     }
     
