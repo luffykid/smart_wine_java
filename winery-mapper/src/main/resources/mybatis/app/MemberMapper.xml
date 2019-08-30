@@ -5,13 +5,11 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="mbr_level_id" property="mbrLevelId" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
-        <result column="token" property="token" jdbcType="VARCHAR" />
         <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
         <result column="phone" property="phone" jdbcType="VARCHAR" />
-        <result column="wechat" property="wechat" jdbcType="VARCHAR" />
         <result column="open_id" property="openId" jdbcType="VARCHAR" />
         <result column="user_icon" property="userIcon" jdbcType="VARCHAR" />
-        <result column="STATUS" property="status" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
         <result column="status_time" property="statusTime" jdbcType="TIMESTAMP" />
         <result column="total_integral" property="totalIntegral" jdbcType="DECIMAL" />
         <result column="total_store_remain" property="totalStoreRemain" jdbcType="DECIMAL" />
@@ -19,14 +17,16 @@
         <result column="market_qr_code" property="marketQrCode" jdbcType="VARCHAR" />
         <result column="market_pid" property="marketPid" jdbcType="BIGINT" />
         <result column="acct_balance" property="acctBalance" jdbcType="DECIMAL" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_level_id, winery_id, token, nick_name, phone, wechat, open_id, user_icon,
-        STATUS, status_time, total_integral, total_store_remain, total_store_increment, market_qr_code,
-        market_pid, acct_balance, create_date, modify_date
+        id, mbr_level_id, winery_id, nick_name, phone, open_id, user_icon, status, status_time,
+         total_integral, total_store_remain, total_store_increment, market_qr_code,
+        market_pid, acct_balance, age, gender, create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="memberMap" parameterType="java.lang.Long" >
@@ -37,13 +37,13 @@
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.Member" >
-        insert into m_member (id, mbr_level_id, winery_id, token, nick_name, phone, wechat,
-            open_id, user_icon, STATUS, status_time, total_integral, total_store_remain,
-            total_store_increment, market_qr_code, market_pid, acct_balance, create_date, modify_date
+        insert into m_member (id, mbr_level_id, winery_id, nick_name, phone,
+            open_id, user_icon, status, status_time, total_integral, total_store_remain,
+            total_store_increment, market_qr_code, market_pid, acct_balance, age, gender, create_date, modify_date
             )
-        values (#{id}, #{mbrLevelId}, #{wineryId}, #{token}, #{nickName}, #{phone}, #{wechat},
-            #{openId}, #{userIcon}, #{status}, #{statusTime}, #{totalIntegral}, #{totalStoreRemain},
-            #{totalStoreIncrement}, #{marketQrCode}, #{marketPid}, #{acctBalance}, #{createDate}, #{modifyDate}
+        values (#{id}, #{mbrLevelId}, #{wineryId}, #{nickName}, #{phone},#{openId}, #{userIcon}, #{status},
+        #{statusTime}, #{totalIntegral}, #{totalStoreRemain}, #{totalStoreIncrement}, #{marketQrCode},
+        #{marketPid}, #{acctBalance}, #{age}, #{gender}, #{createDate}, #{modifyDate}
             )
     </insert>
 
@@ -56,17 +56,11 @@
             <if test="wineryId != null" >
                 winery_id = #{wineryId},
             </if>
-            <if test="token != null and token != ''" >
-                token = #{token},
-            </if>
             <if test="nickName != null and nickName != ''" >
                 nick_name = #{nickName},
             </if>
             <if test="phone != null and phone != ''" >
                 phone = #{phone},
-            </if>
-            <if test="wechat != null and wechat != ''" >
-                wechat = #{wechat},
             </if>
             <if test="openId != null and openId != ''" >
                 open_id = #{openId},
@@ -75,7 +69,7 @@
                 user_icon = #{userIcon},
             </if>
             <if test="status != null" >
-                STATUS = #{status},
+                status = #{status},
             </if>
             <if test="statusTime != null" >
                 status_time = #{statusTime},
@@ -97,6 +91,12 @@
             </if>
             <if test="acctBalance != null" >
                 acct_balance = #{acctBalance},
+            </if>
+            <if test="age != null" >
+                age = #{age},
+            </if>
+            <if test="gender != null" >
+                gender = #{gender},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -124,17 +124,11 @@
             <if test="wineryId != null" >
                 and member.winery_id = #{wineryId}
             </if>
-            <if test="token != null and token != ''" >
-                and member.token = #{token}
-            </if>
             <if test="nickName != null and nickName != ''" >
                 and member.nick_name = #{nickName}
             </if>
             <if test="phone != null and phone != ''" >
                 and member.phone = #{phone}
-            </if>
-            <if test="wechat != null and wechat != ''" >
-                and member.wechat = #{wechat}
             </if>
             <if test="openId != null and openId != ''" >
                 and member.open_id = #{openId}
@@ -143,7 +137,7 @@
                 and member.user_icon = #{userIcon}
             </if>
             <if test="status != null" >
-                and member.STATUS = #{status}
+                and member.status = #{status}
             </if>
             <if test="statusTime != null" >
                 and member.status_time = #{statusTime}
@@ -165,6 +159,12 @@
             </if>
             <if test="acctBalance != null" >
                 and member.acct_balance = #{acctBalance}
+            </if>
+            <if test="age != null" >
+                and member.age = #{age}
+            </if>
+            <if test="gender != null" >
+                and member.gender = #{gender}
             </if>
             <if test="createDate != null" >
                 and member.create_date = #{createDate}

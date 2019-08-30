@@ -14,10 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
-import org.omg.CORBA.PUBLIC_MEMBER;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,11 +32,12 @@ import java.util.Map;
 @RequestMapping("/wxMini/auth/member")
 public class MemberController extends BaseController {
     @Resource(name = "memberServiceImpl")
-    private MemberService memberServiceImpl;
+    private MemberService memberService;
     @Resource(name = "mbrWineryVoucherServiceImpl")
-    private MbrWineryVoucherService mbrWineryVoucherServiceImpl;
+    private MbrWineryVoucherService mbrWineryVoucherService;
     @Resource(name = "mbrWechatServiceImpl")
-    private MbrWechatService mbrWechatServiceImpl;
+    private MbrWechatService mbrWechatService;
+
     /**
      * 获取个人信息
      *
@@ -49,14 +46,9 @@ public class MemberController extends BaseController {
     @ApiOperation(value = "获取个人信息", notes = "更新系统的配置")
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(HttpServletRequest request) {
-
         Member member = getCurMember(request);
-        member.setVoucherCount(mbrWineryVoucherServiceImpl.getEnableVoucherCount(member.getId()));
-        MbrWechat mbrWechat = new MbrWechat();
-        mbrWechat.setMbrId(member.getId());
-        List<MbrWechat> list = mbrWechatServiceImpl.selectList(mbrWechat);
+        member.setVoucherCount(mbrWineryVoucherService.getEnableVoucherCount(member.getId()));
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("wechat", list);
         returnMap.put("member", member);
         return getResult(returnMap);
     }
@@ -74,8 +66,8 @@ public class MemberController extends BaseController {
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("list", memberServiceImpl.getSubList(member.getId(), pageInfo).getList());
-        returnMap.put("other", memberServiceImpl.getSubStatis(member.getId()));
+        returnMap.put("list", memberService.getSubList(member.getId(), pageInfo).getList());
+        returnMap.put("other", memberService.getSubStatis(member.getId()));
         return getResult(returnMap);
     }
 
@@ -91,7 +83,7 @@ public class MemberController extends BaseController {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
-        pageInfo = memberServiceImpl.getIntegralList(member.getId(), pageInfo);
+        pageInfo = memberService.getIntegralList(member.getId(), pageInfo);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("totalIntegral", member.getTotalIntegral());
         returnMap.put("list", pageInfo.getList());
@@ -116,7 +108,7 @@ public class MemberController extends BaseController {
     public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, Integer gender, String phone) {
         Member member = getCurMember(request);
         try {
-            memberServiceImpl.updateMember(member.getId(), userIcon, nickName, birthday, gender, phone);
+            memberService.updateMember(member.getId(), userIcon, nickName, birthday, gender, phone);
         } catch (Exception e) {
             log.info("此处有错误:{}", e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
