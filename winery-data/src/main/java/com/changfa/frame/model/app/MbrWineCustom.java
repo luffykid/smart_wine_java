@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 会员白酒定制
@@ -46,7 +47,21 @@ public class MbrWineCustom extends BaseEntity {
     /** 商品SKU 名称 */
     private String skuName;
 
-    
+
+    /**
+     * mbr_wine_custom_detail
+     * 会员定制详情列表
+     */
+    private List<MbrWineCustomDetail> mbrWineCustomDetails;
+
+    public List<MbrWineCustomDetail> getMbrWineCustomDetails() {
+        return mbrWineCustomDetails;
+    }
+
+    public void setMbrWineCustomDetails(List<MbrWineCustomDetail> mbrWineCustomDetails) {
+        this.mbrWineCustomDetails = mbrWineCustomDetails;
+    }
+
     /**
      * 获取会员白酒定制订单
     */
