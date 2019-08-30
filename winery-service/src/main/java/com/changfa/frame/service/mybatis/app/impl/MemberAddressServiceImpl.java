@@ -36,18 +36,18 @@ public class MemberAddressServiceImpl extends BaseServiceImpl<MemberAddress, Lon
      * @param phone
      * @param provinceCode
      * @param cityCode
-     * @param countryCode
+     * @param countyCode
      * @param detailAddress
      * @param isDefault
      */
     @Override
-    public void add(Long mbrId, Long wineryId, String contact, String phone, String provinceCode, String cityCode, String countryCode, String detailAddress, Boolean isDefault) {
+    public void add(Long mbrId, Long wineryId, String contact, String phone, String provinceCode, String cityCode, String countyCode, String detailAddress, Boolean isDefault) {
         Area area = new Area();
         area.setCode(provinceCode);
         Area areaOfProvince = areaMapper.selectList(area).get(0);
         area.setCode(cityCode);
         Area areOfCity = areaMapper.selectList(area).get(0);
-        area.setCode(countryCode);
+        area.setCode(countyCode);
         Area areaOfcountry = areaMapper.selectList(area).get(0);
         MemberAddress memberAddress = new MemberAddress();
         memberAddress.setId(IDUtil.getId());

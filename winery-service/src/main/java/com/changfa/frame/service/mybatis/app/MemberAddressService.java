@@ -19,11 +19,11 @@ public interface MemberAddressService extends BaseService<MemberAddress, Long> {
      * @param phone
      * @param provinceCode
      * @param cityCode
-     * @param countryCode
+     * @param countyCode
      * @param detailAddress
      * @param isDefault
      */
-    void add(Long mbrId, Long wineryId,String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
+    void add(Long mbrId, Long wineryId,String contact, String phone, String provinceCode, String cityCode,String countyCode,String detailAddress,Boolean isDefault);
 
     /**
      * 修改管理地址

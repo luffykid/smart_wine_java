@@ -54,16 +54,16 @@ public class MemberAddressController extends BaseController {
             @ApiImplicitParam(name = "phone", value = "联系电话", dataType = "String"),
             @ApiImplicitParam(name = "provinceCode", value = "省编码", dataType = "String"),
             @ApiImplicitParam(name = "cityCode", value = "市编码", dataType = "String"),
-            @ApiImplicitParam(name = "countryCode", value = "县编码", dataType = "String"),
+            @ApiImplicitParam(name = "countyCode", value = "县编码", dataType = "String"),
             @ApiImplicitParam(name = "detailAddress", value = "详细地址", dataType = "String"),
             @ApiImplicitParam(name = "isDefault", value = "是否默认地址", dataType = "Boolean")
     })
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Map<String, Object> add(String contact, String phone, String provinceCode, String cityCode, String countryCode, String detailAddress, Boolean isDefault, HttpServletRequest request) {
+    public Map<String, Object> add(String contact, String phone, String provinceCode, String cityCode, String countyCode, String detailAddress, Boolean isDefault, HttpServletRequest request) {
         Member member = getCurMember(request);
         Long wineryId = getCurWineryId();
         try {
-            memberAddressServiceImpl.add(member.getId(),wineryId, contact, phone, provinceCode, cityCode, countryCode, detailAddress, isDefault);
+            memberAddressServiceImpl.add(member.getId(),wineryId, contact, phone, provinceCode, cityCode, countyCode, detailAddress, isDefault);
         } catch (Exception e) {
             log.info("此处有错误:{}", "插入数据失败");
             throw new CustomException(RESPONSE_CODE_ENUM.INSERT_EXIST);
@@ -83,15 +83,15 @@ public class MemberAddressController extends BaseController {
             @ApiImplicitParam(name = "phone", value = "联系电话", dataType = "String"),
             @ApiImplicitParam(name = "provinceCode", value = "省编码", dataType = "String"),
             @ApiImplicitParam(name = "cityCode", value = "市编码", dataType = "String"),
-            @ApiImplicitParam(name = "countryCode", value = "县编码", dataType = "String"),
+            @ApiImplicitParam(name = "countyCode", value = "县编码", dataType = "String"),
             @ApiImplicitParam(name = "detailAddress", value = "详细地址", dataType = "String"),
             @ApiImplicitParam(name = "isDefault", value = "是否默认地址", dataType = "Boolean")
     })
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Map<String, Object> update(Long id, String contact, String phone, String provinceCode, String cityCode, String countryCode, String detailAddress, Boolean isDefault, HttpServletRequest request) {
+    public Map<String, Object> update(Long id, String contact, String phone, String provinceCode, String cityCode, String countyCode, String detailAddress, Boolean isDefault, HttpServletRequest request) {
         Member member = getCurMember(request);
         try {
-            memberAddressServiceImpl.modify(id, contact, phone, provinceCode, cityCode, countryCode, detailAddress, isDefault);
+            memberAddressServiceImpl.modify(id, contact, phone, provinceCode, cityCode, countyCode, detailAddress, isDefault);
         } catch (Exception e) {
             log.info("此处有错误:{}", "修改数据失败");
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
