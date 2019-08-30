@@ -24,4 +24,6 @@ public interface WinerySightImgMapper extends BaseMapper<WinerySightImg, Long> {
     int deleteByWinerySightId(Long id);
 
     int saveList(@Param("list") List<WinerySightImg> winerySightImgList);
+
+    int updateList(@Param("list") List<WinerySightImg> updateWinerySightImgList);
 }

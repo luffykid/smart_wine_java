@@ -30,10 +30,10 @@ public interface ProdService extends BaseService<Prod, Long> {
 
     /**
      * 获取产品列表
-     * @param pageInfo 分页对象
+     * @param prodPageInfo 分页对象
      * @return List<Prod>
      */
-    PageInfo getProdList(Prod prod,PageInfo pageInfo);
+    PageInfo getProdList(Prod prod, PageInfo<Prod> prodPageInfo);
 
     /**
      * 添加产品

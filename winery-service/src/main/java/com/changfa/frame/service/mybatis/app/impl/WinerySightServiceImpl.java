@@ -73,13 +73,35 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     @Override
     @Transactional
     public void addScenicImageText(List<WinerySightDetail> winerySightDetailList) {
+        List<WinerySightDetail> saveWinerySightDetailList = new ArrayList<WinerySightDetail>();
+        List<WinerySightDetail> updateWinerySightDetailList = new ArrayList<WinerySightDetail>();
         for (WinerySightDetail winerySightDetail: winerySightDetailList) {
-            winerySightDetail.setId(IDUtil.getId());
-            winerySightDetail.setDetailImg(FileUtil.copyNFSByFileName(winerySightDetail.getDetailImg(), FilePathConsts.TEST_FILE_PATH));
-            winerySightDetail.setCreateDate(new Date());
-            winerySightDetail.setModifyDate(new Date());
-            winerySightDetailMapper.save(winerySightDetail);
+            if(winerySightDetail.getId() == null && winerySightDetail.getId().equals("")){
+                winerySightDetail.setId(IDUtil.getId());
+                winerySightDetail.setDetailImg(FileUtil.copyNFSByFileName(winerySightDetail.getDetailImg(), FilePathConsts.TEST_FILE_PATH));
+                winerySightDetail.setDetailStatus(WinerySightDetail.DETAIL_STATUS_ENUM.XJ.getValue());
+                winerySightDetail.setCreateDate(new Date());
+                winerySightDetail.setModifyDate(new Date());
+                saveWinerySightDetailList.add(winerySightDetail);
+            }else{
+                WinerySightDetail winerySightDetail1 = winerySightDetailMapper.getById(winerySightDetail.getId());
+                if(!StringUtils.equals(winerySightDetail1.getDetailImg(), winerySightDetail.getDetailImg())){
+                    String newFileUrl = FileUtil.copyNFSByFileName(winerySightDetail.getDetailImg(), FilePathConsts.TEST_FILE_PATH);
+                    FileUtil.deleteNFSByFileUrl(winerySightDetail1.getDetailImg(),newFileUrl);
+                    winerySightDetail.setDetailImg(newFileUrl);
+                }
+                winerySightDetail.setModifyDate(new Date());
+                updateWinerySightDetailList.add(winerySightDetail);
+            }
         }
+        if(saveWinerySightDetailList!=null && saveWinerySightDetailList.size()>0){
+            winerySightDetailMapper.saveList(saveWinerySightDetailList);
+        }
+        if(saveWinerySightDetailList!=null && saveWinerySightDetailList.size()>0){
+            winerySightDetailMapper.updateList(updateWinerySightDetailList);
+        }
+
+
     }
 
     /**
@@ -106,30 +128,71 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     /**
      * 添加景点
      * @param winerySight  景点对象
-     * @param curAdmin     当前用户
+     * @param WineryId     酒庄id
      */
     @Override
     @Transactional
-    public void addWinerySight(WinerySight winerySight,Admin curAdmin ) {
-        winerySight.setId(IDUtil.getId());
-        winerySight.setSightIcon(FileUtil.copyNFSByFileName(winerySight.getSightIcon(), FilePathConsts.TEST_FILE_PATH));
-        winerySight.setCoverImg(FileUtil.copyNFSByFileName(winerySight.getCoverImg(),FilePathConsts.TEST_FILE_PATH));
-        winerySight.setWineryId(curAdmin.getWineryId());
-        winerySight.setCreateDate(new Date());
-        winerySight.setModifyDate(new Date());
-        winerySightMapper.addWinerySight(winerySight);
-        List<WinerySightImg> winerySightImgList = new ArrayList<WinerySightImg>();
-        if (winerySight.getWinerySightImgList() != null && winerySight.getWinerySightImgList().size() > 0){
-            for (WinerySightImg winerySightImg : winerySight.getWinerySightImgList()) {
-                winerySightImg.setId(IDUtil.getId());
-                winerySightImg.setWinerySightId(winerySight.getId());
-                winerySightImg.setImgAddr(FileUtil.copyNFSByFileName(winerySightImg.getImgName(), FilePathConsts.TEST_FILE_PATH));
-                winerySightImg.setCreateDate(new Date());
-                winerySightImg.setModifyDate(new Date());
-                winerySightImgList.add(winerySightImg);
+    public void addWinerySight(WinerySight winerySight,Long WineryId ) {
+        if(winerySight.getId()==null){
+            winerySight.setId(IDUtil.getId());
+            winerySight.setSightIcon(FileUtil.copyNFSByFileName(winerySight.getSightIcon(), FilePathConsts.TEST_FILE_PATH));
+            winerySight.setCoverImg(FileUtil.copyNFSByFileName(winerySight.getCoverImg(),FilePathConsts.TEST_FILE_PATH));
+            winerySight.setWineryId(WineryId);
+            winerySight.setCreateDate(new Date());
+            winerySight.setModifyDate(new Date());
+            winerySightMapper.addWinerySight(winerySight);
+            List<WinerySightImg> winerySightImgList = new ArrayList<WinerySightImg>();
+            if (winerySight.getWinerySightImgList() != null && winerySight.getWinerySightImgList().size() > 0){
+                for (WinerySightImg winerySightImg : winerySight.getWinerySightImgList()) {
+                    winerySightImg.setId(IDUtil.getId());
+                    winerySightImg.setWinerySightId(winerySight.getId());
+                    winerySightImg.setImgAddr(FileUtil.copyNFSByFileName(winerySightImg.getImgAddr(), FilePathConsts.TEST_FILE_PATH));
+                    winerySightImg.setCreateDate(new Date());
+                    winerySightImg.setModifyDate(new Date());
+                    winerySightImgList.add(winerySightImg);
+                }
+                winerySightImgMapper.saveList(winerySightImgList);
             }
-            winerySightImgMapper.saveList(winerySightImgList);
+        }else{
+            winerySight.setModifyDate(new Date());
+            winerySightMapper.update(winerySight);
+            List<WinerySightImg> updateWinerySightImgList = new ArrayList<WinerySightImg>();
+            List<WinerySightImg> winerySightImgList = new ArrayList<WinerySightImg>();
+            if (winerySight.getWinerySightImgList() != null && winerySight.getWinerySightImgList().size() > 0){ // false 如果提交没有图片，就把数据库中的老图片清空
+                for (WinerySightImg winerySightImg : winerySight.getWinerySightImgList()) {
+                    if(winerySightImg.getId()!=null){
+                        WinerySightImg winerySightImg1 = winerySightImgMapper.getById(winerySightImg.getId());
+                        if(!StringUtils.equals(winerySightImg1.getImgAddr(),winerySightImg.getImgAddr())){
+                            String newFileUrl = FileUtil.copyNFSByFileName(winerySightImg.getImgAddr(), FilePathConsts.TEST_FILE_PATH);
+                            FileUtil.deleteNFSByFileUrl(winerySightImg1.getImgAddr(),newFileUrl);
+                            winerySightImg.setImgAddr(newFileUrl);
+                        }
+                        winerySightImg.setModifyDate(new Date());
+                        updateWinerySightImgList.add(winerySightImg);
+                    }else{ // 如果再编辑时新添加图片
+                        winerySightImg.setId(IDUtil.getId());
+                        winerySightImg.setWinerySightId(winerySight.getId());
+                        winerySightImg.setImgAddr(FileUtil.copyNFSByFileName(winerySightImg.getImgAddr(), FilePathConsts.TEST_FILE_PATH));
+                        winerySightImg.setCreateDate(new Date());
+                        winerySightImg.setModifyDate(new Date());
+                        winerySightImgList.add(winerySightImg);
+                    }
+
+                }
+                if(winerySightImgList !=null && winerySightImgList.size() > 0){
+                    winerySightImgMapper.saveList(winerySightImgList);
+                }
+                if(updateWinerySightImgList !=null && updateWinerySightImgList.size() > 0){
+                    winerySightImgMapper.updateList(updateWinerySightImgList);
+                }
+
+            }else{
+                winerySightImgMapper.deleteByWinerySightId(winerySight.getId());
+            }
+
+
         }
+
 
 
     }
@@ -151,44 +214,6 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
         return winerySight;
     }
 
-    /**
-     * 修改景点
-     * @param winerySight  景点对象
-     */
-    @Override
-    @Transactional
-    public void updateWinerySight(WinerySight winerySight) {
-       /* WinerySight winerySight1 = winerySightMapper.getById(winerySight.getId()); // 获取老地址
-        if(winerySight.getSightIcon()== null && winerySight.getSightIcon().equals("")){
-
-        }
-        winerySight.setSightIcon(null);
-        if(winerySight.getCoverImg()== null && winerySight.getCoverImg().equals("")){
-            if(!StringUtils.equals(winerySight1.getCoverImg(), winerySight.getCoverImg())){
-                String  newFileUrl = FileUtil.copyNFSByFileName(winerySight.getCoverImg(), FilePathConsts.TEST_FILE_PATH);
-                FileUtil.deleteNFSByFileUrl(winerySight1.getCoverImg(),newFileUrl);
-                winerySight.setCoverImg(newFileUrl);
-            }
-        }
-
-        winerySight.setModifyDate(new Date());
-        winerySightMapper.updateWinerySight(winerySight);
-
-        if(winerySightImgMapper.findListByWinerySightId(winerySight.getId()).size() >0 ){
-            winerySightImgMapper.deleteByWinerySightId(winerySight.getId());
-        }
-        if(winerySight.getScenicImg() != null && winerySight.getScenicImg().size() > 0 ){
-            for (String scenicImg : winerySight.getScenicImg()) {
-                WinerySightImg winerySightImg = new WinerySightImg();
-                winerySightImg.setId(IDUtil.getId());
-                winerySightImg.setWinerySightId(winerySight.getId());
-                winerySightImg.setImgName(scenicImg);
-                winerySightImg.setImgAddr(FileUtil.copyNFSByFileName(scenicImg, FilePathConsts.TEST_FILE_PATH));
-                winerySightImg.setCreateDate(new Date());
-                winerySightImgMapper.save(winerySightImg);
-            }
-        }*/
-    }
 
     /**
      * 删除景点
@@ -307,6 +332,15 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
         return 0;
     }
 
+    /**
+     * 删除景点图文
+     * @param id
+     * @return boolean
+     */
+    @Override
+    public boolean deleteScenicImageText(Long id) {
+        return winerySightDetailMapper.delete(id)>0 ? true : false;
+    }
 
 
     /**

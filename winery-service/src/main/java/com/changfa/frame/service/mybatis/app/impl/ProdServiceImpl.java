@@ -54,7 +54,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      * @return List<Prod>
      */
     @Override
-    public PageInfo getProdList(Prod prod,PageInfo pageInfo) {
+    public PageInfo<Prod> getProdList(Prod prod,PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
@@ -136,7 +136,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
                     prodDetail.setModifyDate(new Date());
                     saveProdDetailList.add(prodDetail);
                 }else{
-                    ProdDetail prodDetailvo = prodDetailMapper.getById(prodDetail.getProdId());
+                    ProdDetail prodDetailvo = prodDetailMapper.getById(prodDetail.getId());
                     if(!StringUtils.equals(prodDetailvo.getDetailImg(), prodDetail.getDetailImg())){
                         String newFileUrl = FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH);
                         FileUtil.deleteNFSByFileUrl(prodDetailvo.getDetailImg(),newFileUrl);
@@ -146,8 +146,13 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
                     updateProdDetailList.add(prodDetail);
                 }
             }
-            prodDetailMapper.saveProdDetailList(saveProdDetailList);
-            prodDetailMapper.updateProdDetailList(updateProdDetailList);
+            if(saveProdDetailList!= null && saveProdDetailList.size()>0){
+                prodDetailMapper.saveProdDetailList(saveProdDetailList);
+            }
+            if(updateProdDetailList!= null && updateProdDetailList.size()>0){
+                prodDetailMapper.updateProdDetailList(updateProdDetailList);
+            }
+
         }
 
 
