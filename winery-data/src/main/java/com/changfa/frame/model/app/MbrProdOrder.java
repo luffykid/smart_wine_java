@@ -387,4 +387,18 @@ public class MbrProdOrder extends BaseEntity {
     public void setTransactionNo(String transactionNo) {
         this.transactionNo = transactionNo == null ? null : transactionNo.trim();
     }
+
+    /**
+     * 获取支付时间
+     */
+    public Date getPayDate() {
+        return payDate;
+    }
+
+    /**
+     * 设置支付时间
+     */
+    public void setPayDate(Date payDate) {
+        this.payDate = payDate;
+    }
 }

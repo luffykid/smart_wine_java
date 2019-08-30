@@ -19,6 +19,7 @@
         <result column="shipping_person_phone" property="shippingPersonPhone" jdbcType="VARCHAR" />
         <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
@@ -41,6 +42,7 @@
         <result column="shipping_person_phone" property="shippingPersonPhone" jdbcType="VARCHAR" />
         <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
         <collection property="mbrProdOrderItems" ofType="com.changfa.frame.model.app.MbrProdOrderItem">
@@ -60,33 +62,35 @@
             <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
             <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
         </collection>
-
     </resultMap>
 
     <sql id="table_column" >
-        id, pay_total_amt, winery_id, mbr_id, pay_mode, prod_total_cnt, pay_real_amt, pay_integral_cnt, 
-        order_status, shipping_detail_addr, shipping_province_id, shipping_city_id, shipping_county_id, 
-        shipping_person_name, shipping_person_phone, order_no, transaction_no, create_date, 
-        modify_date
+        mpo.id as id, mpo.pay_total_amt as pay_total_amt, mpo.winery_id as winery_id, mpo.mbr_id as mbr_id,
+        mpo.pay_mode as pay_mode, mpo.prod_total_cnt as prod_total_cnt, mpo.pay_real_amt as pay_real_amt,
+        mpo.pay_integral_cnt as pay_integral_cnt, mpo.order_status as order_status, mpo.shipping_detail_addr as shipping_detail_addr,
+        mpo.shipping_province_id as shipping_province_id, mpo.shipping_city_id as shipping_city_id,
+        mpo.shipping_county_id as shipping_county_id, mpo.shipping_person_name as shipping_person_name,
+        mpo.shipping_person_phone as shipping_person_phone, mpo.order_no as order_no, mpo.transaction_no as transaction_no,
+        mpo.pay_date as pay_date, mpo.create_date as create_date, mpo.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrProdOrderMap" parameterType="com.changfa.frame.model.app.MbrProdOrderKey" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_prod_order
-        where id = #{id}
-          and pay_total_amt = #{payTotalAmt}
+        from m_mbr_prod_order mpo
+        where mpo.id = #{id}
+        and mpo.pay_total_amt = #{payTotalAmt}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrder" >
-        insert into m_mbr_prod_order (id, pay_total_amt, winery_id, mbr_id, pay_mode, prod_total_cnt, 
-            pay_real_amt, pay_integral_cnt, order_status, shipping_detail_addr, shipping_province_id, 
-            shipping_city_id, shipping_county_id, shipping_person_name, shipping_person_phone, 
-            order_no, transaction_no, create_date, modify_date)
-        values (#{id}, #{payTotalAmt}, #{wineryId}, #{mbrId}, #{payMode}, #{prodTotalCnt}, 
-            #{payRealAmt}, #{payIntegralCnt}, #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId}, 
-            #{shippingCityId}, #{shippingCountyId}, #{shippingPersonName}, #{shippingPersonPhone}, 
-            #{orderNo}, #{transactionNo}, #{createDate}, #{modifyDate})
+        insert into m_mbr_prod_order (id, pay_total_amt, winery_id, mbr_id, pay_mode, prod_total_cnt,
+            pay_real_amt, pay_integral_cnt, order_status, shipping_detail_addr, shipping_province_id,
+            shipping_city_id, shipping_county_id, shipping_person_name, shipping_person_phone,
+            order_no, transaction_no, pay_date, create_date, modify_date)
+        values (#{id}, #{payTotalAmt}, #{wineryId}, #{mbrId}, #{payMode}, #{prodTotalCnt},
+            #{payRealAmt}, #{payIntegralCnt}, #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId},
+            #{shippingCityId}, #{shippingCountyId}, #{shippingPersonName}, #{shippingPersonPhone},
+            #{orderNo}, #{transactionNo}, #{payDate}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrProdOrder" >
@@ -137,6 +141,9 @@
             <if test="transactionNo != null and transactionNo != ''" >
                 transaction_no = #{transactionNo},
             </if>
+            <if test="payDate != null" >
+                pay_date = #{payDate},
+            </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
             </if>
@@ -145,7 +152,7 @@
             </if>
         </set>
         where id = #{id}
-          and pay_total_amt = #{payTotalAmt}
+        and pay_total_amt = #{payTotalAmt}
     </update>
 
     <delete id="delete" parameterType="com.changfa.frame.model.app.MbrProdOrderKey" >
@@ -155,63 +162,67 @@
     </delete>
 
     <select id="selectList" resultMap="mbrProdOrderMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_prod_order
-        <where>
+        from m_mbr_prod_order mpo
+        <where >
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and mpo.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mpo.mbr_id = #{mbrId}
             </if>
             <if test="payMode != null" >
-                and null.pay_mode = #{payMode}
+                and mpo.pay_mode = #{payMode}
             </if>
             <if test="prodTotalCnt != null" >
-                and null.prod_total_cnt = #{prodTotalCnt}
+                and mpo.prod_total_cnt = #{prodTotalCnt}
             </if>
             <if test="payRealAmt != null" >
-                and null.pay_real_amt = #{payRealAmt}
+                and mpo.pay_real_amt = #{payRealAmt}
             </if>
             <if test="payIntegralCnt != null" >
-                and null.pay_integral_cnt = #{payIntegralCnt}
+                and mpo.pay_integral_cnt = #{payIntegralCnt}
             </if>
             <if test="orderStatus != null" >
-                and null.order_status = #{orderStatus}
+                and mpo.order_status = #{orderStatus}
             </if>
             <if test="shippingDetailAddr != null and shippingDetailAddr != ''" >
-                and null.shipping_detail_addr = #{shippingDetailAddr}
+                and mpo.shipping_detail_addr = #{shippingDetailAddr}
             </if>
             <if test="shippingProvinceId != null" >
-                and null.shipping_province_id = #{shippingProvinceId}
+                and mpo.shipping_province_id = #{shippingProvinceId}
             </if>
             <if test="shippingCityId != null" >
-                and null.shipping_city_id = #{shippingCityId}
+                and mpo.shipping_city_id = #{shippingCityId}
             </if>
             <if test="shippingCountyId != null" >
-                and null.shipping_county_id = #{shippingCountyId}
+                and mpo.shipping_county_id = #{shippingCountyId}
             </if>
             <if test="shippingPersonName != null and shippingPersonName != ''" >
-                and null.shipping_person_name = #{shippingPersonName}
+                and mpo.shipping_person_name = #{shippingPersonName}
             </if>
             <if test="shippingPersonPhone != null and shippingPersonPhone != ''" >
-                and null.shipping_person_phone = #{shippingPersonPhone}
+                and mpo.shipping_person_phone = #{shippingPersonPhone}
             </if>
             <if test="orderNo != null and orderNo != ''" >
-                and null.order_no = #{orderNo}
+                and mpo.order_no = #{orderNo}
             </if>
             <if test="transactionNo != null and transactionNo != ''" >
-                and null.transaction_no = #{transactionNo}
+                and mpo.transaction_no = #{transactionNo}
+            </if>
+            <if test="payDate != null" >
+                and mpo.pay_date = #{payDate}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mpo.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mpo.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
+
     <select id="selectListByType" resultMap="mbrProdOrderMap2">
         select o.id,order_no,o.order_status,o.create_date,i.sku_name,i.prod_sku_cnt,i.sku_sell_price from m_mbr_prod_order o
         inner join m_mbr_prod_order_item i on o.id = i.mbr_prod_order_id
