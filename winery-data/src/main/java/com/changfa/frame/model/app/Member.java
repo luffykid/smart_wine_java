@@ -9,7 +9,6 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -35,7 +34,7 @@ public class Member extends BaseEntity {
     /**
      * 昵称
      */
-    private String nickName;
+    private String mbrName;
 
     /**
      * 手机号
@@ -162,12 +161,26 @@ public class Member extends BaseEntity {
      */
     public Integer gender;
 
+    /**
+     * 返现金额
+     */
+    public BigDecimal returnAmt;
+
     /******************** 扩展属性 ***********************/
     /**
      * 优惠券数量
      */
-    @Transient
-    private Integer voucherCount;
+    public Integer voucherCount;
+
+    /**
+     * 会员微信昵称
+     */
+    public String nickName;
+
+    /**
+     * 会员等级名称
+     */
+    public String levelName;
 
     /**
      * 获取会员等级ID
@@ -200,15 +213,15 @@ public class Member extends BaseEntity {
     /**
      * 获取昵称
      */
-    public String getNickName() {
-        return nickName;
+    public String getMbrName() {
+        return mbrName;
     }
 
     /**
      * 设置昵称
      */
-    public void setNickName(String nickName) {
-        this.nickName = nickName == null ? null : nickName.trim();
+    public void setMbrName(String nickName) {
+        this.mbrName = nickName == null ? null : nickName.trim();
     }
 
     /**
@@ -409,5 +422,47 @@ public class Member extends BaseEntity {
      */
     public void setGender(Integer gender) {
         this.gender = gender;
+    }
+
+    /**
+     * 返现金额
+     */
+    public BigDecimal getReturnAmt() {
+        return returnAmt;
+    }
+
+    /**
+     * 返现金额
+     */
+    public void setReturnAmt(BigDecimal returnAmt) {
+        this.returnAmt = returnAmt;
+    }
+
+    /**
+     * 获取会员微信昵称
+     */
+    public String getNickName() {
+        return nickName;
+    }
+
+    /**
+     * 设置会员微信昵称
+     */
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    /**
+     * 获取会员等级名称
+     */
+    public String getLevelName() {
+        return levelName;
+    }
+
+    /**
+     * 设置会员等级名称
+     */
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
     }
 }
