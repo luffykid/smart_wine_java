@@ -132,7 +132,7 @@ fabric.properties
 
 # zeroturnaround
 rebel.xml
-
+*.yml
 
 # log
 log/

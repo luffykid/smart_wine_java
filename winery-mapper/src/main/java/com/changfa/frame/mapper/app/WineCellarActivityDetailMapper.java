@@ -34,5 +34,5 @@ public interface WineCellarActivityDetailMapper extends BaseMapper<WineCellarAct
      * @param id
      * @return
      */
-    Map selectProdSkuDetail(@Param("id") Long id);
+    List<Map> selectProdSkuDetail(@Param("id") Long id);
 }

@@ -40,6 +40,6 @@ public class WineCellarActivityDetailServiceImpl extends BaseServiceImpl<WineCel
      * @return
      */
     @Override
-    public Map getProdSkuDetail(Long id){ return wineCellarActivityDetailMapper.selectProdSkuDetail(id);}
+    public List<Map> getProdSkuDetail(Long id){ return wineCellarActivityDetailMapper.selectProdSkuDetail(id);}
 
 }
