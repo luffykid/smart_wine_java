@@ -10,7 +10,7 @@ public interface MbrProdOrderService extends BaseService<MbrProdOrder, Long> {
      *
      * @return
      */
-    public PageInfo getListByType(Long mbrId, Integer orderStatus, PageInfo pageInfo);
+    PageInfo getListByType(Long mbrId, Integer orderStatus, PageInfo pageInfo);
 
 
 }

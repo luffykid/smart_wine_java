@@ -19,6 +19,9 @@
         <result column="increase_scale" property="increaseScale" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <!-- 扩展字段 -->
+        <result column="like_status" property="likeStatus" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="table_column" >
@@ -164,14 +167,14 @@
         </where>
     </select>
 
-    <select id="selectSecById" resultType="java.util.HashMap">
+    <select id="selectSecById" resultMap="wineCellarActivityMap">
         select a.*,ifnull(l.like_status,0) like_status from b_wine_cellar_activity a
         left join b_wine_cellar_activity_like l on a.id = l.winery_id and l.mbr_id=#{mbrId}
         where a.id = #{id}
     </select>
 
-    <select id="selectSecList" parameterType="Long" resultType="java.util.HashMap">
-        select a.act_cover_img,a.act_title,a.like_total_cnt,a.share_total_cnt,ifnull(l.like_status,0) like_status from b_wine_cellar_activity a
+    <select id="selectSecList" parameterType="Long" resultMap="wineCellarActivityMap">
+        select a.*,ifnull(l.like_status,0) like_status from b_wine_cellar_activity a
         left join b_wine_cellar_activity_like l on a.id = l.winery_id and l.mbr_id=#{mbrId}
         where a.act_status = 2
     </select>

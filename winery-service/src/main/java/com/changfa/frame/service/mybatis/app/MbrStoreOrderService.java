@@ -14,7 +14,7 @@ public interface MbrStoreOrderService extends BaseService<MbrStoreOrder, Long> {
      * @param mbrId
      * @return
      */
-    public List<Map> getStoreList(@Param("mbrId") Long mbrId);
+    public List<MbrStoreOrder> getStoreList(@Param("mbrId") Long mbrId);
 
     /**
      * 获取储酒订单项

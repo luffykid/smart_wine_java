@@ -12,5 +12,5 @@ public interface MbrBillRecordService extends BaseService<MbrBillRecord, Long> {
      * @param mbrId
      * @return
      */
-    public PageInfo<MbrBillRecord> getFlowList(Long mbrId, PageInfo pageInfo);
+    PageInfo<MbrBillRecord> getFlowList(Long mbrId, PageInfo pageInfo);
 }

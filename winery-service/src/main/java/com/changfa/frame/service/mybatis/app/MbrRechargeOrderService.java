@@ -14,7 +14,7 @@ public interface MbrRechargeOrderService extends BaseService<MbrRechargeOrder, L
      * @param payTotalAmt
      * @param payRealAmt
      */
-    public void recharge(Long mbrId, Long wineryId, BigDecimal payTotalAmt, BigDecimal payRealAmt);
+    void recharge(Long mbrId, Long wineryId, BigDecimal payTotalAmt, BigDecimal payRealAmt);
 
 
     /**
@@ -22,5 +22,5 @@ public interface MbrRechargeOrderService extends BaseService<MbrRechargeOrder, L
      * @param id
      * @param orderStatus
      */
-    public void update(Long id, Integer orderStatus);
+    void update(Long id, Integer orderStatus);
 }

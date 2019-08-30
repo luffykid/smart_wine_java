@@ -21,7 +21,7 @@ public interface WineCellarActivityMapper extends BaseMapper<WineCellarActivity,
      * 获取酒庄活动列表
      * @return
      */
-    public List<Map> selectSecList(@Param("mbrId") Long mbrId);
+    List<WineCellarActivity> selectSecList(@Param("mbrId") Long mbrId);
 
     /**
      * 获取酒庄活动详细
@@ -29,5 +29,5 @@ public interface WineCellarActivityMapper extends BaseMapper<WineCellarActivity,
      * @param mbrId
      * @return
      */
-    public Map selectSecById(@Param("id") Long id, @Param("mbrId") Long mbrId);
+    WineCellarActivity selectSecById(@Param("id") Long id, @Param("mbrId") Long mbrId);
 }

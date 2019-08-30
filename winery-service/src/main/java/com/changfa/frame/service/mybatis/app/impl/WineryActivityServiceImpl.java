@@ -30,11 +30,11 @@ public class WineryActivityServiceImpl extends BaseServiceImpl<WineryActivity, L
      * @return
      */
     @Override
-    public PageInfo<WineryActivity> getNoEndList(PageInfo pageInfo) {
+    public PageInfo<WineryActivity> getNoEndList(Long mbrId, PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(wineryActivityMapper.selectNoEndList());
+        return new PageInfo(wineryActivityMapper.selectNoEndList(mbrId));
     }
 
     /**
@@ -42,7 +42,7 @@ public class WineryActivityServiceImpl extends BaseServiceImpl<WineryActivity, L
      * @return
      */
     @Override
-    public PageInfo getSecList(Long mbrId, PageInfo pageInfo) {
+    public PageInfo<WineryActivity> getSecList(Long mbrId, PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
@@ -56,7 +56,7 @@ public class WineryActivityServiceImpl extends BaseServiceImpl<WineryActivity, L
      * @return
      */
     @Override
-    public Map getSecById(Long id, Long mbrId) {
+    public WineryActivity getSecById(Long id, Long mbrId) {
         return wineryActivityMapper.selectSecById(id, mbrId);
     }
 

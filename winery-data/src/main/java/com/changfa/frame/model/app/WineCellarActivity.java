@@ -62,7 +62,18 @@ public class WineCellarActivity extends BaseEntity {
     /** 增长比例 */
     private BigDecimal increaseScale;
 
-    
+    /******************************* 扩展字段*********************************/
+    /** 点赞状态0:为点赞 1:点赞**/
+     private Integer likeStatus;
+
+    public Integer getLikeStatus() {
+        return likeStatus;
+    }
+
+    public void setLikeStatus(Integer likeStatus) {
+        this.likeStatus = likeStatus;
+    }
+
     /**
      * 获取酒庄ID
     */

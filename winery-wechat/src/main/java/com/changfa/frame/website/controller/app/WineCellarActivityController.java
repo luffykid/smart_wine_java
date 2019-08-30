@@ -1,6 +1,7 @@
 package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.model.app.Member;
+import com.changfa.frame.model.app.WineCellarActivity;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityDetailService;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -85,7 +86,7 @@ public class WineCellarActivityController extends BaseController {
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
-        Map wineCellarActivity = wineCellarActivityServiceImpl.selectSecById(id, member.getId());
+        WineCellarActivity wineCellarActivity = wineCellarActivityServiceImpl.selectSecById(id, member.getId());
         List<Map> list = wineCellarActivityDetailServiceImpl.getProdSkuList(id);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("wineCellarActivity",wineCellarActivity);

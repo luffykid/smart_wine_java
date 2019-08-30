@@ -14,19 +14,19 @@ public interface WineCellarActivityDetailService extends BaseService<WineCellarA
      * @param wineCellarActivityId
      * @return
      */
-    public List<Map> getProdSkuList(Long wineCellarActivityId);
+    List<Map> getProdSkuList(Long wineCellarActivityId);
 
     /**
      * 活动订单预支付详情
      * @param id
      * @return
      */
-    public Map getPrePayDetail(Long id);
+    Map getPrePayDetail(Long id);
 
     /**
      * 获取商品详情
      * @param id
      * @return
      */
-    public Map getProdSkuDetail(Long id);
+    Map getProdSkuDetail(Long id);
 }

@@ -11,7 +11,7 @@ public interface MemberAddressService extends BaseService<MemberAddress, Long> {
      * @param mbrId
      * @return
      */
-    public List<MemberAddress> getList(Long mbrId);
+    List<MemberAddress> getList(Long mbrId);
 
     /**
      * 添加管理地址
@@ -23,7 +23,7 @@ public interface MemberAddressService extends BaseService<MemberAddress, Long> {
      * @param detailAddress
      * @param isDefault
      */
-    public void add(String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
+    void add(String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
 
     /**
      * 修改管理地址
@@ -35,5 +35,5 @@ public interface MemberAddressService extends BaseService<MemberAddress, Long> {
      * @param detailAddress
      * @param isDefault
      */
-    public void modify(Long id, String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
+    void modify(Long id, String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
 }
