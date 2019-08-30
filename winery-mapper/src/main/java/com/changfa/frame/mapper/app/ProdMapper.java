@@ -18,7 +18,7 @@ public interface ProdMapper extends BaseMapper<Prod, Long> {
 
     List<Prod> findProdList();
 
-    int updateProdStatus(@Param("id") Long id,@Param("skuStatus") Integer skuStatus);
+    int updateProdStatus(@Param("id") Long id,@Param("status") Integer status);
 
     int deleteByid(Long id);
 
@@ -29,4 +29,6 @@ public interface ProdMapper extends BaseMapper<Prod, Long> {
     int updateProd(Prod prod);
 
     List<ProdSku> getProdNameList();
+
+    List<Prod> selectListLikeName(Prod prod);
 }

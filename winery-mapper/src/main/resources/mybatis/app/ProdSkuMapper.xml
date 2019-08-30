@@ -180,7 +180,7 @@
     </select>
 
     <update id="updateSkuStatusByProdId">
-        update s_prod_sku set sku_status =#{skuStatus} where prod_id = #{id}
+        update s_prod_sku set sku_status =#{status} where prod_id = #{id}
     </update>
 
     <select id="selectProdSkuStatusByProdId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.ProdSku">
@@ -205,5 +205,15 @@
             #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort},
             #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
     </insert>
+
+    <select id="getProdNameBySkuId" parameterType="java.lang.Long" resultType="string">
+        select p.prod_name from s_prod_sku ps left join s_prod p on ps.prod_id = p.id where ps.id =#{prodSkuId}
+    </select>
+
+    <select id="getProdNameBySkuIdLike" parameterType="java.lang.Long" resultMap="prodSkuMap">
+        select ps.*,p.prod_name prodName from b_winery_sight_detail wsd
+        join s_prod_sku ps on wsd.prod_sku_id = ps.id
+        join s_prod p on ps.prod_id = p.id where ps.id =#{prodSkuId}
+    </select>
 
 </mapper>

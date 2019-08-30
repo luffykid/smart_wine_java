@@ -77,7 +77,7 @@ public class WinerySight extends BaseEntity {
     /**
      * 景点图片
      */
-    private  List<String> scenicImg;
+    private  List<WinerySightImg> winerySightImgList;
 
     /**
      * 获取酒庄ID
@@ -225,17 +225,18 @@ public class WinerySight extends BaseEntity {
 
     /**
      * 获取景点图片
-     * @return
+     * @return List<WinerySightImg>
      */
-    public List<String> getScenicImg() {
-        return scenicImg;
-    }
 
+    public List<WinerySightImg> getWinerySightImgList() {
+        return winerySightImgList;
+    }
     /**
      * 设置景点图片
-     * @param scenicImg
+     * @param winerySightImgList
      */
-    public void setScenicImg(List<String> scenicImg) {
-        this.scenicImg = scenicImg;
+
+    public void setWinerySightImgList(List<WinerySightImg> winerySightImgList) {
+        this.winerySightImgList = winerySightImgList;
     }
 }

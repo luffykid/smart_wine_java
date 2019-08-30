@@ -1,16 +1,13 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.model.app.WineryMaster;
 import com.changfa.frame.service.mybatis.app.WineryMasterService;
 import com.changfa.frame.website.controller.common.BaseController;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +18,6 @@ import java.util.Map;
 
 /**
  * 荣誉庄主接口
- *
  */
 @Api(value = "荣誉庄主接口", tags = "荣誉庄主接口")
 @RestController("wxMiniWineryMasterController")
@@ -30,6 +26,7 @@ public class WineryMasterController extends BaseController {
 
     @Resource(name = "wineryMasterServiceImpl")
     private WineryMasterService wineryMasterServiceImpl;
+
     /**
      * 获取荣誉庄主列表
      *
@@ -37,9 +34,12 @@ public class WineryMasterController extends BaseController {
      */
     @ApiOperation(value = "获取荣誉庄主列表", notes = "获取荣誉庄主列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
-    public Map<String, Object> getList(PageInfo pageInfo) {
-        PageInfo list = wineryMasterServiceImpl.selectList(new WineryMaster(), pageInfo);
-        return getResult(list);
+    public Map<String, Object> getList(int pageSize, int pageNum) {
+        PageInfo<WineryMaster> pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = wineryMasterServiceImpl.getHonourWineryList(pageInfo);
+        return getResult(pageInfo.getList());
     }
 
     /**
@@ -53,7 +53,6 @@ public class WineryMasterController extends BaseController {
             @ApiImplicitParam(name = "id", value = "id", dataType = "Long"))
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id) {
-        WineryMaster wineryMaster = wineryMasterServiceImpl.getById(id);
-        return getResult(wineryMaster);
+        return getResult(wineryMasterServiceImpl.getHonourWineryDetail(id));
     }
 }

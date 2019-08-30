@@ -127,6 +127,8 @@ public class WinerySightDetail extends BaseEntity {
      */
     private Integer sort;
 
+    /**产品规格*/
+    private ProdSku prodSku;
 
     /**
      * 获取酒庄景点ID
@@ -272,5 +274,19 @@ public class WinerySightDetail extends BaseEntity {
      */
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    /**
+     * 获取产品规格
+     */
+    public ProdSku getProdSku() {
+        return prodSku;
+    }
+
+    /**
+     * 设置产品规格
+     */
+    public void setProdSku(ProdSku prodSku) {
+        this.prodSku = prodSku;
     }
 }

@@ -17,9 +17,9 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
     /**
      * 添加景点
      * @param winerySight  景点对象
-     * @param curAdmin     当前用户
+     * @param WineryId     酒庄id
      */
-    void addWinerySight(WinerySight winerySight, Admin curAdmin );
+    void addWinerySight(WinerySight winerySight, Long WineryId );
 
     /**
      * 查询景点详情
@@ -28,11 +28,6 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
      */
     WinerySight findWinerySight(Long id);
 
-    /**
-     * 修改景点
-     * @param winerySight  景点对象
-     */
-    void updateWinerySight(WinerySight winerySight);
 
     /**
      * 删除景点
@@ -46,7 +41,7 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
      * @param pageInfo 分页对象
      * @return List<WinerySight>
      */
-    PageInfo<WinerySight> findWinerySightList(Admin curAdmin, PageInfo pageInfo);
+    PageInfo<WinerySight> findWinerySightList(WinerySight winerySight,Admin curAdmin, PageInfo pageInfo);
 
     /**
      * 添加景点图文
@@ -93,6 +88,22 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
     /**
      * 景点点赞
      * @param id
+     * @param curMember 当前用户
      */
-    boolean scenicLike(Long id);
+    boolean scenicLike(Long id,Member curMember);
+
+    /**
+     * 查询是否点赞
+     * @param id 景点id
+     * @param userid 用户id
+     * @return
+     */
+    int findScenicLike(Long id, Long userid);
+
+    /**
+     * 删除景点图文
+     * @param id
+     * @return
+     */
+    boolean deleteScenicImageText(Long id);
 }

@@ -134,7 +134,7 @@ public abstract class BaseController {
      * @param request 请求对象
      */
     public Admin getCurAdmin(HttpServletRequest request) {
-        /*************************** 生产环境 **************************/
+//        /*************************** 生产环境 **************************/
 //        // 取出登陆账号
 //        String headerAcctName = request.getHeader("request-header-acct");
 //        if (StringUtils.isBlank(headerAcctName)) {

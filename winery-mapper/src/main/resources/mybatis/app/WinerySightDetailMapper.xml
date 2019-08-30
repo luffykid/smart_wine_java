@@ -136,4 +136,36 @@
         from b_winery_sight_detail where winery_sight_id = #{id} order by  create_date desc
     </select>
 
+
+    <insert id="saveList" parameterType="java.util.List">
+        insert into b_winery_sight_detail(<include refid="table_column"/>)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.winerySightId},#{item.wineryActivityId},#{item.prodId},#{item.prodSkuId},#{item.wineryVoucherId},#{item.detailTitle},
+             #{item.detailBrief},#{item.detailImg},#{item.detailStatus},#{item.sort},#{item.createDate},#{item.modifyDate})
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=",">
+            update b_winery_sight_detail
+            <set>
+                winery_sight_id =#{item.winerySightId},
+                winery_activity_id =#{item.wineryActivityId},
+                prod_id = #{item.prodId},
+                prod_sku_id =#{item.prodSkuId},
+                winery_voucher_id =#{item.wineryVoucherId},
+                detail_title =#{item.detailTitle},
+                detail_brief =#{item.detailBrief},，
+                detail_img =#{item.detailImg},
+                detail_status =#{item.detailStatus},
+                sort =#{item.sort},
+                modify_date =#{item.modifyDate}
+            </set>
+            <where>
+                id =#{id}
+            </where>
+        </foreach>
+    </update>
+
 </mapper>

@@ -121,5 +121,4 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
     }
-
 }

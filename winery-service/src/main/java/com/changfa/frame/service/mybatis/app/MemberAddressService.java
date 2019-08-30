@@ -12,4 +12,28 @@ public interface MemberAddressService extends BaseService<MemberAddress, Long> {
      * @return
      */
     public List<MemberAddress> getList(Long mbrId);
+
+    /**
+     * 添加管理地址
+     * @param contact
+     * @param phone
+     * @param provinceCode
+     * @param cityCode
+     * @param countryCode
+     * @param detailAddress
+     * @param isDefault
+     */
+    public void add(String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
+
+    /**
+     * 修改管理地址
+     * @param contact
+     * @param phone
+     * @param provinceCode
+     * @param cityCode
+     * @param countryCode
+     * @param detailAddress
+     * @param isDefault
+     */
+    public void modify(Long id, String contact, String phone, String provinceCode, String cityCode,String countryCode,String detailAddress,Boolean isDefault);
 }

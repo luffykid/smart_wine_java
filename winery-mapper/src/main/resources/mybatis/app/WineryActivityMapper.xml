@@ -24,6 +24,13 @@
         id, winery_id, act_title, act_cover_img, is_platform, act_type, sign_start_date, sign_end_date,act_start_date,act_end_date,like_total_cnt,share_total_cnt,sign_total_cnt,create_date,modify_date,act_status
     </sql>
 
+    <select id="getById" resultMap="wineryActivityMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from b_winery_activity a
+        where a.id = #{id}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.WineryActivity" >
         insert into b_winery_activity (id, winery_id, act_title, act_cover_img, is_platform, act_type, 
             sign_start_date, sign_end_date, act_start_date, act_end_date, like_total_cnt, 
@@ -35,6 +42,57 @@
             )
     </insert>
 
+    <update id="update" parameterType="com.changfa.frame.model.app.WineryActivityLike" >
+        update b_winery_activity
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="actTitle != null and actTitle != ''" >
+                act_title = #{actTitle},
+            </if>
+            <if test="actCoverImg != null and actCoverImg != ''" >
+                act_cover_img = #{actCoverImg},
+            </if>
+            <if test="isPlatform != null" >
+                is_platform = #{isPlatform},
+            </if>
+            <if test="actType != null" >
+                act_type = #{actType},
+            </if>
+            <if test="signStartDate != null" >
+                sign_start_date = #{signStartDate},
+            </if>
+            <if test="signEndDate != null" >
+                sign_end_date = #{signEndDate},
+            </if>
+            <if test="actStartDate != null" >
+                act_start_date = #{actStartDate},
+            </if>
+            <if test="actEndDate != null" >
+                act_end_date = #{actEndDate},
+            </if>
+            <if test="likeTotalCnt != null" >
+                like_total_cnt = #{likeTotalCnt},
+            </if>
+            <if test="shareTotalCnt != null" >
+                share_total_cnt = #{shareTotalCnt},
+            </if>
+            <if test="signTotalCnt != null" >
+                sign_total_cnt = #{signTotalCnt},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+            <if test="actStatus != null" >
+                act_status = #{actStatus}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
     <select id="selectList" resultMap="wineryActivityMap" >
         select 
         <include refid="table_column" />
@@ -94,8 +152,25 @@
     <select id="selectNoEndList" resultMap="wineryActivityMap">
         select
         <include refid="table_column" />
-        from b_winery_activity where act_end_date <![CDATA[ >= ]]> now()
+        from b_winery_activity where act_status = 2 and act_end_date <![CDATA[ >= ]]> now()
     </select>
 
+    <select id="selectSecById" resultType="java.util.HashMap">
+        select a.*,ifnull(l.like_status,0) like_status from b_winery_activity a
+        left join b_winery_activity_like l on a.id = l.winery_id and l.mbr_id=#{mbrId}
+        where a.id = #{id}
+    </select>
 
+    <select id="selectSecList" parameterType="Long" resultType="java.util.HashMap">
+        select a.act_cover_img,a.act_title,a.like_total_cnt,a.share_total_cnt,ifnull(l.like_status,0) like_status from b_winery_activity a
+        left join b_winery_activity_like l on a.id = l.winery_id and l.mbr_id=#{mbrId}
+        where a.act_status = 2
+    </select>
+
+    <select id="selectMySignAct" parameterType="Long" resultMap="wineryActivityMap">
+        select a.* from b_winery_activity a
+        inner join m_mbr_winery_activity_sign s on a.id = s.winery_activity_id
+        where a.act_status=2 and s.mbr_id=#{mbrId}
+        order by a.act_end_date desc
+    </select>
 </mapper>

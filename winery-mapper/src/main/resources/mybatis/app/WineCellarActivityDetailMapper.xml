@@ -117,9 +117,17 @@
         order by d.sort asc
     </select>
 
+    <select id="selectProdSkuDetail" parameterType="Long" resultType="java.util.HashMap">
+        select s.sku_name,d.* from s_prod_sku s
+        inner join s_prod_detail d on s.prod_id =d.prod_id
+        where s.id = #{id}
+        order by d.sort
+    </select>
+
     <select id="getPrePayDetail" parameterType="Long" resultType="java.util.HashMap">
         select d.id dId,d.present_remark,s.id sId, s.sku_name,s.sku_sell_price,s.alcohol_cnt,s.fragrance_type from b_wine_cellar_activity_detail d
         inner join s_prod_sku s on d.prod_sku_id=s.id
         where d.id=#{id}
     </select>
+
 </mapper>

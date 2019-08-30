@@ -9,12 +9,14 @@ import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,11 +54,11 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      * @return List<Prod>
      */
     @Override
-    public PageInfo<Prod> getProdList(PageInfo pageInfo) {
+    public PageInfo<Prod> getProdList(Prod prod,PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(prodMapper.findProdList());
+        return new PageInfo(prodMapper.selectListLikeName(prod));
     }
 
     /**
@@ -94,9 +96,9 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      */
     @Override
     @Transactional
-    public void updateProdStatus(Long id, Integer skuStatus) {
-        prodSkuMapper.updateSkuStatusByProdId(id,skuStatus);
-        prodMapper.updateProdStatus(id,skuStatus);
+    public void updateProdStatus(Long id, Integer status) {
+        prodSkuMapper.updateSkuStatusByProdId(id,status);
+        prodMapper.updateProdStatus(id,status);
     }
 
     /**
@@ -114,25 +116,46 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     /**
      * 修改产品信息
      * @param prod 产品修改对象
-     * @return boolean
+     * @return boolean库
      */
     @Override
     @Transactional
     public void updateProd(Prod prod) {
         prod.setModifyDate(new Date());
         prodMapper.updateProd(prod);
-        prodDetailMapper.deleteByProdId(prod.getId());
+        List<ProdDetail> saveProdDetailList = new ArrayList<ProdDetail>();
+        List<ProdDetail> updateProdDetailList = new ArrayList<ProdDetail>();
         if(prod.getProdDetailList() != null && prod.getProdDetailList().size() >0){
             for (ProdDetail prodDetail : prod.getProdDetailList()) {
-                prodDetail.setId(IDUtil.getId());
-                prodDetail.setProdId(prod.getId());
-                prodDetail.setDetailImg(FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH)); //TEST_FILE_CP_PATH 产品图片存放路径
-                prodDetail.setDetailStatus(ProdDetail.DETAIL_STATUS_ENUM.JY.getValue());
-                prodDetail.setCreateDate(new Date());
-                prodDetail.setModifyDate(new Date());
-                prodDetailMapper.save(prodDetail);
+                if(prodDetail.getId() == null){   //    如果新添加图片
+                    prodDetail.setId(IDUtil.getId());
+                    prodDetail.setProdId(prod.getId());
+                    prodDetail.setDetailImg(FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH)); //TEST_FILE_CP_PATH 产品图片存放路径
+                    prodDetail.setDetailStatus(ProdDetail.DETAIL_STATUS_ENUM.JY.getValue());
+                    prodDetail.setCreateDate(new Date());
+                    prodDetail.setModifyDate(new Date());
+                    saveProdDetailList.add(prodDetail);
+                }else{
+                    ProdDetail prodDetailvo = prodDetailMapper.getById(prodDetail.getId());
+                    if(!StringUtils.equals(prodDetailvo.getDetailImg(), prodDetail.getDetailImg())){
+                        String newFileUrl = FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH);
+                        FileUtil.deleteNFSByFileUrl(prodDetailvo.getDetailImg(),newFileUrl);
+                        prodDetail.setDetailImg(newFileUrl);
+                    }
+                    prodDetail.setModifyDate(new Date());
+                    updateProdDetailList.add(prodDetail);
+                }
             }
+            if(saveProdDetailList!= null && saveProdDetailList.size()>0){
+                prodDetailMapper.saveProdDetailList(saveProdDetailList);
+            }
+            if(updateProdDetailList!= null && updateProdDetailList.size()>0){
+                prodDetailMapper.updateProdDetailList(updateProdDetailList);
+            }
+
         }
+
+
     }
 
     /**
@@ -188,7 +211,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         prodSku.setSkuWeight(prodSku.getSkuCapacity()); //重量和容量一比一
         prodSku.setCreateDate(new Date());
         prodSku.setModifyDate(new Date());
-        prodSkuMapper.add(prodSku);
+        prodSkuMapper.save(prodSku);
         if(prodSku.getIsIntegral()){
             for (ProdSkuMbrPrice prodSkuMbrPrice:prodSku.getProdSkuMbrPriceList()) {
                 prodSkuMbrPrice.setId(IDUtil.getId());
@@ -283,6 +306,16 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
         return new PageInfo(prodSkuMapper.getByProdId(id));
+    }
+
+    /**
+     * 删除产品详情
+     * @param id
+     * @return boolean
+     */
+    @Override
+    public boolean deleteProdDetail(Long id) {
+        return prodDetailMapper.delete(id) > 0 ? true : false;
     }
 
 }

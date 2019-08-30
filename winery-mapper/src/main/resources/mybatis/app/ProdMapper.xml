@@ -5,7 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="prod_category_id" property="prodCategoryId" jdbcType="INTEGER" />
-        <result column="lable_type" property="LABLE_TYPE" jdbcType="INTEGER" />
+        <result column="lable_type" property="lableType" jdbcType="INTEGER" />
         <result column="prod_name" property="prodName" jdbcType="VARCHAR" />
         <result column="prod_title" property="prodTitle" jdbcType="VARCHAR" />
         <result column="prod_code" property="prodCode" jdbcType="VARCHAR" />
@@ -14,7 +14,7 @@
         <result column="descri" property="descri" jdbcType="LONGVARCHAR" />
         <result column="is_limit" property="isLimit" jdbcType="TINYINT" />
         <result column="limit_count" property="limitCount" jdbcType="INTEGER" />
-        <result column="prod_status" property="PROD_STATUS" jdbcType="INTEGER" />
+        <result column="prod_status" property="prodStatus" jdbcType="INTEGER" />
         <result column="is_recommend" property="isRecommend" jdbcType="TINYINT" />
         <result column="admin_id" property="adminId" jdbcType="BIGINT" />
         <result column="is_del" property="isDel" jdbcType="BIT" />
@@ -173,7 +173,7 @@
     </select>
 
     <update id="updateProdStatus">
-        update s_prod set prod_status =#{skuStatus} where id =#{id}
+        update s_prod set prod_status =#{status} where id =#{id}
     </update>
 
     <update id="deleteByid" parameterType="java.lang.Long">
@@ -245,6 +245,65 @@
 
     <select id="getProdNameList" resultMap="prodMap">
         select id,prod_name from s_prod where prod_status =1 and is_del =0
+    </select>
+
+    <select id="selectListLikeName" parameterType="com.changfa.frame.model.app.Prod" resultMap="prodMap" >
+        select
+        <include refid="table_column" />
+        from s_prod p
+        <where >
+            <if test="wineryId != null" >
+                and p.winery_id = #{wineryId}
+            </if>
+            <if test="prodCategoryId != null" >
+                and p.prod_category_id = #{prodCategoryId}
+            </if>
+            <if test="lableType != null" >
+                and p.lable_type = #{lableType}
+            </if>
+            <if test="prodName != null and prodName != ''" >
+                and p.prod_name like concat(concat('%',#{prodName}),'%')
+            </if>
+            <if test="prodTitle != null and prodTitle != ''" >
+                and p.prod_title = #{prodTitle}
+            </if>
+            <if test="prodCode != null and prodCode != ''" >
+                and p.prod_code = #{prodCode}
+            </if>
+            <if test="totalStockCnt != null" >
+                and p.total_stock_cnt = #{totalStockCnt}
+            </if>
+            <if test="listImg != null and listImg != ''" >
+                and p.list_img = #{listImg}
+            </if>
+            <if test="descri != null" >
+                and p.descri = #{descri}
+            </if>
+            <if test="isLimit != null" >
+                and p.is_limit = #{isLimit}
+            </if>
+            <if test="limitCount != null" >
+                and p.limit_count = #{limitCount}
+            </if>
+            <if test="prodStatus != null" >
+                and p.prod_status = #{prodStatus}
+            </if>
+            <if test="isRecommend != null" >
+                and p.is_recommend = #{isRecommend}
+            </if>
+            <if test="adminId != null" >
+                and p.admin_id = #{adminId}
+            </if>
+            <if test="isDel != null" >
+                and p.is_del = #{isDel}
+            </if>
+            <if test="createDate != null" >
+                and p.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and p.modify_date = #{modifyDate}
+            </if>
+        </where>
     </select>
 
 </mapper>

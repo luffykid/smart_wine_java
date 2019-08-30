@@ -1,6 +1,8 @@
 package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.core.util.OrderNoUtil;
+import com.changfa.frame.model.app.MbrStoreOrder;
+import com.changfa.frame.model.app.MbrStoreOrderItem;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrStoreOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +49,25 @@ public class MbrStoreOrderController extends BaseController {
     }
 
     /**
+     * 获取储酒订单详情
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取储酒订单详情", notes = "获取储酒订单详情")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "id", value = "储酒订单id", dataType = "Long"))
+    @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
+    public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
+        Member member = getCurMember(request);
+        MbrStoreOrder mbrStoreOrder = mbrStoreOrderServiceImpl.getById(id);
+        List<MbrStoreOrderItem> list = mbrStoreOrderServiceImpl.getMbrStoreOrderItemByStoreId(id);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("mbrStoreOrder", mbrStoreOrder);
+        returnMap.put("MbrStoreOrderItem", list);
+        return getResult(returnMap);
+    }
+
+    /**
      * 生成储酒订单
      *
      * @return
@@ -53,10 +75,11 @@ public class MbrStoreOrderController extends BaseController {
     @ApiOperation(value = "生成储酒订单", notes = "生成储酒订单")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "dId", value = "酒庄活动详情id", dataType = "Long"),
-            @ApiImplicitParam(name = "sId", value = "商品skuId", dataType = "Long")
+            @ApiImplicitParam(name = "sId", value = "商品skuId", dataType = "Long"),
+            @ApiImplicitParam(name = "prodTotalCnt", value = "商品数量", dataType = "Integer")
     })
-    @RequestMapping(value = "/buildOrder", method = RequestMethod.GET)
-    public Map<String, Object> buildOrder(Long dId, Long sId, HttpServletRequest request) {
+    @RequestMapping(value = "/buildOrder", method = RequestMethod.POST)
+    public Map<String, Object> buildOrder(Long dId, Long sId, Integer prodTotalCnt, HttpServletRequest request) {
         Member member = getCurMember(request);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("totalStoreRemain", member.getTotalStoreRemain());

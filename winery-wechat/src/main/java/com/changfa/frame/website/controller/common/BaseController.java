@@ -4,6 +4,7 @@ import com.changfa.frame.core.prop.PropAttributes;
 import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MemberService;
+import com.changfa.frame.website.interceptor.TokenInterceptor;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -135,9 +136,11 @@ public abstract class BaseController {
      * @param request 请求对象
      */
     public Member getCurMember(HttpServletRequest request) {
-        /************ 生产环境使用 ****************/
+//        /************ 生产环境使用 ****************/
 //        // 获取会员openId，并查询会员数据
+//        log.info("*********** getCurMember *********");
 //        String openId = request.getHeader(TokenInterceptor.REQUEST_HEADER_OPENID_KEY);
+//        log.info("获取当前openId：{}",openId);
 //
 //        // 根据手机号查询会员
 //        Member member = memberService.getByOpenId(openId);

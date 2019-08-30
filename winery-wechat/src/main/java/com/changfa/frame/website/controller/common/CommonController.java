@@ -80,6 +80,16 @@ public class CommonController extends BaseController {
             throw new CustomException(RESPONSE_CODE_ENUM.ACCT_PHONE_NO_SAME);
         }
 
+        // 判断验证码是否一致
+        Object redisPhoneCodeObj = redisClient.get(RedisConsts.WXMEMBER_MOBILE_CAPTCHA + phone);
+        if (redisPhoneCodeObj == null) {
+            throw new CustomException(RESPONSE_CODE_ENUM.CAPTCHA_CODE_INVALID);
+        }
+        String redisPhoneCode = String.valueOf(redisPhoneCodeObj);
+        if (!StringUtils.equalsIgnoreCase(redisPhoneCode,phoneCode)) {
+            throw new CustomException(RESPONSE_CODE_ENUM.CAPTCHA_CODE_ERROR);
+        }
+
         // 设置redis中的token
         String redisTokenKey = RedisConsts.WXMINI_OPENID + curMember.getOpenId();
         String token = RandomStringUtils.randomNumeric(10) + phone;

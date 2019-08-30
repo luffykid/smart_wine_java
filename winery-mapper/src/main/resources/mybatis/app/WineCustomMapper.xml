@@ -123,10 +123,63 @@
         </where>
     </select>
 
-    <select id="getWineCustomList" resultMap="wineCustomMap">
+    <select id="getWineCustomList" resultMap="wineCustomMap" >
         select
-        <include refid="table_column"/>
-        from b_wine_custom  where custom_status != 1  order by create_date  desc
+        <include refid="table_column" />
+        from b_wine_custom wc
+        <where >
+            <if test="wineryId != null" >
+                and wc.winery_id = #{wineryId}
+            </if>
+            <if test="prodSkuId != null" >
+                and wc.prod_sku_id = #{prodSkuId}
+            </if>
+            <if test="skuName != null and skuName != ''" >
+                and wc.sku_name = #{skuName}
+            </if>
+            <if test="customName != null and customName != ''" >
+                and wc.custom_name = #{customName}
+            </if>
+            <if test="customCoverImg != null and customCoverImg != ''" >
+                and wc.custom_cover_img = #{customCoverImg}
+            </if>
+            <if test="customStateImg != null and customStateImg != ''" >
+                and wc.custom_state_img = #{customStateImg}
+            </if>
+            <if test="customStatus != null" >
+                and wc.custom_status = #{customStatus}
+            </if>
+            <if test="customPrice != null" >
+                and wc.custom_price = #{customPrice}
+            </if>
+            <if test="sellTotalCnt != null" >
+                and wc.sell_total_cnt = #{sellTotalCnt}
+            </if>
+            <if test="createDate != null" >
+                and wc.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and wc.modify_date = #{modifyDate}
+            </if>
+        </where>
+                order by modify_date desc
+    </select>
+
+    <select id="getWineCustomListByName" parameterType="string" resultMap="wineCustomMap">
+
+        select a.*,b.elementName from  b_wine_custom a left join
+        (select wcec.wine_custom_id id,group_concat(wce.element_name) elementName
+        from b_wine_custom_element_content wcec join b_wine_custom_element wce
+        on wcec.wine_custom_element_id = wce.id and wcec.wine_custom_id
+        in(select id from b_wine_custom where custom_name like concat(concat('%',#{customName}),'%'))
+        group by wcec.wine_custom_id) b on a.id = b.id
+
+    </select>
+
+    <select id="getWineCustomContianProd" parameterType="java.lang.Long" resultMap="wineCustomMap">
+        select wc.*,p.id prodId,p.prod_name prodName from b_wine_custom wc
+        join s_prod_sku ps on wc.prod_sku_id = ps.id
+        join s_prod p on ps.prod_id = p.id where  wc.id = #{id}
     </select>
 
 </mapper>

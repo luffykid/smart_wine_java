@@ -13,5 +13,10 @@ import com.changfa.frame.model.app.WineCustom;
 import java.util.List;
 
 public interface WineCustomMapper extends BaseMapper<WineCustom, Long> {
-    List<WineCustom> getWineCustomList();
+
+    List<WineCustom> getWineCustomList(WineCustom wineCustom);
+
+    List<WineCustom> getWineCustomListByName(String customName);
+
+    WineCustom getWineCustomContianProd(Long id);
 }

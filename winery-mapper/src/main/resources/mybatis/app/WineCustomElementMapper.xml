@@ -97,4 +97,34 @@
         select element_name from b_wine_custom_element where id =#{id}
     </select>
 
+    <select id="getElementNameByWineCustomId" parameterType="java.lang.Long" resultType="string">
+       select group_concat(wce.element_name) element_name
+       from b_wine_custom_element_content wcec join b_wine_custom_element wce
+       on wcec.wine_custom_element_id = wce.id and wcec.wine_custom_id = #{id}
+    </select>
+
+    <select id="getwineCustomElementList" resultMap="wineCustomElementMap">
+        select
+        <include refid="table_column"/>
+        from b_wine_custom_element where element_status = 1
+    </select>
+
+    <select id="getwineCustomElementListByid" resultMap="wineCustomElementMap">
+        select
+        <include refid="table_column"/>
+        from b_wine_custom_element where id in
+        <foreach item="id" index="index" collection="listId" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getCustomElementListByWineCustomId" parameterType="java.lang.Long" resultMap="wineCustomElementMap">
+        select
+        <include refid="table_column"/>
+        from b_wine_custom_element_content wcec join b_wine_custom_element wce
+        on wcec.wine_custom_element_id = wce.id and wcec.wine_custom_id = #{id}
+    </select>
+    
+
+
 </mapper>

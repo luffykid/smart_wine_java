@@ -168,12 +168,20 @@
         </where>
     </select>
 
-    <select id="selectEnableVoucherCount" resultMap="mbrWineryVoucherMap">
-        select
-        <include refid="table_column" />
+
+    <select id="selectEnableVoucherList" parameterType="Long" resultMap="mbrWineryVoucherMap">
+        select <include refid="table_column" />
         from b_mbr_winery_voucher
         <where>
-            mbr_id=#{mbrId} and voucher_cnt=#{voucherCnt} and UNIX_TIMESTAMP(now()) bettwen  effective_begin_date and effective_begin_date
+            mbr_id=#{mbrId} and voucher_cnt=1 and now() between  effective_begin_date and effective_end_date
+        </where>
+    </select>
+
+    <select id="selectEnableVoucherCount" parameterType="Long" resultType="Integer">
+        select count(id)
+        from b_mbr_winery_voucher
+        <where>
+            mbr_id=#{mbrId} and voucher_cnt=1 and now() between  effective_begin_date and effective_end_date
         </where>
     </select>
 

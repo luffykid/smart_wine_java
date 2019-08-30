@@ -108,4 +108,27 @@
         from b_wine_custom_element_content where wine_custom_id =#{id}
     </select>
 
+    <select id="getIdListByWineCustomId" parameterType="java.lang.Long" resultType="long">
+        select id from  b_wine_custom_element_content where wine_custom_id =#{id}
+    </select>
+
+    <delete id="deleteById" parameterType="long">
+      delete from b_wine_custom_element_content where id in
+      <foreach collection="List" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </delete>
+
+    <insert id="saveList">
+        insert into b_wine_custom_element_content (<include refid="table_column"/>)
+        value
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.wineCustomId},#{item.wineCustomElementId},#{item.bgImg},#{item.maskImg},#{item.bottomImg},#{item.createDate},#{item.modifyDate})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByWineCustomId" parameterType="java.lang.Long">
+        delete from b_wine_custom_element_content where wine_custom_id =#{id}
+    </delete>
+
 </mapper>

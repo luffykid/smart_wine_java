@@ -7,6 +7,8 @@ import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("mbrWineryVoucherServiceImpl")
 public class MbrWineryVoucherServiceImpl extends BaseServiceImpl<MbrWineryVoucher, Long> implements MbrWineryVoucherService {
 
@@ -20,6 +22,15 @@ public class MbrWineryVoucherServiceImpl extends BaseServiceImpl<MbrWineryVouche
      */
     @Override
     public Integer getEnableVoucherCount(Long mbrId) {
-        return mbrWineryVoucherMapper.selectEnableVoucherCount(mbrId, 1);
+        return mbrWineryVoucherMapper.selectEnableVoucherCount(mbrId);
+    }
+
+    /**
+     * 获取可以使用的优惠券列表
+     * @return
+     */
+    @Override
+    public List<MbrWineryVoucher> getEnableVoucherList(Long mbrId) {
+        return mbrWineryVoucherMapper.selectEnableVoucherList(mbrId);
     }
 }

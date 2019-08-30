@@ -1,7 +1,9 @@
 package com.changfa.frame.website.controller.app;
 
 
+import com.changfa.frame.model.app.MbrWechat;
 import com.changfa.frame.model.app.Member;
+import com.changfa.frame.service.mybatis.app.MbrWechatService;
 import com.changfa.frame.service.mybatis.app.MbrWineryVoucherService;
 import com.changfa.frame.service.mybatis.app.MemberService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,7 +39,8 @@ public class MemberController extends BaseController {
     private MemberService memberServiceImpl;
     @Resource(name = "mbrWineryVoucherServiceImpl")
     private MbrWineryVoucherService mbrWineryVoucherServiceImpl;
-
+    @Resource(name = "mbrWechatServiceImpl")
+    private MbrWechatService mbrWechatServiceImpl;
     /**
      * 获取个人信息
      *
@@ -48,7 +52,13 @@ public class MemberController extends BaseController {
 
         Member member = getCurMember(request);
         member.setVoucherCount(mbrWineryVoucherServiceImpl.getEnableVoucherCount(member.getId()));
-        return getResult(member);
+        MbrWechat mbrWechat = new MbrWechat();
+        mbrWechat.setMbrId(member.getId());
+        List<MbrWechat> list = mbrWechatServiceImpl.selectList(mbrWechat);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("wechat", list);
+        returnMap.put("member", member);
+        return getResult(returnMap);
     }
 
     /**
@@ -58,25 +68,34 @@ public class MemberController extends BaseController {
      */
     @ApiOperation(value = "获取招募会员列表", notes = "获取招募会员列表")
     @RequestMapping(value = "/getSubList", method = RequestMethod.GET)
-    public Map<String, Object> getSubList(HttpServletRequest request, PageInfo pageInfo) {
+    public Map<String, Object> getSubList(HttpServletRequest request, int pageSize, int pageNum) {
         Member member = getCurMember(request);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("list", memberServiceImpl.getSubList(member.getId(), pageInfo));
+        returnMap.put("list", memberServiceImpl.getSubList(member.getId(), pageInfo).getList());
         returnMap.put("other", memberServiceImpl.getSubStatis(member.getId()));
         return getResult(returnMap);
     }
 
     /**
-     * 获取会员积分列表
+     * 获取会员积分
      *
      * @return
      */
-    @ApiOperation(value = "获取会员积分列表", notes = "获取会员积分列表")
-    @RequestMapping(value = "/getIntegralList", method = RequestMethod.GET)
-    public Map<String, Object> getIntegralList(HttpServletRequest request, PageInfo pageInfo) {
+    @ApiOperation(value = "获取会员积分", notes = "获取会员积分")
+    @RequestMapping(value = "/getIntegral", method = RequestMethod.GET)
+    public Map<String, Object> getIntegral(HttpServletRequest request, int pageSize, int pageNum) {
         Member member = getCurMember(request);
-        PageInfo list = memberServiceImpl.getIntegralList(member.getId(), pageInfo);
-        return getResult(list);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = memberServiceImpl.getIntegralList(member.getId(), pageInfo);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("totalIntegral", member.getTotalIntegral());
+        returnMap.put("list", pageInfo.getList());
+        return getResult(returnMap);
     }
 
     /**
@@ -93,7 +112,7 @@ public class MemberController extends BaseController {
             @ApiImplicitParam(name = "phone", value = "联系电话", dataType = "String"),
     }
     )
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, Integer gender, String phone) {
         Member member = getCurMember(request);
         try {

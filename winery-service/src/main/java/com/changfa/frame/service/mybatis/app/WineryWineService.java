@@ -31,7 +31,7 @@ public interface WineryWineService extends BaseService<WineryWine, Long> {
      * @param pageInfo 分页对象
      * @return List<WineryWine>
      */
-    PageInfo<WineryWine> getWineryWineList(PageInfo pageInfo);
+    PageInfo<WineryWine> getWineryWineList(WineryWine wineryWine,PageInfo pageInfo);
 
     /**
      * 搜索酒庄酒
