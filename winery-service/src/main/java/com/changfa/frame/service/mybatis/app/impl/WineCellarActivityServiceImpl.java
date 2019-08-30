@@ -29,7 +29,7 @@ public class WineCellarActivityServiceImpl extends BaseServiceImpl<WineCellarAct
      * @return
      */
     @Override
-    public PageInfo getSecList(Long mbrId, PageInfo pageInfo) {
+    public PageInfo<WineCellarActivity> getSecList(Long mbrId, PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
@@ -43,7 +43,7 @@ public class WineCellarActivityServiceImpl extends BaseServiceImpl<WineCellarAct
      * @return
      */
     @Override
-    public Map selectSecById(Long id, Long mbrId) {
+    public WineCellarActivity selectSecById(Long id, Long mbrId) {
         return wineCellarActivityMapper.selectSecById(id, mbrId);
     }
 

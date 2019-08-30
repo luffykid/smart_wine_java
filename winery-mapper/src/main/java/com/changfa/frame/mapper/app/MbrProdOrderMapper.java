@@ -21,5 +21,5 @@ public interface MbrProdOrderMapper extends BaseMapper<MbrProdOrder, Long> {
      * @param mbrId
      * @return
      */
-    public List<MbrProdOrder> selectListByType(@Param("mbrId") Long mbrId,@Param("orderStatus") Integer orderStatus);
+    List<MbrProdOrder> selectListByType(@Param("mbrId") Long mbrId,@Param("orderStatus") Integer orderStatus);
 }

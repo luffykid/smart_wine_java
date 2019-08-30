@@ -123,6 +123,9 @@ public class ProdSku extends BaseEntity {
     /**酒精度*/
     private BigDecimal alcoholCnt;
 
+    /**包装费【每斤酒的包装价格】*/
+    private BigDecimal packagePrice;
+
     /**是否删除
      0：否
      1：是*/
@@ -135,6 +138,14 @@ public class ProdSku extends BaseEntity {
 
     /**商品名称*/
     private String prodName;
+
+    public BigDecimal getPackagePrice() {
+        return packagePrice;
+    }
+
+    public void setPackagePrice(BigDecimal packagePrice) {
+        this.packagePrice = packagePrice;
+    }
 
     /**
      * 获取商品ID

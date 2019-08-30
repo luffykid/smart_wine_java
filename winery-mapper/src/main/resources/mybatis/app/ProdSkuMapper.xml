@@ -18,6 +18,7 @@
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
         <result column="integral_cnt" property="integralCnt" jdbcType="DECIMAL" />
+        <result column="package_price" property="packagePrice" jdbcType="DECIMAL" />
         <result column="is_del" property="isDel" jdbcType="BIT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
@@ -25,7 +26,7 @@
 
     <sql id="table_column" >
         id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type,alcohol_cnt, sku_weight, sku_capacity, sku_sell_price,
-        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, is_del,
+        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, package_price, is_del,
         create_date, modify_date
     </sql>
 
@@ -39,10 +40,10 @@
     <insert id="save" parameterType="com.changfa.frame.model.app.ProdSku" >
         insert into s_prod_sku (id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type, alcohol_cnt, sku_weight,
             sku_capacity, sku_sell_price, sku_market_price, sell_total_cnt, sort, 
-            is_integral, integral_amt, integral_cnt, is_del, create_date, modify_date)
+            is_integral, integral_amt, integral_cnt, package_price, is_del, create_date, modify_date)
         values (#{id}, #{prodId}, #{skuName}, #{skuStatus}, #{skuStockCnt}, #{fragranceType}, #{alcoholCnt}, #{skuWeight},
             #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort}, 
-            #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
+            #{isIntegral}, #{integralAmt}, #{integralCnt}, #{packagePrice}, #{isDel}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.ProdSku" >
@@ -92,6 +93,9 @@
             </if>
             <if test="integralCnt != null" >
                 integral_cnt = #{integralCnt},
+            </if>
+            <if test="packagePrice != null" >
+                package_price = #{packagePrice},
             </if>
             <if test="isDel != null" >
                 is_del = #{isDel},
@@ -160,6 +164,9 @@
             </if>
             <if test="integralCnt != null" >
                 and ps.integral_cnt = #{integralCnt}
+            </if>
+            <if test="packagePrice != null" >
+                and ps.package_price = #{packagePrice}
             </if>
             <if test="isDel != null" >
                 and ps.is_del = #{isDel}

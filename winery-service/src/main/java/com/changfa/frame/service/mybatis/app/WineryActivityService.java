@@ -13,13 +13,13 @@ public interface WineryActivityService extends BaseService<WineryActivity, Long>
      * 获取未结束活动列表
      * @return
      */
-    public PageInfo<WineryActivity> getNoEndList(PageInfo pageInfo);
+    PageInfo<WineryActivity> getNoEndList(Long mbrId, PageInfo pageInfo);
 
     /**
      * 获取酒庄活动列表
      * @return
      */
-    public PageInfo getSecList(Long mbrId, PageInfo pageInfo);
+    PageInfo<WineryActivity> getSecList(Long mbrId, PageInfo pageInfo);
 
     /**
      * 获取酒庄活动详细
@@ -27,7 +27,7 @@ public interface WineryActivityService extends BaseService<WineryActivity, Long>
      * @param mbrId
      * @return
      */
-    public Map getSecById(Long id, Long mbrId);
+    WineryActivity getSecById(Long id, Long mbrId);
 
     /**
      * 活动点赞
@@ -35,12 +35,12 @@ public interface WineryActivityService extends BaseService<WineryActivity, Long>
      * @param mbrId
      * @param wineryId
      */
-    public void thumbup(Long wineryActivityId, Long mbrId, Long wineryId);
+    void thumbup(Long wineryActivityId, Long mbrId, Long wineryId);
 
     /**
      * 我参加的活动列表
      * @param id
      * @return
      */
-    public List<WineryActivity> getMySignAct(Long id);
+    List<WineryActivity> getMySignAct(Long id);
 }

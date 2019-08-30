@@ -15,5 +15,5 @@ import java.util.List;
 
 public interface MbrTakeOrderMapper extends BaseMapper<MbrTakeOrder, Long> {
 
-    public List<MbrTakeOrder> selectListByMbrStoreOrderId(@Param("mbrStoreOrderId") Long mbrStoreOrderId);
+    List<MbrTakeOrder> selectListByMbrStoreOrderId(@Param("mbrStoreOrderId") Long mbrStoreOrderId);
 }

@@ -58,6 +58,28 @@ public class WineryActivity extends BaseEntity {
     /** 活动状态1：新疆2：启用3：禁用 */
     private Integer actStatus;
 
+    /******************************* 扩展字段*********************************/
+    /** 点赞状态0:为点赞 1:点赞**/
+    private Integer likeStatus;
+
+    /**会员活动状态 0:未报名 1：已报名 2：已签到 3：已签退 **/
+    private Integer mbrActStatus;
+
+    public Integer getMbrActStatus() {
+        return mbrActStatus;
+    }
+
+    public void setMbrActStatus(Integer mbrActStatus) {
+        this.mbrActStatus = mbrActStatus;
+    }
+
+    public Integer getLikeStatus() {
+        return likeStatus;
+    }
+
+    public void setLikeStatus(Integer likeStatus) {
+        this.likeStatus = likeStatus;
+    }
     
     /**
      * 获取酒庄ID

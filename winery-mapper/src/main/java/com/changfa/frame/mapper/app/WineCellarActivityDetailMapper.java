@@ -20,19 +20,19 @@ public interface WineCellarActivityDetailMapper extends BaseMapper<WineCellarAct
      * @param wineCellarActivityId
      * @return
      */
-    public List<Map> selectProdSkuList(@Param("wineCellarActivityId") Long wineCellarActivityId);
+    List<Map> selectProdSkuList(@Param("wineCellarActivityId") Long wineCellarActivityId);
 
     /**
      * 活动订单预支付详情
      * @param id
      * @return
      */
-    public Map getPrePayDetail(@Param("id") Long id);
+    Map getPrePayDetail(@Param("id") Long id);
 
     /**
      * 获取商品详情
      * @param id
      * @return
      */
-    public Map selectProdSkuDetail(@Param("id") Long id);
+    Map selectProdSkuDetail(@Param("id") Long id);
 }

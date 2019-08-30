@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 会员商品订单
@@ -70,7 +71,40 @@ public class MbrStoreOrder extends BaseEntity {
     /** 订单号【系统生成】 */
     private String orderNo;
 
-    
+    /** 是否随时取酒 0：否 1：是 **/
+    private Integer isNow;
+
+    /**取酒时间【到某个时间后可以取酒】**/
+    private Date takeDate;
+    /*******************************************扩展字段***************************************/
+
+    /**商品sku名称**/
+    private String skuName;
+
+    public String getSkuName() {
+        return skuName;
+    }
+
+    public void setSkuName(String skuName) {
+        this.skuName = skuName;
+    }
+
+    public Integer getIsNow() {
+        return isNow;
+    }
+
+    public void setIsNow(Integer isNow) {
+        this.isNow = isNow;
+    }
+
+    public Date getTakeDate() {
+        return takeDate;
+    }
+
+    public void setTakeDate(Date takeDate) {
+        this.takeDate = takeDate;
+    }
+
     /**
      * 获取酒庄ID
     */

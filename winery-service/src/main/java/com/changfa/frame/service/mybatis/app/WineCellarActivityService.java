@@ -13,7 +13,7 @@ public interface WineCellarActivityService extends BaseService<WineCellarActivit
      * 获取酒庄活动列表
      * @return
      */
-    public PageInfo getSecList(Long mbrId, PageInfo pageInfo);
+    PageInfo<WineCellarActivity> getSecList(Long mbrId, PageInfo pageInfo);
 
     /**
      * 获取酒庄活动详细
@@ -21,7 +21,7 @@ public interface WineCellarActivityService extends BaseService<WineCellarActivit
      * @param mbrId
      * @return
      */
-    public Map selectSecById(Long id, Long mbrId);
+    WineCellarActivity selectSecById(Long id, Long mbrId);
 
     /**
      * 活动点赞
@@ -29,5 +29,5 @@ public interface WineCellarActivityService extends BaseService<WineCellarActivit
      * @param mbrId
      * @param wineryId
      */
-    public void thumbup(Long wineCellarActivityId, Long mbrId, Long wineryId);
+    void thumbup(Long wineCellarActivityId, Long mbrId, Long wineryId);
 }

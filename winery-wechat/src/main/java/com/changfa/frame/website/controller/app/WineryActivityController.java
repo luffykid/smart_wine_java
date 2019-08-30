@@ -4,7 +4,6 @@ import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.WineryActivity;
 import com.changfa.frame.service.mybatis.app.MbrWineryActivitySignService;
 import com.changfa.frame.service.mybatis.app.WineryActivityService;
-import com.changfa.frame.service.mybatis.app.impl.MbrWineryActivitySignServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -13,7 +12,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,12 +41,13 @@ public class WineryActivityController extends BaseController {
      */
     @ApiOperation(value = "获取未结束活动列表", notes = "获取未结束活动列表")
     @RequestMapping(value = "/getNoEndList", method = RequestMethod.GET)
-    public Map<String, Object> getNoEndList(int pageNum, int pageSize) {
+    public Map<String, Object> getNoEndList(int pageNum, int pageSize, HttpServletRequest request) {
+        Member member = getCurMember(request);
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(pageInfo).getList());
+        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(member.getId(), pageInfo).getList());
         return getResult(resultMap);
     }
 
@@ -80,8 +78,8 @@ public class WineryActivityController extends BaseController {
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
-        Map wineCellarActivity = wineryActivityServiceImpl.getSecById(id, member.getId());
-        return getResult(wineCellarActivity);
+        WineryActivity wineryActivity = wineryActivityServiceImpl.getSecById(id, member.getId());
+        return getResult(wineryActivity);
     }
     /**
      * 活动点赞

@@ -20,5 +20,5 @@ public interface MbrBillRecordMapper extends BaseMapper<MbrBillRecord, Long> {
      * @param mbrId
      * @return
      */
-    public List<MbrBillRecord> selectFlowList(@Param("mbrId") Long mbrId);
+    List<MbrBillRecord> selectFlowList(@Param("mbrId") Long mbrId);
 }

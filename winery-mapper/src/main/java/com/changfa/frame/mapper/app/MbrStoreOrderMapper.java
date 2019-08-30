@@ -16,5 +16,5 @@ import java.util.Map;
 
 public interface MbrStoreOrderMapper extends BaseMapper<MbrStoreOrder, Long> {
 
-    List<Map> selectStoreList(@Param("mbrId") Long mbrId);
+    List<MbrStoreOrder> selectStoreList(@Param("mbrId") Long mbrId);
 }

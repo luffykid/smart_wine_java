@@ -33,7 +33,7 @@ public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Lon
      * @return
      */
     @Override
-    public List<Map> getStoreList(Long mbrId) {
+    public List<MbrStoreOrder> getStoreList(Long mbrId) {
 
         return mbrStoreOrderMapper.selectStoreList(mbrId);
     }

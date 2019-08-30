@@ -12,7 +12,6 @@ import com.changfa.frame.model.app.WineryActivity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface WineryActivityMapper extends BaseMapper<WineryActivity, Long> {
 
@@ -20,13 +19,13 @@ public interface WineryActivityMapper extends BaseMapper<WineryActivity, Long> {
      * 获取未结束活动列表
      * @return
      */
-    List<WineryActivity> selectNoEndList();
+    List<WineryActivity> selectNoEndList(@Param("mbrId") Long mbrId);
 
     /**
      * 获取酒庄活动列表
      * @return
      */
-    public List<Map> selectSecList(@Param("mbrId") Long mbrId);
+    List<WineryActivity> selectSecList(@Param("mbrId") Long mbrId);
 
     /**
      * 获取酒庄活动详细
@@ -34,12 +33,12 @@ public interface WineryActivityMapper extends BaseMapper<WineryActivity, Long> {
      * @param mbrId
      * @return
      */
-    public Map selectSecById(@Param("id") Long id, @Param("mbrId") Long mbrId);
+    WineryActivity selectSecById(@Param("id") Long id, @Param("mbrId") Long mbrId);
 
     /**
      * 我参加的活动列表
      * @param mbrId
      * @return
      */
-    public List<WineryActivity> selectMySignAct(@Param("mbrId") Long mbrId);
+    List<WineryActivity> selectMySignAct(@Param("mbrId") Long mbrId);
 }
