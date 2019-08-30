@@ -173,7 +173,7 @@
     </select>
 
     <update id="updateProdStatus">
-        update s_prod set prod_status =#{skuStatus} where id =#{id}
+        update s_prod set prod_status =#{status} where id =#{id}
     </update>
 
     <update id="deleteByid" parameterType="java.lang.Long">

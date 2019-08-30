@@ -101,9 +101,9 @@ public class ProdController extends BaseController {
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"),
                         @ApiImplicitParam(name = "skuStatus", value = "下上架参数", dataType = "Integer")})
     @RequestMapping(value = "/prodOut", method = RequestMethod.POST)
-    public Map<String, Object> prodOut(Long id ,Integer skuStatus){
+    public Map<String, Object> prodOut(Long id ,Integer status){
         try{
-            prodService.updateProdStatus(id,skuStatus);
+            prodService.updateProdStatus(id,status);
         }catch (Exception e){
             log.info("此处有错误:{}",e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);

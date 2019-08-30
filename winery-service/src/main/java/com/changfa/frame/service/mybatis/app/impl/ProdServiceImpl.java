@@ -96,9 +96,9 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      */
     @Override
     @Transactional
-    public void updateProdStatus(Long id, Integer skuStatus) {
-        prodSkuMapper.updateSkuStatusByProdId(id,skuStatus);
-        prodMapper.updateProdStatus(id,skuStatus);
+    public void updateProdStatus(Long id, Integer status) {
+        prodSkuMapper.updateSkuStatusByProdId(id,status);
+        prodMapper.updateProdStatus(id,status);
     }
 
     /**

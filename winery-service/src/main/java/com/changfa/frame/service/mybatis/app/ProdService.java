@@ -45,9 +45,9 @@ public interface ProdService extends BaseService<Prod, Long> {
     /**
      * 产品下架  同时下架有关商品sku
      * @param id 产品id
-     * @param skuStatus 上下架参数  sku状态 0：未上架 1：已上架
+     * @param status 上下架参数  sku状态 0：未上架 1：已上架
      */
-    void updateProdStatus(Long id,Integer skuStatus);
+    void updateProdStatus(Long id,Integer status);
 
     /**
      * 查询产品详情

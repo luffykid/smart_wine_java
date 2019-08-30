@@ -180,7 +180,7 @@
     </select>
 
     <update id="updateSkuStatusByProdId">
-        update s_prod_sku set sku_status =#{skuStatus} where prod_id = #{id}
+        update s_prod_sku set sku_status =#{status} where prod_id = #{id}
     </update>
 
     <select id="selectProdSkuStatusByProdId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.ProdSku">
