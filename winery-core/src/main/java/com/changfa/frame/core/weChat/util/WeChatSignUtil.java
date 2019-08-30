@@ -12,6 +12,9 @@ import java.util.*;
 
 /**
  * 微信签名验证工具类
+ *
+ * @author wyy
+ * @date 2019-08-30
  */
 public class WeChatSignUtil {
 

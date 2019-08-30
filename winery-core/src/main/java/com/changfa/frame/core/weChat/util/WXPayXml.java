@@ -8,7 +8,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * 2018/7/3
+ *微信支付解析
+ * @author wyy
+ * @date 2019-08-30
  */
 public final class WXPayXml {
     public static DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
