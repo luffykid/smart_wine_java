@@ -23,4 +23,6 @@ public interface MbrWineCustomOrderService extends BaseService<MbrWineCustomOrde
                                      Integer quantity,
                                      List<MbrWineCustomDetail> details);
 
+     MbrWineCustomOrder PayForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId);
+
 }

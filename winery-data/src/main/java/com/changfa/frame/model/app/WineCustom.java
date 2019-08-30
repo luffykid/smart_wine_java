@@ -123,9 +123,6 @@ public class WineCustom extends BaseEntity {
     /** 商品名称*/
     private String  prodName;
 
-    /** 商品id*/
-    private String  prodId;
-
     /** 定制元素*/
     private String elementName;
 
@@ -324,17 +321,4 @@ public class WineCustom extends BaseEntity {
         this.wineCustomElementContentList = wineCustomElementContentList;
     }
 
-    /**
-     * 获取商品id
-     */
-    public String getProdId() {
-        return prodId;
-    }
-
-    /**
-     * 设置商品id
-     */
-    public void setProdId(String prodId) {
-        this.prodId = prodId;
-    }
 }
