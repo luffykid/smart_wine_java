@@ -263,14 +263,22 @@ public class MbrProdOrder extends BaseEntity {
     }
 
     /**
-     * 获取订单状态0：新建订单1：未支付（已生成预支付ID）2：已取消（取消订单）3：已支付（用户完成支付）4：支付成功（回调通知成功）5：支付失败（回调通知失败）
+     * 订单状态
+     * 1：未支付（已生成预支付ID）
+     * 2：已取消（取消订单）
+     * 3：支付成功（回调通知成功）
+     * 4：支付失败（回调通知失败）
      */
     public Integer getOrderStatus() {
         return orderStatus;
     }
 
     /**
-     * 设置订单状态0：新建订单1：未支付（已生成预支付ID）2：已取消（取消订单）3：已支付（用户完成支付）4：支付成功（回调通知成功）5：支付失败（回调通知失败）
+     * 订单状态
+     * 1：未支付（已生成预支付ID）
+     * 2：已取消（取消订单）
+     * 3：支付成功（回调通知成功）
+     * 4：支付失败（回调通知失败）
      */
     public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;

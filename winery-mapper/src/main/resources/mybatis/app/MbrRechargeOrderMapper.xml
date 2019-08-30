@@ -8,26 +8,29 @@
         <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
         <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
         <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_id, mbr_id, pay_total_amt, pay_real_amt, order_status, create_date, modify_date
+        mro.id as id, mro.winery_id as winery_id, mro.mbr_id as mbr_id, mro.pay_total_amt as pay_total_amt,
+        mro.pay_real_amt as pay_real_amt, mro.order_status as order_status, mro.pay_date as pay_date,
+        mro.create_date as create_date, mro.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrRechargeOrderMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_recharge_order
-        where id = #{id}
+        from m_mbr_recharge_order mro
+        where mro.id = #{id}
     </select>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
-        insert into m_mbr_recharge_order (id, winery_id, mbr_id, pay_total_amt, pay_real_amt, order_status, 
-            create_date, modify_date)
-        values (#{id}, #{wineryId}, #{mbrId}, #{payTotalAmt}, #{payRealAmt}, #{orderStatus}, 
-            #{createDate}, #{modifyDate})
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
+        insert into m_mbr_recharge_order (id, winery_id, mbr_id, pay_total_amt, pay_real_amt, order_status,
+            pay_date, create_date, modify_date)
+        values (#{id}, #{wineryId}, #{mbrId}, #{payTotalAmt}, #{payRealAmt}, #{orderStatus},
+            #{payDate}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
@@ -48,6 +51,9 @@
             <if test="orderStatus != null" >
                 order_status = #{orderStatus},
             </if>
+            <if test="payDate != null" >
+                pay_date = #{payDate},
+            </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
             </if>
@@ -64,30 +70,33 @@
     </delete>
 
     <select id="selectList" resultMap="mbrRechargeOrderMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_recharge_order mbrRechargeOrder
+        from m_mbr_recharge_order mro
         <where >
             <if test="wineryId != null" >
-                and mbrRechargeOrder.winery_id = #{wineryId}
+                and mro.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and mbrRechargeOrder.mbr_id = #{mbrId}
+                and mro.mbr_id = #{mbrId}
             </if>
             <if test="payTotalAmt != null" >
-                and mbrRechargeOrder.pay_total_amt = #{payTotalAmt}
+                and mro.pay_total_amt = #{payTotalAmt}
             </if>
             <if test="payRealAmt != null" >
-                and mbrRechargeOrder.pay_real_amt = #{payRealAmt}
+                and mro.pay_real_amt = #{payRealAmt}
             </if>
             <if test="orderStatus != null" >
-                and mbrRechargeOrder.order_status = #{orderStatus}
+                and mro.order_status = #{orderStatus}
+            </if>
+            <if test="payDate != null" >
+                and mro.pay_date = #{payDate}
             </if>
             <if test="createDate != null" >
-                and mbrRechargeOrder.create_date = #{createDate}
+                and mro.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and mbrRechargeOrder.modify_date = #{modifyDate}
+                and mro.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
