@@ -308,4 +308,14 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         return new PageInfo(prodSkuMapper.getByProdId(id));
     }
 
+    /**
+     * 删除产品详情
+     * @param id
+     * @return boolean
+     */
+    @Override
+    public boolean deleteProdDetail(Long id) {
+        return prodDetailMapper.delete(id) > 0 ? true : false;
+    }
+
 }

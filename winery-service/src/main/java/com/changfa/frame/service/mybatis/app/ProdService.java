@@ -131,5 +131,12 @@ public interface ProdService extends BaseService<Prod, Long> {
      * @return
      */
     PageInfo<ProdSku> getProdSkuList(Long id,PageInfo pageInfo);
+
+    /**
+     * 删除产品详情
+     * @param id
+     * @return
+     */
+    boolean deleteProdDetail(Long id);
 }
  

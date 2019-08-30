@@ -172,6 +172,23 @@ public class ProdController extends BaseController {
     }
 
     /**
+     * 删除产品
+     * @param id 产品id
+     * @return Map<String, Object>
+     */
+    @ApiOperation(value = "删除产品详情",notes = "删除产品详情")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品详情id", dataType = "Long"))
+    @RequestMapping(value = "/deleteProdDetail", method = RequestMethod.POST)
+    public Map<String, Object> deleteProdDetail(Long id){
+        if(prodService.deleteProdDetail(id)){
+            return getResult("删除成功");
+        }
+        throw new CustomException(RESPONSE_CODE_ENUM.DELETE_FAILED);
+    }
+
+
+
+    /**
      * 通过产品id 查询产品规格列表
      * @param pageNum 分页参数
      * @param pageSize
