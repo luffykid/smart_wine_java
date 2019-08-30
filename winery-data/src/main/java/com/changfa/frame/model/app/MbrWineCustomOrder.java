@@ -42,7 +42,6 @@ public class MbrWineCustomOrder extends BaseEntity {
     private BigDecimal payRealAmt;
 
     /** 订单状态
-0：新建订单
 1：未支付（已生成预支付ID）
 2：已取消（取消订单）
 3：已支付（用户完成支付）
@@ -73,6 +72,19 @@ public class MbrWineCustomOrder extends BaseEntity {
 
     /** 订单号【系统生成单号】 */
     private String orderNo;
+
+    /**
+     *  订单支付时间
+     */
+    private Date payDate;
+
+    public Date getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(Date payDate) {
+        this.payDate = payDate;
+    }
 
     /** 预支付返回包*/
     private Map<String, Object> unifiedOrderReturnMap;
@@ -108,21 +120,17 @@ public class MbrWineCustomOrder extends BaseEntity {
 
     /**
      *  订单状态
-     * 0：新建订单
      * 1：未支付（已生成预支付ID）
      * 2：已取消（取消订单）
-     * 3：已支付（用户完成支付）
-     * 4：支付成功（回调通知成功）
-     * 5：支付失败（回调通知失败）
+     * 3：支付成功（回调通知成功）
+     * 4：支付失败（回调通知失败）
      */
     public enum Status {
 
-        NEW_ORDER(0, "新建订单"),
         UNPAID(1, "未支付"),
         CANCEL(2, "已取消"),
-        PAID(3, "已支付"),
-        PAY_SUCCESS(4, "支付成功"),
-        PAY_FAILED(5, "支付失败");
+        PAY_SUCCESS(3, "支付成功"),
+        PAY_FAILED(4, "支付失败");
 
         // 枚举值
         private Integer value;

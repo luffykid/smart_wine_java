@@ -31,5 +31,5 @@ public interface MbrWineCustomOrderService extends BaseService<MbrWineCustomOrde
      * @return 未支付的定制就订单状态
      */
      MbrWineCustomOrder payForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId);
-     
+
 }

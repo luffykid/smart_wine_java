@@ -19,6 +19,7 @@
         <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
@@ -43,11 +44,11 @@
         insert into m_mbr_wine_custom_order (id, winery_id, mbr_id, custom_total_cnt, pay_total_amt, pay_real_amt, 
             order_status, shipping_detail_addr, shipping_province_id, shipping_city_id, 
             shipping_county_id, shipping_person_name, shipping_person_phone, transaction_no, 
-            order_no, create_date, modify_date)
+            order_no, create_date, modify_date, pay_date)
         values (#{id}, #{wineryId}, #{mbrId}, #{customTotalCnt}, #{payTotalAmt}, #{payRealAmt}, 
             #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId}, #{shippingCityId}, 
             #{shippingCountyId}, #{shippingPersonName}, #{shippingPersonPhone}, #{transactionNo}, 
-            #{orderNo}, #{createDate}, #{modifyDate})
+            #{orderNo}, #{createDate}, #{modifyDate}, #{payDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrWineCustomOrder" >
@@ -100,6 +101,9 @@
             </if>
             <if test="modifyDate != null" >
                 modify_date = #{modifyDate},
+            </if>
+            <if test="payDate != null" >
+                pay_date = #{payDate},
             </if>
         </set>
         where id = #{id}
@@ -162,6 +166,9 @@
             </if>
             <if test="modifyDate != null" >
                 and MbrWineCustomOrder.modify_date = #{modifyDate}
+            </if>
+            <if test="payDate != null" >
+                and MbrWineCustomOrder.pay_date = #{payDate}
             </if>
         </where>
     </select>
