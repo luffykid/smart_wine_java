@@ -1,6 +1,7 @@
 package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.model.app.Member;
+import com.changfa.frame.model.app.WineryActivity;
 import com.changfa.frame.service.mybatis.app.MbrWineryActivitySignService;
 import com.changfa.frame.service.mybatis.app.WineryActivityService;
 import com.changfa.frame.service.mybatis.app.impl.MbrWineryActivitySignServiceImpl;
@@ -91,7 +92,7 @@ public class WineryActivityController extends BaseController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "wineryActivityId", value = "活动id", dataType = "Long")
     )
-    @RequestMapping(value = "/thumbup")
+    @RequestMapping(value = "/thumbup", method = RequestMethod.POST)
     public Map<String, Object> thumbup(Long wineryActivityId, HttpServletRequest request) {
         Member member = getCurMember(request);
         Long wineryId = getCurWineryId();
@@ -115,14 +116,16 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动报名", notes = "活动报名")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/signUp", method = RequestMethod.GET)
-    public void signUp(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signUp", method = RequestMethod.POST)
+    public Map<String, Object> signUp(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.signUp(wineryActivityId, member.getId());
-        if (!flag){
+        try {
+            mbrWineryActivitySignServiceImpl.signUp(wineryActivityId, member.getId());
+        }catch (Exception e){
             log.info("此处有错误:{}", "活动报名失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
+        return getResult(new HashMap<>());
     }
 
     /**
@@ -133,14 +136,16 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动签到", notes = "活动签到")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/signIn", method = RequestMethod.GET)
-    public void signIn(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
+    public Map<String, Object> signIn(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.signIn(wineryActivityId, member.getId());
-        {
+        try {
+            mbrWineryActivitySignServiceImpl.signIn(wineryActivityId, member.getId());
+        }catch (Exception e) {
             log.info("此处有错误:{}", "活动签到失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
+        return getResult(new HashMap<>());
     }
 
 
@@ -152,13 +157,27 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动签退", notes = "活动签退")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/signOff", method = RequestMethod.GET)
-    public void signOff(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signOff", method = RequestMethod.POST)
+    public Map<String, Object> signOff(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.signOff(wineryActivityId, member.getId());
-        {
+        try {
+            mbrWineryActivitySignServiceImpl.signOff(wineryActivityId, member.getId());
+        }catch (Exception e) {
             log.info("此处有错误:{}", "活动签退失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
+        return getResult(new HashMap<>());
+    }
+
+    /**
+     * 我参加的活动列表
+     * @return
+     */
+    @ApiOperation(value = "我参加的活动列表", notes = "我参加的活动列表")
+    @RequestMapping(value = "/getMySignAct", method = RequestMethod.GET)
+    public Map<String, Object> getMySignAct(HttpServletRequest request) {
+        Member member = getCurMember(request);
+
+        return getResult(wineryActivityServiceImpl.getMySignAct(member.getId()));
     }
 }

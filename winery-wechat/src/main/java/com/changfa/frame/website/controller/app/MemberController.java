@@ -112,7 +112,7 @@ public class MemberController extends BaseController {
             @ApiImplicitParam(name = "phone", value = "联系电话", dataType = "String"),
     }
     )
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, Integer gender, String phone) {
         Member member = getCurMember(request);
         try {

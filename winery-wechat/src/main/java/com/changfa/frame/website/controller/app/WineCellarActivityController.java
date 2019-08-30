@@ -58,7 +58,7 @@ public class WineCellarActivityController extends BaseController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "wineCellarActivityId", value = "活动id", dataType = "Long")
     )
-    @RequestMapping(value = "/thumbup")
+    @RequestMapping(value = "/thumbup",method = RequestMethod.POST)
     public Map<String, Object> thumbup(Long wineCellarActivityId, HttpServletRequest request) {
         Member member = getCurMember(request);
         Long wineryId = getCurWineryId();

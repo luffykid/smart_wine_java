@@ -101,7 +101,7 @@
     </select>
 
     <select id="selectSignUpOne" parameterType="Long" resultType="Integer">
-        select count(id) count from b_winery_activity id = #{wineryActivityId} where now() between sign_start_date and sign_end_date
+        select count(id) count from b_winery_activity where id = #{wineryActivityId} and now() between sign_start_date and sign_end_date
     </select>
 
     <select id="selectSignUpTwo" resultType="Integer">

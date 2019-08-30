@@ -96,4 +96,14 @@ public class WineryActivityServiceImpl extends BaseServiceImpl<WineryActivity, L
         }
         wineryActivityMapper.update(wineryActivity);
     }
+
+    /**
+     * 我参加的活动列表
+     * @param id
+     * @return
+     */
+    @Override
+    public List<WineryActivity> getMySignAct(Long id) {
+        return wineryActivityMapper.selectMySignAct(id);
+    }
 }

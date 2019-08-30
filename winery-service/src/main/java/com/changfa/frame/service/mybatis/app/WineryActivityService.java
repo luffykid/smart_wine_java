@@ -36,4 +36,11 @@ public interface WineryActivityService extends BaseService<WineryActivity, Long>
      * @param wineryId
      */
     public void thumbup(Long wineryActivityId, Long mbrId, Long wineryId);
+
+    /**
+     * 我参加的活动列表
+     * @param id
+     * @return
+     */
+    public List<WineryActivity> getMySignAct(Long id);
 }

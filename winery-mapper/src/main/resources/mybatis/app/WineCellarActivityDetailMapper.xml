@@ -121,6 +121,7 @@
         select s.sku_name,d.* from s_prod_sku s
         inner join s_prod_detail d on s.prod_id =d.prod_id
         where s.id = #{id}
+        order by d.sort
     </select>
 
     <select id="getPrePayDetail" parameterType="Long" resultType="java.util.HashMap">
