@@ -23,6 +23,13 @@ public interface MbrWineCustomOrderService extends BaseService<MbrWineCustomOrde
                                      Integer quantity,
                                      List<MbrWineCustomDetail> details);
 
+    /**
+     *
+     * @param mbrId 会员id
+     * @param memberAddressId 会员配送地址id
+     * @param mbrWineCustomOrderId 定制酒订单id
+     * @return 未支付的定制就订单状态
+     */
      MbrWineCustomOrder payForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId);
-
+     
 }
