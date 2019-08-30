@@ -32,7 +32,7 @@ import java.util.Map;
  * 微信支付xml工具类
  *
  * @author WYY
- * @date 2018/07/10
+ * @date 2019/08/30
  */
 public class WXPayXmlUtil {
     /**
