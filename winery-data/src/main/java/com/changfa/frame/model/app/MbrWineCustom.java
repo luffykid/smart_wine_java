@@ -8,6 +8,8 @@
 package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
  * 会员白酒定制
  * @version 1.0 2019-08-26
  */
+@ApiModel
 public class MbrWineCustom extends BaseEntity {
 
     private static final long serialVersionUID = 445921611535613952L;
@@ -24,15 +27,19 @@ public class MbrWineCustom extends BaseEntity {
     private Long mbrWineCustomOrderId;
 
     /** 白酒定制ID */
+    @ApiModelProperty(value = "定制酒id", name = "wineCustomId", required = true)
     private Long wineCustomId;
 
     /** 酒庄ID */
+    @ApiModelProperty(value = "酒庄id", required = true, name = "wineryId")
     private Long wineryId;
 
     /** 会员ID */
+    @ApiModelProperty(value = "会员id", required = true, name = "mbrId")
     private Long mbrId;
 
     /** 定制数量 */
+    @ApiModelProperty(value = "定制数量", required = true, name = "customCnt")
     private Integer customCnt;
 
     /** 定制价格 */
@@ -49,9 +56,9 @@ public class MbrWineCustom extends BaseEntity {
 
 
     /**
-     * mbr_wine_custom_detail
      * 会员定制详情列表
      */
+    @ApiModelProperty(value = "会员定制详情列表", required = true, name = "mbrWineCustomDetails")
     private List<MbrWineCustomDetail> mbrWineCustomDetails;
 
     public List<MbrWineCustomDetail> getMbrWineCustomDetails() {

@@ -6,6 +6,7 @@ import com.changfa.frame.model.app.MbrWineCustomOrder;
 import com.changfa.frame.service.mybatis.app.MbrWineCustomOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public class MbrWineCustomOrderController extends BaseController {
     private MbrWineCustomOrderService mbrWineCustomOrderServiceImpl;
 
     @ApiOperation(value = "用户定制酒下单")
+    @ApiImplicitParam(required = true, paramType = "MbrWineCustom")
     @PostMapping
     public Map<String, Object> placeAnOrder(@RequestBody MbrWineCustom mbrWineCustom) {
 
@@ -40,5 +42,7 @@ public class MbrWineCustomOrderController extends BaseController {
         return getResult(order);
 
     }
+
+
 
 }

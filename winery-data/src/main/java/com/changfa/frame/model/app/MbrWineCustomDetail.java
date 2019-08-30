@@ -8,11 +8,14 @@
 package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 会员白酒定制明细表
  * @version 1.0 2019-08-26
  */
+@ApiModel
 public class MbrWineCustomDetail extends BaseEntity {
 
     private static final long serialVersionUID = 445923422875156480L;
@@ -36,6 +39,7 @@ public class MbrWineCustomDetail extends BaseEntity {
     private String maskImg;
 
     /** 预览图 */
+    @ApiModelProperty(value = "预览图", required = true, name = "previewImg")
     private String previewImg;
 
     /** 底版图 */
@@ -47,6 +51,7 @@ public class MbrWineCustomDetail extends BaseEntity {
     /**
      *  可定制元素内容id
      */
+    @ApiModelProperty(value = "可定制元素内容id", required = true, name = "wineCustomElementContentId")
     private Long wineCustomElementContentId;
 
     public Long getWineCustomElementContentId() {
