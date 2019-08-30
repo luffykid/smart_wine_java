@@ -78,7 +78,7 @@ public class MbrStoreOrderController extends BaseController {
             @ApiImplicitParam(name = "sId", value = "商品skuId", dataType = "Long"),
             @ApiImplicitParam(name = "prodTotalCnt", value = "商品数量", dataType = "Integer")
     })
-    @RequestMapping(value = "/buildOrder", method = RequestMethod.GET)
+    @RequestMapping(value = "/buildOrder", method = RequestMethod.POST)
     public Map<String, Object> buildOrder(Long dId, Long sId, Integer prodTotalCnt, HttpServletRequest request) {
         Member member = getCurMember(request);
         Map<String, Object> returnMap = new HashMap<>();

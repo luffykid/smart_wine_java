@@ -26,7 +26,7 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
      */
     @Transactional
     @Override
-    public boolean signUp(Long wineryActivityId, Long mbrId){
+    public void signUp(Long wineryActivityId, Long mbrId) throws Exception {
         Integer countOne = mbrWineryActivitySignMapper.selectSignUpOne(wineryActivityId);
         Integer countTwo = mbrWineryActivitySignMapper.selectSignUpTwo(wineryActivityId, mbrId);
         if (countOne == 1){
@@ -35,10 +35,13 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
                 WineryActivity wineryActivity = wineryActivityMapper.getById(wineryActivityId);
                 wineryActivity.setSignTotalCnt(wineryActivity.getSignTotalCnt()+1);
                 wineryActivityMapper.update(wineryActivity);
-                return true;
             }
+            else {
+                throw new Exception("已经过了报名截止时间！");
+            }
+        }else {
+            throw new Exception("你已经报名过了！");
         }
-        return false;
     }
 
     /**
@@ -47,13 +50,13 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
      * @return
      */
     @Override
-    public boolean signIn(Long wineryActivityId, Long mbrId){
+    public void signIn(Long wineryActivityId, Long mbrId) throws Exception {
         Integer count = mbrWineryActivitySignMapper.selectSignIn(wineryActivityId, mbrId);
         if (count == 1){
             mbrWineryActivitySignMapper.signIn(wineryActivityId, mbrId);
-            return true;
+        }else{
+            throw new Exception("你没报名该活动！");
         }
-        return false;
     }
 
     /**
@@ -62,12 +65,12 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
      * @return
      */
     @Override
-    public boolean signOff(Long wineryActivityId, Long mbrId){
+    public void signOff(Long wineryActivityId, Long mbrId) throws Exception {
         Integer count = mbrWineryActivitySignMapper.selectSignOff(wineryActivityId, mbrId);
         if (count == 1){
             mbrWineryActivitySignMapper.signOff(wineryActivityId, mbrId);
-            return true;
+        }else{
+            throw new Exception("你没报名该活动！");
         }
-        return false;
     }
 }

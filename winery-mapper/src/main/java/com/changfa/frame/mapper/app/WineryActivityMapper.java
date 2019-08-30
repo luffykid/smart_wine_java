@@ -35,4 +35,11 @@ public interface WineryActivityMapper extends BaseMapper<WineryActivity, Long> {
      * @return
      */
     public Map selectSecById(@Param("id") Long id, @Param("mbrId") Long mbrId);
+
+    /**
+     * 我参加的活动列表
+     * @param mbrId
+     * @return
+     */
+    public List<WineryActivity> selectMySignAct(@Param("mbrId") Long mbrId);
 }

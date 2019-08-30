@@ -117,7 +117,7 @@ public class MbrTakeOrderController extends BaseController {
             @ApiImplicitParam(name = "mbrStoreOrderId", value = "我的储酒订单Id", dataType = "Long"),
             @ApiImplicitParam(name = "takeWeight", value = "id", dataType = "BigDecimal")
     })
-    @RequestMapping(value = "/takeInPerson", method = RequestMethod.GET)
+    @RequestMapping(value = "/takeInPerson", method = RequestMethod.POST)
     public Map<String, Object> takeInPerson(HttpServletRequest request, Long mbrStoreOrderId, BigDecimal takeWeight) {
         Member member = getCurMember(request);
         Long takeOrderId;

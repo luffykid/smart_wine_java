@@ -58,7 +58,7 @@ public class MemberAddressController extends BaseController {
             @ApiImplicitParam(name = "detailAddress", value = "详细地址", dataType = "String"),
             @ApiImplicitParam(name = "isDefault", value = "是否默认地址", dataType = "Boolean")
     })
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Map<String, Object> add(String contact, String phone, String provinceCode, String cityCode, String countryCode, String detailAddress, Boolean isDefault, HttpServletRequest request) {
         Member member = getCurMember(request);
 
@@ -87,7 +87,7 @@ public class MemberAddressController extends BaseController {
             @ApiImplicitParam(name = "detailAddress", value = "详细地址", dataType = "String"),
             @ApiImplicitParam(name = "isDefault", value = "是否默认地址", dataType = "Boolean")
     })
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Map<String, Object> update(Long id, String contact, String phone, String provinceCode, String cityCode, String countryCode, String detailAddress, Boolean isDefault, HttpServletRequest request) {
         Member member = getCurMember(request);
         try {
@@ -105,7 +105,7 @@ public class MemberAddressController extends BaseController {
      * @return
      */
     @ApiOperation(value = "删除的地址", notes = "删除的地址")
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Map<String, Object> delete(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
         try {

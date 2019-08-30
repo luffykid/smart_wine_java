@@ -167,4 +167,10 @@
         where a.act_status = 2
     </select>
 
+    <select id="selectMySignAct" parameterType="Long" resultMap="wineryActivityMap">
+        select a.* from b_winery_activity a
+        inner join m_mbr_winery_activity_sign s on a.id = s.winery_activity_id
+        where a.act_status=2 and s.mbr_id=#{mbrId}
+        order by a.act_end_date desc
+    </select>
 </mapper>
