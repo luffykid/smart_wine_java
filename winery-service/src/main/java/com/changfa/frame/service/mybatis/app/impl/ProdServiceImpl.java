@@ -48,6 +48,18 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     @Autowired
     private MbrLevelMapper mbrLevelMapper;
 
+    @Autowired
+    private MbrProdOrderMapper mbrProdOrderMapper;
+
+    @Autowired
+    private MbrProdOrderRecordMapper mbrProdOrderRecordMapper;
+
+    @Autowired
+    private MbrBillRecordMapper mbrBillRecordMapper;
+
+    @Autowired
+    private MbrProdOrderItemMapper mbrProdOrderItemMapper;
+
     /**
      * 获取产品列表
      *
@@ -341,9 +353,63 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
      * @param transactionId 微信支付返回的订单号
      * @param payDate       成功支付时间
      */
+    @Transactional
     @Override
     public void handleNotifyOfProdOrder(String outTradeNo, String transactionId, Date payDate) {
-        //
+        // 根据订单号查询订单信息
+        MbrProdOrder dbOrder = mbrProdOrderMapper.getByOrderNo(outTradeNo);
+        if (dbOrder == null) {
+            return;
+        }
+
+        // 如果订单已经处理则不在处理订单
+        if (dbOrder.getOrderStatus().equals(MbrProdOrder.ORDER_STATUS_ENUM.PAY_SUCCESS.getValue())) {
+            return;
+        }
+
+        // 更新商品订单
+        MbrProdOrder updateOrder = new MbrProdOrder();
+        updateOrder.setId(dbOrder.getId());
+        updateOrder.setOrderStatus(MbrProdOrder.ORDER_STATUS_ENUM.PAY_SUCCESS.getValue());
+        updateOrder.setTransactionNo(transactionId);
+        updateOrder.setPayDate(payDate);
+        updateOrder.setModifyDate(new Date());
+        mbrProdOrderMapper.update(updateOrder);
+
+        // 插入订单记录
+        MbrProdOrderRecord saveOrderRecord = new MbrProdOrderRecord();
+        saveOrderRecord.setId(IDUtil.getId());
+        saveOrderRecord.setMbrProdOrderId(dbOrder.getId());
+        saveOrderRecord.setOrderRemark("订单支付成功");
+        saveOrderRecord.setOrderStatus(MbrProdOrderRecord.ORDER_STATUS_ENUM.PAY_SUCCESS.getValue());
+        saveOrderRecord.setCreateDate(new Date());
+        saveOrderRecord.setModifyDate(new Date());
+        mbrProdOrderRecordMapper.save(saveOrderRecord);
+
+        // 插入会员账户流水信息
+        MbrBillRecord mbrBillRecord = new MbrBillRecord();
+        mbrBillRecord.setId(IDUtil.getId());
+        mbrBillRecord.setPkId(dbOrder.getId());
+        mbrBillRecord.setWineryId(dbOrder.getWineryId());
+        mbrBillRecord.setSignType(0);
+        mbrBillRecord.setBillType(MbrBillRecord.BILL_TYPE_ENUM.PROD_ORDER.getValue());
+        mbrBillRecord.setBillRemark("商品消费");
+        mbrBillRecord.setBillAmt(dbOrder.getPayRealAmt());
+        mbrBillRecord.setCreateDate(new Date());
+        mbrBillRecord.setModifyDate(new Date());
+        mbrBillRecordMapper.save(mbrBillRecord);
+
+        // 批量更新更新对应SKU销售数量
+        MbrProdOrderItem mbrProdOrderItem = new MbrProdOrderItem();
+        mbrProdOrderItem.setMbrProdOrderId(dbOrder.getId());
+        List<MbrProdOrderItem> mbrProdOrderItems = mbrProdOrderItemMapper.selectList(mbrProdOrderItem);
+        List<ProdSku> prodSkus = new ArrayList();
+        for (MbrProdOrderItem prodOrderItem : mbrProdOrderItems) {
+            ProdSku prodSku = new ProdSku();
+            prodSku.setId(prodOrderItem.getProdSkuId());
+            prodSku.setSellTotalCnt(prodOrderItem.getProdSkuCnt());
+            prodSkus.add(prodSku);
+        }
 
     }
 }

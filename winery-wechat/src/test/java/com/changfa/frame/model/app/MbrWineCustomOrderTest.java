@@ -1,12 +1,9 @@
 package com.changfa.frame.model.app;
 
 import com.changfa.frame.core.util.OrderNoUtil;
-import com.changfa.frame.model.event.DomainEventPublisher;
-import com.changfa.frame.model.event.order.OrderCreatedEvent;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,8 +13,6 @@ public class MbrWineCustomOrderTest {
 
     @Test
     public void testPlaceAnWineCustomOrder() {
-
-        DomainEventPublisher publisher = Mockito.mock(DomainEventPublisher.class);
 
 
 

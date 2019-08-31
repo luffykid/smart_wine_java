@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Api(value = "定制酒接口", tags = "定制酒接口")
 @RestController("wineCustomController")
-@RequestMapping("/wxMini/wineCustom/")
+@RequestMapping("/wxMini/auth/wineCustom/")
 public class WineCustomController extends BaseController {
 
     @Resource(name = "wineCustomServiceImpl")

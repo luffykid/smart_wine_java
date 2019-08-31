@@ -3,10 +3,6 @@ package com.changfa.frame.service.mybatis.app.impl;
 import com.changfa.frame.core.util.OrderNoUtil;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
-import com.changfa.frame.model.event.DomainEventPublisher;
-import com.changfa.frame.model.event.DomainEventSubscriber;
-import com.changfa.frame.model.event.order.OrderCreatedEvent;
-import com.changfa.frame.model.event.order.OrderStateChangedEvent;
 import com.changfa.frame.service.mybatis.app.MbrWineCustomOrderService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
@@ -20,7 +16,7 @@ import java.util.List;
 
 @Service("mbrWineCustomOrderServiceImpl")
 public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustomOrder, Long>
-                                           implements MbrWineCustomOrderService {
+        implements MbrWineCustomOrderService {
 
     @Autowired
     private WineCustomMapper wineCustomMapper;
@@ -72,12 +68,13 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         mbrWineCustom.setMbrWineCustomOrderId(order.getId());
 
+
         //将details中的每个MbrWineCustomDetail对象填充完全
         completeMbrWineCustomDetails(details, mbrWineCustom.getId(), mbrWineCustom.getMbrId());
 
         saveToRepository(order, mbrWineCustom, details);
 
-        return order;
+        return null;
     }
 
     @Transactional
@@ -94,8 +91,6 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         addShipInfoForTheOrder(order, address);
 
-        order.updateState(MbrWineCustomOrder.Status.UNPAID);
-
         addMbrWineCustomOrderRecordToRepository(order);
 
         mbrWineCustomOrderMapper.update(order);
@@ -105,6 +100,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
     }
 
     private void addMbrWineCustomOrderRecordToRepository(MbrWineCustomOrder order) {
+        mbrWineCustomOrderMapper.update(order);
 
         MbrWineCustomOrderRecord record = new MbrWineCustomOrderRecord();
         record.setId(IDUtil.getId());
@@ -143,7 +139,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         if (!address.getMbrId().equals(member.getId()))
             throw new IllegalArgumentException("the address don't belong to the member!");
 
-        if (order.getOrderStatus() != MbrWineCustomOrder.Status.UNPAID.getValue())
+        if (order.getOrderStatus() != MbrWineCustomOrder.ORDER_STATUS_ENUM.UNPAID.getValue())
             throw new IllegalStateException("the operation don't allowed for the current mbrWineCustomOrder state!");
 
     }
@@ -172,7 +168,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         mbrWineCustom.setCustomPrice(wineCustom.getCustomPrice());
         mbrWineCustom.setCustomCnt(quantity);
         mbrWineCustom.setCustomTotalAmt(wineCustom.getCustomPrice()
-                                                    .multiply(BigDecimal.valueOf(quantity)));
+                .multiply(BigDecimal.valueOf(quantity)));
         mbrWineCustom.setMbrId(mbrId);
         mbrWineCustom.setWineCustomId(wineCustom.getId());
         mbrWineCustom.setId(IDUtil.getId());
@@ -213,7 +209,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         details.stream().forEach(detail -> {
 
             WineCustomElementContent wineCustomElementContent =
-                wineCustomElementContentMapper.getById(detail.getWineCustomElementContentId());
+                    wineCustomElementContentMapper.getById(detail.getWineCustomElementContentId());
 
             detail.setId(IDUtil.getId());
             detail.setWineCustomId(wineCustomElementContent.getWineCustomId());

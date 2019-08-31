@@ -10,7 +10,6 @@ import com.changfa.frame.core.weChat.util.WeChatSignUtil;
 import com.changfa.frame.service.mybatis.app.ProdService;
 import com.changfa.frame.service.mybatis.app.WineCustomService;
 import com.changfa.frame.website.utils.ORDER_TYPE_ENUM;
-import io.swagger.annotations.Api;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;

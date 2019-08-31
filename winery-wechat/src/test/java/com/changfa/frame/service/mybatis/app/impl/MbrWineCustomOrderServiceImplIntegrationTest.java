@@ -53,7 +53,7 @@ public class MbrWineCustomOrderServiceImplIntegrationTest {
                                                                                 Long.valueOf(447185632331038720L));
 
         Assert.assertNotNull(unPaidOrder);
-        Assert.assertEquals(MbrWineCustomOrder.Status.UNPAID.getValue(), unPaidOrder.getOrderStatus());
+        Assert.assertEquals(MbrWineCustomOrder.ORDER_STATUS_ENUM.UNPAID.getValue(), unPaidOrder.getOrderStatus());
 
         MbrWineCustomOrder orderUpdated = mbrWineCustomOrderMapper.getById(unPaidOrder.getId());
 
