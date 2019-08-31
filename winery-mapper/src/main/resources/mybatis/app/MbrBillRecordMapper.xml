@@ -15,21 +15,22 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, pk_id, mbr_id, winery_id, sign_type, bill_type, bill_remark, bill_amt, create_date,
-        modify_date
+        mbr.id as id, mbr.pk_id as pk_id, mbr.mbr_id as mbr_id, mbr.winery_id as winery_id,
+        mbr.sign_type as sign_type, mbr.bill_type as bill_type, mbr.bill_remark as bill_remark,
+        mbr.bill_amt as bill_amt, mbr.create_date as create_date, mbr.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrBillRecordMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_bill_record mbrBillRecord
-        where mbrBillRecord.id = #{id}
+        from m_mbr_bill_record mbr
+        where mbr.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrBillRecord" >
-        insert into m_mbr_bill_record (id, pk_id, mbr_id, winery_id, sign_type, bill_type, bill_remark, 
+        insert into m_mbr_bill_record (id, pk_id, mbr_id, winery_id, sign_type, bill_type, bill_remark,
             bill_amt, create_date, modify_date)
-        values (#{id}, #{pkId}, #{mbrId}, #{wineryId}, #{signType}, #{billType}, #{billRemark}, 
+        values (#{id}, #{pkId}, #{mbrId}, #{wineryId}, #{signType}, #{billType}, #{billRemark},
             #{billAmt}, #{createDate}, #{modifyDate})
     </insert>
 
@@ -73,36 +74,36 @@
     </delete>
 
     <select id="selectList" resultMap="mbrBillRecordMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_bill_record mbrBillRecord
+        from m_mbr_bill_record mbr
         <where >
             <if test="pkId != null" >
-                and mbrBillRecord.pk_id = #{pkId}
+                and mbr.pk_id = #{pkId}
             </if>
             <if test="mbrId != null" >
-                and mbrBillRecord.mbr_id = #{mbrId}
+                and mbr.mbr_id = #{mbrId}
             </if>
             <if test="wineryId != null" >
-                and mbrBillRecord.winery_id = #{wineryId}
+                and mbr.winery_id = #{wineryId}
             </if>
             <if test="signType != null" >
-                and mbrBillRecord.sign_type = #{signType}
+                and mbr.sign_type = #{signType}
             </if>
             <if test="billType != null" >
-                and mbrBillRecord.bill_type = #{billType}
+                and mbr.bill_type = #{billType}
             </if>
             <if test="billRemark != null and billRemark != ''" >
-                and mbrBillRecord.bill_remark = #{billRemark}
+                and mbr.bill_remark = #{billRemark}
             </if>
             <if test="billAmt != null" >
-                and mbrBillRecord.bill_amt = #{billAmt}
+                and mbr.bill_amt = #{billAmt}
             </if>
             <if test="createDate != null" >
-                and mbrBillRecord.create_date = #{createDate}
+                and mbr.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and mbrBillRecord.modify_date = #{modifyDate}
+                and mbr.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -110,6 +111,6 @@
     <select id="selectFlowList" parameterType="Long" resultMap="mbrBillRecordMap">
         select
         <include refid="table_column" />
-        from m_mbr_bill_record where mbr_id = #{mbrId} and bill_type in (1,3,4)
+        from m_mbr_bill_record mbr where mbr.mbr_id = #{mbrId} and mbr.bill_type in (1,3,4)
     </select>
 </mapper>

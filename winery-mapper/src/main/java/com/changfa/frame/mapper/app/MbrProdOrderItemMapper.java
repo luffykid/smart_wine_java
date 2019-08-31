@@ -11,4 +11,6 @@ import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.MbrProdOrderItem;
 
 public interface MbrProdOrderItemMapper extends BaseMapper<MbrProdOrderItem, Long> {
+
+
 }

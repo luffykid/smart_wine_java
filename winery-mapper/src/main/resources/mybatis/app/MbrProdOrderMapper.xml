@@ -74,12 +74,11 @@
         mpo.pay_date as pay_date, mpo.create_date as create_date, mpo.modify_date as modify_date
     </sql>
 
-    <select id="getById" resultMap="mbrProdOrderMap" parameterType="com.changfa.frame.model.app.MbrProdOrderKey" >
+    <select id="getById" resultMap="mbrProdOrderMap" parameterType="java.lang.Long" >
         select
         <include refid="table_column" />
         from m_mbr_prod_order mpo
         where mpo.id = #{id}
-        and mpo.pay_total_amt = #{payTotalAmt}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrder" >
@@ -155,10 +154,9 @@
         and pay_total_amt = #{payTotalAmt}
     </update>
 
-    <delete id="delete" parameterType="com.changfa.frame.model.app.MbrProdOrderKey" >
+    <delete id="delete" parameterType="java.lang.Long" >
         delete from m_mbr_prod_order
         where id = #{id}
-          and pay_total_amt = #{payTotalAmt}
     </delete>
 
     <select id="selectList" resultMap="mbrProdOrderMap" >
@@ -227,5 +225,13 @@
         select o.id,order_no,o.order_status,o.create_date,i.sku_name,i.prod_sku_cnt,i.sku_sell_price from m_mbr_prod_order o
         inner join m_mbr_prod_order_item i on o.id = i.mbr_prod_order_id
         where o.mbr_id = #{mbrId} and o.order_status=#{orderStatus}
+    </select>
+
+    <!-- 依据订单号查询订单 -->
+    <select id="getByOrderNo" resultMap="mbrProdOrderMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from m_mbr_prod_order mpo
+        where mpo.order_no = #{orderNo}
     </select>
 </mapper>
