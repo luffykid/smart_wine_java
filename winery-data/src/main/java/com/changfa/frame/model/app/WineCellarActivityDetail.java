@@ -3,136 +3,141 @@
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-27 Created
+ * 2019-08-31 Created
  */
 package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
 /**
- * 酒庄活动详情
- * @version 1.0 2019-08-27
+ * 商品详情
+ *
+ * @version 1.0 2019-08-31
  */
 public class WineCellarActivityDetail extends BaseEntity {
 
-    private static final long serialVersionUID = 446186275225993216L;
+    private static final long serialVersionUID = 447643322102579200L;
 
-    /** 酒庄酒窖活动ID */
-    private Long wineCellarActivityId;
+    /**
+     * 云酒窖活动ID
+     */
+    private Long wineCellarActivity;
 
-    /** 商品id */
-    private Long prodId;
+    /**
+     * 详情主题
+     */
+    private String detailTitle;
 
-    /** 商品skuID */
-    private Long prodSkuId;
+    /**
+     * 详情简介
+     */
+    private String detailBrief;
 
-    /** 酒庄优惠券ID */
-    private Long wineryVoucherId;
+    /**
+     * 详情图片
+     */
+    private String detailImg;
 
-    /** 赠送类型1：余额2：优惠券3：其他 */
-    private Integer presentType;
+    /**
+     * 详情状态
+     * 0：新建
+     * 1：启用
+     * 2：禁用
+     */
+    private Integer detailStatus;
 
-    /** 赠送备注 */
-    private String presentRemark;
-
-    /** 排序 */
+    /**
+     * 详情排序
+     */
     private Integer sort;
 
-    
+
     /**
-     * 获取酒庄酒窖活动ID
-    */
-    public Long getWineCellarActivityId() {
-        return wineCellarActivityId;
+     * 获取云酒窖活动ID
+     */
+    public Long getWineCellarActivity() {
+        return wineCellarActivity;
     }
-    
+
     /**
-     * 设置酒庄酒窖活动ID
-    */
-    public void setWineCellarActivityId(Long wineCellarActivityId) {
-        this.wineCellarActivityId = wineCellarActivityId;
+     * 设置云酒窖活动ID
+     */
+    public void setWineCellarActivity(Long wineCellarActivity) {
+        this.wineCellarActivity = wineCellarActivity;
     }
-    
+
     /**
-     * 获取商品id
-    */
-    public Long getProdId() {
-        return prodId;
+     * 获取详情主题
+     */
+    public String getDetailTitle() {
+        return detailTitle;
     }
-    
+
     /**
-     * 设置商品id
-    */
-    public void setProdId(Long prodId) {
-        this.prodId = prodId;
+     * 设置详情主题
+     */
+    public void setDetailTitle(String detailTitle) {
+        this.detailTitle = detailTitle == null ? null : detailTitle.trim();
     }
-    
+
     /**
-     * 获取商品skuID
-    */
-    public Long getProdSkuId() {
-        return prodSkuId;
+     * 获取详情简介
+     */
+    public String getDetailBrief() {
+        return detailBrief;
     }
-    
+
     /**
-     * 设置商品skuID
-    */
-    public void setProdSkuId(Long prodSkuId) {
-        this.prodSkuId = prodSkuId;
+     * 设置详情简介
+     */
+    public void setDetailBrief(String detailBrief) {
+        this.detailBrief = detailBrief == null ? null : detailBrief.trim();
     }
-    
+
     /**
-     * 获取酒庄优惠券ID
-    */
-    public Long getWineryVoucherId() {
-        return wineryVoucherId;
+     * 获取详情图片
+     */
+    public String getDetailImg() {
+        return detailImg;
     }
-    
+
     /**
-     * 设置酒庄优惠券ID
-    */
-    public void setWineryVoucherId(Long wineryVoucherId) {
-        this.wineryVoucherId = wineryVoucherId;
+     * 设置详情图片
+     */
+    public void setDetailImg(String detailImg) {
+        this.detailImg = detailImg == null ? null : detailImg.trim();
     }
-    
+
     /**
-     * 获取赠送类型1：余额2：优惠券3：其他
-    */
-    public Integer getPresentType() {
-        return presentType;
+     * 获取详情状态
+     * 0：新建
+     * 1：启用
+     * 2：禁用
+     */
+    public Integer getDetailStatus() {
+        return detailStatus;
     }
-    
+
     /**
-     * 设置赠送类型1：余额2：优惠券3：其他
-    */
-    public void setPresentType(Integer presentType) {
-        this.presentType = presentType;
+     * 设置详情状态
+     * 0：新建
+     * 1：启用
+     * 2：禁用
+     */
+    public void setDetailStatus(Integer detailStatus) {
+        this.detailStatus = detailStatus;
     }
-    
+
     /**
-     * 获取赠送备注
-    */
-    public String getPresentRemark() {
-        return presentRemark;
-    }
-    
-    /**
-     * 设置赠送备注
-    */
-    public void setPresentRemark(String presentRemark) {
-        this.presentRemark = presentRemark == null ? null : presentRemark.trim();
-    }
-    
-    /**
-     * 获取排序
-    */
+     * 获取详情排序
+     */
     public Integer getSort() {
         return sort;
     }
-    
+
     /**
-     * 设置排序
-    */
+     * 设置详情排序
+     */
     public void setSort(Integer sort) {
         this.sort = sort;
     }

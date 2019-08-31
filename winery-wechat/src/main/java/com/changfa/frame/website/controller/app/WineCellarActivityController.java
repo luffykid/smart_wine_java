@@ -19,12 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * 酒庄活动接口
- *
  */
 @Api(value = "酒庄活动接口", tags = "酒庄活动接口")
 @RestController("wxMiniWineCellarActivityController")
@@ -34,6 +32,7 @@ public class WineCellarActivityController extends BaseController {
     private WineCellarActivityService wineCellarActivityServiceImpl;
     @Resource(name = "wineCellarActivityDetailServiceImpl")
     private WineCellarActivityDetailService wineCellarActivityDetailServiceImpl;
+
     /**
      * 获取酒庄活动列表
      *
@@ -41,7 +40,7 @@ public class WineCellarActivityController extends BaseController {
      */
     @ApiOperation(value = "获取酒庄活动列表", notes = "获取酒庄活动列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
-    public Map<String, Object> getList(HttpServletRequest request, int pageSize,int pageNum) {
+    public Map<String, Object> getList(HttpServletRequest request, int pageSize, int pageNum) {
         Member member = getCurMember(request);
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(pageNum);
@@ -59,16 +58,16 @@ public class WineCellarActivityController extends BaseController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "wineCellarActivityId", value = "活动id", dataType = "Long")
     )
-    @RequestMapping(value = "/thumbup",method = RequestMethod.POST)
+    @RequestMapping(value = "/thumbup", method = RequestMethod.POST)
     public Map<String, Object> thumbup(Long wineCellarActivityId, HttpServletRequest request) {
         Member member = getCurMember(request);
         Long wineryId = getCurWineryId();
-        if (member == null){
+        if (member == null) {
             throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
         }
         try {
             wineCellarActivityServiceImpl.thumbup(wineCellarActivityId, member.getId(), wineryId);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info("此处有错误:{}", "点赞失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
         }
@@ -87,10 +86,10 @@ public class WineCellarActivityController extends BaseController {
     public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
         WineCellarActivity wineCellarActivity = wineCellarActivityServiceImpl.selectSecById(id, member.getId());
-        List<Map> list = wineCellarActivityDetailServiceImpl.getProdSkuList(id);
+//        List<Map> list = wineCellarActivityDetailServiceImpl.getProdSkuList(id);
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("wineCellarActivity",wineCellarActivity);
-        returnMap.put("list",list);
+        returnMap.put("wineCellarActivity", wineCellarActivity);
+//        returnMap.put("list",list);
         return getResult(returnMap);
     }
 
@@ -103,9 +102,11 @@ public class WineCellarActivityController extends BaseController {
     @ApiImplicitParams(
             @ApiImplicitParam(name = "id", value = "prodSkuId", dataType = "Long"))
     @RequestMapping(value = "/getProdSkuDetail", method = RequestMethod.GET)
-    public Map<String, Object> getProdSkuDetail(Long id){
-        return getResult(wineCellarActivityDetailServiceImpl.getProdSkuDetail(id));
+    public Map<String, Object> getProdSkuDetail(Long id) {
+//        return getResult(wineCellarActivityDetailServiceImpl.getProdSkuDetail(id));
+        return getResult(null);
     }
+
     /**
      * 活动订单预支付
      *
@@ -117,6 +118,7 @@ public class WineCellarActivityController extends BaseController {
     @RequestMapping(value = "/prePayDetail", method = RequestMethod.GET)
     public Map<String, Object> prePayDetail(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
-        return getResult(wineCellarActivityDetailServiceImpl.getPrePayDetail(id));
+//        return getResult(wineCellarActivityDetailServiceImpl.getPrePayDetail(id));
+        return getResult(null);
     }
 }

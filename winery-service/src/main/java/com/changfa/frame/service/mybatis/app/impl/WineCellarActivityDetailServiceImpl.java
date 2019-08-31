@@ -12,34 +12,4 @@ import java.util.Map;
 
 @Service("wineCellarActivityDetailServiceImpl")
 public class WineCellarActivityDetailServiceImpl extends BaseServiceImpl<WineCellarActivityDetail, Long> implements WineCellarActivityDetailService {
-    @Autowired
-    private WineCellarActivityDetailMapper wineCellarActivityDetailMapper;
-    /**
-     * 获取活动关联商品
-     * @param wineCellarActivityId
-     * @return
-     */
-    @Override
-    public List<Map> getProdSkuList(Long wineCellarActivityId) {
-        return wineCellarActivityDetailMapper.selectProdSkuList(wineCellarActivityId);
-    }
-
-    /**
-     * 活动订单预支付详情
-     * @param id
-     * @return
-     */
-    @Override
-    public Map getPrePayDetail(Long id) {
-        return wineCellarActivityDetailMapper.getPrePayDetail(id);
-    }
-
-    /**
-     * 获取商品详情
-     * @param id
-     * @return
-     */
-    @Override
-    public List<Map> getProdSkuDetail(Long id){ return wineCellarActivityDetailMapper.selectProdSkuDetail(id);}
-
 }
