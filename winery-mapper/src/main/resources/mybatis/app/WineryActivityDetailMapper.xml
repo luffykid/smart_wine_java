@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineryActivityDetailMapper" >
+    <resultMap id="wineryActivityDetailMap" type="com.changfa.frame.model.app.WineryActivityDetail" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_activity_id" property="wineryActivityId" jdbcType="BIGINT" />
+        <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
+        <result column="winery_voucher_id" property="wineryVoucherId" jdbcType="BIGINT" />
+        <result column="detail_title" property="detailTitle" jdbcType="VARCHAR" />
+        <result column="detail_brief" property="detailBrief" jdbcType="VARCHAR" />
+        <result column="detail_img" property="detailImg" jdbcType="VARCHAR" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        wad.id as id, wad.winery_activity_id as winery_activity_id, wad.prod_sku_id as prod_sku_id, 
+        wad.winery_voucher_id as winery_voucher_id, wad.detail_title as detail_title, wad.detail_brief as detail_brief, 
+        wad.detail_img as detail_img, wad.sort as sort, wad.create_date as create_date, wad.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineryActivityDetailMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_winery_activity_detail wad
+        where wad.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineryActivityDetail" >
+        insert into b_winery_activity_detail (id, winery_activity_id, prod_sku_id, winery_voucher_id, detail_title, 
+            detail_brief, detail_img, sort, create_date, modify_date)
+        values (#{id}, #{wineryActivityId}, #{prodSkuId}, #{wineryVoucherId}, #{detailTitle}, 
+            #{detailBrief}, #{detailImg}, #{sort}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineryActivityDetail" >
+        update b_winery_activity_detail
+        <set >
+            <if test="wineryActivityId != null" >
+                winery_activity_id = #{wineryActivityId},
+            </if>
+            <if test="prodSkuId != null" >
+                prod_sku_id = #{prodSkuId},
+            </if>
+            <if test="wineryVoucherId != null" >
+                winery_voucher_id = #{wineryVoucherId},
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                detail_title = #{detailTitle},
+            </if>
+            <if test="detailBrief != null and detailBrief != ''" >
+                detail_brief = #{detailBrief},
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                detail_img = #{detailImg},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_winery_activity_detail
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineryActivityDetailMap" >
+        select 
+        <include refid="table_column" />
+        from b_winery_activity_detail wad
+        <where >
+            <if test="wineryActivityId != null" >
+                and wad.winery_activity_id = #{wineryActivityId}
+            </if>
+            <if test="prodSkuId != null" >
+                and wad.prod_sku_id = #{prodSkuId}
+            </if>
+            <if test="wineryVoucherId != null" >
+                and wad.winery_voucher_id = #{wineryVoucherId}
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                and wad.detail_title = #{detailTitle}
+            </if>
+            <if test="detailBrief != null and detailBrief != ''" >
+                and wad.detail_brief = #{detailBrief}
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                and wad.detail_img = #{detailImg}
+            </if>
+            <if test="sort != null" >
+                and wad.sort = #{sort}
+            </if>
+            <if test="createDate != null" >
+                and wad.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and wad.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>
