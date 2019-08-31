@@ -19,7 +19,8 @@
         <result column="acct_balance" property="acctBalance" jdbcType="DECIMAL" />
         <result column="age" property="age" jdbcType="INTEGER" />
         <result column="gender" property="gender" jdbcType="INTEGER" />
-        <result column="return_amt" property="returnAmt" jdbcType="DECIMAL" />
+        <result column="invite_return_amt" property="inviteReturnAmt" jdbcType="DECIMAL" />
+        <result column="recharge_return_amt" property="rechargeReturnAmt" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
 
@@ -34,7 +35,7 @@
         mbr.status_time as status_time, mbr.total_integral as total_integral, mbr.total_store_remain as total_store_remain,
         mbr.total_store_increment as total_store_increment, mbr.market_qr_code as market_qr_code,
         mbr.market_pid as market_pid, mbr.acct_balance as acct_balance, mbr.age as age, mbr.gender as gender,
-        mbr.return_amt as return_amt, mbr.create_date as create_date, mbr.modify_date as modify_date
+        mbr.invite_return_amt as invite_return_amt, mbr.recharge_return_amt as recharge_return_amt, mbr.create_date as create_date, mbr.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="memberMap" parameterType="java.lang.Long" >
@@ -51,7 +52,7 @@
             create_date, modify_date)
         values (#{id}, #{mbrLevelId}, #{wineryId}, #{mbrName}, #{phone}, #{openId}, #{userIcon},
             #{status}, #{statusTime}, #{totalIntegral}, #{totalStoreRemain}, #{totalStoreIncrement},
-            #{marketQrCode}, #{marketPid}, #{acctBalance}, #{age}, #{gender}, #{returnAmt},
+            #{marketQrCode}, #{marketPid}, #{acctBalance}, #{age}, #{gender}, #{invite_return_amt}, #{recharge_return_amt},
             #{createDate}, #{modifyDate})
     </insert>
 
@@ -106,8 +107,11 @@
             <if test="gender != null" >
                 gender = #{gender},
             </if>
-            <if test="returnAmt != null" >
-                return_amt = #{returnAmt},
+            <if test="inviteReturnAmt != null" >
+                invite_return_amt = #{inviteReturnAmt},
+            </if>
+            <if test="rechargeReturnAmt != null" >
+                recharge_return_amt = #{rechargeReturnAmt},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -177,8 +181,11 @@
             <if test="gender != null" >
                 and mbr.gender = #{gender}
             </if>
-            <if test="returnAmt != null" >
-                and mbr.return_amt = #{returnAmt}
+            <if test="inviteReturnAmt != null" >
+                and mbr.invite_return_amt = #{inviteReturnAmt},
+            </if>
+            <if test="rechargeReturnAmt != null" >
+                and mbr.recharge_return_amt = #{rechargeReturnAmt},
             </if>
             <if test="createDate != null" >
                 and mbr.create_date = #{createDate}
