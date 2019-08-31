@@ -18,21 +18,4 @@ public class WineryMasterServiceImpl extends BaseServiceImpl<WineryMaster, Long>
 
     @Autowired
     private WineryMasterMapper wineryMasterMapper;
-
-    /**
-     * 获取荣誉庄主列表
-     * @return
-     */
-    @Override
-    public PageInfo getHonourWineryList(PageInfo pageInfo) {
-        if (pageInfo != null) {
-            PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-        }
-        return new PageInfo(wineryMasterMapper.selectHonourWineryList());
-    }
-
-    @Override
-    public WineryMaster getHonourWineryDetail(Long id) {
-        return wineryMasterMapper.selectHonourWineryDetail(id);
-    }
 }

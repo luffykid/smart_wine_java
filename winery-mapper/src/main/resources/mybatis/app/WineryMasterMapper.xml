@@ -8,30 +8,31 @@
         <result column="master_type" property="masterType" jdbcType="INTEGER" />
         <result column="master_name" property="masterName" jdbcType="VARCHAR" />
         <result column="master_detail" property="masterDetail" jdbcType="VARCHAR" />
+        <result column="head_photo" property="headPhoto" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
 
         <!-- 扩展字段 -->
-        <result column="mbr_nick_name" property="mbrNickName" jdbcType="VARCHAR" />
-        <result column="mbr_user_ico" property="mbrUserIco" jdbcType="VARCHAR" />
         <result column="mbr_level_name" property="mbrLevelName" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_id, winery_id, master_type, master_name, master_detail, create_date, modify_date
+        wm.id as id, wm.mbr_id as mbr_id, wm.winery_id as winery_id, wm.master_type as master_type,
+        wm.master_name as master_name, wm.master_detail as master_detail, wm.head_photo as head_photo,
+        wm.create_date as create_date, wm.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineryMasterMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from b_winery_master
-        where id = #{id}
+        from b_winery_master wm
+        where wm.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineryMaster" >
-        insert into b_winery_master (id, mbr_id, winery_id, master_type, master_name, master_detail, 
-            create_date, modify_date)
-        values (#{id}, #{mbrId}, #{wineryId}, #{masterType}, #{masterName}, #{masterDetail}, 
+        insert into b_winery_master (id, mbr_id, winery_id, master_type, master_name, master_detail,
+            head_photo,create_date, modify_date)
+        values (#{id}, #{mbrId}, #{wineryId}, #{masterType}, #{masterName}, #{masterDetail},#{headPhoto}
             #{createDate}, #{modifyDate})
     </insert>
 
@@ -53,6 +54,9 @@
             <if test="masterDetail != null and masterDetail != ''" >
                 master_detail = #{masterDetail},
             </if>
+             <if test="headPhoto != null and headPhoto != ''" >
+                 head_photo = #{headPhoto},
+            </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
             </if>
@@ -69,54 +73,38 @@
     </delete>
 
     <select id="selectList" resultMap="wineryMasterMap" >
-        select 
-        <include refid="table_column" />
-        from b_winery_master wineryMaster 
+        select
+        <include refid="table_column" />,
+        ml.name as mbr_level_name
+        from b_winery_master wm
+        left join m_member m on m.id = wm.mbr_id
+        left join m_mbr_level ml on ml.id = m.mbr_level_id
         <where >
             <if test="mbrId != null" >
-                and wineryMaster.mbr_id = #{mbrId}
+                and wm.mbr_id = #{mbrId}
             </if>
             <if test="wineryId != null" >
-                and wineryMaster.winery_id = #{wineryId}
+                and wm.winery_id = #{wineryId}
             </if>
             <if test="masterType != null" >
-                and wineryMaster.master_type = #{masterType}
+                and wm.master_type = #{masterType}
             </if>
             <if test="masterName != null and masterName != ''" >
-                and wineryMaster.master_name = #{masterName}
+                and wm.master_name = #{masterName}
             </if>
             <if test="masterDetail != null and masterDetail != ''" >
-                and wineryMaster.master_detail = #{masterDetail}
+                and wm.master_detail = #{masterDetail}
+            </if>
+             <if test="headPhoto != null and headPhoto != ''" >
+                and wm.head_photo = #{headPhoto}
             </if>
             <if test="createDate != null" >
-                and wineryMaster.create_date = #{createDate}
+                and wm.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and wineryMaster.modify_date = #{modifyDate}
+                and wm.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
 
-    <!-- 查询荣誉庄主列表 -->
-    <select id="selectHonourWineryList" resultMap="wineryMasterMap">
-        select
-            m.*,e.nick_name as mbr_nick_name,
-            e.user_icon as mbr_user_ico,
-            l.name as mbr_level_name
-        from b_winery_master m
-        inner join m_member e on m.mbr_id=e.id
-        left join m_mbr_level l on l.id =e.mbr_level_id
-    </select>
-
-    <!-- 根据ID查询荣誉庄主 -->
-    <select id="selectHonourWineryDetail" parameterType="Long" resultMap="wineryMasterMap">
-        select
-            m.*,e.nick_name as mbr_nick_name,
-            e.user_icon as mbr_user_ico,
-            l.name as mbr_level_name
-        from b_winery_master m
-        inner join m_member e on m.mbr_id=e.id
-        left join m_mbr_level l on l.id =e.mbr_level_id
-        where m.id=#{id}
-    </select>
 </mapper>
