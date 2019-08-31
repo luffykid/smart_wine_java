@@ -62,44 +62,20 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         MbrWineCustom mbrWineCustom = constructMbrWineCustom(wineryId, wineCustom, quantity, mbrId);
 
 
-        //订阅新建定制酒订单事件
-        DomainEventPublisher publisher = DomainEventPublisher.newInstance();
-        publisher.subcribe(new DomainEventSubscriber<OrderCreatedEvent>() {
-
-            @Override
-            public void handleEvent(OrderCreatedEvent orderCreatedEvent) {
-
-                MbrWineCustomOrderRecord record = new MbrWineCustomOrderRecord();
-                record.setId(IDUtil.getId());
-                record.setMbrWineCustomOrderId(orderCreatedEvent.getMbrWineCustomOrderId());
-                record.setOrderStatus(Long.valueOf(MbrWineCustomOrder.Status.NEW_ORDER.getValue()));
-                record.setStatusDate(orderCreatedEvent.occurredOn());
-                record.setCreateDate(new Date());
-                record.setModifyDate(new Date());
-
-                mbrWineCustomOrderRecordMapper.save(record);
-
-            }
-
-            @Override
-            public Class<OrderCreatedEvent> subscribedToEventType() {
-                return OrderCreatedEvent.class;
-            }
-        });
-
         // 创建定制酒订单
-        MbrWineCustomOrder order = MbrWineCustomOrder.createOrder(publisher,
-                                                                  wineryId,
+        MbrWineCustomOrder order = MbrWineCustomOrder.createOrder(wineryId,
                                                                   mbrWineCustom,
                                                                   IDUtil.getId(),
                                                                   OrderNoUtil.get());
+
+        addMbrWineCustomOrderRecordToRepository(order);
 
         mbrWineCustom.setMbrWineCustomOrderId(order.getId());
 
         //将details中的每个MbrWineCustomDetail对象填充完全
         completeMbrWineCustomDetails(details, mbrWineCustom.getId(), mbrWineCustom.getMbrId());
 
-        SaveToRepository(order, mbrWineCustom, details);
+        saveToRepository(order, mbrWineCustom, details);
 
         return order;
     }
@@ -118,35 +94,27 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         addShipInfoForTheOrder(order, address);
 
-        DomainEventPublisher publisher = DomainEventPublisher.newInstance();
-        publisher.subcribe(new DomainEventSubscriber<OrderStateChangedEvent>() {
-            @Override
-            public void handleEvent(OrderStateChangedEvent orderStateChangedEvent) {
+        order.updateState(MbrWineCustomOrder.Status.UNPAID);
 
-                MbrWineCustomOrderRecord record = new MbrWineCustomOrderRecord();
-                record.setId(IDUtil.getId());
-                record.setMbrWineCustomOrderId(orderStateChangedEvent.getMbrWineCustomOrderId());
-                record.setOrderStatus(Long.valueOf(orderStateChangedEvent.getUpdatedOrderState()));
-                record.setStatusDate(orderStateChangedEvent.occurredOn());
-                record.setCreateDate(new Date());
-                record.setModifyDate(new Date());
-
-                mbrWineCustomOrderRecordMapper.save(record);
-
-            }
-
-            @Override
-            public Class<OrderStateChangedEvent> subscribedToEventType() {
-                return OrderStateChangedEvent.class;
-            }
-        });
-
-        order.updateState(publisher, MbrWineCustomOrder.Status.UNPAID);
+        addMbrWineCustomOrderRecordToRepository(order);
 
         mbrWineCustomOrderMapper.update(order);
 
         return order;
 
+    }
+
+    private void addMbrWineCustomOrderRecordToRepository(MbrWineCustomOrder order) {
+
+        MbrWineCustomOrderRecord record = new MbrWineCustomOrderRecord();
+        record.setId(IDUtil.getId());
+        record.setMbrWineCustomOrderId(order.getId());
+        record.setOrderStatus(Long.valueOf(order.getOrderStatus()));
+        record.setStatusDate(new Date());
+        record.setCreateDate(new Date());
+        record.setModifyDate(new Date());
+
+        mbrWineCustomOrderRecordMapper.save(record);
     }
 
     private void addShipInfoForTheOrder(MbrWineCustomOrder order, MemberAddress address) {
@@ -175,12 +143,12 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         if (!address.getMbrId().equals(member.getId()))
             throw new IllegalArgumentException("the address don't belong to the member!");
 
-        if (order.getOrderStatus() != MbrWineCustomOrder.Status.NEW_ORDER.getValue())
+        if (order.getOrderStatus() != MbrWineCustomOrder.Status.UNPAID.getValue())
             throw new IllegalStateException("the operation don't allowed for the current mbrWineCustomOrder state!");
 
     }
 
-    private void SaveToRepository(MbrWineCustomOrder order,
+    private void saveToRepository(MbrWineCustomOrder order,
                                   MbrWineCustom mbrWineCustom,
                                   List<MbrWineCustomDetail> details) {
 

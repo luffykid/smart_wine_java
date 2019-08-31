@@ -11,8 +11,6 @@ import com.changfa.frame.model.common.BaseEntity;
 import com.changfa.frame.model.event.DomainEventPublisher;
 import com.changfa.frame.model.event.order.OrderCreatedEvent;
 import com.changfa.frame.model.event.order.OrderStateChangedEvent;
-import com.sun.mail.imap.protocol.ID;
-import org.apache.ibatis.jdbc.Null;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -104,14 +102,12 @@ public class MbrWineCustomOrder extends BaseEntity {
         this.openId = openId;
     }
 
-    public void updateState(DomainEventPublisher publisher, Status status) {
+    public void updateState(Status status) {
 
         if (status == null)
             throw new NullPointerException("status must not be null!");
 
         this.setOrderStatus(status.getValue());
-
-        publisher.publish(new OrderStateChangedEvent(this.getId(), status.getValue()));
 
     }
 
@@ -165,13 +161,12 @@ public class MbrWineCustomOrder extends BaseEntity {
      * @return 新建的定制酒订单
      */
 
-    public static MbrWineCustomOrder createOrder(DomainEventPublisher publisher,
-                                                 Long wineryId,
+    public static MbrWineCustomOrder createOrder(Long wineryId,
                                                  MbrWineCustom mbrWineCustom,
                                                  Long mbrWineCustomOrderId,
                                                  String orderNo) {
 
-        checkValidate(publisher, mbrWineCustom, mbrWineCustomOrderId, orderNo);
+        checkValidate(mbrWineCustom, mbrWineCustomOrderId, orderNo);
 
         MbrWineCustomOrder order = new MbrWineCustomOrder();
         order.setId(mbrWineCustomOrderId);
@@ -186,19 +181,13 @@ public class MbrWineCustomOrder extends BaseEntity {
         order.setMbrId(mbrWineCustom.getMbrId());
         order.setOrderStatus(0);
 
-        //发布新建定制酒订单事件
-        publisher.publish(new OrderCreatedEvent(mbrWineCustomOrderId));
 
         return order;
     }
 
-    private static void checkValidate(DomainEventPublisher publisher,
-                                      MbrWineCustom mbrWineCustom,
+    private static void checkValidate(MbrWineCustom mbrWineCustom,
                                       Long mbrWineCustomOrderId,
                                       String orderNo) {
-
-        if (publisher == null)
-            throw new NullPointerException("publisher must not be null!");
 
         if (mbrWineCustom == null)
             throw new NullPointerException("mbrWineCustom must not be null!");
@@ -284,7 +273,6 @@ public class MbrWineCustomOrder extends BaseEntity {
     
     /**
      * 获取订单状态
-0：新建订单
 1：未支付（已生成预支付ID）
 2：已取消（取消订单）
 3：已支付（用户完成支付）
@@ -297,7 +285,6 @@ public class MbrWineCustomOrder extends BaseEntity {
     
     /**
      * 设置订单状态
-0：新建订单
 1：未支付（已生成预支付ID）
 2：已取消（取消订单）
 3：已支付（用户完成支付）

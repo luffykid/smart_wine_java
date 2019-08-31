@@ -23,8 +23,7 @@ public class MbrWineCustomOrderTest {
 
         MbrWineCustom mbrWineCustom = getFixtureMbrWineCustom();
 
-        MbrWineCustomOrder order = MbrWineCustomOrder.createOrder(publisher,
-                                                                  Long.valueOf(9999),
+        MbrWineCustomOrder order = MbrWineCustomOrder.createOrder(Long.valueOf(9999),
                                                                   mbrWineCustom,
                                                                   IDUtil.getId(),
                                                                   OrderNoUtil.get());
@@ -46,24 +45,6 @@ public class MbrWineCustomOrderTest {
         Assert.assertEquals(0, order.getOrderStatus().intValue());
 
 
-
-    }
-
-    @Test
-    public void testPublishOrderCreatedEventAfterPlaceAnOrder() {
-
-        DomainEventPublisher publisher = Mockito.mock(DomainEventPublisher.class);
-
-
-        MbrWineCustom mbrWineCustom = getFixtureMbrWineCustom();
-
-       MbrWineCustomOrder.createOrder(publisher,
-                                      Long.valueOf(9999),
-                                      mbrWineCustom,
-                                      IDUtil.getId(),
-                                      OrderNoUtil.get());
-
-        Mockito.verify(publisher).publish(Mockito.any(OrderCreatedEvent.class));
 
     }
 
