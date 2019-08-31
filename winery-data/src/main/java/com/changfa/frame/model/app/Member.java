@@ -149,38 +149,43 @@ public class Member extends BaseEntity {
     /**
      * 账户余额
      */
-    public BigDecimal acctBalance;
+    private BigDecimal acctBalance;
 
     /**
      * 年龄
      */
-    public Integer age;
+    private Integer age;
 
     /**
      * 性别
      */
-    public Integer gender;
+    private Integer gender;
 
     /**
-     * 返现金额
+     * 邀请返现金额
      */
-    public BigDecimal returnAmt;
+    private BigDecimal inviteReturnAmt;
+
+    /**
+     * 充值返现金额
+     */
+    private BigDecimal rechargeReturnAmt;
 
     /******************** 扩展属性 ***********************/
     /**
      * 优惠券数量
      */
-    public Integer voucherCount;
+    private Integer voucherCount;
 
     /**
      * 会员微信昵称
      */
-    public String nickName;
+    private String nickName;
 
     /**
      * 会员等级名称
      */
-    public String levelName;
+    private String levelName;
 
     /**
      * 获取会员等级ID
@@ -425,20 +430,6 @@ public class Member extends BaseEntity {
     }
 
     /**
-     * 返现金额
-     */
-    public BigDecimal getReturnAmt() {
-        return returnAmt;
-    }
-
-    /**
-     * 返现金额
-     */
-    public void setReturnAmt(BigDecimal returnAmt) {
-        this.returnAmt = returnAmt;
-    }
-
-    /**
      * 获取会员微信昵称
      */
     public String getNickName() {
@@ -464,5 +455,33 @@ public class Member extends BaseEntity {
      */
     public void setLevelName(String levelName) {
         this.levelName = levelName;
+    }
+
+    /**
+     * 获取邀请返现
+     */
+    public BigDecimal getInviteReturnAmt() {
+        return inviteReturnAmt;
+    }
+
+    /**
+     * 设置邀请返现
+     */
+    public void setInviteReturnAmt(BigDecimal inviteReturnAmt) {
+        this.inviteReturnAmt = inviteReturnAmt;
+    }
+
+    /**
+     * 获取充值返现
+     */
+    public BigDecimal getRechargeReturnAmt() {
+        return rechargeReturnAmt;
+    }
+
+    /**
+     * 设置充值返现
+     */
+    public void setRechargeReturnAmt(BigDecimal rechargeReturnAmt) {
+        this.rechargeReturnAmt = rechargeReturnAmt;
     }
 }
