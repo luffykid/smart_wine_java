@@ -136,6 +136,16 @@ public class ProdSku extends BaseEntity {
      */
     private List<ProdSkuMbrPrice> prodSkuMbrPriceList;
 
+    private BigDecimal wineCustomPrice;
+
+    public BigDecimal getWineCustomPrice() {
+        return wineCustomPrice;
+    }
+
+    public void setWineCustomPrice(BigDecimal wineCustomPrice) {
+        this.wineCustomPrice = wineCustomPrice;
+    }
+
     /**
      * 产品规格会员价
      */

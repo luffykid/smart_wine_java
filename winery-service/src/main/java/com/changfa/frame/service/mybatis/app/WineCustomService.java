@@ -1,9 +1,6 @@
 package com.changfa.frame.service.mybatis.app;
 
-import com.changfa.frame.model.app.WineCustom;
-import com.changfa.frame.model.app.WineCustomAdvance;
-import com.changfa.frame.model.app.WineCustomElement;
-import com.changfa.frame.model.app.WineCustomElementContent;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
 
@@ -85,4 +82,10 @@ public interface WineCustomService extends BaseService<WineCustom, Long> {
      * @param wineCustom
      */
     void updateWineCustom(WineCustom wineCustom);
+
+    /**
+     * 获取该同款定制酒产品规格列表
+     * @param prodId 产品id
+     */
+    List<ProdSku> getProdSkus(Long prodId);
 }

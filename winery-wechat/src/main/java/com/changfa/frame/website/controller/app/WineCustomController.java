@@ -1,7 +1,8 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.WineCustom;
-import com.changfa.frame.model.app.WineCustomElementContent;
+import com.changfa.frame.model.app.*;
+import com.changfa.frame.service.mybatis.app.ProdDetailService;
+import com.changfa.frame.service.mybatis.app.ProdService;
 import com.changfa.frame.service.mybatis.app.WineCustomService;
 import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
@@ -24,6 +25,12 @@ public class WineCustomController extends BaseController {
 
     @Resource(name = "wineCustomServiceImpl")
     private WineCustomService wineCustomService;
+
+    @Resource(name = "prodServiceImpl")
+    private ProdService prodServiceImpl;
+
+    @Resource(name = "prodDetailServiceImpl")
+    private ProdDetailService prodDetailServiceImpl;
 
     @ApiOperation(value = "获取定制酒列表")
     @GetMapping
@@ -70,5 +77,24 @@ public class WineCustomController extends BaseController {
         return getResult(wineCustomService.getWineCustomAdvancesUnderTheWineCustomElementContent(id, elemContId));
 
     }
+
+    @GetMapping("{id}/detail")
+    public Map<String, Object> getWineCustomDetail(@PathVariable("id") Long id) {
+
+        WineCustom wineCustom = wineCustomService.getById(id);
+
+        Prod prod = prodServiceImpl.getProd(wineCustom.getProdId());
+
+        ProdDetail queryForTheProd = new ProdDetail();
+        queryForTheProd.setProdId(prod.getId());
+        List<ProdDetail> prodDetails = prodDetailServiceImpl.selectList(queryForTheProd);
+
+        prod.setProdDetailList(prodDetails);
+
+        return getResult(prod);
+
+    }
+
+
 
 }

@@ -277,6 +277,25 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
         saveWineCustomElementContentAndwinCustomElementAdvance(wineCustom);
     }
 
+    @Override
+    public List<ProdSku> getProdSkus(Long prodId) {
+
+        WineCustom queryForSameProd = new WineCustom();
+        queryForSameProd.setProdId(prodId);
+
+        List<WineCustom> wineCustoms = this.selectList(queryForSameProd);
+
+        List<ProdSku> prodSkus = wineCustoms.stream()
+                                            .map(wineCustom -> {
+                                                ProdSku sku = prodSkuMapper.getById(wineCustom.getProdSkuId());
+                                                sku.setWineCustomPrice(wineCustom.getCustomPrice());
+                                                return sku;
+                                            }).collect(Collectors.toList());
+
+
+        return prodSkus;
+    }
+
 
     // 取到预制图表信息  填充定制元素内容  保存填充定制元素内容  保存 结合预制图表信息和定制元素内容信息 到winCustomElementAdvance表
     public void saveWineCustomElementContentAndwinCustomElementAdvance(WineCustom wineCustom){
