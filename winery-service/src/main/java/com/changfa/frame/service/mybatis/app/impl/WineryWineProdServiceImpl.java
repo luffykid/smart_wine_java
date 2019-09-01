@@ -1,5 +1,7 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.mapper.app.ProdImgMapper;
+import com.changfa.frame.mapper.app.ProdMapper;
 import com.changfa.frame.mapper.app.ProdSkuMapper;
 import com.changfa.frame.mapper.app.ProdSkuMbrPriceMapper;
 import com.changfa.frame.model.app.*;
@@ -22,6 +24,12 @@ public class WineryWineProdServiceImpl extends BaseServiceImpl<WineryWineProd, L
     @Autowired
     private ProdSkuMapper prodSkuMapper;
 
+    @Autowired
+    private ProdImgMapper prodImgMapper;
+
+    @Autowired
+    private ProdMapper prodMapper;
+
 
 
     @Override
@@ -38,8 +46,17 @@ public class WineryWineProdServiceImpl extends BaseServiceImpl<WineryWineProd, L
         wineryWineProds.forEach(wineryWineProd -> {
 
             ProdSkuMbrPrice price = getMbrPrice(member, wineryWineProd);
+            ProdImg queryForFirstImg = new ProdImg();
+            queryForFirstImg.setProdId(wineryWineProd.getProdId());
+            List<ProdImg> prodImgs = prodImgMapper.selectList(queryForFirstImg)
+                                            .stream()
+                                            .sorted(Comparator.comparing(ProdImg::getSort))
+                                            .collect(Collectors.toList());
             wineryWineProd.setMbrPrice(price.getMbrLevelPrice());
+            wineryWineProd.setProdImgs(prodImgs);
 
+            Prod prod = prodMapper.getById(wineryWineProd.getProdId());
+            wineryWineProd.setProd(prod);
         });
 
         return wineryWineProds;

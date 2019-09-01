@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 酒庄酒表
@@ -36,6 +37,32 @@ public class WineryWineProd extends BaseEntity {
      * 酒庄酒产品价格
      */
     private BigDecimal mbrPrice;
+
+    /**
+     * 酒庄酒产品图片
+     */
+    private List<ProdImg> prodImgs;
+
+    /**
+     * 酒庄酒产品相关信息
+     */
+    private Prod prod;
+
+    public Prod getProd() {
+        return prod;
+    }
+
+    public void setProd(Prod prod) {
+        this.prod = prod;
+    }
+
+    public List<ProdImg> getProdImgs() {
+        return prodImgs;
+    }
+
+    public void setProdImgs(List<ProdImg> prodImgs) {
+        this.prodImgs = prodImgs;
+    }
 
     public BigDecimal getMbrPrice() {
         return mbrPrice;
