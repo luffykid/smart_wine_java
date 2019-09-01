@@ -11,6 +11,7 @@
 package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.model.app.ProdSku;
+import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.model.app.WineryWine;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
@@ -81,5 +82,6 @@ public interface WineryWineService extends BaseService<WineryWine, Long> {
      * @return boolean
      */
     boolean deleteWineryWine(Long id);
+
 }
  

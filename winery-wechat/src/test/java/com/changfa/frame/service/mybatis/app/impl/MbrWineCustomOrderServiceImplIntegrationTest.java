@@ -45,20 +45,18 @@ public class MbrWineCustomOrderServiceImplIntegrationTest {
     }
 
     @Test
-    public void testOrderStateTransformUnPaid() {
+    public void testAddShipInfoForTheOrder() {
+
+        Long mbrWineCustomOrderId = Long.valueOf(447185632331038720L);
+
+        mbrWineCustomOrderService.addShipInfoForTheOrder(Long.valueOf(1), Long.valueOf(446980587345936384L),
+                                                                                mbrWineCustomOrderId);
 
 
-        MbrWineCustomOrder unPaidOrder = mbrWineCustomOrderService.payForOrder(Long.valueOf(1234),
-                                                                               Long.valueOf(446980587345936384L),
-                                                                                Long.valueOf(447185632331038720L));
-
-        Assert.assertNotNull(unPaidOrder);
-        Assert.assertEquals(MbrWineCustomOrder.ORDER_STATUS_ENUM.UNPAID.getValue(), unPaidOrder.getOrderStatus());
-
-        MbrWineCustomOrder orderUpdated = mbrWineCustomOrderMapper.getById(unPaidOrder.getId());
+        MbrWineCustomOrder orderUpdated = mbrWineCustomOrderMapper.getById(mbrWineCustomOrderId);
 
         Assert.assertNotNull(orderUpdated);
-        Assert.assertEquals(unPaidOrder.getOrderStatus(), orderUpdated.getOrderStatus());
+        Assert.assertNotNull(orderUpdated.getShippingDetailAddr());
 
     }
 

@@ -74,12 +74,12 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         saveToRepository(order, mbrWineCustom, details);
 
-        return null;
+        return order;
     }
 
     @Transactional
     @Override
-    public MbrWineCustomOrder payForOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId) {
+    public void addShipInfoForTheOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId) {
 
         Member member = memberMapper.getById(mbrId);
 
@@ -91,11 +91,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         addShipInfoForTheOrder(order, address);
 
-        addMbrWineCustomOrderRecordToRepository(order);
-
         mbrWineCustomOrderMapper.update(order);
-
-        return order;
 
     }
 

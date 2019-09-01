@@ -9,6 +9,8 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 酒庄酒表
  * @version 1.0 2019-08-24
@@ -29,7 +31,20 @@ public class WineryWineProd extends BaseEntity {
     /** 售卖总数量 */
     private Integer totalSellCnt;
 
-    
+    /**
+     * 扩展字段
+     * 酒庄酒产品价格
+     */
+    private BigDecimal mbrPrice;
+
+    public BigDecimal getMbrPrice() {
+        return mbrPrice;
+    }
+
+    public void setMbrPrice(BigDecimal mbrPrice) {
+        this.mbrPrice = mbrPrice;
+    }
+
     /**
      * 获取酒庄酒ID
     */

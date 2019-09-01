@@ -136,6 +136,19 @@ public class ProdSku extends BaseEntity {
      */
     private List<ProdSkuMbrPrice> prodSkuMbrPriceList;
 
+    /**
+     * 产品规格会员价
+     */
+    private BigDecimal mbrPrice;
+
+    public BigDecimal getMbrPrice() {
+        return mbrPrice;
+    }
+
+    public void setMbrPrice(BigDecimal mbrPrice) {
+        this.mbrPrice = mbrPrice;
+    }
+
     /**商品名称*/
     private String prodName;
 
