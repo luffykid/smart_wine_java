@@ -75,7 +75,7 @@ public class MbrProdOrderItem extends BaseEntity {
     /**
      * 积分数量
      */
-    private Long integralCnt;
+    private BigDecimal integralCnt;
 
 
     /**
@@ -229,14 +229,14 @@ public class MbrProdOrderItem extends BaseEntity {
     /**
      * 获取积分数量
      */
-    public Long getIntegralCnt() {
+    public BigDecimal getIntegralCnt() {
         return integralCnt;
     }
 
     /**
      * 设置积分数量
      */
-    public void setIntegralCnt(Long integralCnt) {
+    public void setIntegralCnt(BigDecimal integralCnt) {
         this.integralCnt = integralCnt;
     }
 }

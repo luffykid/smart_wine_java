@@ -9,7 +9,6 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -114,7 +113,7 @@ public class MbrProdOrder extends BaseEntity {
     /**
      * 支付积分
      */
-    private Long payIntegralCnt;
+    private BigDecimal payIntegralCnt;
 
     /**
      * 订单状态
@@ -230,16 +229,10 @@ public class MbrProdOrder extends BaseEntity {
      */
     private Date payDate;
 
-    @Transient
+    /**
+     * 会员商品订单条目
+     */
     private List<MbrProdOrderItem> mbrProdOrderItems;
-
-    public List<MbrProdOrderItem> getMbrProdOrderItems() {
-        return mbrProdOrderItems;
-    }
-
-    public void setMbrProdOrderItems(List<MbrProdOrderItem> mbrProdOrderItems) {
-        this.mbrProdOrderItems = mbrProdOrderItems;
-    }
 
     /**
      * 获取酒庄ID
@@ -314,14 +307,14 @@ public class MbrProdOrder extends BaseEntity {
     /**
      * 获取支付积分
      */
-    public Long getPayIntegralCnt() {
+    public BigDecimal getPayIntegralCnt() {
         return payIntegralCnt;
     }
 
     /**
      * 设置支付积分
      */
-    public void setPayIntegralCnt(Long payIntegralCnt) {
+    public void setPayIntegralCnt(BigDecimal payIntegralCnt) {
         this.payIntegralCnt = payIntegralCnt;
     }
 
@@ -471,5 +464,19 @@ public class MbrProdOrder extends BaseEntity {
      */
     public void setPayDate(Date payDate) {
         this.payDate = payDate;
+    }
+
+    /**
+     * 会员商品订单
+     */
+    public List<MbrProdOrderItem> getMbrProdOrderItems() {
+        return mbrProdOrderItems;
+    }
+
+    /**
+     * 会员商品订单
+     */
+    public void setMbrProdOrderItems(List<MbrProdOrderItem> mbrProdOrderItems) {
+        this.mbrProdOrderItems = mbrProdOrderItems;
     }
 }

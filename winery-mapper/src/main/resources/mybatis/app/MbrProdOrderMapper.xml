@@ -9,7 +9,7 @@
         <result column="prod_total_cnt" property="prodTotalCnt" jdbcType="INTEGER" />
         <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
         <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
-        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="BIGINT" />
+        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="DECIMAL" />
         <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
         <result column="shipping_detail_addr" property="shippingDetailAddr" jdbcType="VARCHAR" />
         <result column="shipping_province_id" property="shippingProvinceId" jdbcType="BIGINT" />
