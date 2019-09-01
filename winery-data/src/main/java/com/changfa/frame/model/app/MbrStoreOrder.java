@@ -221,6 +221,10 @@ public class MbrStoreOrder extends BaseEntity {
      */
     private String transactionNo;
 
+
+    /** 储酒位置 */
+    private String storePosition;
+
     /**
      * 订单号【系统生成】
      */
@@ -241,6 +245,16 @@ public class MbrStoreOrder extends BaseEntity {
      * 商品sku名称
      **/
     private String skuName;
+    /**商品sku图片**/
+    private String prodImg;
+
+    public String getProdImg() {
+        return prodImg;
+    }
+
+    public void setProdImg(String prodImg) {
+        this.prodImg = prodImg;
+    }
 
     public String getSkuName() {
         return skuName;
@@ -249,7 +263,13 @@ public class MbrStoreOrder extends BaseEntity {
     public void setSkuName(String skuName) {
         this.skuName = skuName;
     }
+    public String getStorePosition() {
+        return storePosition;
+    }
 
+    public void setStorePosition(String storePosition) {
+        this.storePosition = storePosition;
+    }
     public Integer getIsNow() {
         return isNow;
     }
