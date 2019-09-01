@@ -34,9 +34,72 @@ public class MbrProdOrder extends BaseEntity {
     private Long mbrId;
 
     /**
-     * 支付方式1：微信支付2：积分支付3：积分+微信支付
+     * 支付方式
+     * 1：微信支付
+     * 2：积分支付
+     * 3：积分+微信支付
      */
     private Integer payMode;
+
+    /**
+     * 订单状态
+     */
+    public enum PAY_MODE_ENUM {
+        WX_MINI_MODE(1, "微信支付"),
+        INTEGRAL_MODE(2, "积分支付"),
+        WX_MINI_INTEGRAL_MODE(3, "微信积分积分支付");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        PAY_MODE_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         * @return
+         */
+        public static ORDER_STATUS_ENUM getEnum(Integer value) {
+            for (ORDER_STATUS_ENUM statusEnum : ORDER_STATUS_ENUM.values()) {
+                if (value.equals(statusEnum.getValue())) {
+                    return statusEnum;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
 
     /**
      * 商品总数量

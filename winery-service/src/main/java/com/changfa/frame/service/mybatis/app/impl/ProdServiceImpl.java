@@ -425,8 +425,53 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
 
         // 消费送积分
         handleConsumeIntegral(dbOrder);
+
+        // 如果是积分+金额支付方式，扣减积分 todo 此处积分扣减在回调延迟情况下会出现负积分，后期可以加预扣除积分操作
+        if (dbOrder.getPayMode().equals(MbrProdOrder.PAY_MODE_ENUM.WX_MINI_INTEGRAL_MODE.getValue())) {
+            handleDeductIntegral(dbOrder);
+        }
+
     }
 
+    /**
+     * 依据当前会员ID处理积分
+     *
+     * @param mbrProdOrder 会员订单
+     */
+    private void handleDeductIntegral(MbrProdOrder mbrProdOrder) {
+        // 如果会员没有父级，不用处理邀请返现
+        Member curMbr = memberMapper.getById(mbrProdOrder.getMbrId());
+
+        // 插入积分记录
+        MbrIntegralRecord integralRecord = new MbrIntegralRecord();
+        integralRecord.setId(IDUtil.getId());
+        integralRecord.setWineryId(mbrProdOrder.getWineryId());
+        integralRecord.setMbrId(mbrProdOrder.getMbrId());
+        integralRecord.setActionType(MbrIntegralRecord.ACTION_TYPE_ENUM.PROD_CUSTOM.getValue());
+        integralRecord.setPkId(mbrProdOrder.getId());
+        integralRecord.setSignType(0);
+
+//        // 计算积分
+//        BigDecimal payRealAmt = mbrProdOrder.getPayIntegralCnt();
+////        BigDecimal divide = payRealAmt.divide(new BigDecimal(integralScale));
+//        BigDecimal integral = divide.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+//        integralRecord.setIntegralValue(integral);
+//
+//        // 计算操作后积分
+//        BigDecimal preIntegral = curMbr.getTotalIntegral();
+//        BigDecimal lastIntegral = preIntegral.add(integral).setScale(2, BigDecimal.ROUND_HALF_UP);
+//        integralRecord.setLatestPoint(lastIntegral);
+//        integralRecord.setCreateDate(new Date());
+        integralRecord.setModifyDate(new Date());
+        mbrIntegralRecordMapper.save(integralRecord);
+
+        // 更新会员积分
+        Member updateMbr = new Member();
+        updateMbr.setId(curMbr.getId());
+//        updateMbr.setTotalIntegral(lastIntegral);
+        updateMbr.setModifyDate(new Date());
+        memberMapper.update(updateMbr);
+    }
     /**
      * 依据当前会员ID处理积分
      *
@@ -444,7 +489,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         integralRecord.setMbrId(mbrProdOrder.getMbrId());
         integralRecord.setActionType(MbrIntegralRecord.ACTION_TYPE_ENUM.PROD_CUSTOM.getValue());
         integralRecord.setPkId(mbrProdOrder.getId());
-        integralRecord.setActionType(1);
+        integralRecord.setSignType(1);
 
         // 计算积分
         BigDecimal payRealAmt = mbrProdOrder.getPayRealAmt();
