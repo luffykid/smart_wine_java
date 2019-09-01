@@ -170,4 +170,14 @@
             </if>
         </where>
     </select>
+
+    <!-- 根据会员ID和时间查询有效优惠券 -->
+    <select id="selectEffectByMbrId" resultMap="mbrWineryVoucherMap" >
+        select
+            <include refid="table_column" />
+        from m_mbr_winery_voucher mwv
+        where 1=1
+        and mwv.mbr_id = #{mbrId}
+        and mwv.effective_begin_date &lt;= #{nowDate} and mwv.effective_end_date &gt;= #{nowDate}
+    </select>
 </mapper>
