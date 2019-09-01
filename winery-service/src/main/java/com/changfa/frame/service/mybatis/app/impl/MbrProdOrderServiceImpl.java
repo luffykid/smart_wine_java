@@ -138,7 +138,7 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
 
 //        // 计算积分
 //        BigDecimal payRealAmt = mbrProdOrder.getPayIntegralCnt();
-////        BigDecimal divide = payRealAmt.divide(new BigDecimal(integralScale));
+//        BigDecimal divide = payRealAmt.subtract();
 //        BigDecimal integral = divide.setScale(2, BigDecimal.ROUND_HALF_DOWN);
 //        integralRecord.setIntegralValue(integral);
 //
@@ -147,8 +147,8 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
 //        BigDecimal lastIntegral = preIntegral.add(integral).setScale(2, BigDecimal.ROUND_HALF_UP);
 //        integralRecord.setLatestPoint(lastIntegral);
 //        integralRecord.setCreateDate(new Date());
-        integralRecord.setModifyDate(new Date());
-        mbrIntegralRecordMapper.save(integralRecord);
+//        integralRecord.setModifyDate(new Date());
+//        mbrIntegralRecordMapper.save(integralRecord);
 
         // 更新会员积分
         Member updateMbr = new Member();
