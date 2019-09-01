@@ -9,9 +9,9 @@ import java.util.List;
 public interface MbrWineryVoucherService extends BaseService<MbrWineryVoucher, Long> {
 
     /**
-     *
+     * 根据会员id和时间查询有效优惠券
+     * @param nowDate
      * @return
      */
-    List<MbrWineryVoucher> selectListByMbrId(Date date);
-
+    List<MbrWineryVoucher> selectEffectByMbrId(Long mbrId ,Date nowDate);
 }

@@ -9,10 +9,18 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.MbrWineryVoucher;
-import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MbrWineryVoucherMapper extends BaseMapper<MbrWineryVoucher, Long> {
+
+    /**
+     * 根据会员id和时间查询有效优惠券
+     *
+     * @param nowDate
+     * @return
+     */
+    List<MbrWineryVoucher> selectEffectByMbrId(Long mbrId, Date nowDate);
 
 }
