@@ -193,6 +193,16 @@ public class Member extends BaseEntity {
     private Boolean isMaster;
 
     /**
+     * 体验次数【会员当前酒庄各景点签到总次数】
+     */
+    private Integer mbrSightSignCnt;
+
+    /**
+     * 会员消费总金额
+     */
+    private BigDecimal TotalMbrCustomAmt;
+
+    /**
      * 获取会员等级ID
      */
     public Long getMbrLevelId() {
@@ -502,5 +512,33 @@ public class Member extends BaseEntity {
      */
     public void setMaster(Boolean master) {
         isMaster = master;
+    }
+
+    /**
+     * 会员签到次数
+     */
+    public Integer getMbrSightSignCnt() {
+        return mbrSightSignCnt;
+    }
+
+    /**
+     * 会员签到次数
+     */
+    public void setMbrSightSignCnt(Integer mbrSightSignCnt) {
+        this.mbrSightSignCnt = mbrSightSignCnt;
+    }
+
+    /**
+     * 获取会员消费总金额
+     */
+    public BigDecimal getTotalMbrCustomAmt() {
+        return TotalMbrCustomAmt;
+    }
+
+    /**
+     * 设置会员消费总金额
+     */
+    public void setTotalMbrCustomAmt(BigDecimal totalMbrCustomAmt) {
+        TotalMbrCustomAmt = totalMbrCustomAmt;
     }
 }

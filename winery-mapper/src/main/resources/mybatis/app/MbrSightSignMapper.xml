@@ -3,34 +3,40 @@
 <mapper namespace="com.changfa.frame.mapper.app.MbrSightSignMapper" >
     <resultMap id="mbrSightSignMap" type="com.changfa.frame.model.app.MbrSightSign" >
         <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="winery_sight_id" property="winerySightId" jdbcType="BIGINT" />
-        <result column="mbr_id" property="mberId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
         <result column="sign_date" property="signDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_sight_id, mbr_id, sign_date, create_date, modify_date
+        mss.id as id, mss.winery_id as winery_id, mss.winery_sight_id as winery_sight_id,
+        mss.mbr_id as mbr_id, mss.sign_date as sign_date, mss.create_date as create_date,
+        mss.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrSightSignMap" parameterType="java.lang.Long" >
         select
         <include refid="table_column" />
-        from m_mbr_sight_sign
-        where id = #{id}
+        from m_mbr_sight_sign mss
+        where mss.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrSightSign" >
-        insert into m_mbr_sight_sign (id, winery_sight_id, mbr_id, sign_date, create_date, modify_date
-            )
-        values (#{id}, #{winerySightId}, #{mbrId}, #{signDate}, #{createDate}, #{modifyDate}
-            )
+        insert into m_mbr_sight_sign (id, winery_id, winery_sight_id, mbr_id, sign_date, create_date,
+            modify_date)
+        values (#{id}, #{wineryId}, #{winerySightId}, #{mbrId}, #{signDate}, #{createDate},
+            #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrSightSign" >
         update m_mbr_sight_sign
         <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
             <if test="winerySightId != null" >
                 winery_sight_id = #{winerySightId},
             </if>
@@ -58,22 +64,25 @@
     <select id="selectList" resultMap="mbrSightSignMap" >
         select
         <include refid="table_column" />
-        from m_mbr_sight_sign
+        from m_mbr_sight_sign mss
         <where >
+            <if test="wineryId != null" >
+                and mss.winery_id = #{wineryId}
+            </if>
             <if test="winerySightId != null" >
-                and null.winery_sight_id = #{winerySightId}
+                and mss.winery_sight_id = #{winerySightId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mss.mbr_id = #{mbrId}
             </if>
             <if test="signDate != null" >
-                and null.sign_date = #{signDate}
+                and mss.sign_date = #{signDate}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mss.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mss.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -81,5 +90,5 @@
     <select id="findMbrSightSign" parameterType="java.lang.Long" resultType="string">
         select id from m_mbr_sight_sign where date(create_date) = curdate() and mbr_id = #{id}  order by create_date desc
     </select>
-
 </mapper>
+

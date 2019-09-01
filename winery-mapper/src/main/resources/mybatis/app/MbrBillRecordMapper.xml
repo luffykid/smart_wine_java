@@ -113,4 +113,17 @@
         <include refid="table_column" />
         from m_mbr_bill_record mbr where mbr.mbr_id = #{mbrId} and mbr.bill_type in (1,3,4)
     </select>
+
+    <!-- 根据会员id、账单类型查询消费 -->
+    <select id="getCustomAmtByType" resultType="java.math.BigDecimal">
+        select
+            sum(mbr.bill_amt) as total_bill_amt
+        from m_mbr_bill_record mbr
+        where 1=1
+         and mbr.mbr_id = #{mbrId}
+         and mbr.bill_type in
+            <foreach collection="types" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
 </mapper>

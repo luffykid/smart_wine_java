@@ -1,9 +1,12 @@
 package com.changfa.frame.website.controller.app;
 
 
+import com.changfa.frame.model.app.MbrBillRecord;
+import com.changfa.frame.model.app.MbrSightSign;
 import com.changfa.frame.model.app.MbrWineryVoucher;
 import com.changfa.frame.model.app.Member;
-import com.changfa.frame.service.mybatis.app.MbrWechatService;
+import com.changfa.frame.service.mybatis.app.MbrBillRecordService;
+import com.changfa.frame.service.mybatis.app.MbrSightSignService;
 import com.changfa.frame.service.mybatis.app.MbrWineryVoucherService;
 import com.changfa.frame.service.mybatis.app.MemberService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -32,10 +36,15 @@ import java.util.*;
 public class MemberController extends BaseController {
     @Resource(name = "memberServiceImpl")
     private MemberService memberService;
+
     @Resource(name = "mbrWineryVoucherServiceImpl")
     private MbrWineryVoucherService mbrWineryVoucherService;
-    @Resource(name = "mbrWechatServiceImpl")
-    private MbrWechatService mbrWechatService;
+
+    @Resource(name = "mbrSightSignServiceImpl")
+    private MbrSightSignService mbrSightSignService;
+
+    @Resource(name = "mbrBillRecordServiceImpl")
+    private MbrBillRecordService mbrBillRecordService;
 
     /**
      * 个人中心首页
@@ -54,6 +63,24 @@ public class MemberController extends BaseController {
             member.setVoucherCount(0);
         }
         member.setVoucherCount(mbrWineryVouchers.size());
+
+        // 查询体验服务【当前会员在酒庄各景点打卡总次数】
+        MbrSightSign mbrSightSign = new MbrSightSign();
+        mbrSightSign.setMbrId(member.getId());
+        mbrSightSign.setWineryId(getCurWineryId());
+        List<MbrSightSign> mbrSightSigns = mbrSightSignService.selectList(mbrSightSign);
+        if (CollectionUtils.isEmpty(mbrSightSigns)) {
+            member.setMbrSightSignCnt(0);
+        }
+        member.setMbrSightSignCnt(mbrSightSigns.size());
+
+        // 查询会员消费
+        List<Integer> types = new ArrayList();
+        types.add(MbrBillRecord.BILL_TYPE_ENUM.PROD_CUSTOM.getValue());
+        types.add(MbrBillRecord.BILL_TYPE_ENUM.STORE_CUSTOM.getValue());
+        types.add(MbrBillRecord.BILL_TYPE_ENUM.ADJUST_CUSTOM.getValue());
+        BigDecimal totalMbrCustomAmt = mbrBillRecordService.getCustomAmtByType(member.getId(), types);
+        member.setTotalMbrCustomAmt(totalMbrCustomAmt);
 
         // 初始化返回集合
         Map<String, Object> returnMap = new HashMap<>();
