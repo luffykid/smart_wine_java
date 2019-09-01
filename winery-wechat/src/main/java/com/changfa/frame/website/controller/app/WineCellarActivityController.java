@@ -1,9 +1,12 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.Member;
-import com.changfa.frame.model.app.WineCellarActivity;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityDetailService;
+import com.changfa.frame.service.mybatis.app.WineCellarActivityProdService;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityService;
+import com.changfa.frame.service.mybatis.app.impl.ProdDetailServiceImpl;
+import com.changfa.frame.service.mybatis.app.impl.ProdServiceImpl;
+import com.changfa.frame.service.mybatis.app.impl.ProdSkuServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -18,27 +21,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * 酒庄活动接口
+ * 云酒窖活动接口
  */
-@Api(value = "酒庄活动接口", tags = "酒庄活动接口")
+@Api(value = "云酒窖活动接口", tags = "云酒窖活动接口")
 @RestController("wxMiniWineCellarActivityController")
 @RequestMapping("/wxMini/auth/wineCellarActivity")
 public class WineCellarActivityController extends BaseController {
     @Resource(name = "wineCellarActivityServiceImpl")
     private WineCellarActivityService wineCellarActivityServiceImpl;
+
     @Resource(name = "wineCellarActivityDetailServiceImpl")
     private WineCellarActivityDetailService wineCellarActivityDetailServiceImpl;
 
+    @Resource(name = "wineCellarActivityProdServiceImpl")
+    private WineCellarActivityProdService wineCellarActivityProdServiceImpl;
+
+    @Resource(name = "prodSkuServiceImpl")
+    private ProdSkuServiceImpl prodSkuServiceImpl;
+
+    @Resource(name = "prodServiceImpl")
+    private ProdServiceImpl prodServiceImpl;
+
+    @Resource(name = "prodDetailServiceImpl")
+    private ProdDetailServiceImpl prodDetailServiceImpl;
+
     /**
-     * 获取酒庄活动列表
+     * 获取云酒窖活动列表
      *
      * @return
      */
-    @ApiOperation(value = "获取酒庄活动列表", notes = "获取酒庄活动列表")
+    @ApiOperation(value = "获取云酒窖活动列表", notes = "获取云酒窖活动列表")
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     public Map<String, Object> getList(HttpServletRequest request, int pageSize, int pageNum) {
         Member member = getCurMember(request);
@@ -85,11 +103,27 @@ public class WineCellarActivityController extends BaseController {
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
+        if(id ==null){
+            log.info("此处有错误:{}", "错误信息");
+            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
+        }
         WineCellarActivity wineCellarActivity = wineCellarActivityServiceImpl.selectSecById(id, member.getId());
-//        List<Map> list = wineCellarActivityDetailServiceImpl.getProdSkuList(id);
+        WineCellarActivityDetail wineCellarActivityDetail = new WineCellarActivityDetail();
+        wineCellarActivityDetail.setWineCellarActivity(id);
+        List<WineCellarActivityDetail> wineCellarActivityDetailList = wineCellarActivityDetailServiceImpl.selectList(wineCellarActivityDetail);
+        WineCellarActivityProd wineCellarActivityProdEntity = new WineCellarActivityProd();
+        wineCellarActivityProdEntity.setWineCellarActivityId(id);
+        List<WineCellarActivityProd> wineCellarActivityProdList = wineCellarActivityProdServiceImpl.selectList(wineCellarActivityProdEntity);
+        List<ProdSku> prodSkuList = new ArrayList<>();
+        for(WineCellarActivityProd wineCellarActivityProd:wineCellarActivityProdList){
+            ProdSku prodSku = prodSkuServiceImpl.getProSkuWithMbrPriceById(wineCellarActivityProd.getProdSkuId(),member.getMbrLevelId());
+            prodSkuList.add(prodSku);
+        }
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("wineCellarActivity", wineCellarActivity);
-//        returnMap.put("list",list);
+        returnMap.put("activity", wineCellarActivity);
+        returnMap.put("levelName", member.getLevelName());
+        returnMap.put("detailList",wineCellarActivityDetailList);
+        returnMap.put("prodSkuList",prodSkuList);
         return getResult(returnMap);
     }
 
@@ -100,11 +134,21 @@ public class WineCellarActivityController extends BaseController {
      */
     @ApiOperation(value = "获取商品详情", notes = "获取商品详情")
     @ApiImplicitParams(
-            @ApiImplicitParam(name = "id", value = "prodSkuId", dataType = "Long"))
+            @ApiImplicitParam(name = "id", value = "prodId", dataType = "Long"))
     @RequestMapping(value = "/getProdSkuDetail", method = RequestMethod.GET)
     public Map<String, Object> getProdSkuDetail(Long id) {
-//        return getResult(wineCellarActivityDetailServiceImpl.getProdSkuDetail(id));
-        return getResult(null);
+
+        ProdSku prodSku = prodSkuServiceImpl.getById(id);
+        Prod prod = prodServiceImpl.getProd(prodSku.getProdId());
+        ProdDetail queryForTheProd = new ProdDetail();
+        queryForTheProd.setProdId(prod.getId());
+        List<ProdDetail> prodDetails = prodDetailServiceImpl.selectList(queryForTheProd);
+
+        prod.setProdDetailList(prodDetails);
+        Map<String,Object> returnMap = new HashMap<>();
+        returnMap.put("prodSku",prodSku);
+        returnMap.put("prod",prod);
+        return getResult(returnMap);
     }
 
     /**

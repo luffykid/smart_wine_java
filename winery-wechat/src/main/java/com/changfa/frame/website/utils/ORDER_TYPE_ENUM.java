@@ -13,7 +13,8 @@ public enum ORDER_TYPE_ENUM {
     PRODUCT_ORDER(1, "商品订单"),
     WINE_CUSTOM_ORDER(2, "定制酒订单"),
     MBR_ADJUST_ORDER(3, "会员自调酒订单"),
-    MBR_RECHARGE_ORDER(4, "会员充值订单");
+    MBR_RECHARGE_ORDER(4, "会员充值订单"),
+    MBR_STORE_ORDER(5,"会员储酒订单");
 
     /**
      * 枚举值

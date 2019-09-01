@@ -1,18 +1,19 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.core.util.OrderNoUtil;
 import com.changfa.frame.model.app.MbrStoreOrder;
 import com.changfa.frame.model.app.MbrStoreOrderItem;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrStoreOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
+import com.changfa.frame.website.controller.common.CustomException;
+import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -74,18 +75,26 @@ public class MbrStoreOrderController extends BaseController {
      */
     @ApiOperation(value = "生成储酒订单", notes = "生成储酒订单")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "dId", value = "酒庄活动详情id", dataType = "Long"),
-            @ApiImplicitParam(name = "sId", value = "商品skuId", dataType = "Long"),
+            @ApiImplicitParam(name = "activityId", value = "云酒窖活动id", dataType = "Long"),
+            @ApiImplicitParam(name = "skuId", value = "商品skuId", dataType = "Long"),
             @ApiImplicitParam(name = "prodTotalCnt", value = "商品数量", dataType = "Integer")
     })
-    @RequestMapping(value = "/buildOrder", method = RequestMethod.POST)
-    public Map<String, Object> buildOrder(Long dId, Long sId, Integer prodTotalCnt, HttpServletRequest request) {
+    @RequestMapping(value = "/buildStroneOrder", method = RequestMethod.POST)
+    public Map<String, Object> buildStroneOrder(Long activityId, Long skuId,
+                                          @RequestParam(required = false,defaultValue ="1") Integer prodTotalCnt,
+                                          HttpServletRequest request) {
+        if(activityId ==null || skuId==null ){
+            log.info("此处有错误:{}", "错误信息");
+            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
+        }
         Member member = getCurMember(request);
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("totalStoreRemain", member.getTotalStoreRemain());
-        returnMap.put("totalStoreIncrement", member.getTotalStoreIncrement());
-        returnMap.put("list", mbrStoreOrderServiceImpl.getStoreList(member.getId()));
-        return getResult(returnMap);
+        try{
+            Map<String, Object> returnMap = mbrStoreOrderServiceImpl.buildStoreOrder(activityId, skuId, prodTotalCnt, member,request);
+            return getResult(returnMap);
+        }catch (Exception e){
+            log.info("此处有错误:{}", "创建订单失败");
+            throw new CustomException(RESPONSE_CODE_ENUM.CREATE_ORDER_ERROR);
+        }
     }
 
 

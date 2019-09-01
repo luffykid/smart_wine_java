@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
  * @author wyy
  * @date 2019-08-31 16:56
  */
-@Service("WineryActivityDetailServiceImpl")
+@Service("wineryActivityDetailServiceImpl")
 public class WineryActivityDetailServiceImpl extends BaseServiceImpl<WineryActivityDetail, Long> implements WineryActivityDetailService {
 }

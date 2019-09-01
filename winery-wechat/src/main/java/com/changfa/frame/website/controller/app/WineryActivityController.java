@@ -1,9 +1,11 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.Member;
-import com.changfa.frame.model.app.WineryActivity;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MbrWineryActivitySignService;
+import com.changfa.frame.service.mybatis.app.WineryActivityDetailService;
 import com.changfa.frame.service.mybatis.app.WineryActivityService;
+import com.changfa.frame.service.mybatis.app.impl.ProdServiceImpl;
+import com.changfa.frame.service.mybatis.app.impl.ProdSkuServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,8 +33,19 @@ import java.util.Map;
 @RestController("wxMiniWineryActivityController")
 @RequestMapping("/wxMini/auth/wineryActivity")
 public class WineryActivityController extends BaseController {
+
     @Resource(name = "wineryActivityServiceImpl")
     private WineryActivityService wineryActivityServiceImpl;
+
+    @Resource(name = "wineryActivityDetailServiceImpl")
+    private WineryActivityDetailService wineryActivityDetailServiceImpl;
+
+    @Resource(name = "prodServiceImpl")
+    private ProdServiceImpl prodServiceImpl;
+
+    @Resource(name = "prodSkuServiceImpl")
+    private ProdSkuServiceImpl prodSkuServiceImpl;
+
     @Resource(name = "mbrWineryActivitySignServiceImpl")
     private MbrWineryActivitySignService mbrWineryActivitySignServiceImpl;
 
@@ -78,8 +93,35 @@ public class WineryActivityController extends BaseController {
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
         Member member = getCurMember(request);
+        if(id ==null){
+            log.info("此处有错误:{}", "错误信息");
+            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
+        }
+        Map<String, Object> returnMap = new HashMap<>();
         WineryActivity wineryActivity = wineryActivityServiceImpl.getSecById(id, member.getId());
-        return getResult(wineryActivity);
+        List<Map<String,Object>> detailList = new ArrayList<>();
+
+        WineryActivityDetail wineryActivityDetailEntity = new WineryActivityDetail();
+        wineryActivityDetailEntity.setWineryActivityId(id);
+        List<WineryActivityDetail> wineryActivityDetailList= wineryActivityDetailServiceImpl.selectList(wineryActivityDetailEntity);
+
+        if(wineryActivityDetailList != null){
+            for (WineryActivityDetail wineryActivityDetail:wineryActivityDetailList) {
+                Map<String,Object> wineryActivityDetailMap = new HashMap<>();
+                wineryActivityDetailMap.put("detailTitle",wineryActivityDetail.getDetailTitle());
+                wineryActivityDetailMap.put("detailImg",wineryActivityDetail.getDetailImg());
+                wineryActivityDetailMap.put("detailBrief",wineryActivityDetail.getDetailBrief());
+                ProdSku prodSku = prodSkuServiceImpl.getById(wineryActivityDetail.getProdSkuId());
+                wineryActivityDetailMap.put("skuName",prodSku.getSkuName());
+                wineryActivityDetailMap.put("skuSellPrice",prodSku.getSkuSellPrice());
+                detailList.add(wineryActivityDetailMap);
+            }
+        }
+
+        returnMap.put("wineryActivity",wineryActivity);
+        returnMap.put("detailList",detailList);
+
+        return getResult(returnMap);
     }
     /**
      * 活动点赞

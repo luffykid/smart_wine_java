@@ -90,6 +90,9 @@ public class WeChatNotifyController extends BaseController {
                     case MBR_RECHARGE_ORDER: {// 会员充值订单
                         break;
                     }
+                    case MBR_STORE_ORDER: {// 会员储酒订单
+                        break;
+                    }
                     default: {
                         return ResMessageUtil.paymentResultToXml(new PaymentResult("FAIL", "不存在的交易类型"));
                     }

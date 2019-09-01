@@ -3,10 +3,7 @@ package com.changfa.frame.website.controller.app;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.WineCellar;
 import com.changfa.frame.service.mybatis.app.WineCellarService;
-import com.changfa.frame.service.mybatis.app.WineryMasterService;
-import com.changfa.frame.service.mybatis.app.impl.WineryMasterServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
-import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +27,7 @@ public class WineCellarController extends BaseController {
 
     @Resource(name = "wineCellarServiceImpl")
     private WineCellarService wineCellarServiceImpl;
+
     /**
      * 获取云酒窖列表
      *
@@ -39,7 +38,11 @@ public class WineCellarController extends BaseController {
     public Map<String, Object> getList(HttpServletRequest request) {
         Member member = getCurMember(request);
         WineCellar wineCellar = new WineCellar();
-        List list = wineCellarServiceImpl.selectList(wineCellar);
-        return getResult(list);
+        List wineCellarList = wineCellarServiceImpl.selectList(wineCellar);
+        Map<String,Object> resultMap = new HashMap<>();
+        //总藏酒斤数
+        resultMap.put("totalStore",member.getTotalStoreRemain().add(member.getTotalStoreIncrement()));
+        resultMap.put("wineCellarList",wineCellarList);
+        return getResult(resultMap);
     }
 }
