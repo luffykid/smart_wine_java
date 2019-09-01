@@ -8,7 +8,7 @@ import com.changfa.frame.core.weChat.WeChatPayUtil;
 import com.changfa.frame.model.app.WineryMaster;
 import com.changfa.frame.service.mybatis.app.SystemConfigService;
 import com.changfa.frame.service.mybatis.app.WineryMasterService;
-import com.changfa.frame.website.utils.SettingUtils;
+import com.changfa.frame.service.mybatis.common.SettingUtils;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -80,10 +80,10 @@ public class DemoController extends BaseController {
     @RequestMapping(value = "/updateSysConfig", method = RequestMethod.GET)
     public Map<String, Object> updateSysConfig(Setting setting) {
         // 测试Setting获取
-        System.out.println(SettingUtils.get().getCopyRight());
+        System.out.println(SettingUtils.get().getConsumeAmtOfIntegral());
 
         // 正常Service层调用，控制层不能直接调用DAO层
-        systemConfigService.set(setting);
+        systemConfigService.set(setting,1l);
 
         // controller层异常方式
         if (true) {

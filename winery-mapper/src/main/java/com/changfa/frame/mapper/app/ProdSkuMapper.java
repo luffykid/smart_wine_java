@@ -9,7 +9,6 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.ProdSku;
-import com.changfa.frame.model.app.ProdSkuMbrPrice;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -30,5 +29,12 @@ public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
 
     String getProdNameBySkuId(Long prodSkuId);
 
-    ProdSku getProdNameBySkuIdLike(Long prodSkuId);
+    /**
+     * 批量更新销售数量
+     *
+     * @param prodSkus 商品SKU集合
+     * @return
+     */
+    int updateSellCnt(List<ProdSku> prodSkus);
+
 }
