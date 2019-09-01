@@ -3,11 +3,11 @@
 <mapper namespace="com.changfa.frame.mapper.app.MbrProdOrderMapper" >
     <resultMap id="mbrProdOrderMap" type="com.changfa.frame.model.app.MbrProdOrder" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <id column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
         <result column="pay_mode" property="payMode" jdbcType="INTEGER" />
         <result column="prod_total_cnt" property="prodTotalCnt" jdbcType="INTEGER" />
+        <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
         <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
         <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="BIGINT" />
         <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
@@ -22,71 +22,31 @@
         <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
-    </resultMap>
-
-    <resultMap id="mbrProdOrderMap2" type="com.changfa.frame.model.app.MbrProdOrder" >
-        <id column="id" property="id" jdbcType="BIGINT" />
-        <id column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
-        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
-        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
-        <result column="pay_mode" property="payMode" jdbcType="INTEGER" />
-        <result column="prod_total_cnt" property="prodTotalCnt" jdbcType="INTEGER" />
-        <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
-        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="BIGINT" />
-        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
-        <result column="shipping_detail_addr" property="shippingDetailAddr" jdbcType="VARCHAR" />
-        <result column="shipping_province_id" property="shippingProvinceId" jdbcType="BIGINT" />
-        <result column="shipping_city_id" property="shippingCityId" jdbcType="BIGINT" />
-        <result column="shipping_county_id" property="shippingCountyId" jdbcType="BIGINT" />
-        <result column="shipping_person_name" property="shippingPersonName" jdbcType="VARCHAR" />
-        <result column="shipping_person_phone" property="shippingPersonPhone" jdbcType="VARCHAR" />
-        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
-        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
-        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
-        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
-        <collection property="mbrProdOrderItems" ofType="com.changfa.frame.model.app.MbrProdOrderItem">
-            <id column="id" property="id" jdbcType="BIGINT" />
-            <result column="mbr_prod_order_id" property="mbrProdOrderId" jdbcType="BIGINT" />
-            <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
-            <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
-            <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
-            <result column="prod_sku_cnt" property="prodSkuCnt" jdbcType="INTEGER" />
-            <result column="sku_name" property="skuName" jdbcType="BIGINT" />
-            <result column="sku_market_price" property="skuMarketPrice" jdbcType="DECIMAL" />
-            <result column="sku_sell_price" property="skuSellPrice" jdbcType="DECIMAL" />
-            <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="BIGINT" />
-            <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
-            <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
-            <result column="integral_cnt" property="integralCnt" jdbcType="BIGINT" />
-            <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-            <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
-        </collection>
     </resultMap>
 
     <sql id="table_column" >
-        mpo.id as id, mpo.pay_total_amt as pay_total_amt, mpo.winery_id as winery_id, mpo.mbr_id as mbr_id,
-        mpo.pay_mode as pay_mode, mpo.prod_total_cnt as prod_total_cnt, mpo.pay_real_amt as pay_real_amt,
-        mpo.pay_integral_cnt as pay_integral_cnt, mpo.order_status as order_status, mpo.shipping_detail_addr as shipping_detail_addr,
-        mpo.shipping_province_id as shipping_province_id, mpo.shipping_city_id as shipping_city_id,
-        mpo.shipping_county_id as shipping_county_id, mpo.shipping_person_name as shipping_person_name,
-        mpo.shipping_person_phone as shipping_person_phone, mpo.order_no as order_no, mpo.transaction_no as transaction_no,
-        mpo.pay_date as pay_date, mpo.create_date as create_date, mpo.modify_date as modify_date
+        mir.id as id, mir.winery_id as winery_id, mir.mbr_id as mbr_id, mir.pay_mode as pay_mode,
+        mir.prod_total_cnt as prod_total_cnt, mir.pay_total_amt as pay_total_amt, mir.pay_real_amt as pay_real_amt,
+        mir.pay_integral_cnt as pay_integral_cnt, mir.order_status as order_status, mir.shipping_detail_addr as shipping_detail_addr,
+        mir.shipping_province_id as shipping_province_id, mir.shipping_city_id as shipping_city_id,
+        mir.shipping_county_id as shipping_county_id, mir.shipping_person_name as shipping_person_name,
+        mir.shipping_person_phone as shipping_person_phone, mir.order_no as order_no, mir.transaction_no as transaction_no,
+        mir.pay_date as pay_date, mir.create_date as create_date, mir.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrProdOrderMap" parameterType="java.lang.Long" >
         select
         <include refid="table_column" />
-        from m_mbr_prod_order mpo
-        where mpo.id = #{id}
+        from m_mbr_prod_order mir
+        where mir.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrder" >
-        insert into m_mbr_prod_order (id, pay_total_amt, winery_id, mbr_id, pay_mode, prod_total_cnt,
+        insert into m_mbr_prod_order (id, winery_id, mbr_id, pay_mode, prod_total_cnt, pay_total_amt,
             pay_real_amt, pay_integral_cnt, order_status, shipping_detail_addr, shipping_province_id,
             shipping_city_id, shipping_county_id, shipping_person_name, shipping_person_phone,
             order_no, transaction_no, pay_date, create_date, modify_date)
-        values (#{id}, #{payTotalAmt}, #{wineryId}, #{mbrId}, #{payMode}, #{prodTotalCnt},
+        values (#{id}, #{wineryId}, #{mbrId}, #{payMode}, #{prodTotalCnt}, #{payTotalAmt},
             #{payRealAmt}, #{payIntegralCnt}, #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId},
             #{shippingCityId}, #{shippingCountyId}, #{shippingPersonName}, #{shippingPersonPhone},
             #{orderNo}, #{transactionNo}, #{payDate}, #{createDate}, #{modifyDate})
@@ -106,6 +66,9 @@
             </if>
             <if test="prodTotalCnt != null" >
                 prod_total_cnt = #{prodTotalCnt},
+            </if>
+            <if test="payTotalAmt != null" >
+                pay_total_amt = #{payTotalAmt},
             </if>
             <if test="payRealAmt != null" >
                 pay_real_amt = #{payRealAmt},
@@ -151,7 +114,6 @@
             </if>
         </set>
         where id = #{id}
-        and pay_total_amt = #{payTotalAmt}
     </update>
 
     <delete id="delete" parameterType="java.lang.Long" >
@@ -162,73 +124,70 @@
     <select id="selectList" resultMap="mbrProdOrderMap" >
         select
         <include refid="table_column" />
-        from m_mbr_prod_order mpo
+        from m_mbr_prod_order mir
         <where >
             <if test="wineryId != null" >
-                and mpo.winery_id = #{wineryId}
+                and mir.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and mpo.mbr_id = #{mbrId}
+                and mir.mbr_id = #{mbrId}
             </if>
             <if test="payMode != null" >
-                and mpo.pay_mode = #{payMode}
+                and mir.pay_mode = #{payMode}
             </if>
             <if test="prodTotalCnt != null" >
-                and mpo.prod_total_cnt = #{prodTotalCnt}
+                and mir.prod_total_cnt = #{prodTotalCnt}
+            </if>
+            <if test="payTotalAmt != null" >
+                and mir.pay_total_amt = #{payTotalAmt}
             </if>
             <if test="payRealAmt != null" >
-                and mpo.pay_real_amt = #{payRealAmt}
+                and mir.pay_real_amt = #{payRealAmt}
             </if>
             <if test="payIntegralCnt != null" >
-                and mpo.pay_integral_cnt = #{payIntegralCnt}
+                and mir.pay_integral_cnt = #{payIntegralCnt}
             </if>
             <if test="orderStatus != null" >
-                and mpo.order_status = #{orderStatus}
+                and mir.order_status = #{orderStatus}
             </if>
             <if test="shippingDetailAddr != null and shippingDetailAddr != ''" >
-                and mpo.shipping_detail_addr = #{shippingDetailAddr}
+                and mir.shipping_detail_addr = #{shippingDetailAddr}
             </if>
             <if test="shippingProvinceId != null" >
-                and mpo.shipping_province_id = #{shippingProvinceId}
+                and mir.shipping_province_id = #{shippingProvinceId}
             </if>
             <if test="shippingCityId != null" >
-                and mpo.shipping_city_id = #{shippingCityId}
+                and mir.shipping_city_id = #{shippingCityId}
             </if>
             <if test="shippingCountyId != null" >
-                and mpo.shipping_county_id = #{shippingCountyId}
+                and mir.shipping_county_id = #{shippingCountyId}
             </if>
             <if test="shippingPersonName != null and shippingPersonName != ''" >
-                and mpo.shipping_person_name = #{shippingPersonName}
+                and mir.shipping_person_name = #{shippingPersonName}
             </if>
             <if test="shippingPersonPhone != null and shippingPersonPhone != ''" >
-                and mpo.shipping_person_phone = #{shippingPersonPhone}
+                and mir.shipping_person_phone = #{shippingPersonPhone}
             </if>
             <if test="orderNo != null and orderNo != ''" >
-                and mpo.order_no = #{orderNo}
+                and mir.order_no = #{orderNo}
             </if>
             <if test="transactionNo != null and transactionNo != ''" >
-                and mpo.transaction_no = #{transactionNo}
+                and mir.transaction_no = #{transactionNo}
             </if>
             <if test="payDate != null" >
-                and mpo.pay_date = #{payDate}
+                and mir.pay_date = #{payDate}
             </if>
             <if test="createDate != null" >
-                and mpo.create_date = #{createDate}
+                and mir.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and mpo.modify_date = #{modifyDate}
+                and mir.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
 
-    <select id="selectListByType" resultMap="mbrProdOrderMap2">
-        select o.id,order_no,o.order_status,o.create_date,i.sku_name,i.prod_sku_cnt,i.sku_sell_price from m_mbr_prod_order o
-        inner join m_mbr_prod_order_item i on o.id = i.mbr_prod_order_id
-        where o.mbr_id = #{mbrId} and o.order_status=#{orderStatus}
-    </select>
-
     <!-- 依据订单号查询订单 -->
-    <select id="getByOrderNo" resultMap="mbrProdOrderMap" parameterType="java.lang.Long" >
+    <select id="getByOrderNo" resultMap="mbrProdOrderMap" parameterType="java.lang.String" >
         select
         <include refid="table_column" />
         from m_mbr_prod_order mpo

@@ -3,10 +3,11 @@
 <mapper namespace="com.changfa.frame.mapper.app.MbrIntegralRecordMapper" >
     <resultMap id="mbrIntegralRecordMap" type="com.changfa.frame.model.app.MbrIntegralRecord" >
         <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="pk_id" property="pkId" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
         <result column="action_type" property="actionType" jdbcType="INTEGER" />
-        <result column="point_type" property="pointType" jdbcType="INTEGER" />
+        <result column="sign_type" property="signType" jdbcType="INTEGER" />
         <result column="integral_value" property="integralValue" jdbcType="DECIMAL" />
         <result column="latest_point" property="latestPoint" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
@@ -14,9 +15,9 @@
     </resultMap>
 
     <sql id="table_column" >
-        mir.id as id, mir.winery_id as winery_id, mir.mbr_id as mbr_id, mir.action_type as action_type,
-        mir.point_type as point_type, mir.integral_value as integral_value, mir.latest_point as latest_point,
-        mir.create_date as create_date, mir.modify_date as modify_date
+        mir.id as id, mir.pk_id as pk_id, mir.winery_id as winery_id, mir.mbr_id as mbr_id,
+        mir.action_type as action_type, mir.sign_type as sign_type, mir.integral_value as integral_value,
+        mir.latest_point as latest_point, mir.create_date as create_date, mir.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrIntegralRecordMap" parameterType="java.lang.Long" >
@@ -27,15 +28,18 @@
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrIntegralRecord" >
-        insert into m_mbr_integral_record (id, winery_id, mbr_id, action_type, point_type, integral_value,
+        insert into m_mbr_integral_record (id, pk_id, winery_id, mbr_id, action_type, sign_type, integral_value,
             latest_point, create_date, modify_date)
-        values (#{id}, #{wineryId}, #{mbrId}, #{actionType}, #{pointType}, #{integralValue},
+        values (#{id}, #{pkId}, #{wineryId}, #{mbrId}, #{actionType}, #{signType}, #{integralValue},
             #{latestPoint}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrIntegralRecord" >
         update m_mbr_integral_record
         <set >
+            <if test="pkId != null" >
+                pk_id = #{pkId},
+            </if>
             <if test="wineryId != null" >
                 winery_id = #{wineryId},
             </if>
@@ -45,8 +49,8 @@
             <if test="actionType != null" >
                 action_type = #{actionType},
             </if>
-            <if test="pointType != null" >
-                point_type = #{pointType},
+            <if test="signType != null" >
+                sign_type = #{signType},
             </if>
             <if test="integralValue != null" >
                 integral_value = #{integralValue},
@@ -74,6 +78,9 @@
         <include refid="table_column" />
         from m_mbr_integral_record mir
         <where >
+            <if test="pkId != null" >
+                and mir.pk_id = #{pkId}
+            </if>
             <if test="wineryId != null" >
                 and mir.winery_id = #{wineryId}
             </if>
@@ -83,8 +90,8 @@
             <if test="actionType != null" >
                 and mir.action_type = #{actionType}
             </if>
-            <if test="pointType != null" >
-                and mir.point_type = #{pointType}
+            <if test="signType != null" >
+                and mir.sign_type = #{signType}
             </if>
             <if test="integralValue != null" >
                 and mir.integral_value = #{integralValue}

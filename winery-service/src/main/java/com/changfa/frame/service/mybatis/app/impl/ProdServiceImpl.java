@@ -65,6 +65,8 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     @Autowired
     private MemberMapper memberMapper;
 
+    @Autowired
+    private MbrIntegralRecordMapper mbrIntegralRecordMapper;
 
     /**
      * 获取产品列表
@@ -436,15 +438,34 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         Member curMbr = memberMapper.getById(mbrProdOrder.getMbrId());
 
         // 插入积分记录
-        MbrIntegralRecord mbrIntegralRecord = new MbrIntegralRecord();
+        MbrIntegralRecord integralRecord = new MbrIntegralRecord();
+        integralRecord.setId(IDUtil.getId());
+        integralRecord.setWineryId(mbrProdOrder.getWineryId());
+        integralRecord.setMbrId(mbrProdOrder.getMbrId());
+        integralRecord.setActionType(MbrIntegralRecord.ACTION_TYPE_ENUM.PROD_CUSTOM.getValue());
+        integralRecord.setPkId(mbrProdOrder.getId());
+        integralRecord.setActionType(1);
 
-        // 更新会员账户余额
+        // 计算积分
+        BigDecimal payRealAmt = mbrProdOrder.getPayRealAmt();
+        BigDecimal divide = payRealAmt.divide(new BigDecimal(integralScale));
+        BigDecimal integral = divide.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        integralRecord.setIntegralValue(integral);
+
+        // 计算操作后积分
+        BigDecimal preIntegral = curMbr.getTotalIntegral();
+        BigDecimal lastIntegral = preIntegral.add(integral).setScale(2, BigDecimal.ROUND_HALF_UP);
+        integralRecord.setLatestPoint(lastIntegral);
+        integralRecord.setCreateDate(new Date());
+        integralRecord.setModifyDate(new Date());
+        mbrIntegralRecordMapper.save(integralRecord);
+
+        // 更新会员积分
         Member updateMbr = new Member();
         updateMbr.setId(curMbr.getId());
-//        updateMbr.setAcctBalance(parenMbr.getAcctBalance().add(returnAmt));
-//        updateMbr.setAcctBalance(parenMbr.getInviteReturnAmt().add(returnAmt));
+        updateMbr.setTotalIntegral(lastIntegral);
         updateMbr.setModifyDate(new Date());
-//        memberMapper.update(parenMbr);
+        memberMapper.update(updateMbr);
     }
 
     /**
