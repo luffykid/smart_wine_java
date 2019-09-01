@@ -12,13 +12,14 @@
         <result column="custom_status" property="customStatus" jdbcType="INTEGER" />
         <result column="custom_price" property="customPrice" jdbcType="DECIMAL" />
         <result column="sell_total_cnt" property="sellTotalCnt" jdbcType="INTEGER" />
+        <result column="prod_id" property="prodId" jdbcType="BIGINT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
         id, winery_id, prod_sku_id, sku_name, custom_name, custom_cover_img, custom_state_img, 
-        custom_status, custom_price, sell_total_cnt, create_date, modify_date
+        custom_status, custom_price, sell_total_cnt, create_date, modify_date, prod_id
     </sql>
 
     <select id="getById" resultMap="wineCustomMap" parameterType="java.lang.Long" >
@@ -30,11 +31,11 @@
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineCustom" >
         insert into b_wine_custom (id, winery_id, prod_sku_id, sku_name, custom_name, custom_cover_img, 
-            custom_state_img, custom_status, custom_price, sell_total_cnt, create_date, 
-            modify_date)
+            custom_state_img, custom_status, custom_price, sell_total_cnt, create_date,
+            modify_date, prod_id)
         values (#{id}, #{wineryId}, #{prodSkuId}, #{skuName}, #{customName}, #{customCoverImg}, 
             #{customStateImg}, #{customStatus}, #{customPrice}, #{sellTotalCnt}, #{createDate}, 
-            #{modifyDate})
+            #{modifyDate}, #{prodId})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.WineCustom" >
@@ -72,6 +73,9 @@
             </if>
             <if test="modifyDate != null" >
                 modify_date = #{modifyDate},
+            </if>
+            <if test="prodId != null" >
+                prod_id = #{prodId},
             </if>
         </set>
         where id = #{id}
