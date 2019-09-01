@@ -1,5 +1,6 @@
 package com.changfa.frame.mapper.app;
 
+import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
 import com.changfa.frame.service.mybatis.app.ProdService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +18,12 @@ import java.util.Date;
 @RunWith(SpringRunner.class)
 public class WechatNotifyTest {
 
-    @Resource(name = "prodServiceImpl")
-    private ProdService prodService;
+    @Resource(name = "mbrProdOrderServiceImpl")
+    private MbrProdOrderService mbrProdOrderService;
 
     @Test
     public void test() {
 
-        prodService.handleNotifyOfProdOrder("1", "1", new Date());
+        mbrProdOrderService.handleNotifyOfProdOrder("1", "1", new Date());
     }
 }
