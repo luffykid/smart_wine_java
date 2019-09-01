@@ -38,15 +38,9 @@ public class ProdSku extends BaseEntity {
      */
     private Integer skuStatus;
 
-    /**
-     * sku状态
-     * 0：未上架
-     * 1：已上架
-     */
     public enum SKU_STATUS_ENUM {
         WSJ(0, "未上架"),
         YSJ(1, "已上架");
-
 
         /**
          * 枚举值
@@ -82,7 +76,6 @@ public class ProdSku extends BaseEntity {
             }
             return null;
         }
-
 
         /**
          * 获取枚举值
@@ -191,6 +184,11 @@ public class ProdSku extends BaseEntity {
      * 商品名称
      */
     private String prodName;
+
+    /**
+     * 商品图片
+     */
+    private String prodImg;
 
     /**
      * 销售数量【订单回调中使用】
@@ -511,5 +509,19 @@ public class ProdSku extends BaseEntity {
      */
     public void setSellCnt(Integer sellCnt) {
         this.sellCnt = sellCnt;
+    }
+
+    /**
+     * 获取商品图片
+     */
+    public String getProdImg() {
+        return prodImg;
+    }
+
+    /**
+     * 设置商品图片
+     */
+    public void setProdImg(String prodImg) {
+        this.prodImg = prodImg;
     }
 }
