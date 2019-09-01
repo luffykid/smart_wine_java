@@ -1,10 +1,10 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.mapper.app.AreaMapper;
-import com.changfa.frame.mapper.app.MemberAddressMapper;
+import com.changfa.frame.mapper.app.MbrAddressMapper;
 import com.changfa.frame.model.app.Area;
-import com.changfa.frame.model.app.MemberAddress;
-import com.changfa.frame.service.mybatis.app.MemberAddressService;
+import com.changfa.frame.model.app.MbrAddress;
+import com.changfa.frame.service.mybatis.app.MbrAddressService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-@Service("memberAddressServiceImpl")
-public class MemberAddressServiceImpl extends BaseServiceImpl<MemberAddress, Long> implements MemberAddressService {
+@Service("mbrAddressServiceImpl")
+public class MbrAddressServiceImpl extends BaseServiceImpl<MbrAddress, Long> implements MbrAddressService {
     @Autowired
-    private MemberAddressMapper memberAddressMapper;
+    private MbrAddressMapper mbrAddressMapper;
     @Autowired
     private AreaMapper areaMapper;
     /**
@@ -25,10 +25,10 @@ public class MemberAddressServiceImpl extends BaseServiceImpl<MemberAddress, Lon
      * @return
      */
     @Override
-    public List<MemberAddress> getList(Long mbrId) {
-        MemberAddress memberAddress = new MemberAddress();
-        memberAddress.setMbrId(mbrId);
-        return memberAddressMapper.selectList(memberAddress);
+    public List<MbrAddress> getList(Long mbrId) {
+        MbrAddress mbrAddress = new MbrAddress();
+        mbrAddress.setMbrId(mbrId);
+        return mbrAddressMapper.selectList(mbrAddress);
     }
     /**
      * 添加管理地址
@@ -49,20 +49,20 @@ public class MemberAddressServiceImpl extends BaseServiceImpl<MemberAddress, Lon
         Area areOfCity = areaMapper.selectList(area).get(0);
         area.setCode(countyCode);
         Area areaOfcountry = areaMapper.selectList(area).get(0);
-        MemberAddress memberAddress = new MemberAddress();
-        memberAddress.setId(IDUtil.getId());
-        memberAddress.setMbrId(mbrId);
-        memberAddress.setWineryId(wineryId);
-        memberAddress.setContact(contact);
-        memberAddress.setPhone(phone);
-        memberAddress.setProvince(areaOfProvince.getId());
-        memberAddress.setCity(areOfCity.getId());
-        memberAddress.setCountry(areaOfcountry.getId());
-        memberAddress.setDetailAddress(detailAddress);
-        memberAddress.setIsDefault(isDefault);
-        memberAddress.setFullAddress(areaOfProvince.getName()+areOfCity.getName()+areaOfcountry.getName()+detailAddress);
-        memberAddress.setCreateDate(new Date());
-        memberAddressMapper.save(memberAddress);
+        MbrAddress mbrAddress = new MbrAddress();
+        mbrAddress.setId(IDUtil.getId());
+        mbrAddress.setMbrId(mbrId);
+        mbrAddress.setWineryId(wineryId);
+        mbrAddress.setContact(contact);
+        mbrAddress.setPhone(phone);
+        mbrAddress.setProvince(areaOfProvince.getId());
+        mbrAddress.setCity(areOfCity.getId());
+        mbrAddress.setCountry(areaOfcountry.getId());
+        mbrAddress.setDetailAddress(detailAddress);
+        mbrAddress.setIsDefault(isDefault);
+        mbrAddress.setFullAddress(areaOfProvince.getName()+areOfCity.getName()+areaOfcountry.getName()+detailAddress);
+        mbrAddress.setCreateDate(new Date());
+        mbrAddressMapper.save(mbrAddress);
     }
     /**
      * 修改管理地址
@@ -83,17 +83,17 @@ public class MemberAddressServiceImpl extends BaseServiceImpl<MemberAddress, Lon
         Area areOfCity = areaMapper.selectList(area).get(0);
         area.setCode(countryCode);
         Area areaOfcountry = areaMapper.selectList(area).get(0);
-        MemberAddress memberAddress = memberAddressMapper.getById(id);
-        memberAddress.setContact(contact);
-        memberAddress.setPhone(phone);
-        memberAddress.setProvince(areaOfProvince.getId());
-        memberAddress.setCity(areOfCity.getId());
-        memberAddress.setCountry(areaOfcountry.getId());
-        memberAddress.setDetailAddress(detailAddress);
-        memberAddress.setIsDefault(isDefault);
-        memberAddress.setFullAddress(areaOfProvince.getName()+areOfCity.getName()+areaOfcountry.getName()+detailAddress);
-        memberAddress.setModifyDate(new Date());
-        memberAddressMapper.update(memberAddress);
+        MbrAddress mbrAddress = mbrAddressMapper.getById(id);
+        mbrAddress.setContact(contact);
+        mbrAddress.setPhone(phone);
+        mbrAddress.setProvince(areaOfProvince.getId());
+        mbrAddress.setCity(areOfCity.getId());
+        mbrAddress.setCountry(areaOfcountry.getId());
+        mbrAddress.setDetailAddress(detailAddress);
+        mbrAddress.setIsDefault(isDefault);
+        mbrAddress.setFullAddress(areaOfProvince.getName()+areOfCity.getName()+areaOfcountry.getName()+detailAddress);
+        mbrAddress.setModifyDate(new Date());
+        mbrAddressMapper.update(mbrAddress);
     }
 
 

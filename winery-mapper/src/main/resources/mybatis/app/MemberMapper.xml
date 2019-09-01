@@ -27,6 +27,7 @@
         <!-- 扩展字段 -->
         <result column="level_name" property="levelName" jdbcType="VARCHAR" />
         <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+        <result column="is_master" property="isMaster" jdbcType="BIT" />
     </resultMap>
 
     <sql id="table_column" >
@@ -224,9 +225,11 @@
         <include refid="table_column" />,
         ml.name as level_name,
         mw.nick_name as nick_name
+        IFNULL(wm.id,FALSE) as is_master
         from m_member as mbr
         left join m_mbr_level as ml on ml.id = mbr.mbr_level_id
         left join m_mbr_wechat as mw on mw.mbr_id = mbr.id
+        left join b_winery_master as wm on wm.mbr_id = mbr.id
         where mbr.open_id = #{openId}
     </select>
 

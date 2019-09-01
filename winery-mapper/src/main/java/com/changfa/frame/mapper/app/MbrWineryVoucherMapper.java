@@ -15,15 +15,4 @@ import java.util.List;
 
 public interface MbrWineryVoucherMapper extends BaseMapper<MbrWineryVoucher, Long> {
 
-    /**
-     * 获取可以使用的优惠券数量
-     * @return
-     */
-    Integer selectEnableVoucherCount(@Param("mbrId") Long mbrId);
-
-    /**
-     * 获取可以使用的优惠券列表
-     * @return
-     */
-    List<MbrWineryVoucher> selectEnableVoucherList(@Param("mbrId") Long mbrId);
 }

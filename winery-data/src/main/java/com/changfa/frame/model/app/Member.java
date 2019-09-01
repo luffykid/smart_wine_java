@@ -188,6 +188,11 @@ public class Member extends BaseEntity {
     private String levelName;
 
     /**
+     * 是否为荣誉庄主
+     */
+    private Boolean isMaster;
+
+    /**
      * 获取会员等级ID
      */
     public Long getMbrLevelId() {
@@ -483,5 +488,19 @@ public class Member extends BaseEntity {
      */
     public void setRechargeReturnAmt(BigDecimal rechargeReturnAmt) {
         this.rechargeReturnAmt = rechargeReturnAmt;
+    }
+
+    /**
+     * 获取是否为荣誉庄主
+     */
+    public Boolean getMaster() {
+        return isMaster;
+    }
+
+    /**
+     * 设置是否为荣誉庄主
+     */
+    public void setMaster(Boolean master) {
+        isMaster = master;
     }
 }

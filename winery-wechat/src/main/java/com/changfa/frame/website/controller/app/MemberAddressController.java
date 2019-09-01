@@ -1,8 +1,8 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.model.app.MbrAddress;
 import com.changfa.frame.model.app.Member;
-import com.changfa.frame.model.app.MemberAddress;
-import com.changfa.frame.service.mybatis.app.MemberAddressService;
+import com.changfa.frame.service.mybatis.app.MbrAddressService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -28,8 +28,8 @@ import java.util.Map;
 @RequestMapping("/wxMini/auth/memberAddress")
 public class MemberAddressController extends BaseController {
 
-    @Resource(name = "memberAddressServiceImpl")
-    private MemberAddressService memberAddressService;
+    @Resource(name = "mbrAddressServiceImpl")
+    private MbrAddressService memberAddressService;
 
     /**
      * 获取我的管理地址列表
@@ -40,7 +40,7 @@ public class MemberAddressController extends BaseController {
     @RequestMapping(value = "/getList", method = RequestMethod.GET)
     public Map<String, Object> getList(HttpServletRequest request) {
         Member member = getCurMember(request);
-        List<MemberAddress> list = memberAddressService.getList(member.getId());
+        List<MbrAddress> list = memberAddressService.getList(member.getId());
         return getResult(list);
     }
 
@@ -53,10 +53,10 @@ public class MemberAddressController extends BaseController {
     @GetMapping(value = "/getFirstAddr")
     public Map<String, Object> getFirstAddr(HttpServletRequest request) {
         Member member = getCurMember(request);
-        MemberAddress mbrAddr = new MemberAddress();
+        MbrAddress mbrAddr = new MbrAddress();
         mbrAddr.setMbrId(member.getId());
         mbrAddr.setIsDefault(true);
-        List<MemberAddress> list = memberAddressService.selectList(mbrAddr);
+        List<MbrAddress> list = memberAddressService.selectList(mbrAddr);
         return getResult(list.get(0));
     }
 

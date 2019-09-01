@@ -8,7 +8,7 @@
 package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
-import com.changfa.frame.model.app.MemberAddress;
+import com.changfa.frame.model.app.MbrAddress;
 
-public interface MemberAddressMapper extends BaseMapper<MemberAddress, Long> {
+public interface MbrAddressMapper extends BaseMapper<MbrAddress, Long> {
 }

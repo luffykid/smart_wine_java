@@ -37,7 +37,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
     private WineCustomElementContentMapper wineCustomElementContentMapper;
 
     @Autowired
-    private MemberAddressMapper memberAddressMapper;
+    private MbrAddressMapper mbrAddressMapper;
 
     @Autowired
     private MemberMapper memberMapper;
@@ -83,7 +83,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
         Member member = memberMapper.getById(mbrId);
 
-        MemberAddress address = memberAddressMapper.getById(memberAddressId);
+        MbrAddress address = mbrAddressMapper.getById(memberAddressId);
 
         MbrWineCustomOrder order = mbrWineCustomOrderMapper.getById(mbrWineCustomOrderId);
 
@@ -109,7 +109,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         mbrWineCustomOrderRecordMapper.save(record);
     }
 
-    private void addShipInfoForTheOrder(MbrWineCustomOrder order, MemberAddress address) {
+    private void addShipInfoForTheOrder(MbrWineCustomOrder order, MbrAddress address) {
 
         order.setShippingDetailAddr(address.getDetailAddress());
         order.setShippingProvinceId(address.getProvince());
@@ -121,7 +121,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
     }
 
-    private void checkValidate(MbrWineCustomOrder order, Member member, MemberAddress address) {
+    private void checkValidate(MbrWineCustomOrder order, Member member, MbrAddress address) {
 
         if (order == null)
             throw new IllegalArgumentException("the mbrWineCustomOrderId don't exsit!");

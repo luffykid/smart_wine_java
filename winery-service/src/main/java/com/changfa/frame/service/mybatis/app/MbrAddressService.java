@@ -1,17 +1,17 @@
 package com.changfa.frame.service.mybatis.app;
 
-import com.changfa.frame.model.app.MemberAddress;
+import com.changfa.frame.model.app.MbrAddress;
 import com.changfa.frame.service.mybatis.common.BaseService;
 
 import java.util.List;
 
-public interface MemberAddressService extends BaseService<MemberAddress, Long> {
+public interface MbrAddressService extends BaseService<MbrAddress, Long> {
     /**
      * 获取我的管理地址列表
      * @param mbrId
      * @return
      */
-    List<MemberAddress> getList(Long mbrId);
+    List<MbrAddress> getList(Long mbrId);
 
     /**
      * 添加管理地址
