@@ -1,6 +1,7 @@
 package com.changfa.frame.website.controller.app;
 
 
+import com.changfa.frame.model.app.MbrWineryVoucher;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrWechatService;
 import com.changfa.frame.service.mybatis.app.MbrWineryVoucherService;
@@ -13,14 +14,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 会员接口
@@ -48,7 +49,11 @@ public class MemberController extends BaseController {
         Member member = getCurMember(request);
 
         // 查询当前优惠券数量
-
+        List<MbrWineryVoucher> mbrWineryVouchers = mbrWineryVoucherService.selectEffectByMbrId(member.getId(), new Date());
+        if (CollectionUtils.isEmpty(mbrWineryVouchers)) {
+            member.setVoucherCount(0);
+        }
+        member.setVoucherCount(mbrWineryVouchers.size());
 
         // 初始化返回集合
         Map<String, Object> returnMap = new HashMap<>();
