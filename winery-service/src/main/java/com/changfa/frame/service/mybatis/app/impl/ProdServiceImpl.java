@@ -2,6 +2,7 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
+import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.ProdService;
@@ -407,9 +408,12 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         for (MbrProdOrderItem prodOrderItem : mbrProdOrderItems) {
             ProdSku prodSku = new ProdSku();
             prodSku.setId(prodOrderItem.getProdSkuId());
-            prodSku.setSellTotalCnt(prodOrderItem.getProdSkuCnt());
+            prodSku.setSellCnt(prodOrderItem.getProdSkuCnt());
             prodSkus.add(prodSku);
         }
+        prodSkuMapper.updateSellCnt(prodSkus);
+
+        // 邀请返现
 
     }
 }

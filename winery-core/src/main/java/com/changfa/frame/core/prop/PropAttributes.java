@@ -15,7 +15,7 @@ public class PropAttributes {
     /****************************** NFS配置 END ******************************/
 
     /****************************** 系统设置 END ******************************/
-    public static final String SYSTEM_SETTING_WINERY_ID = "systemm.setting.winery.id";
+    public static final String SYSTEM_SETTING_WINERY_ID = "system.setting.winery.id";
     /****************************** NFS配置 END ******************************/
 
     /****************************** 酒庄小程序端 START ******************************/

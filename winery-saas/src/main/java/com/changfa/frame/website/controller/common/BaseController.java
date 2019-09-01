@@ -1,5 +1,7 @@
 package com.changfa.frame.website.controller.common;
 
+import com.changfa.frame.core.prop.PropAttributes;
+import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.service.mybatis.app.AdminService;
 import net.sf.json.JSONObject;
@@ -151,4 +153,13 @@ public abstract class BaseController {
         return adminUser;
     }
 
+    /**
+     * 获取当前酒庄Id
+     *
+     * @return
+     */
+    public Long getCurWineryId() {
+        String wineryIdStr = PropConfig.getProperty(PropAttributes.SYSTEM_SETTING_WINERY_ID);
+        return Long.valueOf(wineryIdStr);
+    }
 }

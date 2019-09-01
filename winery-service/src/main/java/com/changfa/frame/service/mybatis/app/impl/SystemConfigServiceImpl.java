@@ -4,6 +4,7 @@ import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.core.util.DateUtil;
 import com.changfa.frame.mapper.core.SystemConfigMapper;
 import com.changfa.frame.model.app.SystemConfig;
+import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.service.mybatis.app.SystemConfigService;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -47,11 +48,11 @@ public class SystemConfigServiceImpl extends BaseServiceImpl<SystemConfig, Long>
      * @return 系统设置
      */
     @Cacheable(value = "redisCache", key = "T(com.changfa.frame.core.redis.RedisConsts).SYSTEM_SETTING")
-    public Setting get() {
+    public Setting get(Long wineryId) {
         if (setting == null) {
             synchronized (this) {
                 if (setting == null) {
-                    reload();
+                    reload(wineryId);
                 }
             }
         }
@@ -64,13 +65,14 @@ public class SystemConfigServiceImpl extends BaseServiceImpl<SystemConfig, Long>
      * @param settingTemp 系统设置
      */
     @CacheEvict(value = "redisCache", key = "T(com.changfa.frame.core.redis.RedisConsts).SYSTEM_SETTING")
-    public void set(Setting settingTemp) {
+    public void set(Setting settingTemp,Long wineryId) {
         Date now = new Date();
         try {
             Field[] fields = Setting.class.getDeclaredFields();//setting属性
             List<SystemConfig> sysConfigs = new ArrayList<>();
             for (Field field : fields) {
                 SystemConfig sysConfig = new SystemConfig();
+                sysConfig.setWineryId(wineryId);
                 sysConfig.setConfigName(field.getName());
                 PropertyDescriptor pd;
                 try {
@@ -99,8 +101,10 @@ public class SystemConfigServiceImpl extends BaseServiceImpl<SystemConfig, Long>
     /**
      * 给setting对象设置值
      */
-    private void reload() {
-        List<SystemConfig> sysConfigs = selectList(new SystemConfig());
+    private void reload(Long wineryId) {
+        SystemConfig systemConfig = new SystemConfig();
+        systemConfig.setWineryId(wineryId);
+        List<SystemConfig> sysConfigs = selectList(systemConfig);
         Map<String, Field> fieldMap = new HashMap<String, Field>();
         Map<String, Method> methodMap = new HashMap<String, Method>();
         setting = new Setting();

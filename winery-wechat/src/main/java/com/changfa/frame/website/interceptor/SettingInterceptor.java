@@ -1,6 +1,6 @@
 package com.changfa.frame.website.interceptor;
 
-import com.changfa.frame.website.utils.SettingUtils;
+import com.changfa.frame.service.mybatis.common.SettingUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -17,8 +17,9 @@ public class SettingInterceptor extends HandlerInterceptorAdapter {
 
     /**
      * setting拦截器
-     * @param request 请求对象
-     * @param response 响应对象
+     *
+     * @param request      请求对象
+     * @param response     响应对象
      * @param handler
      * @param modelAndView
      * @throws Exception

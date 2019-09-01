@@ -217,10 +217,17 @@
         select p.prod_name from s_prod_sku ps left join s_prod p on ps.prod_id = p.id where ps.id =#{prodSkuId}
     </select>
 
-    <select id="getProdNameBySkuIdLike" parameterType="java.lang.Long" resultMap="prodSkuMap">
-        select ps.*,p.prod_name prodName from b_winery_sight_detail wsd
-        join s_prod_sku ps on wsd.prod_sku_id = ps.id
-        join s_prod p on ps.prod_id = p.id where ps.id =#{prodSkuId}
-    </select>
+    <!--批量更新sku售卖数量-->
+    <update id="updateList">
+        <foreach collection="prodSkus" separator=";" item="item">
+            update s_prod_sku
+            <set>
+                <if test="ite.sellCnt != null">
+                    sell_total_cnt = sell_total_cnt + #{sellCnt},
+                </if>
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
 
 </mapper>

@@ -21,6 +21,12 @@ public class SystemConfig extends BaseEntity {
     private static final long serialVersionUID = 441790072660951040L;
 
     /**
+     * 酒庄ID
+     */
+
+    private Long wineryId;
+
+    /**
      * 配置名称
      */
     private String configName;
@@ -56,5 +62,19 @@ public class SystemConfig extends BaseEntity {
      */
     public void setConfigValue(String configValue) {
         this.configValue = configValue == null ? null : configValue.trim();
+    }
+
+    /**
+     *酒庄ID
+     */
+    public Long getWineryId() {
+        return wineryId;
+    }
+
+    /**
+     *
+     */
+    public void setWineryId(Long wineryId) {
+        this.wineryId = wineryId;
     }
 }
