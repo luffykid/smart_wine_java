@@ -70,4 +70,13 @@ public class ProdSkuMbrPrice extends BaseEntity {
     public void setMbrLevelPrice(BigDecimal mbrLevelPrice) {
         this.mbrLevelPrice = mbrLevelPrice;
     }
+
+    @Override
+    public String toString() {
+        return "ProdSkuMbrPrice{" +
+                "prodSkuId=" + prodSkuId +
+                ", mbrLevelId=" + mbrLevelId +
+                ", mbrLevelPrice=" + mbrLevelPrice +
+                '}';
+    }
 }
