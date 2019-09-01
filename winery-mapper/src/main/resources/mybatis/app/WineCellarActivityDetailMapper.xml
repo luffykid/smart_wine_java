@@ -3,58 +3,53 @@
 <mapper namespace="com.changfa.frame.mapper.app.WineCellarActivityDetailMapper" >
     <resultMap id="wineCellarActivityDetailMap" type="com.changfa.frame.model.app.WineCellarActivityDetail" >
         <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="wine_cellar_activity_id" property="wineCellarActivityId" jdbcType="BIGINT" />
-        <result column="prod_id" property="prodId" jdbcType="BIGINT" />
-        <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
-        <result column="winery_voucher_id" property="wineryVoucherId" jdbcType="BIGINT" />
-        <result column="present_type" property="presentType" jdbcType="INTEGER" />
-        <result column="present_remark" property="presentRemark" jdbcType="VARCHAR" />
+        <result column="wine_cellar_activity" property="wineCellarActivity" jdbcType="BIGINT" />
+        <result column="detail_title" property="detailTitle" jdbcType="VARCHAR" />
+        <result column="detail_brief" property="detailBrief" jdbcType="VARCHAR" />
+        <result column="detail_img" property="detailImg" jdbcType="VARCHAR" />
+        <result column="detail_status" property="detailStatus" jdbcType="INTEGER" />
         <result column="sort" property="sort" jdbcType="INTEGER" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        d.id as id, d.wine_cellar_activity_id as wine_cellar_activity_id, d.prod_id as prod_id, 
-        d.prod_sku_id as prod_sku_id, d.winery_voucher_id as winery_voucher_id, d.present_type as present_type, 
-        d.present_remark as present_remark, d.sort as sort, d.create_date as create_date, 
-        d.modify_date as modify_date
+        wcad.id as id, wcad.wine_cellar_activity as wine_cellar_activity, wcad.detail_title as detail_title,
+        wcad.detail_brief as detail_brief, wcad.detail_img as detail_img, wcad.detail_status as detail_status,
+        wcad.sort as sort, wcad.create_date as create_date, wcad.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineCellarActivityDetailMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from b_wine_cellar_activity_detail d
-        where d.id = #{id}
+        from b_wine_cellar_activity_detail wcad
+        where wcad.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineCellarActivityDetail" >
-        insert into b_wine_cellar_activity_detail (id, wine_cellar_activity_id, prod_id, prod_sku_id, winery_voucher_id, 
-            present_type, present_remark, sort, create_date, modify_date)
-        values (#{id}, #{wineCellarActivityId}, #{prodId}, #{prodSkuId}, #{wineryVoucherId}, 
-            #{presentType}, #{presentRemark}, #{sort}, #{createDate}, #{modifyDate})
+        insert into b_wine_cellar_activity_detail (id, wine_cellar_activity, detail_title, detail_brief, detail_img,
+            detail_status, sort, create_date, modify_date)
+        values (#{id}, #{wineCellarActivity}, #{detailTitle}, #{detailBrief}, #{detailImg},
+            #{detailStatus}, #{sort}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.WineCellarActivityDetail" >
         update b_wine_cellar_activity_detail
         <set >
-            <if test="wineCellarActivityId != null" >
-                wine_cellar_activity_id = #{wineCellarActivityId},
+            <if test="wineCellarActivity != null" >
+                wine_cellar_activity = #{wineCellarActivity},
             </if>
-            <if test="prodId != null" >
-                prod_id = #{prodId},
+            <if test="detailTitle != null and detailTitle != ''" >
+                detail_title = #{detailTitle},
             </if>
-            <if test="prodSkuId != null" >
-                prod_sku_id = #{prodSkuId},
+            <if test="detailBrief != null and detailBrief != ''" >
+                detail_brief = #{detailBrief},
             </if>
-            <if test="wineryVoucherId != null" >
-                winery_voucher_id = #{wineryVoucherId},
+            <if test="detailImg != null and detailImg != ''" >
+                detail_img = #{detailImg},
             </if>
-            <if test="presentType != null" >
-                present_type = #{presentType},
-            </if>
-            <if test="presentRemark != null and presentRemark != ''" >
-                present_remark = #{presentRemark},
+            <if test="detailStatus != null" >
+                detail_status = #{detailStatus},
             </if>
             <if test="sort != null" >
                 sort = #{sort},
@@ -75,59 +70,35 @@
     </delete>
 
     <select id="selectList" resultMap="wineCellarActivityDetailMap" >
-        select 
+        select
         <include refid="table_column" />
-        from b_wine_cellar_activity_detail d
+        from b_wine_cellar_activity_detail wcad
         <where >
-            <if test="wineCellarActivityId != null" >
-                and d.wine_cellar_activity_id = #{wineCellarActivityId}
+            <if test="wineCellarActivity != null" >
+                and wcad.wine_cellar_activity = #{wineCellarActivity}
             </if>
-            <if test="prodId != null" >
-                and d.prod_id = #{prodId}
+            <if test="detailTitle != null and detailTitle != ''" >
+                and wcad.detail_title = #{detailTitle}
             </if>
-            <if test="prodSkuId != null" >
-                and d.prod_sku_id = #{prodSkuId}
+            <if test="detailBrief != null and detailBrief != ''" >
+                and wcad.detail_brief = #{detailBrief}
             </if>
-            <if test="wineryVoucherId != null" >
-                and d.winery_voucher_id = #{wineryVoucherId}
+            <if test="detailImg != null and detailImg != ''" >
+                and wcad.detail_img = #{detailImg}
             </if>
-            <if test="presentType != null" >
-                and d.present_type = #{presentType}
-            </if>
-            <if test="presentRemark != null and presentRemark != ''" >
-                and d.present_remark = #{presentRemark}
+            <if test="detailStatus != null" >
+                and wcad.detail_status = #{detailStatus}
             </if>
             <if test="sort != null" >
-                and d.sort = #{sort}
+                and wcad.sort = #{sort}
             </if>
             <if test="createDate != null" >
-                and d.create_date = #{createDate}
+                and wcad.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and d.modify_date = #{modifyDate}
+                and wcad.modify_date = #{modifyDate}
             </if>
         </where>
-    </select>
-
-    <select id="selectProdSkuList" parameterType="Long" resultType="java.util.HashMap">
-        select d.id,s.sku_name skuName,s.sku_sell_price skuSellPrice,i.img_addrr imgAddrr,d.present_type presentType from b_wine_cellar_activity_detail d
-        inner join s_prod_sku s on d.prod_sku_id = s.id
-        inner join s_prod_img i on i.prod_id = d.prod_id
-        where d.wine_cellar_activity_id=#{wineCellarActivityId}
-        order by d.sort asc
-    </select>
-
-    <select id="selectProdSkuDetail" parameterType="Long" resultType="java.util.HashMap">
-        select s.sku_name skuName,d.id,d.prod_id prodId,d.detail_title detailTitle,d.detail_brief detailBrief,d.detail_img detailImg from s_prod_sku s
-        inner join s_prod_detail d on s.prod_id =d.prod_id
-        where s.id = #{id} and d.detail_status=2
-        order by d.sort
-    </select>
-
-    <select id="getPrePayDetail" parameterType="Long" resultType="java.util.HashMap">
-        select d.id dId,d.present_remark presentRemark,s.id sId, s.sku_name skuName,s.sku_sell_price skuSellPrice,s.alcohol_cnt alcoholCnt,s.fragrance_type fragranceType from b_wine_cellar_activity_detail d
-        inner join s_prod_sku s on d.prod_sku_id=s.id
-        where d.id=#{id}
     </select>
 
 </mapper>

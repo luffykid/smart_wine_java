@@ -80,6 +80,9 @@
         left join m_member m on m.id = wm.mbr_id
         left join m_mbr_level ml on ml.id = m.mbr_level_id
         <where >
+            <if test="id != null" >
+                and wm.id = #{id}
+            </if>
             <if test="mbrId != null" >
                 and wm.mbr_id = #{mbrId}
             </if>

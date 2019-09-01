@@ -1,5 +1,5 @@
 /*
- * WineCellarActivityDetail.java
+ * WineryActivityDetail.java
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
@@ -10,21 +10,31 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 /**
- * 商品详情
+ * 酒庄活动详情
  *
  * @version 1.0 2019-08-31
  */
-public class WineCellarActivityDetail extends BaseEntity {
+public class WineryActivityDetail extends BaseEntity {
 
-    private static final long serialVersionUID = 447643322102579200L;
+    private static final long serialVersionUID = 447641972853702656L;
 
     /**
-     * 云酒窖活动ID
+     * 酒庄活动ID
      */
-    private Long wineCellarActivity;
+    private Long wineryActivityId;
 
     /**
-     * 详情主题
+     * 商品sku id
+     */
+    private Long prodSkuId;
+
+    /**
+     * 酒庄优惠券ID
+     */
+    private Long wineryVoucherId;
+
+    /**
+     * 详情标题
      */
     private String detailTitle;
 
@@ -39,42 +49,62 @@ public class WineCellarActivityDetail extends BaseEntity {
     private String detailImg;
 
     /**
-     * 详情状态
-     * 0：新建
-     * 1：启用
-     * 2：禁用
-     */
-    private Integer detailStatus;
-
-    /**
-     * 详情排序
+     * 排序
      */
     private Integer sort;
 
 
     /**
-     * 获取云酒窖活动ID
+     * 获取酒庄活动ID
      */
-    public Long getWineCellarActivity() {
-        return wineCellarActivity;
+    public Long getWineryActivityId() {
+        return wineryActivityId;
     }
 
     /**
-     * 设置云酒窖活动ID
+     * 设置酒庄活动ID
      */
-    public void setWineCellarActivity(Long wineCellarActivity) {
-        this.wineCellarActivity = wineCellarActivity;
+    public void setWineryActivityId(Long wineryActivityId) {
+        this.wineryActivityId = wineryActivityId;
     }
 
     /**
-     * 获取详情主题
+     * 获取商品sku id
+     */
+    public Long getProdSkuId() {
+        return prodSkuId;
+    }
+
+    /**
+     * 设置商品sku id
+     */
+    public void setProdSkuId(Long prodSkuId) {
+        this.prodSkuId = prodSkuId;
+    }
+
+    /**
+     * 获取酒庄优惠券ID
+     */
+    public Long getWineryVoucherId() {
+        return wineryVoucherId;
+    }
+
+    /**
+     * 设置酒庄优惠券ID
+     */
+    public void setWineryVoucherId(Long wineryVoucherId) {
+        this.wineryVoucherId = wineryVoucherId;
+    }
+
+    /**
+     * 获取详情标题
      */
     public String getDetailTitle() {
         return detailTitle;
     }
 
     /**
-     * 设置详情主题
+     * 设置详情标题
      */
     public void setDetailTitle(String detailTitle) {
         this.detailTitle = detailTitle == null ? null : detailTitle.trim();
@@ -109,34 +139,14 @@ public class WineCellarActivityDetail extends BaseEntity {
     }
 
     /**
-     * 获取详情状态
-     * 0：新建
-     * 1：启用
-     * 2：禁用
-     */
-    public Integer getDetailStatus() {
-        return detailStatus;
-    }
-
-    /**
-     * 设置详情状态
-     * 0：新建
-     * 1：启用
-     * 2：禁用
-     */
-    public void setDetailStatus(Integer detailStatus) {
-        this.detailStatus = detailStatus;
-    }
-
-    /**
-     * 获取详情排序
+     * 获取排序
      */
     public Integer getSort() {
         return sort;
     }
 
     /**
-     * 设置详情排序
+     * 设置排序
      */
     public void setSort(Integer sort) {
         this.sort = sort;
