@@ -3,7 +3,7 @@
  * Copyright(C) 北京畅发科技有限公司
  * All rights reserved.
  * -----------------------------------------------
- * 2019-08-14 Created
+ * 2019-09-01 Created
  */
 package com.changfa.frame.model.app;
 
@@ -14,11 +14,16 @@ import java.util.Date;
 /**
  * 会员景点签到
  *
- * @version 1.0 2019-08-14
+ * @version 1.0 2019-09-01
  */
 public class MbrSightSign extends BaseEntity {
 
-    private static final long serialVersionUID = 441546301381804032L;
+    private static final long serialVersionUID = 447967500139757568L;
+
+    /**
+     * 酒庄ID
+     */
+    private Long wineryId;
 
     /**
      * 酒庄景点ID
@@ -28,13 +33,27 @@ public class MbrSightSign extends BaseEntity {
     /**
      * 会员ID
      */
-    private Long mberId;
+    private Long mbrId;
 
     /**
      * 签到时间
      */
     private Date signDate;
 
+
+    /**
+     * 获取酒庄ID
+     */
+    public Long getWineryId() {
+        return wineryId;
+    }
+
+    /**
+     * 设置酒庄ID
+     */
+    public void setWineryId(Long wineryId) {
+        this.wineryId = wineryId;
+    }
 
     /**
      * 获取酒庄景点ID
@@ -53,15 +72,15 @@ public class MbrSightSign extends BaseEntity {
     /**
      * 获取会员ID
      */
-    public Long getMberId() {
-        return mberId;
+    public Long getMbrId() {
+        return mbrId;
     }
 
     /**
      * 设置会员ID
      */
-    public void setMberId(Long mberId) {
-        this.mberId = mberId;
+    public void setMbrId(Long mbrId) {
+        this.mbrId = mbrId;
     }
 
     /**

@@ -392,7 +392,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         mbrBillRecord.setPkId(dbOrder.getId());
         mbrBillRecord.setWineryId(dbOrder.getWineryId());
         mbrBillRecord.setSignType(0);
-        mbrBillRecord.setBillType(MbrBillRecord.BILL_TYPE_ENUM.PROD_ORDER.getValue());
+        mbrBillRecord.setBillType(MbrBillRecord.BILL_TYPE_ENUM.PROD_CUSTOM.getValue());
         mbrBillRecord.setBillRemark("商品消费");
         mbrBillRecord.setBillAmt(dbOrder.getPayRealAmt());
         mbrBillRecord.setCreateDate(new Date());

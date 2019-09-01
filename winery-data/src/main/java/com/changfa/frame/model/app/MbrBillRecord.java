@@ -17,7 +17,6 @@ import java.math.BigDecimal;
  * @version 1.0 2019-08-31
  */
 public class MbrBillRecord extends BaseEntity {
-
     private static final long serialVersionUID = 447420713385590784L;
 
     /**
@@ -61,13 +60,13 @@ public class MbrBillRecord extends BaseEntity {
     private Integer billType;
 
     /**
-     * 账单类型
+     * 订单状态
      */
     public enum BILL_TYPE_ENUM {
-        PROD_ORDER(1, "商品消费"),
-        STORE_ORDER(2, "储酒消费"),
-        ADJUST_ORDER(3, "自调酒消费"),
-        RECHARGE_ORDER(4, "账户充值"),
+        PROD_CUSTOM(1, "商品消费"),
+        STORE_CUSTOM(2, "储酒消费"),
+        ADJUST_CUSTOM(3, "自调酒消费"),
+        RECHARGE_ACCT(4, "账户充值"),
         RECHARGE_RETURN(5, "充值返现"),
         INVITE_RETURN(6, "邀请返现");
 
@@ -90,21 +89,6 @@ public class MbrBillRecord extends BaseEntity {
         BILL_TYPE_ENUM(Integer value, String name) {
             this.value = value;
             this.name = name;
-        }
-
-        /**
-         * 根据枚举值获取枚举对象
-         *
-         * @param value 枚举值
-         * @return
-         */
-        public static BILL_TYPE_ENUM getEnum(Integer value) {
-            for (BILL_TYPE_ENUM statusEnum : BILL_TYPE_ENUM.values()) {
-                if (value.equals(statusEnum.getValue())) {
-                    return statusEnum;
-                }
-            }
-            return null;
         }
 
         /**
