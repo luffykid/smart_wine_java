@@ -224,7 +224,7 @@
         select
         <include refid="table_column" />,
         ml.name as level_name,
-        mw.nick_name as nick_name
+        mw.nick_name as nick_name,
         IFNULL(wm.id,FALSE) as is_master
         from m_member as mbr
         left join m_mbr_level as ml on ml.id = mbr.mbr_level_id
