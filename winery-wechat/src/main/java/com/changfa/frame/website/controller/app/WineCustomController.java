@@ -78,6 +78,7 @@ public class WineCustomController extends BaseController {
 
     }
 
+    @ApiOperation(value = "获取酒庄酒产品详情")
     @GetMapping("{id}/detail")
     public Map<String, Object> getWineCustomDetail(@PathVariable("id") Long id) {
 
@@ -95,6 +96,12 @@ public class WineCustomController extends BaseController {
 
     }
 
+    @ApiOperation(value = "获取所有产品规格")
+    @GetMapping("{prodId}/sku/")
+    public Map<String, Object> getAllSkus(@PathVariable("prodId") Long prodId) {
 
+       return  getResult(wineCustomService.getProdSkus(prodId));
+
+    }
 
 }
