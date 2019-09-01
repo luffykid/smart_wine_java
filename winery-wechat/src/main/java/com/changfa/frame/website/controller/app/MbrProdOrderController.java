@@ -1,8 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.MbrProdOrder;
 import com.changfa.frame.model.app.Member;
-import com.changfa.frame.model.app.MemberAddress;
 import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.github.pagehelper.PageInfo;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.changfa.frame.mapper.app.MemberAddressMapper" >
-    <resultMap id="memberAddressMap" type="com.changfa.frame.model.app.MemberAddress" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrAddressMapper" >
+    <resultMap id="memberAddressMap" type="com.changfa.frame.model.app.MbrAddress" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
@@ -29,7 +29,7 @@
         where id = #{id}
     </select>
 
-    <insert id="save" parameterType="com.changfa.frame.model.app.MemberAddress" >
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrAddress" >
         insert into m_member_address (id, winery_id, mbr_id, contact, phone, province, city, 
             country, detail_address, full_address, is_default, create_date, modify_date
             )
@@ -38,7 +38,7 @@
             )
     </insert>
 
-    <update id="update" parameterType="com.changfa.frame.model.app.MemberAddress" >
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrAddress" >
         update m_member_address
         <set >
             <if test="wineryId != null" >
@@ -89,43 +89,43 @@
     <select id="selectList" resultMap="memberAddressMap" >
         select 
         <include refid="table_column" />
-        from m_member_address memberAddress
+        from m_member_address mbrAddress
         <where >
             <if test="wineryId != null" >
-                and memberAddress.winery_id = #{wineryId}
+                and mbrAddress.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and memberAddress.mbr_id = #{mbrId}
+                and mbrAddress.mbr_id = #{mbrId}
             </if>
             <if test="contact != null and contact != ''" >
-                and memberAddress.contact = #{contact}
+                and mbrAddress.contact = #{contact}
             </if>
             <if test="phone != null and phone != ''" >
-                and memberAddress.phone = #{phone}
+                and mbrAddress.phone = #{phone}
             </if>
             <if test="province != null" >
-                and memberAddress.province = #{province}
+                and mbrAddress.province = #{province}
             </if>
             <if test="city != null" >
-                and memberAddress.city = #{city}
+                and mbrAddress.city = #{city}
             </if>
             <if test="country != null" >
-                and memberAddress.country = #{country}
+                and mbrAddress.country = #{country}
             </if>
             <if test="detailAddress != null and detailAddress != ''" >
-                and memberAddress.detail_address = #{detailAddress}
+                and mbrAddress.detail_address = #{detailAddress}
             </if>
             <if test="fullAddress != null and fullAddress != ''" >
-                and memberAddress.full_address = #{fullAddress}
+                and mbrAddress.full_address = #{fullAddress}
             </if>
             <if test="isDefault != null" >
-                and memberAddress.is_default = #{isDefault}
+                and mbrAddress.is_default = #{isDefault}
             </if>
             <if test="createDate != null" >
-                and memberAddress.create_date = #{createDate}
+                and mbrAddress.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and memberAddress.modify_date = #{modifyDate}
+                and mbrAddress.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

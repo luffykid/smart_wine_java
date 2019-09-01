@@ -23,31 +23,34 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_id, winery_voucher_inst_id, mbr_id, name, type, voucher_amt, voucher_discount, 
-        prod_sku_id, enable_type, enable_amt, quantity_limit_cnt, effective_begin_date, effective_end_date, 
-        use_scope, voucher_cnt, create_date, modify_date
+        mwv.id as id, mwv.winery_id as winery_id, mwv.winery_voucher_inst_id as winery_voucher_inst_id,
+        mwv.mbr_id as mbr_id, mwv.name as name, mwv.type as type, mwv.voucher_amt as voucher_amt,
+        mwv.voucher_discount as voucher_discount, mwv.prod_sku_id as prod_sku_id, mwv.enable_type as enable_type,
+        mwv.enable_amt as enable_amt, mwv.quantity_limit_cnt as quantity_limit_cnt, mwv.effective_begin_date as effective_begin_date,
+        mwv.effective_end_date as effective_end_date, mwv.use_scope as use_scope, mwv.voucher_cnt as voucher_cnt,
+        mwv.create_date as create_date, mwv.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrWineryVoucherMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from b_mbr_winery_voucher
-        where id = #{id}
+        from m_mbr_winery_voucher mwv
+        where mwv.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineryVoucher" >
-        insert into b_mbr_winery_voucher (id, winery_id, winery_voucher_inst_id, mbr_id, name, type, voucher_amt, 
-            voucher_discount, prod_sku_id, enable_type, enable_amt, quantity_limit_cnt, 
-            effective_begin_date, effective_end_date, use_scope, voucher_cnt, create_date, 
+        insert into m_mbr_winery_voucher (id, winery_id, winery_voucher_inst_id, mbr_id, name, type, voucher_amt,
+            voucher_discount, prod_sku_id, enable_type, enable_amt, quantity_limit_cnt,
+            effective_begin_date, effective_end_date, use_scope, voucher_cnt, create_date,
             modify_date)
-        values (#{id}, #{wineryId}, #{wineryVoucherInstId}, #{mbrId}, #{name}, #{type}, #{voucherAmt}, 
-            #{voucherDiscount}, #{prodSkuId}, #{enableType}, #{enableAmt}, #{quantityLimitCnt}, 
-            #{effectiveBeginDate}, #{effectiveEndDate}, #{useScope}, #{voucherCnt}, #{createDate}, 
+        values (#{id}, #{wineryId}, #{wineryVoucherInstId}, #{mbrId}, #{name}, #{type}, #{voucherAmt},
+            #{voucherDiscount}, #{prodSkuId}, #{enableType}, #{enableAmt}, #{quantityLimitCnt},
+            #{effectiveBeginDate}, #{effectiveEndDate}, #{useScope}, #{voucherCnt}, #{createDate},
             #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrWineryVoucher" >
-        update b_mbr_winery_voucher
+        update m_mbr_winery_voucher
         <set >
             <if test="wineryId != null" >
                 winery_id = #{wineryId},
@@ -105,85 +108,66 @@
     </update>
 
     <delete id="delete" parameterType="java.lang.Long" >
-        delete from b_mbr_winery_voucher
+        delete from m_mbr_winery_voucher
         where id = #{id}
     </delete>
 
     <select id="selectList" resultMap="mbrWineryVoucherMap" >
-        select 
+        select
         <include refid="table_column" />
-        from b_mbr_winery_voucher mbrWineryVoucher
+        from m_mbr_winery_voucher mwv
         <where >
             <if test="wineryId != null" >
-                and mbrWineryVoucher.winery_id = #{wineryId}
+                and mwv.winery_id = #{wineryId}
             </if>
             <if test="wineryVoucherInstId != null" >
-                and mbrWineryVoucher.winery_voucher_inst_id = #{wineryVoucherInstId}
+                and mwv.winery_voucher_inst_id = #{wineryVoucherInstId}
             </if>
             <if test="mbrId != null" >
-                and mbrWineryVoucher.mbr_id = #{mbrId}
+                and mwv.mbr_id = #{mbrId}
             </if>
             <if test="name != null and name != ''" >
-                and mbrWineryVoucher.name = #{name}
+                and mwv.name = #{name}
             </if>
             <if test="type != null" >
-                and mbrWineryVoucher.type = #{type}
+                and mwv.type = #{type}
             </if>
             <if test="voucherAmt != null" >
-                and mbrWineryVoucher.voucher_amt = #{voucherAmt}
+                and mwv.voucher_amt = #{voucherAmt}
             </if>
             <if test="voucherDiscount != null" >
-                and mbrWineryVoucher.voucher_discount = #{voucherDiscount}
+                and mwv.voucher_discount = #{voucherDiscount}
             </if>
             <if test="prodSkuId != null" >
-                and mbrWineryVoucher.prod_sku_id = #{prodSkuId}
+                and mwv.prod_sku_id = #{prodSkuId}
             </if>
             <if test="enableType != null" >
-                and mbrWineryVoucher.enable_type = #{enableType}
+                and mwv.enable_type = #{enableType}
             </if>
             <if test="enableAmt != null" >
-                and mbrWineryVoucher.enable_amt = #{enableAmt}
+                and mwv.enable_amt = #{enableAmt}
             </if>
             <if test="quantityLimitCnt != null" >
-                and mbrWineryVoucher.quantity_limit_cnt = #{quantityLimitCnt}
+                and mwv.quantity_limit_cnt = #{quantityLimitCnt}
             </if>
             <if test="effectiveBeginDate != null" >
-                and mbrWineryVoucher.effective_begin_date = #{effectiveBeginDate}
+                and mwv.effective_begin_date = #{effectiveBeginDate}
             </if>
             <if test="effectiveEndDate != null" >
-                and mbrWineryVoucher.effective_end_date = #{effectiveEndDate}
+                and mwv.effective_end_date = #{effectiveEndDate}
             </if>
             <if test="useScope != null" >
-                and mbrWineryVoucher.use_scope = #{useScope}
+                and mwv.use_scope = #{useScope}
             </if>
             <if test="voucherCnt != null" >
-                and mbrWineryVoucher.voucher_cnt = #{voucherCnt}
+                and mwv.voucher_cnt = #{voucherCnt}
             </if>
             <if test="createDate != null" >
-                and mbrWineryVoucher.create_date = #{createDate}
+                and mwv.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and mbrWineryVoucher.modify_date = #{modifyDate}
+                and mwv.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
-
-
-    <select id="selectEnableVoucherList" parameterType="Long" resultMap="mbrWineryVoucherMap">
-        select <include refid="table_column" />
-        from b_mbr_winery_voucher
-        <where>
-            mbr_id=#{mbrId} and voucher_cnt=1 and now() between  effective_begin_date and effective_end_date
-        </where>
-    </select>
-
-    <select id="selectEnableVoucherCount" parameterType="Long" resultType="Integer">
-        select count(id)
-        from b_mbr_winery_voucher
-        <where>
-            mbr_id=#{mbrId} and voucher_cnt=1 and now() between  effective_begin_date and effective_end_date
-        </where>
-    </select>
-
-
 </mapper>
