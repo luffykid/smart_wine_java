@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.changfa.frame.mapper.app.MbrIntegralDetailMapper" >
-    <resultMap id="mbrIntegralDetailMap" type="com.changfa.frame.model.app.MbrIntegralDetail" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrIntegralRecordMapper" >
+    <resultMap id="mbrIntegralRecordMap" type="com.changfa.frame.model.app.MbrIntegralRecord" >
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
@@ -14,26 +14,27 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_id, mbr_id, action_type, point_type, integral_value, latest_point, create_date, 
-        modify_date
+        mir.id as id, mir.winery_id as winery_id, mir.mbr_id as mbr_id, mir.action_type as action_type,
+        mir.point_type as point_type, mir.integral_value as integral_value, mir.latest_point as latest_point,
+        mir.create_date as create_date, mir.modify_date as modify_date
     </sql>
 
-    <select id="getById" resultMap="mbrIntegralDetailMap" parameterType="java.lang.Long" >
-        select 
+    <select id="getById" resultMap="mbrIntegralRecordMap" parameterType="java.lang.Long" >
+        select
         <include refid="table_column" />
-        from m_mbr_integral_detail
-        where id = #{id}
+        from m_mbr_integral_record mir
+        where mir.id = #{id}
     </select>
 
-    <insert id="save" parameterType="com.changfa.frame.model.app.MbrIntegralDetail" >
-        insert into m_mbr_integral_detail (id, winery_id, mbr_id, action_type, point_type, integral_value, 
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrIntegralRecord" >
+        insert into m_mbr_integral_record (id, winery_id, mbr_id, action_type, point_type, integral_value,
             latest_point, create_date, modify_date)
-        values (#{id}, #{wineryId}, #{mbrId}, #{actionType}, #{pointType}, #{integralValue}, 
+        values (#{id}, #{wineryId}, #{mbrId}, #{actionType}, #{pointType}, #{integralValue},
             #{latestPoint}, #{createDate}, #{modifyDate})
     </insert>
 
-    <update id="update" parameterType="com.changfa.frame.model.app.MbrIntegralDetail" >
-        update m_mbr_integral_detail
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrIntegralRecord" >
+        update m_mbr_integral_record
         <set >
             <if test="wineryId != null" >
                 winery_id = #{wineryId},
@@ -64,38 +65,38 @@
     </update>
 
     <delete id="delete" parameterType="java.lang.Long" >
-        delete from m_mbr_integral_detail
+        delete from m_mbr_integral_record
         where id = #{id}
     </delete>
 
-    <select id="selectList" resultMap="mbrIntegralDetailMap" >
-        select 
+    <select id="selectList" resultMap="mbrIntegralRecordMap" >
+        select
         <include refid="table_column" />
-        from m_mbr_integral_detail mbrIntegralDetail
+        from m_mbr_integral_record mir
         <where >
             <if test="wineryId != null" >
-                and mbrIntegralDetail.winery_id = #{wineryId}
+                and mir.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and mbrIntegralDetail.mbr_id = #{mbrId}
+                and mir.mbr_id = #{mbrId}
             </if>
             <if test="actionType != null" >
-                and mbrIntegralDetail.action_type = #{actionType}
+                and mir.action_type = #{actionType}
             </if>
             <if test="pointType != null" >
-                and mbrIntegralDetail.point_type = #{pointType}
+                and mir.point_type = #{pointType}
             </if>
             <if test="integralValue != null" >
-                and mbrIntegralDetail.integral_value = #{integralValue}
+                and mir.integral_value = #{integralValue}
             </if>
             <if test="latestPoint != null" >
-                and mbrIntegralDetail.latest_point = #{latestPoint}
+                and mir.latest_point = #{latestPoint}
             </if>
             <if test="createDate != null" >
-                and mbrIntegralDetail.create_date = #{createDate}
+                and mir.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and mbrIntegralDetail.modify_date = #{modifyDate}
+                and mir.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

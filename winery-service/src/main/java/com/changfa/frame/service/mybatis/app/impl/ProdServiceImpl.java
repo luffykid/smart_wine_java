@@ -2,11 +2,11 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
-import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.ProdService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
+import com.changfa.frame.service.mybatis.common.SettingUtils;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +61,10 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
 
     @Autowired
     private MbrProdOrderItemMapper mbrProdOrderItemMapper;
+
+    @Autowired
+    private MemberMapper memberMapper;
+
 
     /**
      * 获取产品列表
@@ -414,6 +419,72 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         prodSkuMapper.updateSellCnt(prodSkus);
 
         // 邀请返现
+        handleInviteReturn(dbOrder);
 
+        // 消费送积分
+        handleConsumeIntegral(dbOrder);
+    }
+
+    /**
+     * 依据当前会员ID处理积分
+     *
+     * @param mbrProdOrder 会员订单
+     */
+    private void handleConsumeIntegral(MbrProdOrder mbrProdOrder) {
+        // 如果会员没有父级，不用处理邀请返现
+        String integralScale = SettingUtils.get().getConsumeAmtOfIntegral();
+        Member curMbr = memberMapper.getById(mbrProdOrder.getMbrId());
+
+        // 插入积分记录
+        MbrIntegralRecord mbrIntegralRecord = new MbrIntegralRecord();
+
+        // 更新会员账户余额
+        Member updateMbr = new Member();
+        updateMbr.setId(curMbr.getId());
+//        updateMbr.setAcctBalance(parenMbr.getAcctBalance().add(returnAmt));
+//        updateMbr.setAcctBalance(parenMbr.getInviteReturnAmt().add(returnAmt));
+        updateMbr.setModifyDate(new Date());
+//        memberMapper.update(parenMbr);
+    }
+
+    /**
+     * 依据当前会员ID处理返现
+     *
+     * @param mbrProdOrder 会员订单
+     */
+    private void handleInviteReturn(MbrProdOrder mbrProdOrder) {
+        // 如果会员没有父级，不用处理邀请返现
+        String inviteReturnScale = SettingUtils.get().getInviteReturnScale();
+        Member curMbr = memberMapper.getById(mbrProdOrder.getMbrId());
+        Member parenMbr = memberMapper.getById(curMbr.getMarketPid());
+        if (parenMbr == null) {
+            return;
+        }
+
+        // 插入返现会员账户记录
+        MbrBillRecord mbrBillRecord = new MbrBillRecord();
+        mbrBillRecord.setId(IDUtil.getId());
+        mbrBillRecord.setPkId(mbrProdOrder.getId());
+        mbrBillRecord.setWineryId(mbrProdOrder.getWineryId());
+        mbrBillRecord.setSignType(0);
+        mbrBillRecord.setBillType(MbrBillRecord.BILL_TYPE_ENUM.INVITE_RETURN.getValue());
+        mbrBillRecord.setBillRemark("邀请返现");
+        // 设置返现金额
+        BigDecimal payRealAmt = mbrProdOrder.getPayRealAmt();
+        BigDecimal returnAmt = payRealAmt.multiply(new BigDecimal(inviteReturnScale));
+        returnAmt.setScale(2, BigDecimal.ROUND_HALF_UP);
+        mbrBillRecord.setBillAmt(returnAmt);
+
+        mbrBillRecord.setCreateDate(new Date());
+        mbrBillRecord.setModifyDate(new Date());
+        mbrBillRecordMapper.save(mbrBillRecord);
+
+        // 更新会员账户余额
+        Member updateMbr = new Member();
+        updateMbr.setId(parenMbr.getId());
+        updateMbr.setAcctBalance(parenMbr.getAcctBalance().add(returnAmt));
+        updateMbr.setInviteReturnAmt(parenMbr.getInviteReturnAmt().add(returnAmt));
+        updateMbr.setModifyDate(new Date());
+        memberMapper.update(parenMbr);
     }
 }

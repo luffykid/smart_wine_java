@@ -1,9 +1,9 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
-import com.changfa.frame.mapper.app.MbrIntegralDetailMapper;
+import com.changfa.frame.mapper.app.MbrIntegralRecordMapper;
 import com.changfa.frame.mapper.app.MbrWechatMapper;
 import com.changfa.frame.mapper.app.MemberMapper;
-import com.changfa.frame.model.app.MbrIntegralDetail;
+import com.changfa.frame.model.app.MbrIntegralRecord;
 import com.changfa.frame.model.app.MbrWechat;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MemberService;
@@ -33,7 +33,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     @Autowired
     private MbrWechatMapper mbrWechatMapper;
     @Autowired
-    private MbrIntegralDetailMapper mbrIntegralDetailMapper;
+    private MbrIntegralRecordMapper mbrIntegralRecordMapper;
 
     /**
      * 根据手机号查询会员
@@ -71,9 +71,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        MbrIntegralDetail mbrIntegralDetail = new MbrIntegralDetail();
-        mbrIntegralDetail.setMbrId(mbrId);
-        return new PageInfo(mbrIntegralDetailMapper.selectList(mbrIntegralDetail));
+        MbrIntegralRecord mbrIntegralRecord = new MbrIntegralRecord();
+        mbrIntegralRecord.setMbrId(mbrId);
+        return new PageInfo(mbrIntegralRecordMapper.selectList(mbrIntegralRecord));
     }
 
     /**

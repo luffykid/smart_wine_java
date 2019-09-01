@@ -27,7 +27,7 @@ public class MbrBillRecord extends BaseEntity {
      * 3：自调酒消费【自调酒订单ID】
      * 4：账户充值【充值订单ID】
      * 5：账户返现【充值订单ID】
-     * 6：邀请返现【邀请会员ID】
+     * 6：邀请返现【商品订单ID】
      */
     private Long pkId;
 

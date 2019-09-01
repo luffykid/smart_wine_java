@@ -8,7 +8,7 @@
 package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
-import com.changfa.frame.model.app.MbrIntegralDetail;
+import com.changfa.frame.model.app.MbrIntegralRecord;
 
-public interface MbrIntegralDetailMapper extends BaseMapper<MbrIntegralDetail, Long> {
+public interface MbrIntegralRecordMapper extends BaseMapper<MbrIntegralRecord, Long> {
 }

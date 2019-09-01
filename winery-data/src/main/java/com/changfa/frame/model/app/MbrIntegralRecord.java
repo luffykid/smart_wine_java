@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * 会员积分明细
  * @version 1.0 2019-08-26
  */
-public class MbrIntegralDetail extends BaseEntity {
+public class MbrIntegralRecord extends BaseEntity {
 
     private static final long serialVersionUID = 445734136712265728L;
 
