@@ -44,8 +44,11 @@ public class MemberController extends BaseController {
     @ApiOperation(value = "个人中心首页", notes = "个人中心首页")
     @RequestMapping(value = "/myIndex", method = RequestMethod.GET)
     public Map<String, Object> myIndex(HttpServletRequest request) {
+        // 获取当前会员
         Member member = getCurMember(request);
-        member.setVoucherCount(mbrWineryVoucherService.getEnableVoucherCount(member.getId()));
+
+        // 查询当前优惠券数量
+
 
         // 初始化返回集合
         Map<String, Object> returnMap = new HashMap<>();
@@ -64,7 +67,6 @@ public class MemberController extends BaseController {
     @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
     public Map<String, Object> getDetail(HttpServletRequest request) {
         Member member = getCurMember(request);
-        member.setVoucherCount(mbrWineryVoucherService.getEnableVoucherCount(member.getId()));
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("member", member);
         return getResult(returnMap);

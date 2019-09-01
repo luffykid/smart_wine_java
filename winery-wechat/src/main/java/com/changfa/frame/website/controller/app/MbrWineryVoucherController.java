@@ -26,6 +26,7 @@ public class MbrWineryVoucherController extends BaseController {
 
     @Resource(name = "mbrWineryVoucherServiceImpl")
     private MbrWineryVoucherService mbrWineryVoucherServiceImpl;
+
     /**
      * 获取可用的优惠券列表
      *
@@ -35,7 +36,7 @@ public class MbrWineryVoucherController extends BaseController {
     @RequestMapping(value = "/getEnableVoucherList", method = RequestMethod.GET)
     public Map<String, Object> getEnableVoucherList(HttpServletRequest request) {
         Member member = getCurMember(request);
-        List<MbrWineryVoucher> list = mbrWineryVoucherServiceImpl.getEnableVoucherList(member.getId());
-        return getResult(list);
+        //List<MbrWineryVoucher> list = mbrWineryVoucherServiceImpl.getEnableVoucherList(member.getId());
+        return getResult(null);
     }
 }
