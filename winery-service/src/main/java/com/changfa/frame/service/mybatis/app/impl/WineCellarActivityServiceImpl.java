@@ -2,6 +2,7 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.mapper.app.WineCellarActivityLikeMapper;
 import com.changfa.frame.mapper.app.WineCellarActivityMapper;
+import com.changfa.frame.mapper.app.WinerySightDetailMapper;
 import com.changfa.frame.model.app.WineCellarActivity;
 import com.changfa.frame.model.app.WineCellarActivityLike;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityService;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service("wineCellarActivityServiceImpl")
 public class WineCellarActivityServiceImpl extends BaseServiceImpl<WineCellarActivity, Long> implements WineCellarActivityService {
@@ -24,6 +24,7 @@ public class WineCellarActivityServiceImpl extends BaseServiceImpl<WineCellarAct
     private WineCellarActivityMapper wineCellarActivityMapper;
     @Autowired
     private WineCellarActivityLikeMapper wineCellarActivityLikeMapper;
+
     /**
      * 获取酒庄活动列表
      * @return
@@ -34,6 +35,16 @@ public class WineCellarActivityServiceImpl extends BaseServiceImpl<WineCellarAct
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
         return new PageInfo(wineCellarActivityMapper.selectSecList(mbrId));
+    }
+
+    /**
+     * 获取关联景点的酒庄活动列表
+     * @return
+     */
+    @Override
+    public List<WineCellarActivity> getListByWinerySightId(Long winerySightId) {
+
+        return wineCellarActivityMapper.selectListByWinerySightId(winerySightId);
     }
 
     /**

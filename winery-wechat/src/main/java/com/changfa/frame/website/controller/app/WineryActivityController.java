@@ -159,6 +159,16 @@ public class WineryActivityController extends BaseController {
     @RequestMapping(value = "/signUp", method = RequestMethod.POST)
     public Map<String, Object> signUp(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
+
+            //是否已经过期
+            if(mbrWineryActivitySignServiceImpl.IsExpireSignUp(wineryActivityId)){
+                throw new CustomException(RESPONSE_CODE_ENUM.SIGN_OUT_TIME);
+            }
+
+            //是否已经报过名了
+            if(mbrWineryActivitySignServiceImpl.IsExistSingUp(wineryActivityId,member.getId())){
+                throw new CustomException(RESPONSE_CODE_ENUM.SIGN_EXIST);
+            }
         try {
             mbrWineryActivitySignServiceImpl.signUp(wineryActivityId, member.getId());
         }catch (Exception e){

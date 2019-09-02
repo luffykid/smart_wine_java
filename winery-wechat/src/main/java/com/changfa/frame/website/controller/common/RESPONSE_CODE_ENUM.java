@@ -42,7 +42,9 @@ public enum RESPONSE_CODE_ENUM {
     UPDTATE_EXIST("1052", "修改数据失败"),
     DELETE_EXIST("1054", "删除数据失败"),
     PARAMETER_ERROR("1055","数据参数错误"),
-    CREATE_ORDER_ERROR("1056","创建订单失败");
+    CREATE_ORDER_ERROR("1056","创建订单失败"),
+    SIGN_EXIST("1060","你已经报名过了！"),
+    SIGN_OUT_TIME("1061","超过了报名时间");
 
 
 

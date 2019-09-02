@@ -9,11 +9,9 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WineCellarActivity;
-import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface WineCellarActivityMapper extends BaseMapper<WineCellarActivity, Long> {
 
@@ -30,4 +28,12 @@ public interface WineCellarActivityMapper extends BaseMapper<WineCellarActivity,
      * @return
      */
     WineCellarActivity selectSecById(@Param("id") Long id, @Param("mbrId") Long mbrId);
+
+    /**
+     * 获取关联景点的酒庄活动列表
+     * @return
+     */
+
+    List<WineCellarActivity> selectListByWinerySightId(@Param("winerySightId") Long winerySightId);
+
 }

@@ -17,8 +17,32 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
 
     @Autowired
     private MbrWineryActivitySignMapper mbrWineryActivitySignMapper;
+
     @Autowired
     private WineryActivityMapper wineryActivityMapper;
+
+    @Override
+    public Boolean IsExistSingUp(Long wineryActivityId, Long mbrId) {
+
+        //查询用户是否报名
+        Integer count = mbrWineryActivitySignMapper.selectSignUpTwo(wineryActivityId, mbrId);
+        if(count==0){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean IsExpireSignUp(Long wineryActivityId) {
+
+        //查询当前日期是否在报名期间 ，返回符合条件的条数
+        Integer count = mbrWineryActivitySignMapper.selectSignUpOne(wineryActivityId);
+        if(count!=1){
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 活动报名
      *
@@ -26,22 +50,13 @@ public class MbrWineryActivitySignServiceImpl extends BaseServiceImpl<MbrWineryA
      */
     @Transactional
     @Override
-    public void signUp(Long wineryActivityId, Long mbrId) throws Exception {
-        Integer countOne = mbrWineryActivitySignMapper.selectSignUpOne(wineryActivityId);
-        Integer countTwo = mbrWineryActivitySignMapper.selectSignUpTwo(wineryActivityId, mbrId);
-        if (countOne == 1){
-            if (countTwo == 0){
-                mbrWineryActivitySignMapper.signUp(IDUtil.getId(), wineryActivityId, mbrId);
-                WineryActivity wineryActivity = wineryActivityMapper.getById(wineryActivityId);
-                wineryActivity.setSignTotalCnt(wineryActivity.getSignTotalCnt()+1);
-                wineryActivityMapper.update(wineryActivity);
-            }
-            else {
-                throw new Exception("已经过了报名截止时间！");
-            }
-        }else {
-            throw new Exception("你已经报名过了！");
-        }
+    public void signUp(Long wineryActivityId, Long mbrId)  throws Exception {
+
+        mbrWineryActivitySignMapper.signUp(IDUtil.getId(), wineryActivityId, mbrId);
+        WineryActivity wineryActivity = wineryActivityMapper.getById(wineryActivityId);
+        wineryActivity.setSignTotalCnt(wineryActivity.getSignTotalCnt()+1);
+        wineryActivityMapper.update(wineryActivity);
+
     }
 
     /**
