@@ -28,7 +28,22 @@ public class MbrAddressServiceImpl extends BaseServiceImpl<MbrAddress, Long> imp
     public List<MbrAddress> getList(Long mbrId) {
         MbrAddress mbrAddress = new MbrAddress();
         mbrAddress.setMbrId(mbrId);
-        return mbrAddressMapper.selectList(mbrAddress);
+        List<MbrAddress> mbrAddressList = mbrAddressMapper.selectList(mbrAddress);
+        for(MbrAddress entity :mbrAddressList){
+            Area province = areaMapper.getAreaByCode(entity.getProvince());
+            if(province!=null){
+                entity.setProvinceName(province.getName());
+            }
+            Area city = areaMapper.getAreaByCode(entity.getCity());
+            if(province!=null){
+                entity.setProvinceName(city.getName());
+            }
+            Area country = areaMapper.getAreaByCode(entity.getCountry());
+            if(province!=null){
+                entity.setProvinceName(country.getName());
+            }
+        }
+        return mbrAddressList;
     }
     /**
      * 添加管理地址
