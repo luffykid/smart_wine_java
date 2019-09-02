@@ -3,8 +3,10 @@ package com.changfa.frame.website.controller.app;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.WineCellar;
 import com.changfa.frame.model.app.WineCellarActivity;
+import com.changfa.frame.model.app.WinerySight;
 import com.changfa.frame.service.mybatis.app.WineCellarActivityService;
 import com.changfa.frame.service.mybatis.app.WineCellarService;
+import com.changfa.frame.service.mybatis.app.WinerySightService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -36,6 +38,9 @@ public class WineCellarController extends BaseController {
 
     @Resource(name = "wineCellarActivityServiceImpl")
     private WineCellarActivityService wineCellarActivityServiceImpl;
+
+    @Resource(name = "winerySightServiceImpl")
+    private WinerySightService winerySightServiceImpl;
 
     /**
      * 获取云酒窖列表
@@ -70,10 +75,16 @@ public class WineCellarController extends BaseController {
             throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
         }
         WineCellar wineCellar = wineCellarServiceImpl.getById(id);
+        WinerySight winerySight = winerySightServiceImpl.getById(wineCellar.getWinerySightId());
+        int statusLike = winerySightServiceImpl.findScenicLike(winerySight.getId(), member.getId());
+        int statusSign = winerySightServiceImpl.findScenicSign(winerySight.getId(), member.getId());
         List<WineCellarActivity> activityList = wineCellarActivityServiceImpl.getListByWinerySightId(id);
 
         Map<String,Object> returnMap = new HashMap<>();
         returnMap.put("wineCellar",wineCellar);
+        returnMap.put("statusLike",wineCellar);
+        returnMap.put("statusSign",wineCellar);
+        returnMap.put("winerySight",winerySight);
         returnMap.put("activityList",activityList);
 
         return getResult(returnMap);

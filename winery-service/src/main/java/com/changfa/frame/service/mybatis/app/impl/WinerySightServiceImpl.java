@@ -269,17 +269,17 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
      */
     @Override
     public Map<String, Object> findSightImageText(Long id) {
-        /*Map<String, Object>  map = new HashMap<>();
-        List<WinerySightDetail> winerySightDetailList = winerySightDetailMapper.findSightImageTextByWinerySightId(id);
-        for (WinerySightDetail winerySightDetail:winerySightDetailList) {
-            winerySightDetail.setProdSku(prodSkuMapper.getProdNameBySkuIdLike(winerySightDetail.getProdSkuId()));
-        }
-        List<String> scenicImg = winerySightImgMapper.findScenicImgById(id); // 查询景点图片
-        if(winerySightDetailList.size() > 0 && winerySightDetailList != null && scenicImg.size() > 0 && scenicImg != null){
-            map.put("winerySightDetail",winerySightDetailList);
-            map.put("scenicImg",scenicImg);
-        }
-        return map;*/
+//        Map<String, Object>  map = new HashMap<>();
+//        List<WinerySightDetail> winerySightDetailList = winerySightDetailMapper.findSightImageTextByWinerySightId(id);
+//        for (WinerySightDetail winerySightDetail:winerySightDetailList) {
+//            winerySightDetail.setProdSku(prodSkuMapper.getProdNameBySkuIdLike(winerySightDetail.getProdSkuId()));
+//        }
+//        List<String> scenicImg = winerySightImgMapper.findScenicImgById(id); // 查询景点图片
+//        if(winerySightDetailList.size() > 0 && winerySightDetailList != null && scenicImg.size() > 0 && scenicImg != null){
+//            map.put("winerySightDetail",winerySightDetailList);
+//            map.put("scenicImg",scenicImg);
+//        }
+//        return map;
         return null;
     }
 
@@ -327,6 +327,23 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     public int findScenicLike(Long id, Long userid) {
         WinerySightMbrLike winerySightMbrLike = winerySightMbrLikeMapper.getByWinerySightId(id, userid);
         if(winerySightMbrLike!= null &&winerySightMbrLike.getLikeStatus() == 1){
+            return 1;
+        }
+        return 0;
+    }
+    /**
+     * 查询是否签到
+     * @param id 景点id
+     * @param userid 用户id
+     * @return int
+     */
+    @Override
+    public int findScenicSign(Long id, Long userid) {
+        MbrSightSign mbrSightSign = new MbrSightSign();
+        mbrSightSign.setWinerySightId(id);
+        mbrSightSign.setMbrId(userid);
+        List<MbrSightSign> mbrSightSigns = mbrSightSignMapper.selectList(mbrSightSign);
+        if(mbrSightSigns!= null && mbrSightSigns.size()==1){
             return 1;
         }
         return 0;
