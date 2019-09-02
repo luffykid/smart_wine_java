@@ -310,6 +310,9 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
 
     private void addAddressInfo(MbrProdOrder order, MbrAddress address) {
 
+        log.info(order.toString());
+        log.info(address.toString());
+
         order.setShippingDetailAddr(address.getDetailAddress());
         order.setShippingProvinceId(address.getProvince());
         order.setShippingCityId(address.getCity());

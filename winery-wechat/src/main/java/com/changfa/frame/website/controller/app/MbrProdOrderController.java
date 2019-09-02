@@ -105,7 +105,7 @@ public class MbrProdOrderController extends BaseController {
                                                                             "酒庄酒订单",
                                                                             request);*/
 
-        return getResult(new HashMap<>());
+        return getResult(order);
     }
 
     private void checkMemberIntegralMoreThanTheOrderShouldBePay(Member member, MbrProdOrder order) {
@@ -118,8 +118,8 @@ public class MbrProdOrderController extends BaseController {
     private void checkValidate(Integer payMode) {
 
         if (payMode != MbrProdOrder.PAY_MODE_ENUM.WX_MINI_INTEGRAL_MODE.getValue()
-            || payMode != MbrProdOrder.PAY_MODE_ENUM.INTEGRAL_MODE.getValue()
-            || payMode != MbrProdOrder.PAY_MODE_ENUM.WX_MINI_MODE.getValue())
+            && payMode != MbrProdOrder.PAY_MODE_ENUM.INTEGRAL_MODE.getValue()
+            && payMode != MbrProdOrder.PAY_MODE_ENUM.WX_MINI_MODE.getValue())
             throw new IllegalArgumentException("the pay mode don't support!");
 
     }
