@@ -185,6 +185,25 @@ public class Prod extends BaseEntity {
      */
     private List<ProdDetail> prodDetails;
 
+
+
+    /**
+     * 产品详情图品
+     */
+    private List<ProdImg> prodImgs;
+
+
+
+    public List<ProdImg> getProdImgs() {
+        return prodImgs;
+    }
+
+    public void setProdImgs(List<ProdImg> prodImgs) {
+        this.prodImgs = prodImgs;
+    }
+
+
+
     public List<ProdDetail> getProdDetails() {
         return prodDetails;
     }

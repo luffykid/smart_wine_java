@@ -2,6 +2,7 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
+import com.changfa.frame.core.util.DateUtil;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.ProdService;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +50,9 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     private ProdSkuMbrPriceMapper prodSkuMbrPriceMapper;
 
     @Autowired
+    private ProdImgMapper prodImgMapper;
+
+    @Autowired
     private MbrLevelMapper mbrLevelMapper;
 
     /**
@@ -61,6 +66,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
+        prod.setProdStatus(Prod.PROD_STATUS_ENUM.QY.getValue());
         return new PageInfo(prodMapper.selectListLikeName(prod));
     }
 
@@ -89,6 +95,18 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
                 prodDetail.setCreateDate(new Date());
                 prodDetail.setModifyDate(new Date());
                 prodDetailMapper.save(prodDetail);
+            }
+        }
+        if(prod.getProdImgs()!=null && prod.getProdImgs().size()>0){
+            for (ProdImg prodImg :prod.getProdImgs()){
+                prodImg.setProdId(prod.getId());
+                prodImg.setId(IDUtil.getId());
+                try {
+                    prodImg.setCreateDate(DateUtil.getCurDate());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                prodImgMapper.save(prodImg);
             }
         }
 
@@ -189,7 +207,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     public boolean deleteById(Long id) {
         Long status = 0L;
         List<ProdSku> prodSkuList = prodSkuMapper.selectProdSkuStatusByProdId(id, status);
-        if (prodSkuList != null && prodSkuList.size() > 0) {
+        if (prodSkuList == null) {
             return false;
         }
         return (prodMapper.deleteByid(id) > 0 ? true : false);

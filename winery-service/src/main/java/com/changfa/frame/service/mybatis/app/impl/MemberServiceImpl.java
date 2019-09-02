@@ -1,8 +1,10 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.util.DateUtil;
 import com.changfa.frame.mapper.app.MbrIntegralRecordMapper;
 import com.changfa.frame.mapper.app.MbrWechatMapper;
 import com.changfa.frame.mapper.app.MemberMapper;
+import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.model.app.MbrIntegralRecord;
 import com.changfa.frame.model.app.MbrWechat;
 import com.changfa.frame.model.app.Member;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -129,5 +132,16 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     @Override
     public Member getByOpenId(String openId) {
         return memberMapper.selectByOpenId(openId);
+    }
+
+    @Override
+    public void saveMember(Admin admin,Member member) {
+        member.setWineryId(admin.getWineryId());
+        try {
+            member.setCreateDate(DateUtil.getCurDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        memberMapper.save(member);
     }
 }

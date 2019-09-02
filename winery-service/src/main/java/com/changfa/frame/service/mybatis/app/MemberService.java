@@ -1,5 +1,6 @@
 package com.changfa.frame.service.mybatis.app;
 
+import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
@@ -68,6 +69,13 @@ public interface MemberService extends BaseService<Member, Long> {
      * @param openId 会员openId
      */
     Member getByOpenId(String openId);
+
+    /**
+     * 新增member
+     * @param admin
+     * @param member
+     */
+    void saveMember(Admin admin,Member member);
 
 }
 
