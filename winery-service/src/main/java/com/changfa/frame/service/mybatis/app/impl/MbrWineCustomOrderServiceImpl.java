@@ -1,22 +1,21 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
-import com.changfa.frame.core.util.OrderNoUtil;
 import com.changfa.frame.mapper.app.*;
-import com.changfa.frame.model.app.*;
+import com.changfa.frame.model.app.MbrAddress;
+import com.changfa.frame.model.app.MbrWineCustomDetail;
+import com.changfa.frame.model.app.MbrWineCustomOrder;
+import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrWineCustomOrderService;
-import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Service("mbrWineCustomOrderServiceImpl")
-public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustomOrder, Long>
-        implements MbrWineCustomOrderService {
+public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustomOrder, Long> implements MbrWineCustomOrderService {
 
     @Autowired
     private WineCustomMapper wineCustomMapper;
@@ -42,39 +41,17 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
     @Autowired
     private MemberMapper memberMapper;
 
-
-    @Transactional(rollbackFor = Exception.class)
+    /**
+     * 保存会员定制信息
+     *
+     * @param mbrWineCustomDetails 会员白酒定制详情集合
+     * @param member               会员
+     * @return
+     */
     @Override
-    public MbrWineCustomOrder placeAnOrder(Long wineryId,
-                                           Long mbrId,
-                                           Long wineCustomId,
-                                           Integer quantity,
-                                           List<MbrWineCustomDetail> details) {
+    public boolean saveMbrCustomInfo(List<MbrWineCustomDetail> mbrWineCustomDetails, Member member) {
 
-        checkValidate(wineryId, mbrId, wineCustomId, quantity, details);
-
-        WineCustom wineCustom = wineCustomMapper.getById(wineCustomId);
-
-        MbrWineCustom mbrWineCustom = constructMbrWineCustom(wineryId, wineCustom, quantity, mbrId);
-
-
-        // 创建定制酒订单
-        MbrWineCustomOrder order = MbrWineCustomOrder.createOrder(wineryId,
-                                                                  mbrWineCustom,
-                                                                  IDUtil.getId(),
-                                                                  OrderNoUtil.get());
-
-        addMbrWineCustomOrderRecordToRepository(order);
-
-        mbrWineCustom.setMbrWineCustomOrderId(order.getId());
-
-
-        //将details中的每个MbrWineCustomDetail对象填充完全
-        completeMbrWineCustomDetails(details, mbrWineCustom.getId(), mbrWineCustom.getMbrId());
-
-        saveToRepository(order, mbrWineCustom, details);
-
-        return order;
+        return false;
     }
 
     @Transactional
@@ -95,22 +72,7 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
 
     }
 
-    private void addMbrWineCustomOrderRecordToRepository(MbrWineCustomOrder order) {
-        mbrWineCustomOrderMapper.update(order);
-
-        MbrWineCustomOrderRecord record = new MbrWineCustomOrderRecord();
-        record.setId(IDUtil.getId());
-        record.setMbrWineCustomOrderId(order.getId());
-        record.setOrderStatus(Long.valueOf(order.getOrderStatus()));
-        record.setStatusDate(new Date());
-        record.setCreateDate(new Date());
-        record.setModifyDate(new Date());
-
-        mbrWineCustomOrderRecordMapper.save(record);
-    }
-
     private void addShipInfoForTheOrder(MbrWineCustomOrder order, MbrAddress address) {
-
         order.setShippingDetailAddr(address.getDetailAddress());
         order.setShippingProvinceId(address.getProvince());
         order.setShippingCityId(address.getCity());
@@ -139,88 +101,4 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
             throw new IllegalStateException("the operation don't allowed for the current mbrWineCustomOrder state!");
 
     }
-
-    private void saveToRepository(MbrWineCustomOrder order,
-                                  MbrWineCustom mbrWineCustom,
-                                  List<MbrWineCustomDetail> details) {
-
-        mbrWineCustomOrderMapper.save(order);
-
-        mbrWineCustomMapper.save(mbrWineCustom);
-
-        details.stream().forEach(mbrWineCustomDetailMapper::save);
-
-    }
-
-    private MbrWineCustom constructMbrWineCustom(Long wineryId, WineCustom wineCustom, Integer quantity, Long mbrId) {
-
-        MbrWineCustom mbrWineCustom = new MbrWineCustom();
-        mbrWineCustom.setCreateDate(new Date());
-        mbrWineCustom.setModifyDate(new Date());
-        mbrWineCustom.setWineryId(wineryId);
-        mbrWineCustom.setCustomName(wineCustom.getCustomName());
-        mbrWineCustom.setWineryId(wineCustom.getWineryId());
-        mbrWineCustom.setSkuName(wineCustom.getSkuName());
-        mbrWineCustom.setCustomPrice(wineCustom.getCustomPrice());
-        mbrWineCustom.setCustomCnt(quantity);
-        mbrWineCustom.setCustomTotalAmt(wineCustom.getCustomPrice()
-                .multiply(BigDecimal.valueOf(quantity)));
-        mbrWineCustom.setMbrId(mbrId);
-        mbrWineCustom.setWineCustomId(wineCustom.getId());
-        mbrWineCustom.setId(IDUtil.getId());
-
-        return mbrWineCustom;
-
-    }
-
-    private void checkValidate(Long wineryId, Long mbrId, Long wineCustomId, Integer quantity, List<MbrWineCustomDetail> details) {
-
-        if (wineryId == null)
-            throw new NullPointerException("wineryId must not be null!");
-
-        if (mbrId == null)
-            throw new NullPointerException("mbrId must not be null!");
-
-        if (wineCustomId == null)
-            throw new NullPointerException("wineCustomId must not be null!");
-
-        if (quantity == null)
-            throw new NullPointerException("quantity must not be null");
-
-        if (quantity <= 0)
-            throw new NullPointerException("quantity must more than 0!");
-
-        if (details == null)
-            throw new NullPointerException("details must not be null!");
-
-        if (details.size() == 0)
-            throw new IllegalArgumentException("quantity of details must be more than 0");
-
-    }
-
-    private void completeMbrWineCustomDetails(List<MbrWineCustomDetail> details,
-                                              Long mbrWineCustomId,
-                                              Long mbrId) {
-
-        details.stream().forEach(detail -> {
-
-            WineCustomElementContent wineCustomElementContent =
-                    wineCustomElementContentMapper.getById(detail.getWineCustomElementContentId());
-
-            detail.setId(IDUtil.getId());
-            detail.setWineCustomId(wineCustomElementContent.getWineCustomId());
-            detail.setWineCustomElementId(wineCustomElementContent.getWineCustomElementId());
-            detail.setMbrWineCustomId(mbrWineCustomId);
-            detail.setMbrId(mbrId);
-            detail.setBgImg(wineCustomElementContent.getBgImg());
-            detail.setMaskImg(wineCustomElementContent.getMaskImg());
-            detail.setBottomImg(wineCustomElementContent.getBottomImg());
-            detail.setCreateDate(new Date());
-            detail.setModifyDate(new Date());
-
-        });
-
-    }
-
-
 }
