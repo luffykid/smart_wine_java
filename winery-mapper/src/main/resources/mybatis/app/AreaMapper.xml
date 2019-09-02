@@ -113,5 +113,11 @@
             </if>
         </where>
     </select>
+    <select id="getAreaByCode"  parameterType="java.lang.Long" resultMap="areaMap">
+        select
+        <include refid="table_column" />
+        from c_area area
+        where code = #{code}
+    </select>
 
 </mapper>

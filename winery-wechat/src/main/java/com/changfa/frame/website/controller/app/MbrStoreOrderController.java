@@ -79,8 +79,8 @@ public class MbrStoreOrderController extends BaseController {
             @ApiImplicitParam(name = "skuId", value = "商品skuId", dataType = "Long"),
             @ApiImplicitParam(name = "prodTotalCnt", value = "商品数量", dataType = "Integer")
     })
-    @RequestMapping(value = "/buildStroneOrder", method = RequestMethod.POST)
-    public Map<String, Object> buildStroneOrder(Long activityId, Long skuId,
+    @RequestMapping(value = "/buildStoreOrder", method = RequestMethod.POST)
+    public Map<String, Object> buildStoreOrder(Long activityId, Long skuId,
                                           @RequestParam(required = false,defaultValue ="1") Integer prodTotalCnt,
                                           HttpServletRequest request) {
         if(activityId ==null || skuId==null ){

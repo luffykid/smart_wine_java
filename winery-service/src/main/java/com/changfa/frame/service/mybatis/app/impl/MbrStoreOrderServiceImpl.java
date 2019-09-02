@@ -27,11 +27,15 @@ public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Lon
 
     @Autowired
     private MbrStoreOrderRecordMapper mbrStoreOrderRecordMapper;
+
     @Autowired
     private ProdSkuMapper prodSkuMapper;
 
     @Autowired
     private ProdMapper prodMapper;
+
+    @Autowired
+    private ProdSkuMbrPriceMapper prodSkuMbrPriceMapper;
 
     @Autowired
     private WineCellarActivityMapper wineCellarActivityMapper;
@@ -65,6 +69,16 @@ public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Lon
     public Map<String, Object> buildStoreOrder(Long activityId, Long skuId,Integer prodTotalCnt,Member member,HttpServletRequest request) {
 
         ProdSku prodSku = prodSkuMapper.getById(skuId);
+
+        ProdSkuMbrPrice entity = new ProdSkuMbrPrice();
+        entity.setProdSkuId(skuId);
+        List<ProdSkuMbrPrice> prodSkuMbrPriceList = prodSkuMbrPriceMapper.selectList(entity);
+
+        for(ProdSkuMbrPrice prodSkuMbrPrice:prodSkuMbrPriceList){
+            if(prodSkuMbrPrice.getMbrLevelId()== member.getMbrLevelId()){
+                prodSku.setMbrPrice(prodSkuMbrPrice.getMbrLevelPrice());
+            }
+        }
         WineCellarActivity wineCellarActivity = wineCellarActivityMapper.getById(activityId);
         Long wineryId =wineCellarActivity.getWineryId();
         String orderNo = OrderNoUtil.get();

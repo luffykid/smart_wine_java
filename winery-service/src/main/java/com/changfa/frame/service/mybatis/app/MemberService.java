@@ -4,11 +4,7 @@ import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -55,13 +51,13 @@ public interface MemberService extends BaseService<Member, Long> {
      * 修改会员信息
      *
      * @param mbrId
-     * @param userIcon 头像
-     * @param nickName 名称
-     * @param birthday 生日
-     * @param gender      性别
+     * @param mbrName  会员名称
+     * @param phone    手机
+     * @param gender   性别
+     * @param age      年龄
      * @param phone    电话
      */
-    void updateMember(Long mbrId, String userIcon, String nickName, String birthday, Integer gender, String phone);
+    void updateMember(Long mbrId, String mbrName, String phone, Integer gender,Integer age);
 
     /**
      * 根据openId查询会员

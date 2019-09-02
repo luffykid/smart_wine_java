@@ -5,7 +5,6 @@ import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
-import java.util.Map;
 
 public interface WineCellarActivityService extends BaseService<WineCellarActivity, Long> {
 
@@ -14,6 +13,13 @@ public interface WineCellarActivityService extends BaseService<WineCellarActivit
      * @return
      */
     PageInfo<WineCellarActivity> getSecList(Long mbrId, PageInfo pageInfo);
+
+
+    /**
+     * 获取关联景点的酒庄活动列表
+     * @return
+     */
+    List<WineCellarActivity> getListByWinerySightId(Long winerySightId);
 
     /**
      * 获取酒庄活动详细

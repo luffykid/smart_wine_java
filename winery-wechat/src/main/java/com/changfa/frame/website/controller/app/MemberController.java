@@ -148,18 +148,17 @@ public class MemberController extends BaseController {
      */
     @ApiOperation(value = "修改个人信息", notes = "修改个人信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userIcon", value = "头像", dataType = "String"),
-            @ApiImplicitParam(name = "nickName", value = "名称", dataType = "String"),
-            @ApiImplicitParam(name = "birthday", value = "出生日期", dataType = "String"),
-            @ApiImplicitParam(name = "sex", value = "性别", dataType = "Integer"),
+
+            @ApiImplicitParam(name = "mbrName", value = "会员名称", dataType = "String"),
+            @ApiImplicitParam(name = "gender", value = "性别", dataType = "Integer"),
             @ApiImplicitParam(name = "phone", value = "联系电话", dataType = "String"),
-    }
-    )
+            @ApiImplicitParam(name = "age", value = "年龄", dataType = "Integer")
+    })
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Map<String, Object> update(HttpServletRequest request, String userIcon, String nickName, String birthday, Integer gender, String phone) {
+    public Map<String, Object> update(HttpServletRequest request, String mbrName, String phone, Integer gender,Integer age) {
         Member member = getCurMember(request);
         try {
-            memberService.updateMember(member.getId(), userIcon, nickName, birthday, gender, phone);
+            memberService.updateMember(member.getId(), mbrName, phone, gender, age);
         } catch (Exception e) {
             log.info("此处有错误:{}", e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);

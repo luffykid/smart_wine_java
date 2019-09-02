@@ -178,4 +178,12 @@
         left join b_wine_cellar_activity_like l on a.id = l.winery_id and l.mbr_id=#{mbrId}
         where a.act_status = 2
     </select>
+
+    <select id="selectListByWinerySightId" parameterType="Long" resultMap="wineCellarActivityMap">
+        select a.* from b_wine_cellar_activity a
+        left join b_winery_sight_detail d on a.id = d.wine_cellar_activity_id
+        where a.act_status = 2 and d.winery_sight_id = #{winerySightId}
+        order by a.create_date desc
+
+    </select>
 </mapper>

@@ -29,6 +29,11 @@ public class WinerySightDetail extends BaseEntity {
     private Long wineryActivityId;
 
     /**
+     * 云酒窖活动id
+     */
+    private Long wineCellarActivityId;
+
+    /**
      * 商品SPU
      */
     private Long prodId;
@@ -288,5 +293,17 @@ public class WinerySightDetail extends BaseEntity {
      */
     public void setProdSku(ProdSku prodSku) {
         this.prodSku = prodSku;
+    }
+    /**
+     * 获取云酒窖活动id
+     */
+    public Long getWineCellarActivityId() {
+        return wineCellarActivityId;
+    }
+    /**
+     * 设置云酒窖活动id
+     */
+    public void setWineCellarActivityId(Long wineCellarActivityId) {
+        this.wineCellarActivityId = wineCellarActivityId;
     }
 }

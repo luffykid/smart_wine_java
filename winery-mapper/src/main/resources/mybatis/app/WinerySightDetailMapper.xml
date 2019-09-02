@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="winery_sight_id" property="winerySightId" jdbcType="BIGINT" />
         <result column="winery_activity_id" property="wineryActivityId" jdbcType="BIGINT" />
+        <result column="wine_cellar_activit_id" property="wineCellarActivityId" jdbcType="BIGINT" />
         <result column="prod_id" property="prodId" jdbcType="BIGINT" />
         <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
         <result column="winery_voucher_id" property="wineryVoucherId" jdbcType="BIGINT" />

@@ -90,37 +90,27 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
         return memberMapper.selectSubStatis(mbrId);
     }
 
+
     /**
      * 修改会员信息
      *
      * @param mbrId
-     * @param userIcon 头像
-     * @param nickName 名称
-     * @param birthday 生日
-     * @param sex      性别
+     * @param mbrName  会员名称
+     * @param phone    手机
+     * @param gender   性别
+     * @param age      年龄
      * @param phone    电话
      */
     @Transactional
     @Override
-    public void updateMember(Long mbrId, String userIcon, String nickName, String birthday, Integer gender, String phone) {
+    public void updateMember(Long mbrId, String mbrName, String phone, Integer gender,Integer age) {
         Member member = memberMapper.getById(mbrId);
-        member.setNickName(nickName);
+        member.setMbrName(mbrName);
+        member.setGender(gender);
         member.setPhone(phone);
+        member.setAge(age);
         memberMapper.update(member);
-        List<MbrWechat> mbrWechats = mbrWechatMapper.selectListByMbrIdAndWineryId(member.getId());
-        if (mbrWechats.size() == 0) {
-            MbrWechat mbrWechat = new MbrWechat();
-            mbrWechat.setNickName(nickName);
-            mbrWechat.setBirthday(new Date(birthday));
-            mbrWechat.setGender(gender);
-            mbrWechatMapper.save(mbrWechat);
-        } else {
-            MbrWechat mbrWechat = mbrWechats.get(0);
-            mbrWechat.setNickName(nickName);
-            mbrWechat.setBirthday(new Date(birthday));
-            mbrWechat.setGender(gender);
-            mbrWechatMapper.update(mbrWechat);
-        }
+
     }
 
     /**

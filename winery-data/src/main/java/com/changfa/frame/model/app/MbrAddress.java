@@ -68,6 +68,72 @@ public class MbrAddress extends BaseEntity {
      */
     private Boolean isDefault;
 
+    /************************************扩展字段***********************/
+    /**
+     * 省份名称
+     */
+    private String provinceName;
+
+    /**
+     * 市名称
+     */
+    private String cityName;
+
+    /**
+     * 县名称
+     */
+
+    private String countryName;
+
+    /**
+     * 获取省份名称
+     */
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+    /**
+     * 设置省份名称
+     */
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+
+    /**
+     * 获取市名称
+     */
+
+    public String getCityName() {
+        return cityName;
+    }
+    /**
+     * 设置市名称
+     */
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+
+    /**
+     * 获取县名称
+     */
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    /**
+     * 设置县名称
+     */
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+
+
 
     /**
      * 获取酒庄ID
