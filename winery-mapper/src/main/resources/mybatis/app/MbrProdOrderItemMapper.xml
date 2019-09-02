@@ -8,10 +8,10 @@
         <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
         <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
         <result column="prod_sku_cnt" property="prodSkuCnt" jdbcType="INTEGER" />
-        <result column="sku_name" property="skuName" jdbcType="BIGINT" />
+        <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
         <result column="sku_market_price" property="skuMarketPrice" jdbcType="DECIMAL" />
         <result column="sku_sell_price" property="skuSellPrice" jdbcType="DECIMAL" />
-        <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="BIGINT" />
+        <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="DECIMAL" />
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
         <result column="integral_cnt" property="integralCnt" jdbcType="DECIMAL" />
