@@ -22,6 +22,11 @@
         <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <collection property="mbrProdOrderItems" ofType="com.changfa.frame.model.app.MbrProdOrderItem"
+                    javaType="java.util.ArrayList"
+                    select="com.changfa.frame.mapper.app.MbrProdOrderItemMapper.getByMbrProdOrderId"
+                    column="mbr_prod_order_id">
+        </collection>
     </resultMap>
 
     <sql id="table_column" >

@@ -10,5 +10,12 @@ package com.changfa.frame.mapper.app;
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.MbrProdOrderRecord;
 
+import java.util.List;
+
 public interface MbrProdOrderRecordMapper extends BaseMapper<MbrProdOrderRecord, Long> {
+
+    /**
+     * 通过产品订单id获取订单记录
+     */
+    List<MbrProdOrderRecord> getByOrderId(Long orderId);
 }

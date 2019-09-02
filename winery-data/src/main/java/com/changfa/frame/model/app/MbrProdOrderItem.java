@@ -248,4 +248,22 @@ public class MbrProdOrderItem extends BaseEntity {
     public void setIntegralCnt(BigDecimal integralCnt) {
         this.integralCnt = integralCnt;
     }
+
+    @Override
+    public String toString() {
+        return "MbrProdOrderItem{" +
+                "mbrProdOrderId=" + mbrProdOrderId +
+                ", wineryId=" + wineryId +
+                ", mbrId=" + mbrId +
+                ", prodSkuId=" + prodSkuId +
+                ", prodSkuCnt=" + prodSkuCnt +
+                ", skuName='" + skuName + '\'' +
+                ", skuMarketPrice=" + skuMarketPrice +
+                ", skuSellPrice=" + skuSellPrice +
+                ", skuMbrPrice=" + skuMbrPrice +
+                ", isIntegral=" + isIntegral +
+                ", integralAmt=" + integralAmt +
+                ", integralCnt=" + integralCnt +
+                '}';
+    }
 }

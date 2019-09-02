@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("mbrProdOrderServiceImpl")
 public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long> implements MbrProdOrderService {
@@ -246,6 +247,7 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         memberMapper.update(parenMbr);
     }
 
+    @Transactional
     @Override
     public MbrProdOrder placeAnOrder(Long wineryId, Long mbrId, List<MbrProdOrderItem> items) {
 
@@ -258,20 +260,57 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         order.setOrderNo(OrderNoUtil.get());
         order.setCreateDate(new Date());
         order.setModifyDate(new Date());
+        order.setOrderStatus(MbrProdOrder.ORDER_STATUS_ENUM.PAY_NOT.getValue());
 
         completeMbrProdOrderItems(order, items);
 
-        return null;
+        order.setProdTotalCnt(countProd(items));
+        order.setPayTotalAmt(countPayAmt(items));
+
+        this.save(order);
+
+        items.stream().forEach(mbrProdOrderItemMapper::save);
+        addMbrProdOrderRecordToRepository(order);
+
+        return order;
+    }
+
+    private BigDecimal countPayAmt(List<MbrProdOrderItem> items) {
+
+        return items.stream()
+                        .map(item
+                                    ->
+                                item.getSkuSellPrice().multiply(BigDecimal.valueOf(item.getProdSkuCnt())))
+                             .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+
+    }
+
+    private Integer countProd(List<MbrProdOrderItem> items) {
+
+        return items.stream().collect(Collectors.reducing(0,
+                                                    MbrProdOrderItem::getProdSkuCnt,
+                                                    Integer::sum));
+
     }
 
     private void completeMbrProdOrderItems(MbrProdOrder order, List<MbrProdOrderItem> items) {
 
         items.stream().forEach(mbrProdOrderItem -> {
 
-            ProdSku sku = prodSkuMapper.getById(mbrProdOrderItem.getId());
+            ProdSku sku = prodSkuMapper.getById(mbrProdOrderItem.getProdSkuId());
+            mbrProdOrderItem.setId(IDUtil.getId());
             mbrProdOrderItem.setMbrProdOrderId(order.getId());
             mbrProdOrderItem.setWineryId(order.getWineryId());
             mbrProdOrderItem.setMbrId(order.getMbrId());
+            mbrProdOrderItem.setSkuName(sku.getSkuName());
+            mbrProdOrderItem.setSkuMarketPrice(sku.getSkuMarketPrice());
+            mbrProdOrderItem.setSkuSellPrice(sku.getSkuSellPrice());
+            mbrProdOrderItem.setSkuMbrPrice(sku.getMbrPrice());
+            mbrProdOrderItem.setIsIntegral(sku.getIsIntegral());
+            mbrProdOrderItem.setIntegralAmt(sku.getIntegralAmt());
+            mbrProdOrderItem.setIntegralCnt(sku.getIntegralCnt());
+            mbrProdOrderItem.setCreateDate(new Date());
+            mbrProdOrderItem.setModifyDate(new Date());
 
         });
 

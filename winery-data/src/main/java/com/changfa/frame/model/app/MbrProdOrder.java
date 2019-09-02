@@ -33,6 +33,11 @@ public class MbrProdOrder extends BaseEntity {
     private Long mbrId;
 
     /**
+     * 支付总金额
+     */
+    private BigDecimal payTotalAmt;
+
+    /**
      * 支付方式
      * 1：微信支付
      * 2：积分支付
@@ -316,6 +321,20 @@ public class MbrProdOrder extends BaseEntity {
      */
     public void setPayIntegralCnt(BigDecimal payIntegralCnt) {
         this.payIntegralCnt = payIntegralCnt;
+    }
+
+    /**
+     * 获取支付总金额
+     */
+    public BigDecimal getPayTotalAmt() {
+        return payTotalAmt;
+    }
+
+    /**
+     * 设置支付总金额
+     */
+    public void setPayTotalAmt(BigDecimal payTotalAmt) {
+        this.payTotalAmt = payTotalAmt;
     }
 
     /**

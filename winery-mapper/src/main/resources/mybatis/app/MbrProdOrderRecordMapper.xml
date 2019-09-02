@@ -22,6 +22,13 @@
         where mpor.id = #{id}
     </select>
 
+    <select id="getByOrderId" resultMap="mbrProdOrderRecordMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from m_mbr_prod_order_record mpor
+        where mpor.mbr_prod_order_id = #{orderId}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrderRecord" >
         insert into m_mbr_prod_order_record (id, mbr_prod_order_id, order_status, order_remark, create_date,
             modify_date)

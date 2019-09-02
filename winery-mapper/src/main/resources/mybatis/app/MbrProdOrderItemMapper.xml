@@ -34,6 +34,13 @@
         where mpoi.id = #{id}
     </select>
 
+    <select id="getByMbrProdOrderId" resultMap="mbrProdOrderItemMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from m_mbr_prod_order_item mpoi
+        where mpoi.mbr_prod_order_id = #{mbrProdOrderId}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrderItem" >
         insert into m_mbr_prod_order_item (id, mbr_prod_order_id, winery_id, mbr_id, prod_sku_id, prod_sku_cnt,
             sku_name, sku_market_price, sku_sell_price, sku_mbr_price, is_integral,
