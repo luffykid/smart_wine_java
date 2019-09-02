@@ -50,6 +50,8 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
      */
     @Override
     public boolean saveMbrCustomInfo(List<MbrWineCustomDetail> mbrWineCustomDetails, Member member) {
+        // 封装会员
+
 
         return false;
     }
