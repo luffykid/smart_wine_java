@@ -50,7 +50,6 @@ public class MbrProdOrderServiceImplTest {
                                                                 MbrProdOrderItem::getProdSkuCnt,
                                                                 Integer::sum));
 
-
         Assert.assertNotNull(order);
         Assert.assertNotNull(order.getId());
         Assert.assertNotNull(order.getOrderNo());
@@ -62,6 +61,7 @@ public class MbrProdOrderServiceImplTest {
         Assert.assertEquals("订单支付总额错误", payAmount, order.getPayTotalAmt());
         Assert.assertNotNull(order.getCreateDate());
         Assert.assertNotNull(order.getModifyDate());
+        Assert.assertEquals(fixtureItems.get(0).getIsIntegral(), order.getIsIntegral());
 
 
         MbrProdOrder orderSaved = mbrProdOrderService.getById(order.getId());
@@ -74,6 +74,72 @@ public class MbrProdOrderServiceImplTest {
         Assert.assertEquals("新增订单记录一条", 1, records.size());
 
 
+
+    }
+
+    @Test
+    public void testAddMbrAddressInfoAndChoosePayMode() {
+
+        Long mbrAddressId = Long.valueOf(447316456124710912L);
+        Integer payMode = MbrProdOrder.PAY_MODE_ENUM.WX_MINI_INTEGRAL_MODE.getValue();
+        Long orderId = Long.valueOf(1);
+
+        mbrProdOrderService.addMbrAddressInfoAndChoosePayMode(orderId, mbrAddressId, payMode);
+
+        MbrProdOrder order = mbrProdOrderService.getById(orderId);
+
+        Assert.assertNotNull(order);
+        Assert.assertEquals(payMode, order.getPayMode());
+        Assert.assertNotNull(order.getShippingDetailAddr());
+        Assert.assertNotNull(order.getShippingProvinceId());
+        Assert.assertNotNull(order.getShippingCityId());
+        Assert.assertNotNull(order.getShippingCountyId());
+        Assert.assertNotNull(order.getShippingPersonName());
+        Assert.assertNotNull(order.getShippingPersonPhone());
+
+    }
+
+    @Test
+    public void testPayWithWxMiniIntegralMode() {
+
+        Long mbrAddressId = Long.valueOf(447316456124710912L);
+        Integer payMode = MbrProdOrder.PAY_MODE_ENUM.WX_MINI_INTEGRAL_MODE.getValue();
+        Long orderId = Long.valueOf(448413559320215552L);
+
+        mbrProdOrderService.addMbrAddressInfoAndChoosePayMode(orderId, mbrAddressId, payMode);
+
+        MbrProdOrder order = mbrProdOrderService.getById(orderId);
+
+        List<MbrProdOrderItem> items = mbrProdOrderItemMapper.getByMbrProdOrderId(orderId);
+
+        BigDecimal totalIntegralCnt = items.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralCnt,
+                BigDecimal::add
+        ));
+
+        BigDecimal totalIntegralAmt = items.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralAmt,
+                BigDecimal::add));
+
+        Assert.assertEquals(totalIntegralAmt, order.getPayRealAmt());
+        Assert.assertEquals(totalIntegralCnt, order.getPayIntegralCnt());
+
+    }
+
+    @Test
+    public void testPayWithoutWxMiniIntegralMode() {
+
+        Long mbrAddressId = Long.valueOf(447316456124710912L);
+        Integer payMode = MbrProdOrder.PAY_MODE_ENUM.WX_MINI_MODE.getValue();
+        Long orderId = Long.valueOf(448379339088592896L);
+
+        mbrProdOrderService.addMbrAddressInfoAndChoosePayMode(orderId, mbrAddressId, payMode);
+
+        MbrProdOrder order = mbrProdOrderService.getById(orderId);
+
+
+        Assert.assertEquals(order.getPayTotalAmt(), order.getPayRealAmt());
+        Assert.assertEquals(BigDecimal.ZERO, order.getPayIntegralCnt());
 
     }
 

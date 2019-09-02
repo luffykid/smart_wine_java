@@ -240,6 +240,12 @@ public class MbrProdOrder extends BaseEntity {
     private List<MbrProdOrderItem> mbrProdOrderItems;
 
     /**
+     * 扩展字段
+     * 是否可以积分支付
+     */
+    private Boolean isIntegral;
+
+    /**
      * 获取酒庄ID
      */
     public Long getWineryId() {
@@ -497,5 +503,13 @@ public class MbrProdOrder extends BaseEntity {
      */
     public void setMbrProdOrderItems(List<MbrProdOrderItem> mbrProdOrderItems) {
         this.mbrProdOrderItems = mbrProdOrderItems;
+    }
+
+    public Boolean getIsIntegral() {
+        return isIntegral;
+    }
+
+    public void setIsIntegral(Boolean integral) {
+        isIntegral = integral;
     }
 }

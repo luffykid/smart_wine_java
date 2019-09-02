@@ -27,4 +27,11 @@ public interface MbrProdOrderService extends BaseService<MbrProdOrder, Long> {
      */
     MbrProdOrder placeAnOrder(Long wineryId, Long mbrId, List<MbrProdOrderItem> items);
 
+    /**
+     * 给订单添加会员地址和支付模式
+     * @param mbrProdOrderId 产品订单id
+     * @param mbrAddressId 会员地址id
+     * @param payMode 支付模式
+     */
+    MbrProdOrder addMbrAddressInfoAndChoosePayMode(Long mbrProdOrderId, Long mbrAddressId, Integer payMode);
 }

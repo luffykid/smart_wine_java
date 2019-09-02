@@ -46,6 +46,9 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
     @Autowired
     private ProdSkuMapper prodSkuMapper;
 
+    @Autowired
+    private MbrAddressMapper mbrAddressMapper;
+
     /**
      * 处理会员商品订单支付
      *
@@ -272,7 +275,65 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         items.stream().forEach(mbrProdOrderItemMapper::save);
         addMbrProdOrderRecordToRepository(order);
 
+        order.setIsIntegral(items.get(0).getIsIntegral());
+
         return order;
+    }
+
+    @Transactional
+    @Override
+    public MbrProdOrder addMbrAddressInfoAndChoosePayMode(Long mbrProdOrderId, Long mbrAddressId, Integer payMode) {
+
+        MbrProdOrder order = mbrProdOrderMapper.getById(mbrProdOrderId);
+        MbrAddress address = mbrAddressMapper.getById(mbrAddressId);
+
+        addAddressInfo(order, address);
+        order.setPayMode(payMode);
+
+        if (payMode == MbrProdOrder.PAY_MODE_ENUM.WX_MINI_INTEGRAL_MODE.getValue()) {
+
+            List<MbrProdOrderItem> items = mbrProdOrderItemMapper.getByMbrProdOrderId(order.getId());
+            order.setPayRealAmt(totalIntegralAmt(items));
+            order.setPayIntegralCnt(totalIntegralCnt(items));
+
+        } else {
+
+            order.setPayIntegralCnt(BigDecimal.ZERO);
+            order.setPayRealAmt(order.getPayTotalAmt());
+
+        }
+
+        this.update(order);
+
+        return order;
+    }
+
+    private void addAddressInfo(MbrProdOrder order, MbrAddress address) {
+
+        order.setShippingDetailAddr(address.getDetailAddress());
+        order.setShippingProvinceId(address.getProvince());
+        order.setShippingCityId(address.getCity());
+        order.setShippingCountyId(address.getCountry());
+        order.setShippingPersonName(address.getContact());
+        order.setShippingPersonPhone(address.getPhone());
+
+    }
+
+    private BigDecimal totalIntegralCnt(List<MbrProdOrderItem> items) {
+
+        return items.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralCnt,
+                BigDecimal::add
+        ));
+
+    }
+
+    private BigDecimal totalIntegralAmt(List<MbrProdOrderItem> items) {
+
+        return items.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralAmt,
+                BigDecimal::add));
+
     }
 
     private BigDecimal countPayAmt(List<MbrProdOrderItem> items) {
