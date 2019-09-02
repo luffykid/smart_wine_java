@@ -9,10 +9,11 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WinerySightMbrLike;
+import org.apache.ibatis.annotations.Param;
 
 public interface WinerySightMbrLikeMapper extends BaseMapper<WinerySightMbrLike, Long> {
 
-    WinerySightMbrLike getByWinerySightId(Long id, Long userid);
+    WinerySightMbrLike getByWinerySightId(@Param("id") Long id,@Param("userid")  Long userid);
 
     int updateLikeStatusById(Long id, int status);
 }

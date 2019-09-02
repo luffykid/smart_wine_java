@@ -10,7 +10,6 @@ package com.changfa.frame.mapper.app;
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.MbrProdOrder;
 import org.apache.ibatis.annotations.Param;
-import org.hibernate.validator.constraints.EAN;
 
 import java.util.List;
 
@@ -22,4 +21,6 @@ public interface MbrProdOrderMapper extends BaseMapper<MbrProdOrder, Long> {
      * @return
      */
     MbrProdOrder getByOrderNo(String orderNo);
+
+    List<MbrProdOrder> getListByStatus(@Param("mbrId") Long mbrId, @Param("status") Integer status);
 }

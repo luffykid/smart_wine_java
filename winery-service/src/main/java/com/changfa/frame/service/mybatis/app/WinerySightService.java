@@ -101,6 +101,14 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
     int findScenicLike(Long id, Long userid);
 
     /**
+     * 查询是否签到
+     * @param id 景点id
+     * @param userid 用户id
+     * @return
+     */
+    int findScenicSign(Long id, Long userid);
+
+    /**
      * 删除景点图文
      * @param id
      * @return

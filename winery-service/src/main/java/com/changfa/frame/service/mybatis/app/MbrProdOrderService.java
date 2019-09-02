@@ -2,9 +2,9 @@ package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.model.app.MbrProdOrder;
 import com.changfa.frame.service.mybatis.common.BaseService;
-import com.github.pagehelper.PageInfo;
 
 import java.util.Date;
+import java.util.List;
 
 public interface MbrProdOrderService extends BaseService<MbrProdOrder, Long> {
 
@@ -16,4 +16,13 @@ public interface MbrProdOrderService extends BaseService<MbrProdOrder, Long> {
      * @param payDate       成功支付时间
      */
     void handleNotifyOfProdOrder(String outTradeNo, String transactionId, Date payDate);
+
+    /**
+     * 根据状态获取订单列表
+     *
+     * @param mbrId    会员ID
+     * @param status   状态
+
+     */
+    List<MbrProdOrder> getListByStatus(Long mbrId, Integer status);
 }
