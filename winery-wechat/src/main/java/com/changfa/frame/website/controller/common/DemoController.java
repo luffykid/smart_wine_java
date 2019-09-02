@@ -2,6 +2,8 @@ package com.changfa.frame.website.controller.common;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
+import com.changfa.frame.core.prop.PropAttributes;
+import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.core.weChat.WeChatMiniUtil;
 import com.changfa.frame.core.weChat.WeChatPayUtil;
@@ -82,6 +84,11 @@ public class DemoController extends BaseController {
         // 测试Setting获取
         System.out.println(SettingUtils.get().getConsumeAmtOfIntegral());
 
+
+        // 属性取值
+        PropConfig.getProperty(PropAttributes.SYSTEM_SETTING_WINERY_ID);
+
+
         // 正常Service层调用，控制层不能直接调用DAO层
         systemConfigService.set(setting,1l);
 
@@ -146,13 +153,12 @@ public class DemoController extends BaseController {
     /**
      * 测试生成永久小程序二维码
      */
-    @ApiOperation(value = "测试微信支付统一下单", notes = "测试微信支付统一下单", httpMethod = "POST")
+    @ApiOperation(value = "测试生成永久小程序二维码", notes = "测试生成永久小程序二维码", httpMethod = "POST")
     @PostMapping(value = "/wxMiniQrCode")
     public Map<String, Object> wxMiniQrCode() {
         // 返回小程序二维码图片服务器地址【主要用于：景点签到，会员邀请】
-        String miniQrCodeImg = WeChatMiniUtil.getMiniQrCodeImg("123123", "page/qrcode", 300, null, false);
+        String miniQrCodeImg = WeChatMiniUtil.getMiniQrCodeImg("winerySightId=1", "pages/login/login", 600, null, false);
 
         return getResult(miniQrCodeImg);
     }
-
 }
