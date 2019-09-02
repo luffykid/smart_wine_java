@@ -206,7 +206,8 @@
     </select>
 
     <select id="selectSubList" parameterType="java.lang.Long"  resultType="java.util.Map">
-        select m.user_icon,m.nick_name,b.bill_amt,b.sign_type,b.create_date,l.descri from m_member m
+        select m.user_icon,m.mbr_name,b.bill_amt,b.sign_type,b.create_date,l.descri
+        from m_member m
         left join m_mbr_bill_record b on m.id = b.pk_id
         left join m_mbr_level l on m.mbr_level_id=l.id
         where m.market_pid =#{mbrId}

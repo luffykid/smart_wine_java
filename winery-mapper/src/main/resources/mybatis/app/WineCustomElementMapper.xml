@@ -13,21 +13,22 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, element_name, element_code, element_icon, element_status, sort, create_date, 
-        modify_date
+        wce.id as id, wce.element_name as element_name, wce.element_code as element_code,
+        wce.element_icon as element_icon, wce.element_status as element_status, wce.sort as sort,
+        wce.create_date as create_date, wce.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineCustomElementMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from b_wine_custom_element
-        where id = #{id}
+        from b_wine_custom_element wce
+        where wce.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomElement" >
-        insert into b_wine_custom_element (id, element_name, element_code, element_icon, element_status, 
+        insert into b_wine_custom_element (id, element_name, element_code, element_icon, element_status,
             sort, create_date, modify_date)
-        values (#{id}, #{elementName}, #{elementCode}, #{elementIcon}, #{elementStatus}, 
+        values (#{id}, #{elementName}, #{elementCode}, #{elementIcon}, #{elementStatus},
             #{sort}, #{createDate}, #{modifyDate})
     </insert>
 
@@ -65,7 +66,7 @@
     </delete>
 
     <select id="selectList" resultMap="wineCustomElementMap" >
-        select 
+        select
         <include refid="table_column" />
         from b_wine_custom_element wce
         <where >
@@ -106,13 +107,13 @@
     <select id="getwineCustomElementList" resultMap="wineCustomElementMap">
         select
         <include refid="table_column"/>
-        from b_wine_custom_element where element_status = 1
+        from b_wine_custom_element wce where wce.element_status = 1
     </select>
 
     <select id="getwineCustomElementListByid" resultMap="wineCustomElementMap">
         select
         <include refid="table_column"/>
-        from b_wine_custom_element where id in
+        from b_wine_custom_element wce where wce.id in
         <foreach item="id" index="index" collection="listId" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -124,7 +125,5 @@
         from b_wine_custom_element_content wcec join b_wine_custom_element wce
         on wcec.wine_custom_element_id = wce.id and wcec.wine_custom_id = #{id}
     </select>
-    
-
 
 </mapper>

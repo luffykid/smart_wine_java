@@ -127,6 +127,18 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         }
 
     }
+    //查询各种状态的订单列表
+    @Override
+    public List<MbrProdOrder> getListByStatus(Long mbrId, Integer status) {
+        List<MbrProdOrder> orderList = mbrProdOrderMapper.getListByStatus(mbrId, status);
+        for(MbrProdOrder order : orderList){
+            MbrProdOrderItem mbrProdOrderItem = new MbrProdOrderItem();
+            mbrProdOrderItem.setMbrProdOrderId(order.getId());
+            List<MbrProdOrderItem> mbrProdOrderItems = mbrProdOrderItemMapper.selectList(mbrProdOrderItem);
+            order.setMbrProdOrderItems(mbrProdOrderItems);
+        }
+        return orderList;
+    }
 
     /**
      * 依据当前会员ID处理积分

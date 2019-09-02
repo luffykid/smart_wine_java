@@ -198,4 +198,13 @@
         from m_mbr_prod_order mpo
         where mpo.order_no = #{orderNo}
     </select>
+
+
+    <select id="getListByStatus" resultMap="mbrProdOrderMap" >
+        select
+        <include refid="table_column" />
+        from m_mbr_prod_order mir
+        where mir.mbr_id = #{mbrId} and mir.order_status =#{status}
+        order by mir.create_time DESC
+    </select>
 </mapper>
