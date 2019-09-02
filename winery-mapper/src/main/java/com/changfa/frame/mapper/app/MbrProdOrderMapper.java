@@ -17,13 +17,6 @@ import java.util.List;
 public interface MbrProdOrderMapper extends BaseMapper<MbrProdOrder, Long> {
 
     /**
-     * 查询订单列表
-     * @param mbrId
-     * @return
-     */
-    List<MbrProdOrder> selectListByType(@Param("mbrId") Long mbrId,@Param("orderStatus") Integer orderStatus);
-
-    /**
      * 根据订单号查询订单
      * @param orderNo 订单号
      * @return

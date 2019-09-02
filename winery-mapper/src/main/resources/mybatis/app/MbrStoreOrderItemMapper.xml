@@ -14,7 +14,7 @@
         <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="BIGINT" />
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
-        <result column="integral_cnt" property="integralCnt" jdbcType="BIGINT" />
+        <result column="integral_cnt" property="integralCnt" jdbcType="DECIMAL" />
         <result column="sku_weight" property="skuWeight" jdbcType="DECIMAL" />
         <result column="sku_capacity" property="skuCapacity" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />

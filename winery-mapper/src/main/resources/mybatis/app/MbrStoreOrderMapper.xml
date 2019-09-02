@@ -10,7 +10,7 @@
         <result column="prod_total_cnt" property="prodTotalCnt" jdbcType="INTEGER" />
         <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
         <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
-        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="BIGINT" />
+        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="DECIMAL" />
         <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
         <result column="total_org_weight" property="totalOrgWeight" jdbcType="DECIMAL" />
         <result column="total_org_capacity" property="totalOrgCapacity" jdbcType="DECIMAL" />
@@ -19,6 +19,7 @@
         <result column="total_remain_weight" property="totalRemainWeight" jdbcType="DECIMAL" />
         <result column="total_remain_capacity" property="totalRemainCapacity" jdbcType="DECIMAL" />
         <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="store_position" property="storePosition" jdbcType="VARCHAR" />
         <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="is_now" property="isNow" jdbcType="INTEGER" />
         <result column="take_date" property="takeDate" jdbcType="TIMESTAMP" />
@@ -27,6 +28,7 @@
 
         <!-- 扩展字段 -->
         <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+        <result column="list_img" property="prodImg" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="table_column" >
@@ -203,8 +205,10 @@
     </select>
 
     <select id="selectStoreList" parameterType="Long" resultMap="mbrStoreOrderMap">
-        select o.*,i.sku_name from m_mbr_store_order o
+        select o.*,i.sku_name,p.list_img from m_mbr_store_order o
         inner join m_mbr_store_order_item i on o.id = i.mbr_store_order_id
+        left join s_prod_sku s on i.prod_sku_id = s.id
+        left join s_prod p on p.id = s.prod_id
         where o.order_status = 4 and o.mbr_id=#{mbrId}
     </select>
 </mapper>

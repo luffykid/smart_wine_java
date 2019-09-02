@@ -48,7 +48,7 @@ public class MbrProdOrderItem extends BaseEntity {
     /**
      * 商品SKU 名称
      */
-    private Long skuName;
+    private String skuName;
 
     /**
      * sku市场价
@@ -60,7 +60,10 @@ public class MbrProdOrderItem extends BaseEntity {
      */
     private BigDecimal skuSellPrice;
 
-    private Long skuMbrPrice;
+    /**
+     * sku会员价
+     */
+    private BigDecimal skuMbrPrice;
 
     /**
      * 是否支持积分支付0：不支持积分支付1：支持积分支付
@@ -75,7 +78,7 @@ public class MbrProdOrderItem extends BaseEntity {
     /**
      * 积分数量
      */
-    private Long integralCnt;
+    private BigDecimal integralCnt;
 
 
     /**
@@ -151,14 +154,14 @@ public class MbrProdOrderItem extends BaseEntity {
     /**
      * 获取商品SKU 名称
      */
-    public Long getSkuName() {
+    public String getSkuName() {
         return skuName;
     }
 
     /**
      * 设置商品SKU 名称
      */
-    public void setSkuName(Long skuName) {
+    public void setSkuName(String skuName) {
         this.skuName = skuName;
     }
 
@@ -190,11 +193,17 @@ public class MbrProdOrderItem extends BaseEntity {
         this.skuSellPrice = skuSellPrice;
     }
 
-    public Long getSkuMbrPrice() {
+    /**
+     * sku会员价格
+     */
+    public BigDecimal getSkuMbrPrice() {
         return skuMbrPrice;
     }
 
-    public void setSkuMbrPrice(Long skuMbrPrice) {
+    /**
+     * sku会员价格
+     */
+    public void setSkuMbrPrice(BigDecimal skuMbrPrice) {
         this.skuMbrPrice = skuMbrPrice;
     }
 
@@ -229,14 +238,14 @@ public class MbrProdOrderItem extends BaseEntity {
     /**
      * 获取积分数量
      */
-    public Long getIntegralCnt() {
+    public BigDecimal getIntegralCnt() {
         return integralCnt;
     }
 
     /**
      * 设置积分数量
      */
-    public void setIntegralCnt(Long integralCnt) {
+    public void setIntegralCnt(BigDecimal integralCnt) {
         this.integralCnt = integralCnt;
     }
 }

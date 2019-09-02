@@ -7,7 +7,7 @@ import com.changfa.frame.core.weChat.res.PaymentResult;
 import com.changfa.frame.core.weChat.util.ResMessageUtil;
 import com.changfa.frame.core.weChat.util.WXPayXmlUtil;
 import com.changfa.frame.core.weChat.util.WeChatSignUtil;
-import com.changfa.frame.service.mybatis.app.ProdService;
+import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
 import com.changfa.frame.service.mybatis.app.WineCustomService;
 import com.changfa.frame.website.utils.ORDER_TYPE_ENUM;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -29,8 +29,8 @@ import java.util.TreeMap;
 @RequestMapping("/wxMini/anon/weChatNotify")
 public class WeChatNotifyController extends BaseController {
 
-    @Resource(name = "prodServiceImpl")
-    private ProdService prodService;
+    @Resource(name = "mbrProdOrderServiceImpl")
+    private MbrProdOrderService mbrProdOrderService;
 
     @Resource(name = "wineCustomServiceImpl")
     private WineCustomService wineCustomService;
@@ -78,7 +78,7 @@ public class WeChatNotifyController extends BaseController {
                     case PRODUCT_ORDER: {// 商品订单
                         String time_end = map.get("time_end");
                         Date payDate = DateUtil.convertStrToDate(time_end, "yyyyMMddHHmmss");
-                        prodService.handleNotifyOfProdOrder(map.get("out_trade_no"), map.get("transaction_id"), payDate);
+                        mbrProdOrderService.handleNotifyOfProdOrder(map.get("out_trade_no"), map.get("transaction_id"), payDate);
                         break;
                     }
                     case WINE_CUSTOM_ORDER: {// 定制酒订单
@@ -88,6 +88,9 @@ public class WeChatNotifyController extends BaseController {
                         break;
                     }
                     case MBR_RECHARGE_ORDER: {// 会员充值订单
+                        break;
+                    }
+                    case MBR_STORE_ORDER: {// 会员储酒订单
                         break;
                     }
                     default: {

@@ -95,4 +95,11 @@
         from s_prod_sku_mbr_price where prod_sku_id =#{id}
     </select>
 
+    <select id="getBySkuIdAndMbrLevelId" resultType="com.changfa.frame.model.app.ProdSkuMbrPrice"
+            resultMap="prodSkuMbrPriceMap">
+        select
+        <include refid="table_column"/>
+        from s_prod_sku_mbr_price where prod_sku_id =#{id} and mbr_level_id = #{mbrLevelId}
+    </select>
+
 </mapper>
