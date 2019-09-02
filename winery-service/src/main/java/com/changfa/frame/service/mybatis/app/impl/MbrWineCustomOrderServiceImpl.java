@@ -1,16 +1,15 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.mapper.app.*;
-import com.changfa.frame.model.app.MbrAddress;
-import com.changfa.frame.model.app.MbrWineCustomDetail;
-import com.changfa.frame.model.app.MbrWineCustomOrder;
-import com.changfa.frame.model.app.Member;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MbrWineCustomOrderService;
+import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +50,20 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
     @Override
     public boolean saveMbrCustomInfo(List<MbrWineCustomDetail> mbrWineCustomDetails, Member member) {
         // 封装会员
+        List<MbrWineCustomDetail> mbrCustomDetails = new ArrayList();
+        MbrWineCustom mbrWineCustom = new MbrWineCustom();
+        for (MbrWineCustomDetail detail : mbrWineCustomDetails) {
+            MbrWineCustomDetail mbrWineCustomDetail = new MbrWineCustomDetail();
+            mbrWineCustomDetail.setId(IDUtil.getId());
+            mbrWineCustomDetail.setWineCustomId(detail.getWineCustomId());
+            mbrWineCustomDetail.setWineCustomElementId(detail.getWineCustomElementId());
+            mbrWineCustomDetail.setMbrWineCustomId(null);
+            mbrWineCustomDetail.setMbrId(member.getId());
+
+//            mbrWineCustomDetail
+//            mbrWineCustomDetail
+//            mbrWineCustomDetail
+        }
 
 
         return false;
