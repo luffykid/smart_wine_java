@@ -9,7 +9,7 @@
         <result column="phone" property="phone" jdbcType="VARCHAR" />
         <result column="province" property="province" jdbcType="BIGINT" />
         <result column="city" property="city" jdbcType="BIGINT" />
-        <result column="country" property="country" jdbcType="BIGINT" />
+        <result column="county" property="county" jdbcType="BIGINT" />
         <result column="detail_address" property="detailAddress" jdbcType="VARCHAR" />
         <result column="full_address" property="fullAddress" jdbcType="VARCHAR" />
         <result column="is_default" property="isDefault" jdbcType="TINYINT" />
@@ -19,7 +19,7 @@
 
     <sql id="table_column" >
         ma.id as id, ma.winery_id as winery_id, ma.mbr_id as mbr_id, ma.contact as contact,
-        ma.phone as phone, ma.province as province, ma.city as city, ma.country as country,
+        ma.phone as phone, ma.province as province, ma.city as city, ma.county as county,
         ma.detail_address as detail_address, ma.full_address as full_address, ma.is_default as is_default,
         ma.create_date as create_date, ma.modify_date as modify_date
     </sql>
@@ -33,10 +33,10 @@
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrAddress" >
         insert into m_mbr_address (id, winery_id, mbr_id, contact, phone, province, city,
-            country, detail_address, full_address, is_default, create_date, modify_date
+            county, detail_address, full_address, is_default, create_date, modify_date
             )
         values (#{id}, #{wineryId}, #{mbrId}, #{contact}, #{phone}, #{province}, #{city},
-            #{country}, #{detailAddress}, #{fullAddress}, #{isDefault}, #{createDate}, #{modifyDate}
+            #{county}, #{detailAddress}, #{fullAddress}, #{isDefault}, #{createDate}, #{modifyDate}
             )
     </insert>
 
@@ -61,8 +61,8 @@
             <if test="city != null" >
                 city = #{city},
             </if>
-            <if test="country != null" >
-                country = #{country},
+            <if test="county != null" >
+                county = #{county},
             </if>
             <if test="detailAddress != null and detailAddress != ''" >
                 detail_address = #{detailAddress},
@@ -111,8 +111,8 @@
             <if test="city != null" >
                 and ma.city = #{city}
             </if>
-            <if test="country != null" >
-                and ma.country = #{country}
+            <if test="county != null" >
+                and ma.county = #{county}
             </if>
             <if test="detailAddress != null and detailAddress != ''" >
                 and ma.detail_address = #{detailAddress}

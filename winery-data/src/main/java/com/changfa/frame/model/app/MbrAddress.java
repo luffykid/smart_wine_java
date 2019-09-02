@@ -51,7 +51,7 @@ public class MbrAddress extends BaseEntity {
     /**
      * 县
      */
-    private Long country;
+    private Long county;
 
     /**
      * 详细地址
@@ -222,15 +222,15 @@ public class MbrAddress extends BaseEntity {
     /**
      * 获取县
      */
-    public Long getCountry() {
-        return country;
+    public Long getCounty() {
+        return county;
     }
 
     /**
      * 设置县
      */
-    public void setCountry(Long country) {
-        this.country = country;
+    public void setCounty(Long country) {
+        this.county = country;
     }
 
     /**

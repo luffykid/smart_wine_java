@@ -328,7 +328,7 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         order.setShippingDetailAddr(address.getDetailAddress());
         order.setShippingProvinceId(address.getProvince());
         order.setShippingCityId(address.getCity());
-        order.setShippingCountyId(address.getCountry());
+        order.setShippingCountyId(address.getCounty());
         order.setShippingPersonName(address.getContact());
         order.setShippingPersonPhone(address.getPhone());
 
