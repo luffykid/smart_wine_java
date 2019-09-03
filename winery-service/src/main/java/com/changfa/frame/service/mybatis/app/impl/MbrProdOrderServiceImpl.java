@@ -1,22 +1,16 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.util.OrderNoUtil;
-import com.changfa.frame.mapper.app.MbrProdOrderMapper;
-import com.changfa.frame.mapper.app.MbrProdOrderRecordMapper;
-import com.changfa.frame.mapper.app.ProdSkuMapper;
-import com.changfa.frame.model.app.*;
-import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
-import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.SettingUtils;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -136,6 +130,30 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
             MbrProdOrderItem mbrProdOrderItem = new MbrProdOrderItem();
             mbrProdOrderItem.setMbrProdOrderId(order.getId());
             List<MbrProdOrderItem> mbrProdOrderItems = mbrProdOrderItemMapper.selectList(mbrProdOrderItem);
+            for(MbrProdOrderItem mbrProdOrderItem1: mbrProdOrderItems){
+                ProdSku prodSku = prodSkuMapper.getById(mbrProdOrderItem1.getProdSkuId());
+                mbrProdOrderItem1.setProdSku(prodSku);
+            }
+            order.setMbrProdOrderItems(mbrProdOrderItems);
+        }
+        return orderList;
+    }
+
+    /** 根据此会员的订单列表
+     *
+     * @param mbrId    会员ID
+     */
+    @Override
+    public List<MbrProdOrder> getListByMbrId(Long mbrId){
+        List<MbrProdOrder> orderList = mbrProdOrderMapper.getListByMbrId(mbrId);
+        for(MbrProdOrder order : orderList){
+            MbrProdOrderItem mbrProdOrderItem = new MbrProdOrderItem();
+            mbrProdOrderItem.setMbrProdOrderId(order.getId());
+            List<MbrProdOrderItem> mbrProdOrderItems = mbrProdOrderItemMapper.selectList(mbrProdOrderItem);
+            for(MbrProdOrderItem mbrProdOrderItem1: mbrProdOrderItems){
+                ProdSku prodSku = prodSkuMapper.getById(mbrProdOrderItem1.getProdSkuId());
+                mbrProdOrderItem1.setProdSku(prodSku);
+            }
             order.setMbrProdOrderItems(mbrProdOrderItems);
         }
         return orderList;

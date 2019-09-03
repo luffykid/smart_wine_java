@@ -82,8 +82,8 @@ public class WineCellarController extends BaseController {
 
         Map<String,Object> returnMap = new HashMap<>();
         returnMap.put("wineCellar",wineCellar);
-        returnMap.put("statusLike",wineCellar);
-        returnMap.put("statusSign",wineCellar);
+        returnMap.put("statusLike",statusLike);
+        returnMap.put("statusSign",statusSign);
         returnMap.put("winerySight",winerySight);
         returnMap.put("activityList",activityList);
 

@@ -79,11 +79,12 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
     Map<String, Object> findSignSight(Member Member);
 
     /**
-     * 查询景点图文
+     *  根据状态和sightID获取该景点的详情结果集
      * @param id
-     * @return  Map<String, Object>
+     * * @param status
+     * @return  List<WinerySightDetail>
      */
-    Map<String, Object> findSightImageText(Long id);
+    List<WinerySightDetail> getDetailBySightIdAndStatus(Long id,Integer status);
 
     /**
      * 景点点赞
@@ -114,4 +115,11 @@ public interface WinerySightService extends BaseService<WinerySight, Long> {
      * @return
      */
     boolean deleteScenicImageText(Long id);
+
+    /**
+     * 获取景点图片list
+     * @param sightId
+     * @return
+     */
+    List<WinerySightImg> getImgList(Long sightId);
 }

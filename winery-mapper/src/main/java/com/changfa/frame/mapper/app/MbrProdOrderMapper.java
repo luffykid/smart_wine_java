@@ -21,6 +21,16 @@ public interface MbrProdOrderMapper extends BaseMapper<MbrProdOrder, Long> {
      * @return
      */
     MbrProdOrder getByOrderNo(String orderNo);
-
+    /**
+     * 根据会员和状态查询订单
+     * @param mbrId 会员ID
+     * @param status 订单状态
+     */
     List<MbrProdOrder> getListByStatus(@Param("mbrId") Long mbrId, @Param("status") Integer status);
+    /**
+     * 根据会员查询订单
+     * @param mbrId 会员ID
+     * @return
+     */
+    List<MbrProdOrder> getListByMbrId(Long mbrId);
 }

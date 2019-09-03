@@ -108,7 +108,7 @@
         select
         <include refid="table_column" />
         from m_mbr_prod_order_item mpoi
-        <where >
+        <where>
             <if test="mbrProdOrderId != null" >
                 and mpoi.mbr_prod_order_id = #{mbrProdOrderId}
             </if>

@@ -1,7 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.Member;
-import com.changfa.frame.model.app.Winery;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.WinerySightService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,19 +71,34 @@ public class WinerySightController extends BaseController {
     }
 
     /**
-     * 查看景点图文
+     * 查看景点详情+图片
      *
      * @param id 景点id
      * @return Map<String, Object>
      */
-    @ApiOperation(value = "景点详情", notes = "查看景点图文")
+    @ApiOperation(value = "查询景点详情和图片", notes = "详情页中的详情集和图片集")
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点id", dataType = "Long"))
-    @RequestMapping(value = "/getSightImageText", method = RequestMethod.POST)
-    public Map<String, Object> getSightImageText(@RequestParam("id") Long id) {
-        Map<String, Object> returnMap = winerySightService.findSightImageText(id);
-        if (returnMap.isEmpty()) {
-            throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
+    @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
+    public Map<String, Object> getDetail(HttpServletRequest request,Long id) {
+        if(id ==null){
+            log.info("此处有错误:{}", "错误信息");
+            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
+
         }
+        Member curMember = getCurMember(request);
+        Map<String,Object> returnMap = new HashMap<>();
+        WinerySight winerySight = winerySightService.getById(id);
+        //查询景点详情list
+        List<WinerySightDetail> DetailList = winerySightService.getDetailBySightIdAndStatus(id,WinerySightDetail.DETAIL_STATUS_ENUM.QY.getValue());
+        //查询景点图片list
+        List<WinerySightImg> imgList = winerySightService.getImgList(id);
+        int scenicLike = winerySightService.findScenicLike(id, curMember.getId());
+        int scenicSign = winerySightService.findScenicSign(id, curMember.getId());
+        returnMap.put("scenicLike",scenicLike);
+        returnMap.put("scenicSign",scenicSign);
+        returnMap.put("winerySight",winerySight);
+        returnMap.put("DetailList",DetailList);
+        returnMap.put("imgList",imgList);
         return getResult(returnMap);
     }
 

@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="prod_id" property="prodId" jdbcType="BIGINT" />
         <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+        <result column="sku_img" property="prodImg" jdbcType="VARCHAR" />
         <result column="sku_status" property="skuStatus" jdbcType="INTEGER" />
         <result column="sku_stock_cnt" property="skuStockCnt" jdbcType="BIGINT" />
         <result column="fragrance_type" property="fragranceType" jdbcType="VARCHAR" />
@@ -25,16 +26,17 @@
     </resultMap>
 
     <sql id="table_column" >
-        id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type,alcohol_cnt, sku_weight, sku_capacity, sku_sell_price,
-        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, package_price, is_del,
-        create_date, modify_date
+        ps.id as id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type,alcohol_cnt, sku_weight, sku_capacity, sku_sell_price,
+        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, package_price, ps.is_del as is_del,
+        ps.create_date as create_date, ps.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="prodSkuMap" parameterType="java.lang.Long" >
         select 
-        <include refid="table_column" />
-        from s_prod_sku
-        where id = #{id}
+        <include refid="table_column" />,p.list_img as sku_img
+        from s_prod_sku ps
+        left join s_prod p on p.id = ps.prod_id
+        where ps.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.ProdSku" >
@@ -183,25 +185,25 @@
     <select id="getByProdId" parameterType="java.lang.Long" resultMap="prodSkuMap">
         select
         <include refid="table_column"/>
-        from s_prod_sku where prod_id = #{id}
+        from s_prod_sku ps where prod_id = #{id}
     </select>
 
     <update id="updateSkuStatusByProdId">
-        update s_prod_sku set sku_status =#{status} where prod_id = #{id}
+        update s_prod_sku ps set sku_status =#{status} where prod_id = #{id}
     </update>
 
     <select id="selectProdSkuStatusByProdId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.ProdSku">
         select
         <include refid="table_column"/>
-        from s_prod_sku where prod_id = #{id} and is_del =#{status}
+        from s_prod_sku ps where prod_id = #{id} and is_del =#{status}
     </select>
 
     <update id="updateProdSkuStatus">
-        update s_prod_sku set sku_status = #{skuStatus} where id =#{id}
+        update s_prod_sku ps set sku_status = #{skuStatus} where id =#{id}
     </update>
 
     <update id="deleteProdSku">
-        update s_prod_sku set is_del = 1 where id =#{id}
+        update s_prod_sku ps set is_del = 1 where id =#{id}
     </update>
 
     <insert id="add" parameterType="com.changfa.frame.model.app.ProdSku" >

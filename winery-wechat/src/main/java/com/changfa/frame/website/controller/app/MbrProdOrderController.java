@@ -1,6 +1,5 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.core.weChat.WeChatPayUtil;
 import com.changfa.frame.model.app.MbrProdOrder;
 import com.changfa.frame.model.app.MbrProdOrderItem;
 import com.changfa.frame.model.app.Member;
@@ -10,16 +9,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.ss.formula.ptg.MemErrPtg;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +40,12 @@ public class MbrProdOrderController extends BaseController {
     public Map<String, Object> getListByTypes(Integer status ,HttpServletRequest request) {
         Member member = getCurMember(request);
 
-        List<MbrProdOrder> orderList = mbrProdOrderServiceImpl.getListByStatus(member.getId(),status);
+        List<MbrProdOrder> orderList = null;
+        if(status == null || "".equals(status)){
+            orderList = mbrProdOrderServiceImpl.getListByMbrId(member.getId());
+        }else{
+            orderList = mbrProdOrderServiceImpl.getListByStatus(member.getId(),status);
+        }
 
         return getResult(orderList);
     }

@@ -20,4 +20,6 @@ public interface WinerySightDetailMapper extends BaseMapper<WinerySightDetail, L
     int saveList(@Param("list") List<WinerySightDetail> winerySightDetailListvo);
 
     int updateList(@Param("list") List<WinerySightDetail> updateWinerySightDetailList);
+
+    List<WinerySightDetail> selectListBySightIdAndStatus(@Param("id") Long id,@Param("status")  Integer status);
 }
