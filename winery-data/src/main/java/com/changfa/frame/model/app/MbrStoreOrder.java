@@ -76,8 +76,8 @@ public class MbrStoreOrder extends BaseEntity {
          * @param value 枚举值
          * @return
          */
-        public static MbrProdOrder.ORDER_STATUS_ENUM getEnum(Integer value) {
-            for (MbrProdOrder.ORDER_STATUS_ENUM statusEnum : MbrProdOrder.ORDER_STATUS_ENUM.values()) {
+        public static MbrStoreOrder.PAY_MODE_ENUM getEnum(Integer value) {
+            for (MbrStoreOrder.PAY_MODE_ENUM statusEnum : MbrStoreOrder.PAY_MODE_ENUM.values()) {
                 if (value.equals(statusEnum.getValue())) {
                     return statusEnum;
                 }

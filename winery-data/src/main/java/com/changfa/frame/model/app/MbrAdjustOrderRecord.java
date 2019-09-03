@@ -90,8 +90,8 @@ public class MbrAdjustOrderRecord extends BaseEntity {
          * @param value 枚举值
          * @return
          */
-        public static MbrProdOrder.ORDER_STATUS_ENUM getEnum(Integer value) {
-            for (MbrProdOrder.ORDER_STATUS_ENUM statusEnum : MbrProdOrder.ORDER_STATUS_ENUM.values()) {
+        public static ORDER_STATUS_ENUM getEnum(Integer value) {
+            for (ORDER_STATUS_ENUM statusEnum : ORDER_STATUS_ENUM.values()) {
                 if (value.equals(statusEnum.getValue())) {
                     return statusEnum;
                 }

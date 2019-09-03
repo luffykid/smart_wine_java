@@ -11,32 +11,35 @@
         <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
         <result column="print_img" property="printImg" jdbcType="VARCHAR" />
         <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        mao.id as id, mao.winery_adjust_wine_id as winery_adjust_wine_id, mao.mbr_id as mbr_id, 
-        mao.winery_id as winery_id, mao.pay_mode as pay_mode, mao.pay_total_amt as pay_total_amt, 
-        mao.pay_real_amt as pay_real_amt, mao.print_img as print_img, mao.order_status as order_status, 
-        mao.pay_date as pay_date, mao.create_date as create_date, mao.modify_date as modify_date
+        mao.id as id, mao.winery_adjust_wine_id as winery_adjust_wine_id, mao.mbr_id as mbr_id,
+        mao.winery_id as winery_id, mao.pay_mode as pay_mode, mao.pay_total_amt as pay_total_amt,
+        mao.pay_real_amt as pay_real_amt, mao.print_img as print_img, mao.order_status as order_status,
+        mao.transaction_no as transaction_no, mao.order_no as order_no, mao.pay_date as pay_date,
+        mao.create_date as create_date, mao.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrAdjustOrderMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
         from m_mbr_adjust_order mao
         where mao.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrAdjustOrder" >
-        insert into m_mbr_adjust_order (id, winery_adjust_wine_id, mbr_id, winery_id, pay_mode, pay_total_amt, 
-            pay_real_amt, print_img, order_status, pay_date, create_date, modify_date
-            )
-        values (#{id}, #{wineryAdjustWineId}, #{mbrId}, #{wineryId}, #{payMode}, #{payTotalAmt}, 
-            #{payRealAmt}, #{printImg}, #{orderStatus}, #{payDate}, #{createDate}, #{modifyDate}
-            )
+        insert into m_mbr_adjust_order (id, winery_adjust_wine_id, mbr_id, winery_id, pay_mode, pay_total_amt,
+        pay_real_amt, print_img, order_status, transaction_no, order_no, pay_date,
+        create_date, modify_date)
+        values (#{id}, #{wineryAdjustWineId}, #{mbrId}, #{wineryId}, #{payMode}, #{payTotalAmt},
+        #{payRealAmt}, #{printImg}, #{orderStatus}, #{transactionNo}, #{orderNo}, #{payDate},
+        #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrAdjustOrder" >
@@ -66,6 +69,12 @@
             <if test="orderStatus != null" >
                 order_status = #{orderStatus},
             </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                transaction_no = #{transactionNo},
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                order_no = #{orderNo},
+            </if>
             <if test="payDate != null" >
                 pay_date = #{payDate},
             </if>
@@ -85,7 +94,7 @@
     </delete>
 
     <select id="selectList" resultMap="mbrAdjustOrderMap" >
-        select 
+        select
         <include refid="table_column" />
         from m_mbr_adjust_order mao
         <where >
@@ -112,6 +121,12 @@
             </if>
             <if test="orderStatus != null" >
                 and mao.order_status = #{orderStatus}
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                and mao.transaction_no = #{transactionNo}
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                and mao.order_no = #{orderNo}
             </if>
             <if test="payDate != null" >
                 and mao.pay_date = #{payDate}

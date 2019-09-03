@@ -43,6 +43,64 @@ public class MbrAdjustOrder extends BaseEntity {
     private Integer payMode;
 
     /**
+     * 支付方式
+     */
+    public enum PAY_MODE_ENUM {
+        WX_MINI_MODE(1, "微信支付");
+
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        PAY_MODE_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         * @return
+         */
+        public static MbrAdjustOrder.PAY_MODE_ENUM getEnum(Integer value) {
+            for (MbrAdjustOrder.PAY_MODE_ENUM statusEnum : MbrAdjustOrder.PAY_MODE_ENUM.values()) {
+                if (value.equals(statusEnum.getValue())) {
+                    return statusEnum;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
+    /**
      * 支付总金额
      */
     private BigDecimal payTotalAmt;
@@ -102,8 +160,8 @@ public class MbrAdjustOrder extends BaseEntity {
          * @param value 枚举值
          * @return
          */
-        public static MbrProdOrder.ORDER_STATUS_ENUM getEnum(Integer value) {
-            for (MbrProdOrder.ORDER_STATUS_ENUM statusEnum : MbrProdOrder.ORDER_STATUS_ENUM.values()) {
+        public static MbrAdjustOrder.ORDER_STATUS_ENUM getEnum(Integer value) {
+            for (MbrAdjustOrder.ORDER_STATUS_ENUM statusEnum : MbrAdjustOrder.ORDER_STATUS_ENUM.values()) {
                 if (value.equals(statusEnum.getValue())) {
                     return statusEnum;
                 }
@@ -130,6 +188,42 @@ public class MbrAdjustOrder extends BaseEntity {
      * 支付时间
      */
     private Date payDate;
+
+    /**
+     * 订单号
+     */
+    private String orderNo;
+
+
+    /**
+     * 交易单号
+     */
+    private String transactionNo;
+
+    /**
+     * 获取订单号
+     */
+    public String getOrderNo() {
+        return orderNo;
+    }
+    /**
+     * 设置订单号
+     */
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+    /**
+     * 获取交易单号
+     */
+    public String getTransactionNo() {
+        return transactionNo;
+    }
+    /**
+     * 设置交易单号
+     */
+    public void setTransactionNo(String transactionNo) {
+        this.transactionNo = transactionNo;
+    }
 
 
     /**
