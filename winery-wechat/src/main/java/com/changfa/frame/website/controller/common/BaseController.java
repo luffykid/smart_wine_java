@@ -81,7 +81,10 @@ public abstract class BaseController {
         } else if (eClass.equals(MemberIntegralNotEnough.class)) {
             MemberIntegralNotEnough notEnough = (MemberIntegralNotEnough) ex;
             addExceptionToMap(notEnough, map);
-        } else {
+        } else if (eClass.equals(IllegalArgumentException.class)) {
+            addResCodeToMap((RuntimeException) ex, RESPONSE_CODE_ENUM.BAD_REQUEST, map);
+        }
+        else {
             addResCodeToMap(RESPONSE_CODE_ENUM.SERVER_ERROR, map);
         }
 
@@ -107,6 +110,17 @@ public abstract class BaseController {
     protected void addResCodeToMap(RESPONSE_CODE_ENUM responseCodeEnum, Map<String, Object> map) {
         map.put(ResultUtil.ERRORCODE_PARAM_NAME, responseCodeEnum.getCode());
         map.put(ResultUtil.ERRORMSG_PARAM_NAME, responseCodeEnum.getMsg());
+    }
+
+    /**
+     * 添加异常信息到map中
+     *
+     * @param responseCodeEnum 错误响应编码枚举类对象
+     * @param map              响应错误编码集合
+     */
+    protected void addResCodeToMap(RuntimeException ex, RESPONSE_CODE_ENUM responseCodeEnum, Map<String, Object> map) {
+        map.put(ResultUtil.ERRORCODE_PARAM_NAME, responseCodeEnum.getCode());
+        map.put(ResultUtil.ERRORMSG_PARAM_NAME, ex.getMessage());
     }
 
     /**
