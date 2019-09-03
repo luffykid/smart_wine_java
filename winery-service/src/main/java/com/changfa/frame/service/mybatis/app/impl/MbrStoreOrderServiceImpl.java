@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -151,11 +152,11 @@ public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Lon
         mbrStoreOrderRecord.setOrderRemark("");
         mbrStoreOrderRecord.setCreateDate(new Date());
         mbrStoreOrderRecordMapper.save(mbrStoreOrderRecord);
+        // 4.返回订单号和金额 用于微信预下单
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("orderNo",orderNo);
+        returnMap.put("payTotalAmt",mbrStoreOrder.getPayTotalAmt());
 
-        // 4.微信支付预下单
-        Map<String, Object> returnMap = WeChatPayUtil.unifiedOrderOfWxMini(orderNo,
-                mbrStoreOrder.getPayTotalAmt(), member.getOpenId(),
-                "/paymentNotify/async_notify/MBR_STORE_ORDER.jhtml", "会员储酒订单", request);
         return returnMap;
     }
 }

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineryAdjustDetailMapper" >
+    <resultMap id="wineryAdjustDetailMap" type="com.changfa.frame.model.app.WineryAdjustDetail" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_adjust_wine_id" property="wineryAdjustWineId" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="detail_title" property="detailTitle" jdbcType="VARCHAR" />
+        <result column="detail_breif" property="detailBreif" jdbcType="VARCHAR" />
+        <result column="detail_img" property="detailImg" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        wad.id as id, wad.winery_adjust_wine_id as winery_adjust_wine_id, wad.winery_id as winery_id, 
+        wad.detail_title as detail_title, wad.detail_breif as detail_breif, wad.detail_img as detail_img, 
+        wad.create_date as create_date, wad.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineryAdjustDetailMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_winery_adjust_detail wad
+        where wad.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineryAdjustDetail" >
+        insert into b_winery_adjust_detail (id, winery_adjust_wine_id, winery_id, detail_title, detail_breif, 
+            detail_img, create_date, modify_date)
+        values (#{id}, #{wineryAdjustWineId}, #{wineryId}, #{detailTitle}, #{detailBreif}, 
+            #{detailImg}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineryAdjustDetail" >
+        update b_winery_adjust_detail
+        <set >
+            <if test="wineryAdjustWineId != null" >
+                winery_adjust_wine_id = #{wineryAdjustWineId},
+            </if>
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                detail_title = #{detailTitle},
+            </if>
+            <if test="detailBreif != null and detailBreif != ''" >
+                detail_breif = #{detailBreif},
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                detail_img = #{detailImg},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_winery_adjust_detail
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineryAdjustDetailMap" >
+        select 
+        <include refid="table_column" />
+        from b_winery_adjust_detail wad
+        <where >
+            <if test="wineryAdjustWineId != null" >
+                and wad.winery_adjust_wine_id = #{wineryAdjustWineId}
+            </if>
+            <if test="wineryId != null" >
+                and wad.winery_id = #{wineryId}
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                and wad.detail_title = #{detailTitle}
+            </if>
+            <if test="detailBreif != null and detailBreif != ''" >
+                and wad.detail_breif = #{detailBreif}
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                and wad.detail_img = #{detailImg}
+            </if>
+            <if test="createDate != null" >
+                and wad.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and wad.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>
