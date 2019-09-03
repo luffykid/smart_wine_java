@@ -176,25 +176,21 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         integralRecord.setActionType(MbrIntegralRecord.ACTION_TYPE_ENUM.PROD_CUSTOM.getValue());
         integralRecord.setPkId(mbrProdOrder.getId());
         integralRecord.setSignType(0);
+        BigDecimal payIntegralCnt = mbrProdOrder.getPayIntegralCnt();
+        integralRecord.setIntegralValue(payIntegralCnt);
 
-//        // 计算积分
-//        BigDecimal payRealAmt = mbrProdOrder.getPayIntegralCnt();
-//        BigDecimal divide = payRealAmt.subtract();
-//        BigDecimal integral = divide.setScale(2, BigDecimal.ROUND_HALF_DOWN);
-//        integralRecord.setIntegralValue(integral);
-//
-//        // 计算操作后积分
-//        BigDecimal preIntegral = curMbr.getTotalIntegral();
-//        BigDecimal lastIntegral = preIntegral.add(integral).setScale(2, BigDecimal.ROUND_HALF_UP);
-//        integralRecord.setLatestPoint(lastIntegral);
-//        integralRecord.setCreateDate(new Date());
-//        integralRecord.setModifyDate(new Date());
-//        mbrIntegralRecordMapper.save(integralRecord);
+        // 计算操作后积分
+        BigDecimal preIntegral = curMbr.getTotalIntegral();
+        BigDecimal lastIntegral = preIntegral.subtract(payIntegralCnt).setScale(2, BigDecimal.ROUND_HALF_UP);
+        integralRecord.setLatestPoint(lastIntegral);
+        integralRecord.setCreateDate(new Date());
+        integralRecord.setModifyDate(new Date());
+        mbrIntegralRecordMapper.save(integralRecord);
 
         // 更新会员积分
         Member updateMbr = new Member();
         updateMbr.setId(curMbr.getId());
-//        updateMbr.setTotalIntegral(lastIntegral);
+        updateMbr.setTotalIntegral(lastIntegral);
         updateMbr.setModifyDate(new Date());
         memberMapper.update(updateMbr);
     }
