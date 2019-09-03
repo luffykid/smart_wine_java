@@ -7,6 +7,7 @@ import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
+import com.changfa.frame.website.controller.common.MemberIntegralNotEnough;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -73,13 +74,13 @@ public class MbrProdOrderController extends BaseController {
     @ApiOperation(value = "酒庄酒订单支付", notes = "酒庄酒订单支付")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "mbrProdOrderId", value = "酒庄酒订单id", dataType = "Long"),
-            @ApiImplicitParam(name = "mbrAddressId", value = "会员地址id", dataType = "Integer"),
+            @ApiImplicitParam(name = "mbrAddressId", value = "会员地址id", dataType = "Long"),
             @ApiImplicitParam(name = "payMode", value = "支付模式", dataType = "Integer")
     })
     @PostMapping("/pay")
-    public Map<String, Object> pay(Long mbrProdOrderId,
-                                   Long mbrAddressId,
-                                   Integer payMode,
+    public Map<String, Object> pay(@RequestParam("mbrProdOrderId") Long mbrProdOrderId,
+                                   @RequestParam("mbrAddressId") Long mbrAddressId,
+                                   @RequestParam("payMode") Integer payMode,
                                    HttpServletRequest request) {
 
         checkValidate(payMode);
@@ -130,7 +131,7 @@ public class MbrProdOrderController extends BaseController {
     private void checkMemberIntegralMoreThanTheOrderShouldBePay(Member member, MbrProdOrder order) {
 
         if (member.getTotalIntegral().compareTo(order.getPayIntegralCnt()) < 0)
-            throw new IllegalStateException("integral of the member don't enough!");
+            throw new MemberIntegralNotEnough(RESPONSE_CODE_ENUM.MBR_INTEGRAL_NOT_ENOUGH);
 
     }
 
