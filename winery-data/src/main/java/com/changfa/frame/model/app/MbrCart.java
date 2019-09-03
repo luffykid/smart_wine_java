@@ -32,7 +32,12 @@ public class MbrCart extends BaseEntity {
     /** 商品SKU数量 */
     private Integer prodSkuCnt;
 
-    
+    /**
+     * 商品sku
+     */
+    private ProdSku prodSku;
+
+
     /**
      * 获取酒庄ID
     */
@@ -101,5 +106,13 @@ public class MbrCart extends BaseEntity {
     */
     public void setProdSkuCnt(Integer prodSkuCnt) {
         this.prodSkuCnt = prodSkuCnt;
+    }
+
+    public ProdSku getProdSku() {
+        return prodSku;
+    }
+
+    public void setProdSku(ProdSku prodSku) {
+        this.prodSku = prodSku;
     }
 }

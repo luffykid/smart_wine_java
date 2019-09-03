@@ -10,6 +10,7 @@
         <result column="prod_sku_cnt" property="prodSkuCnt" jdbcType="INTEGER" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <association property="prodSku" column="prod_sku_id" select="com.changfa.frame.mapper.app.ProdSkuMapper.getById"/>
     </resultMap>
 
     <sql id="table_column" >
