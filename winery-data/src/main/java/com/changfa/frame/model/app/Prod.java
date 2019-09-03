@@ -188,7 +188,7 @@ public class Prod extends BaseEntity {
 
 
     /**
-     * 产品详情图品
+     * 产品详情图片
      */
     private List<ProdImg> prodImgs;
 

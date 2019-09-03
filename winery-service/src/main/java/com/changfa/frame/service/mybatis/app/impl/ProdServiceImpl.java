@@ -67,6 +67,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
         prod.setProdStatus(Prod.PROD_STATUS_ENUM.QY.getValue());
+        prod.setDel(true);
         return new PageInfo(prodMapper.selectListLikeName(prod));
     }
 
@@ -85,6 +86,8 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         prod.setProdStatus(Prod.LABLE_TYPE_ENUM.PTJ.getValue());
         prod.setCreateDate(new Date());
         prod.setModifyDate(new Date());
+        prod.setDel(false);
+        prod.setListImg(FileUtil.copyNFSByFileName(prod.getListImg(),FilePathConsts.TEST_FILE_CP_PATH));
         prodMapper.save(prod);
         if (prod.getProdDetailList() != null && prod.getProdDetailList().size() > 0) {
             for (ProdDetail prodDetail : prod.getProdDetailList()) {
@@ -101,6 +104,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
             for (ProdImg prodImg :prod.getProdImgs()){
                 prodImg.setProdId(prod.getId());
                 prodImg.setId(IDUtil.getId());
+                prodImg.setImgAddrr(FileUtil.copyNFSByFileName(prodImg.getImgAddrr(),FilePathConsts.TEST_FILE_CP_PATH));
                 try {
                     prodImg.setCreateDate(DateUtil.getCurDate());
                 } catch (ParseException e) {
@@ -134,6 +138,9 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     public Prod getProd(Long id) {
         Prod prod = prodMapper.getById(id);
         prod.setProdDetailList(prodDetailMapper.getProdImgTextByProdId(id));
+        ProdImg prodImg = new ProdImg();
+        prodImg.setProdId(id);
+        prod.setProdImgs(prodImgMapper.selectList(prodImg));
         return prod;
     }
 
@@ -205,11 +212,11 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     @Override
     @Transactional
     public boolean deleteById(Long id) {
-        Long status = 0L;
-        List<ProdSku> prodSkuList = prodSkuMapper.selectProdSkuStatusByProdId(id, status);
-        if (prodSkuList == null) {
-            return false;
-        }
+//        Long status = 0L;
+//        List<ProdSku> prodSkuList = prodSkuMapper.selectProdSkuStatusByProdId(id, status);
+//        if (prodSkuList == null) {
+//            return false;
+//        }
         return (prodMapper.deleteByid(id) > 0 ? true : false);
 
 

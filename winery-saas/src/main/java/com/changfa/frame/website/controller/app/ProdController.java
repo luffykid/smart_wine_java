@@ -165,10 +165,11 @@ public class ProdController extends BaseController {
     @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "产品id", dataType = "Long"))
     @RequestMapping(value = "/deleteProd", method = RequestMethod.POST)
     public Map<String, Object> deleteProd(Long id){
+        log.info("com.changfa.frame.website.controller.app.ProdController deleteProd res {}",id);
         if(prodService.deleteById(id)){
             return getResult("删除成功");
         }
-        return getResult("该产品规格未完全删除");
+        throw new CustomException(RESPONSE_CODE_ENUM.DELETE_FAILED);
     }
 
     /**

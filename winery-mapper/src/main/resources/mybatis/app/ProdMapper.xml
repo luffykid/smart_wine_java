@@ -294,9 +294,14 @@
             <if test="adminId != null" >
                 and p.admin_id = #{adminId}
             </if>
-            <if test="isDel != null" >
-                and p.is_del = #{isDel}
-            </if>
+            <choose>
+                <when test="isDel != null">
+                    and p.is_del = 0
+                </when>
+                <otherwise>
+                    and p.is_del = 1
+                </otherwise>
+            </choose>
             <if test="createDate != null" >
                 and p.create_date = #{createDate}
             </if>
