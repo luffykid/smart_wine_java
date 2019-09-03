@@ -196,6 +196,11 @@ public class ProdSku extends BaseEntity {
     private Integer sellCnt;
 
     /**
+     * 白酒定制ID
+     */
+    private Long wineCustomId;
+
+    /**
      * 获取商品ID
      */
     public Long getProdId() {
@@ -523,6 +528,20 @@ public class ProdSku extends BaseEntity {
      */
     public void setProdImg(String prodImg) {
         this.prodImg = prodImg;
+    }
+
+    /**
+     * 设置白酒定制ID
+     */
+    public Long getWineCustomId() {
+        return wineCustomId;
+    }
+
+    /**
+     * 设置白酒定制ID
+     */
+    public void setWineCustomId(Long wineCustomId) {
+        this.wineCustomId = wineCustomId;
     }
 
     @Override
