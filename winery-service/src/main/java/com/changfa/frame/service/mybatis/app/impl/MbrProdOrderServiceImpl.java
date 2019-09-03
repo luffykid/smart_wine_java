@@ -1,5 +1,12 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.util.OrderNoUtil;
+import com.changfa.frame.mapper.app.MbrProdOrderMapper;
+import com.changfa.frame.mapper.app.MbrProdOrderRecordMapper;
+import com.changfa.frame.mapper.app.ProdSkuMapper;
+import com.changfa.frame.model.app.*;
+import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
+import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
@@ -9,11 +16,11 @@ import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("mbrProdOrderServiceImpl")
 public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long> implements MbrProdOrderService {
@@ -38,6 +45,9 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
 
     @Autowired
     private ProdSkuMapper prodSkuMapper;
+
+    @Autowired
+    private MbrAddressMapper mbrAddressMapper;
 
     /**
      * 处理会员商品订单支付
@@ -116,6 +126,18 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
             handleDeductIntegral(dbOrder);
         }
 
+    }
+    //查询各种状态的订单列表
+    @Override
+    public List<MbrProdOrder> getListByStatus(Long mbrId, Integer status) {
+        List<MbrProdOrder> orderList = mbrProdOrderMapper.getListByStatus(mbrId, status);
+        for(MbrProdOrder order : orderList){
+            MbrProdOrderItem mbrProdOrderItem = new MbrProdOrderItem();
+            mbrProdOrderItem.setMbrProdOrderId(order.getId());
+            List<MbrProdOrderItem> mbrProdOrderItems = mbrProdOrderItemMapper.selectList(mbrProdOrderItem);
+            order.setMbrProdOrderItems(mbrProdOrderItems);
+        }
+        return orderList;
     }
 
     /**
@@ -239,4 +261,159 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         updateMbr.setModifyDate(new Date());
         memberMapper.update(parenMbr);
     }
+
+    @Transactional
+    @Override
+    public MbrProdOrder placeAnOrder(Long wineryId, Long mbrId, List<MbrProdOrderItem> items) {
+
+        checkValidate(items);
+
+        MbrProdOrder order = new MbrProdOrder();
+        order.setId(IDUtil.getId());
+        order.setMbrId(mbrId);
+        order.setWineryId(wineryId);
+        order.setOrderNo(OrderNoUtil.get());
+        order.setCreateDate(new Date());
+        order.setModifyDate(new Date());
+        order.setOrderStatus(MbrProdOrder.ORDER_STATUS_ENUM.PAY_NOT.getValue());
+
+        completeMbrProdOrderItems(order, items);
+
+        order.setProdTotalCnt(countProd(items));
+        order.setPayTotalAmt(countPayAmt(items));
+
+        this.save(order);
+
+        items.stream().forEach(mbrProdOrderItemMapper::save);
+        addMbrProdOrderRecordToRepository(order);
+
+        order.setIsIntegral(items.get(0).getIsIntegral());
+
+        return order;
+    }
+
+    @Transactional
+    @Override
+    public MbrProdOrder addMbrAddressInfoAndChoosePayMode(Long mbrProdOrderId, Long mbrAddressId, Integer payMode) {
+
+        MbrProdOrder order = mbrProdOrderMapper.getById(mbrProdOrderId);
+        MbrAddress address = mbrAddressMapper.getById(mbrAddressId);
+
+        addAddressInfo(order, address);
+        order.setPayMode(payMode);
+
+        if (payMode == MbrProdOrder.PAY_MODE_ENUM.WX_MINI_INTEGRAL_MODE.getValue()) {
+
+            List<MbrProdOrderItem> items = mbrProdOrderItemMapper.getByMbrProdOrderId(order.getId());
+            order.setPayRealAmt(totalIntegralAmt(items));
+            order.setPayIntegralCnt(totalIntegralCnt(items));
+
+        } else {
+
+            order.setPayIntegralCnt(BigDecimal.ZERO);
+            order.setPayRealAmt(order.getPayTotalAmt());
+
+        }
+
+        this.update(order);
+
+        return order;
+    }
+
+    private void addAddressInfo(MbrProdOrder order, MbrAddress address) {
+
+        log.info(order.toString());
+        log.info(address.toString());
+
+        order.setShippingDetailAddr(address.getDetailAddress());
+        order.setShippingProvinceId(address.getProvince());
+        order.setShippingCityId(address.getCity());
+        order.setShippingCountyId(address.getCounty());
+        order.setShippingPersonName(address.getContact());
+        order.setShippingPersonPhone(address.getPhone());
+
+    }
+
+    private BigDecimal totalIntegralCnt(List<MbrProdOrderItem> items) {
+
+        return items.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralCnt,
+                BigDecimal::add
+        ));
+
+    }
+
+    private BigDecimal totalIntegralAmt(List<MbrProdOrderItem> items) {
+
+        return items.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralAmt,
+                BigDecimal::add));
+
+    }
+
+    private BigDecimal countPayAmt(List<MbrProdOrderItem> items) {
+
+        return items.stream()
+                        .map(item
+                                    ->
+                                item.getSkuSellPrice().multiply(BigDecimal.valueOf(item.getProdSkuCnt())))
+                             .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+
+    }
+
+    private Integer countProd(List<MbrProdOrderItem> items) {
+
+        return items.stream().collect(Collectors.reducing(0,
+                                                    MbrProdOrderItem::getProdSkuCnt,
+                                                    Integer::sum));
+
+    }
+
+    private void completeMbrProdOrderItems(MbrProdOrder order, List<MbrProdOrderItem> items) {
+
+        items.stream().forEach(mbrProdOrderItem -> {
+
+            ProdSku sku = prodSkuMapper.getById(mbrProdOrderItem.getProdSkuId());
+            mbrProdOrderItem.setId(IDUtil.getId());
+            mbrProdOrderItem.setMbrProdOrderId(order.getId());
+            mbrProdOrderItem.setWineryId(order.getWineryId());
+            mbrProdOrderItem.setMbrId(order.getMbrId());
+            mbrProdOrderItem.setSkuName(sku.getSkuName());
+            mbrProdOrderItem.setSkuMarketPrice(sku.getSkuMarketPrice());
+            mbrProdOrderItem.setSkuSellPrice(sku.getSkuSellPrice());
+            mbrProdOrderItem.setSkuMbrPrice(sku.getMbrPrice());
+            mbrProdOrderItem.setIsIntegral(sku.getIsIntegral());
+            mbrProdOrderItem.setIntegralAmt(sku.getIntegralAmt());
+            mbrProdOrderItem.setIntegralCnt(sku.getIntegralCnt());
+            mbrProdOrderItem.setCreateDate(new Date());
+            mbrProdOrderItem.setModifyDate(new Date());
+
+        });
+
+    }
+
+    private void addMbrProdOrderRecordToRepository(MbrProdOrder order) {
+
+        MbrProdOrderRecord record = new MbrProdOrderRecord();
+        record.setId(IDUtil.getId());
+        record.setMbrProdOrderId(order.getId());
+        record.setOrderStatus(order.getOrderStatus());
+        record.setCreateDate(new Date());
+        record.setModifyDate(new Date());
+
+        mbrProdOrderRecordMapper.save(record);
+
+    }
+
+    private void checkValidate(List<MbrProdOrderItem> items) {
+
+        if (items == null)
+            throw new NullPointerException("order items must not be null!");
+
+        if (items.size() == 0)
+            throw new IllegalArgumentException("order items at less one line");
+
+    }
+
+
 }

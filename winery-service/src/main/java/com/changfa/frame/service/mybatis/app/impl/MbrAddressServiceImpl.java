@@ -38,7 +38,7 @@ public class MbrAddressServiceImpl extends BaseServiceImpl<MbrAddress, Long> imp
             if(province!=null){
                 entity.setProvinceName(city.getName());
             }
-            Area country = areaMapper.getAreaByCode(entity.getCountry());
+            Area country = areaMapper.getAreaByCode(entity.getCounty());
             if(province!=null){
                 entity.setProvinceName(country.getName());
             }
@@ -72,7 +72,7 @@ public class MbrAddressServiceImpl extends BaseServiceImpl<MbrAddress, Long> imp
         mbrAddress.setPhone(phone);
         mbrAddress.setProvince(areaOfProvince.getId());
         mbrAddress.setCity(areOfCity.getId());
-        mbrAddress.setCountry(areaOfcountry.getId());
+        mbrAddress.setCounty(areaOfcountry.getId());
         mbrAddress.setDetailAddress(detailAddress);
         mbrAddress.setIsDefault(isDefault);
         mbrAddress.setFullAddress(areaOfProvince.getName()+areOfCity.getName()+areaOfcountry.getName()+detailAddress);
@@ -103,7 +103,7 @@ public class MbrAddressServiceImpl extends BaseServiceImpl<MbrAddress, Long> imp
         mbrAddress.setPhone(phone);
         mbrAddress.setProvince(areaOfProvince.getId());
         mbrAddress.setCity(areOfCity.getId());
-        mbrAddress.setCountry(areaOfcountry.getId());
+        mbrAddress.setCounty(areaOfcountry.getId());
         mbrAddress.setDetailAddress(detailAddress);
         mbrAddress.setIsDefault(isDefault);
         mbrAddress.setFullAddress(areaOfProvince.getName()+areOfCity.getName()+areaOfcountry.getName()+detailAddress);

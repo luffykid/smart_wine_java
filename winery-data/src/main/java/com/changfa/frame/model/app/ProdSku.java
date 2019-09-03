@@ -524,4 +524,33 @@ public class ProdSku extends BaseEntity {
     public void setProdImg(String prodImg) {
         this.prodImg = prodImg;
     }
+
+    @Override
+    public String toString() {
+        return "ProdSku{" +
+                "prodId=" + prodId +
+                ", skuName='" + skuName + '\'' +
+                ", skuStatus=" + skuStatus +
+                ", skuStockCnt=" + skuStockCnt +
+                ", skuWeight=" + skuWeight +
+                ", skuCapacity=" + skuCapacity +
+                ", skuSellPrice=" + skuSellPrice +
+                ", skuMarketPrice=" + skuMarketPrice +
+                ", sellTotalCnt=" + sellTotalCnt +
+                ", sort=" + sort +
+                ", isIntegral=" + isIntegral +
+                ", integralAmt=" + integralAmt +
+                ", integralCnt=" + integralCnt +
+                ", fragranceType='" + fragranceType + '\'' +
+                ", alcoholCnt=" + alcoholCnt +
+                ", packagePrice=" + packagePrice +
+                ", isDel=" + isDel +
+                ", wineCustomPrice=" + wineCustomPrice +
+                ", prodSkuMbrPriceList=" + prodSkuMbrPriceList +
+                ", mbrPrice=" + mbrPrice +
+                ", prodName='" + prodName + '\'' +
+                ", prodImg='" + prodImg + '\'' +
+                ", sellCnt=" + sellCnt +
+                '}';
+    }
 }
