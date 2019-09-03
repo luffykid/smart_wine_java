@@ -34,6 +34,7 @@ public class WineCustomElementServiceImpl extends BaseServiceImpl<WineCustomElem
         //酒贴code生成规则
 //        wineCustomElement.setElementCode();
         wineCustomElement.setElementIcon(FileUtil.copyNFSByFileName(wineCustomElement.getElementIcon(), FilePathConsts.TEST_FILE_CP_PATH));
+        wineCustomElement.setElementStatus(WineCustomElement.ELEMENT_STATUS_ENUM.XJ.getValue());
         try {
             wineCustomElement.setCreateDate(DateUtil.getCurDate());
         } catch (ParseException e) {
