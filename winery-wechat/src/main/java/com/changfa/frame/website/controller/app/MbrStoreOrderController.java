@@ -1,5 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.core.weChat.WeChatPayUtil;
 import com.changfa.frame.model.app.MbrStoreOrder;
 import com.changfa.frame.model.app.MbrStoreOrderItem;
 import com.changfa.frame.model.app.Member;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +91,14 @@ public class MbrStoreOrderController extends BaseController {
         }
         Member member = getCurMember(request);
         try{
-            Map<String, Object> returnMap = mbrStoreOrderServiceImpl.buildStoreOrder(activityId, skuId, prodTotalCnt, member,request);
+            Map<String, Object> orderDetail = mbrStoreOrderServiceImpl.buildStoreOrder(activityId, skuId, prodTotalCnt, member,request);
+            String orderNo = (String) orderDetail.get("orderNo");
+            BigDecimal payTotalAmt = (BigDecimal) orderDetail.get("payTotalAmt");
+
+            //微信预下单
+            Map<String, Object> returnMap = WeChatPayUtil.unifiedOrderOfWxMini(orderNo,
+                    payTotalAmt, member.getOpenId(),
+                    "/paymentNotify/async_notify/MBR_STORE_ORDER.jhtml", "会员储酒订单", request);
             return getResult(returnMap);
         }catch (Exception e){
             log.info("此处有错误:{}", "创建订单失败");
