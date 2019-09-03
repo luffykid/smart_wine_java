@@ -25,18 +25,18 @@ public class MbrRechargeOrderServiceImpl extends BaseServiceImpl<MbrRechargeOrde
      * 会员新建订单
      * @param mbrId
      * @param wineryId
-     * @param payTotalAmt
-     * @param payRealAmt
+     * @param payAmt
+
      */
     @Transactional
     @Override
-    public void recharge(Long mbrId, Long wineryId, BigDecimal payTotalAmt, BigDecimal payRealAmt) {
+    public void unifiedOrder(Long mbrId, Long wineryId, BigDecimal payAmt) {
         MbrRechargeOrder mbrRechargeOrder = new MbrRechargeOrder();
         mbrRechargeOrder.setId(IDUtil.getId());
         mbrRechargeOrder.setMbrId(mbrId);
         mbrRechargeOrder.setWineryId(wineryId);
-        mbrRechargeOrder.setPayTotalAmt(payTotalAmt);
-        mbrRechargeOrder.setPayRealAmt(payRealAmt);
+        mbrRechargeOrder.setPayTotalAmt(payAmt);
+        mbrRechargeOrder.setPayRealAmt(payAmt);
         mbrRechargeOrder.setOrderStatus(1);
         mbrRechargeOrder.setCreateDate(new Date());
         mbrRechargeOrderMapper.save(mbrRechargeOrder);

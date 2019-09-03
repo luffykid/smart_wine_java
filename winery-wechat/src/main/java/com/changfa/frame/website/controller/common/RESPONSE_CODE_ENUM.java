@@ -8,6 +8,7 @@ package com.changfa.frame.website.controller.common;
  */
 public enum RESPONSE_CODE_ENUM {
     /********************* SpringMBoot 系统异常 **********************/
+    BAD_REQUEST("400", "请求参数异常"),
     RESOURCE_NOT_FOUND("404", "请求的资源不存在"),
     METHOD_NOT_SUPPORTED("405", "不支持的请求方法"),
     MEDIA_TYPE_NOT_ACCEPT("406", "无法接受请求中的媒体类型"),
@@ -46,7 +47,8 @@ public enum RESPONSE_CODE_ENUM {
     SIGN_EXIST("1060","你已经报名过了！"),
     SIGN_OUT_TIME("1061","超过了报名时间"),
     SAVE_CUSTOM_INFO_FAIL("1062","保存消息失败"),
-    MBR_INTEGRAL_NOT_ENOUGH("1063", "会员积分不足");
+    MBR_INTEGRAL_NOT_ENOUGH("1063", "会员积分不足"),
+    DIFFERENT_PAY_MODE("1064", "订单项之间包含不同的支付方式");
 
 
     /**
