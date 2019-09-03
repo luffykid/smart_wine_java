@@ -62,6 +62,17 @@ public class MbrProdOrderServiceImplTest {
         Assert.assertNotNull(order.getCreateDate());
         Assert.assertNotNull(order.getModifyDate());
         Assert.assertEquals(fixtureItems.get(0).getIsIntegral(), order.getIsIntegral());
+        BigDecimal totalIntegralCnt = fixtureItems.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralCnt,
+                BigDecimal::add
+        ));
+
+        BigDecimal totalIntegralAmt = fixtureItems.stream().collect(Collectors.reducing(BigDecimal.ZERO,
+                MbrProdOrderItem::getIntegralAmt,
+                BigDecimal::add));
+
+        Assert.assertEquals(totalIntegralAmt, order.getPayRealAmt());
+        Assert.assertEquals(totalIntegralCnt, order.getPayIntegralCnt());
 
 
         MbrProdOrder orderSaved = mbrProdOrderService.getById(order.getId());
@@ -82,7 +93,7 @@ public class MbrProdOrderServiceImplTest {
 
         Long mbrAddressId = Long.valueOf(447316456124710912L);
         Integer payMode = MbrProdOrder.PAY_MODE_ENUM.WX_MINI_INTEGRAL_MODE.getValue();
-        Long orderId = Long.valueOf(1);
+        Long orderId = Long.valueOf(448413559320215552L);
 
         mbrProdOrderService.addMbrAddressInfoAndChoosePayMode(orderId, mbrAddressId, payMode);
 

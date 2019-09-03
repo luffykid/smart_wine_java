@@ -284,6 +284,8 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
 
         order.setProdTotalCnt(countProd(items));
         order.setPayTotalAmt(countPayAmt(items));
+        order.setPayRealAmt(totalIntegralAmt(items));
+        order.setPayIntegralCnt(totalIntegralCnt(items));
 
         this.save(order);
 
