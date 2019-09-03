@@ -7,11 +7,8 @@ import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.core.setting.Setting;
 import com.changfa.frame.core.weChat.WeChatMiniUtil;
 import com.changfa.frame.core.weChat.WeChatPayUtil;
-import com.changfa.frame.model.app.WineryMaster;
 import com.changfa.frame.service.mybatis.app.SystemConfigService;
-import com.changfa.frame.service.mybatis.app.WineryMasterService;
 import com.changfa.frame.service.mybatis.common.SettingUtils;
-import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,7 +79,7 @@ public class DemoController extends BaseController {
 
 
         // 正常Service层调用，控制层不能直接调用DAO层
-        systemConfigService.set(setting,1l);
+        systemConfigService.set(setting, 1l);
 
         // controller层异常方式
         if (true) {
