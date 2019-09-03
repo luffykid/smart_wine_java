@@ -171,7 +171,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
                     ProdDetail prodDetailvo = prodDetailMapper.getById(prodDetail.getId());
                     if (!StringUtils.equals(prodDetailvo.getDetailImg(), prodDetail.getDetailImg())) {
                         String newFileUrl = FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH);
-                        FileUtil.deleteNFSByFileUrl(prodDetailvo.getDetailImg(), newFileUrl);
+                        FileUtil.deleteNFSByFileUrl(prodDetailvo.getDetailImg());
                         prodDetail.setDetailImg(newFileUrl);
                     }
                     prodDetail.setModifyDate(new Date());

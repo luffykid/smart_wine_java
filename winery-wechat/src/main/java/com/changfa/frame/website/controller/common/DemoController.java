@@ -127,8 +127,8 @@ public class DemoController extends BaseController {
         // 2、表单提交，需将临时文件夹中文件拷贝到图片仓库文件夹中，并返回图片URL
         String fileUrl = FileUtil.copyNFSByFileName(orgFileName, FilePathConsts.TEST_FILE_PATH);
 
-        // 3、如果是编辑页面，需要先删除原图片
-//        FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
+        // 3、先删除原图片
+        FileUtil.deleteNFSByFileUrl(fileUrl);
 
         // 4、如果是直接图片上传到NFS服务器，返回文件NFS访问URL
         String nfsUrl = FileUtil.getNFSUrl(testFile, FilePathConsts.TEST_FILE_PATH);
@@ -160,5 +160,18 @@ public class DemoController extends BaseController {
         String miniQrCodeImg = WeChatMiniUtil.getMiniQrCodeImg("winerySightId=1", "pages/login/login", 600, null, false);
 
         return getResult(miniQrCodeImg);
+    }
+
+    /**
+     * 图片合成
+     */
+    @ApiOperation(value = "图片合成", notes = "图片合成", httpMethod = "POST")
+    @PostMapping(value = "/getUrlOfComposite")
+    public Map<String, Object> getUrlOfComposite() {
+        String baseImgUrl = "http://test.file.jiuqixing.cn/1.jpeg";
+        String renderImgUrl = "http://test.file.jiuqixing.cn/2.jpeg";
+        String urlOfComposite = FileUtil.getUrlOfComposite(baseImgUrl, renderImgUrl, new BigDecimal(0.01), new BigDecimal(0.01), 1, "/test");
+
+        return getResult(urlOfComposite);
     }
 }

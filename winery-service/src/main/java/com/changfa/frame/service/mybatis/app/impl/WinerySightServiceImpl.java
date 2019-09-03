@@ -87,7 +87,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
                 WinerySightDetail winerySightDetail1 = winerySightDetailMapper.getById(winerySightDetail.getId());
                 if(!StringUtils.equals(winerySightDetail1.getDetailImg(), winerySightDetail.getDetailImg())){
                     String newFileUrl = FileUtil.copyNFSByFileName(winerySightDetail.getDetailImg(), FilePathConsts.TEST_FILE_PATH);
-                    FileUtil.deleteNFSByFileUrl(winerySightDetail1.getDetailImg(),newFileUrl);
+                    FileUtil.deleteNFSByFileUrl(winerySightDetail1.getDetailImg());
                     winerySightDetail.setDetailImg(newFileUrl);
                 }
                 winerySightDetail.setModifyDate(new Date());
@@ -164,7 +164,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
                         WinerySightImg winerySightImg1 = winerySightImgMapper.getById(winerySightImg.getId());
                         if(!StringUtils.equals(winerySightImg1.getImgAddr(),winerySightImg.getImgAddr())){
                             String newFileUrl = FileUtil.copyNFSByFileName(winerySightImg.getImgAddr(), FilePathConsts.TEST_FILE_PATH);
-                            FileUtil.deleteNFSByFileUrl(winerySightImg1.getImgAddr(),newFileUrl);
+                            FileUtil.deleteNFSByFileUrl(winerySightImg1.getImgAddr());
                             winerySightImg.setImgAddr(newFileUrl);
                         }
                         winerySightImg.setModifyDate(new Date());
@@ -374,7 +374,7 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
     public String bijiao(String orgFileUrl,String newFileUrl){
         if(!StringUtils.equals(orgFileUrl, newFileUrl)){
             String  newFileUrlvo = FileUtil.copyNFSByFileName(newFileUrl, FilePathConsts.TEST_FILE_PATH);
-            FileUtil.deleteNFSByFileUrl(orgFileUrl,newFileUrl);
+            FileUtil.deleteNFSByFileUrl(orgFileUrl);
             return newFileUrlvo;
         }
         return null;
