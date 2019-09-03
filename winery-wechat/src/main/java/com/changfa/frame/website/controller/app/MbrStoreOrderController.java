@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 会员商品订单接口
+ * 会员储酒订单接口
  *
  */
-@Api(value = "会员商品订单接口", tags = "会员商品订单接口")
+@Api(value = "会员储酒订单接口", tags = "会员储酒订单接口")
 @RestController("wxMiniMbrStoreOrderController")
 @RequestMapping("/wxMini/auth/mbrStoreOrder")
 public class MbrStoreOrderController extends BaseController {
