@@ -1,5 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.core.weChat.WeChatPayUtil;
 import com.changfa.frame.model.app.MbrProdOrder;
 import com.changfa.frame.model.app.MbrProdOrderItem;
 import com.changfa.frame.model.app.Member;
@@ -90,14 +91,14 @@ public class MbrProdOrderController extends BaseController {
         Member member = getCurMember(request);
         checkMemberIntegralMoreThanTheOrderShouldBePay(member, order);
 
-        /*Map<String, Object> returnMap = WeChatPayUtil.unifiedOrderOfWxMini(order.getOrderNo(),
+        Map<String, Object> returnMap = WeChatPayUtil.unifiedOrderOfWxMini(order.getOrderNo(),
                                                                             order.getPayRealAmt(),
                                                                             member.getOpenId(),
                                                                             "",
                                                                             "酒庄酒订单",
-                                                                            request);*/
+                                                                            request);
 
-        return getResult(order);
+        return getResult(returnMap);
     }
 
     private void checkMemberIntegralMoreThanTheOrderShouldBePay(Member member, MbrProdOrder order) {
