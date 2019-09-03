@@ -95,7 +95,7 @@ public class MbrProdOrderController extends BaseController {
         Map<String, Object> returnMap = WeChatPayUtil.unifiedOrderOfWxMini(order.getOrderNo(),
                                                                             order.getPayRealAmt(),
                                                                             member.getOpenId(),
-                                                                            "",
+                                                                            "/paymentNotify/async_notify/PRODUCT_ORDER.jhtml",
                                                                             "酒庄酒订单",
                                                                             request);
 
