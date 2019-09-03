@@ -13,6 +13,7 @@ import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.SettingUtils;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -279,6 +280,8 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
 
         completeMbrProdOrderItems(order, items);
 
+        checkHasSamePayMode(items);
+
         order.setProdTotalCnt(countProd(items));
         order.setPayTotalAmt(countPayAmt(items));
 
@@ -290,6 +293,19 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         order.setIsIntegral(items.get(0).getIsIntegral());
 
         return order;
+    }
+
+    private void checkHasSamePayMode(List<MbrProdOrderItem> items) {
+
+        Boolean isEqual = items.get(0).getIsIntegral();
+
+        for (MbrProdOrderItem item: items) {
+
+            if (isEqual != item.getIsIntegral())
+                throw new IllegalArgumentException("the order items with different pay mode!");
+
+        }
+
     }
 
     @Transactional
@@ -316,6 +332,7 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
         }
 
         this.update(order);
+        addMbrProdOrderRecordToRepository(order);
 
         return order;
     }

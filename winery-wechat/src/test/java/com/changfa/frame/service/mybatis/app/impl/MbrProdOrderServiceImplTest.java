@@ -143,6 +143,44 @@ public class MbrProdOrderServiceImplTest {
 
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testPlaceAnOrderFailureWithOrderItemsWhichDifferentPayMode() {
+
+        Long wineryId = Long.valueOf(1);
+        Long mbrId = Long.valueOf(1);
+        List<MbrProdOrderItem> differentPayModeItems = getFixtureOrderItemsWhichDifferentPayMode();
+
+        try {
+
+            mbrProdOrderService.placeAnOrder(wineryId, mbrId, differentPayModeItems);
+
+        } catch (IllegalArgumentException e) {
+
+            Assert.assertEquals("the order items with different pay mode!",
+                                e.getMessage());
+            throw e;
+
+        }
+
+
+
+
+    }
+
+    private List<MbrProdOrderItem> getFixtureOrderItemsWhichDifferentPayMode() {
+
+        MbrProdOrderItem item = new MbrProdOrderItem();
+        item.setProdSkuCnt(2);
+        item.setProdSkuId(Long.valueOf(445525426773688320L));
+
+        MbrProdOrderItem item2 = new MbrProdOrderItem();
+        item2.setProdSkuCnt(2);
+        item2.setProdSkuId(Long.valueOf(445544192899284992L));
+
+        return Arrays.asList(item, item2);
+
+    }
+
     private List<MbrProdOrderItem> getFixtureOrderItem() {
 
         MbrProdOrderItem item = new MbrProdOrderItem();
