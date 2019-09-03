@@ -260,27 +260,21 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
         return map;
     }
 
+
     /**
-     * 查询景点图文/景点图片
-     * @param id 景点id
-     * @return Map<String, Object>
-     *  winerySightDetail  图文
-     *  scenicImg  景点图片
+     *  根据状态和sightID获取该景点的详情结果集
+     * @param id
+     * * @param status
+     * @return  List<WinerySightDetail>
      */
     @Override
-    public Map<String, Object> findSightImageText(Long id) {
-//        Map<String, Object>  map = new HashMap<>();
-//        List<WinerySightDetail> winerySightDetailList = winerySightDetailMapper.findSightImageTextByWinerySightId(id);
-//        for (WinerySightDetail winerySightDetail:winerySightDetailList) {
-//            winerySightDetail.setProdSku(prodSkuMapper.getProdNameBySkuIdLike(winerySightDetail.getProdSkuId()));
-//        }
-//        List<String> scenicImg = winerySightImgMapper.findScenicImgById(id); // 查询景点图片
-//        if(winerySightDetailList.size() > 0 && winerySightDetailList != null && scenicImg.size() > 0 && scenicImg != null){
-//            map.put("winerySightDetail",winerySightDetailList);
-//            map.put("scenicImg",scenicImg);
-//        }
-//        return map;
-        return null;
+    public List<WinerySightDetail> getDetailBySightIdAndStatus(Long id,Integer status) {
+        List<WinerySightDetail> winerySightDetailList = winerySightDetailMapper.selectListBySightIdAndStatus(id,status);
+        for (WinerySightDetail winerySightDetail:winerySightDetailList) {
+            ProdSku prodSku = prodSkuMapper.getById(winerySightDetail.getProdSkuId());
+            winerySightDetail.setProdSku(prodSku);
+        }
+        return winerySightDetailList;
     }
 
 
@@ -359,6 +353,17 @@ public class WinerySightServiceImpl extends BaseServiceImpl<WinerySight, Long> i
         return winerySightDetailMapper.delete(id)>0 ? true : false;
     }
 
+    /**
+     * 获取景点图片list
+     * @param sightId
+     * @return
+     */
+    @Override
+    public List<WinerySightImg> getImgList(Long sightId) {
+        WinerySightImg winerySightImg= new WinerySightImg();
+        winerySightImg.setWinerySightId(sightId);
+        return winerySightImgMapper.selectList(winerySightImg);
+    }
 
     /**
      * 根据原文件、新文件地址删除NFS上文件

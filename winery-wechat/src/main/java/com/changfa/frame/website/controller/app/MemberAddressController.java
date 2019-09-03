@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,9 @@ public class MemberAddressController extends BaseController {
         mbrAddr.setMbrId(member.getId());
         mbrAddr.setIsDefault(true);
         List<MbrAddress> list = memberAddressService.selectList(mbrAddr);
+        if(list==null || list.size()==0){
+            return getResult(new HashMap<>());
+        }
         return getResult(list.get(0));
     }
 

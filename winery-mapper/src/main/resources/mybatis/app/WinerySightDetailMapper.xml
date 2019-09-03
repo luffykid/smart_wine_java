@@ -168,5 +168,14 @@
             </where>
         </foreach>
     </update>
+    <select id="selectListBySightIdAndStatus" resultMap="winerySightDetailMap">
+        select
+        <include refid="table_column" />
+        from b_winery_sight_detail wsd
+        <where>
+            Winery_sight_id = #{id} and detail_status = #{status}
+        </where>
+        order by sort
+    </select>
 
 </mapper>

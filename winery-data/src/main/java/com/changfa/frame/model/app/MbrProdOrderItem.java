@@ -81,6 +81,27 @@ public class MbrProdOrderItem extends BaseEntity {
     private BigDecimal integralCnt;
 
 
+    /*********************************************扩展字段**********/
+    /**
+     * ProdSku
+     */
+    private ProdSku prodSku;
+
+    /**
+     * 获取ProdSku
+     */
+
+    public ProdSku getProdSku() {
+        return prodSku;
+    }
+
+    /**
+     * 设置ProdSku
+     */
+    public void setProdSku(ProdSku prodSku) {
+        this.prodSku = prodSku;
+    }
+
     /**
      * 获取商品订单ID
      */

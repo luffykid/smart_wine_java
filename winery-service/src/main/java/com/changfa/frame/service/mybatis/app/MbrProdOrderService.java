@@ -4,7 +4,6 @@ import com.changfa.frame.model.app.MbrProdOrder;
 import com.changfa.frame.model.app.MbrProdOrderItem;
 import com.changfa.frame.service.mybatis.common.BaseService;
 
-import java.util.List;
 import java.util.Date;
 import java.util.List;
 
@@ -36,11 +35,19 @@ public interface MbrProdOrderService extends BaseService<MbrProdOrder, Long> {
      */
     MbrProdOrder addMbrAddressInfoAndChoosePayMode(Long mbrProdOrderId, Long mbrAddressId, Integer payMode);
 
-    /** 根据状态获取订单列表
+    /** 根据状态获取此会员订单列表
      *
      * @param mbrId    会员ID
      * @param status   状态
 
      */
     List<MbrProdOrder> getListByStatus(Long mbrId, Integer status);
+
+    /** 根据此会员的订单列表
+     *
+     * @param mbrId    会员ID
+
+
+     */
+    List<MbrProdOrder> getListByMbrId(Long mbrId);
 }
