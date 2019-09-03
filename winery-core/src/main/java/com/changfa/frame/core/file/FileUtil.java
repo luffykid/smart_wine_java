@@ -138,6 +138,9 @@ public static String getNFSFileName(MultipartFile file) {
         return fileName;
     }
 
+    // 生成随机图片名称
+    fileName = RandomStringUtils.randomAlphanumeric(12);
+
     // 目标文件的绝对路径
     String distDirStr = PropConfig.getProperty(PropAttributes.NFS__SERVICE_FILE_TEMP_PATH);
 
@@ -181,6 +184,8 @@ public static String getNFSUrl(MultipartFile file, String targetDir) {
     } else if (fileName.startsWith("/") || fileName.startsWith("http://") || fileName.startsWith("https://")) {
         return fileName;
     }
+    // 生成随机图片名称
+    fileName = RandomStringUtils.randomAlphanumeric(12);
 
     // 保存文件的目标文件夹，基于项目根路径
     String saveDir = targetDir + DateUtil.convertDateToStr(new Date(), "yyyyMMdd");
