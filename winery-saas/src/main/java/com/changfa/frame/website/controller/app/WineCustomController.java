@@ -143,7 +143,7 @@ public class WineCustomController extends BaseController {
             wineCustomService.addWineCustom(wineCustom,curAdmin.getWineryId());
         }catch (Exception e){
             log.info("此处有错误:{}",e.getMessage());
-            throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
+            throw new CustomException(RESPONSE_CODE_ENUM.ADD_FAILED);
         }
         return getResult("添加成功");
     }

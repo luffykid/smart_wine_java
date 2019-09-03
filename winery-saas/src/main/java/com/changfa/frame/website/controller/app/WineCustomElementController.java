@@ -1,6 +1,8 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.model.app.WineCustomAdvance;
 import com.changfa.frame.model.app.WineCustomElement;
+import com.changfa.frame.service.mybatis.app.WineCustomAdvanceService;
 import com.changfa.frame.service.mybatis.app.WineCustomElementService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
@@ -9,7 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -23,28 +27,31 @@ import java.util.Map;
  * @Version 1.0
  */
 
-@Api(value = "酒贴管理",tags = "酒贴管理")
+@Api(value = "定制化管理",tags = "定制化管理")
 @RestController("adminWineCustomElement")
 @RequestMapping("/admin/auth/WineCustom/Element")
 public class WineCustomElementController extends BaseController {
 
 
 
-    @Resource(name = "wineCustomElementServiceImpl")
-    private WineCustomElementService wineCustomElementService;
+    @Resource(name = "wineCustomAdvanceServiceImpl")
+    private WineCustomAdvanceService wineCustomAdvanceService;
 
 
-    @ApiOperation(value = "新建酒贴",notes = "新建酒贴")
-    @ApiImplicitParams(@ApiImplicitParam(name = "wineCustomElement", value = "产品新建对象", dataType = "WineCustomElement"))
-    public Map<String,Object> addWineCustomElement(WineCustomElement wineCustomElement){
 
+    @ApiOperation(value = "新建预制图",notes = "新建预制图")
+    @ApiImplicitParams(@ApiImplicitParam(name = "winecustomAdcance", value = "预制图新建", dataType = "winecustomAdvance"))
+    @RequestMapping(value = "/addWineCustomAdvance", method = RequestMethod.POST)
+    public Map<String,Object> addElementAdvance(@RequestBody WineCustomAdvance wineCustomAdvance){
+        log.info("com.changfa.frame.website.controller.app.WineCustomElementController addElementAdvance : {}",wineCustomAdvance);
         try {
-            wineCustomElementService.addWineCustomElement(wineCustomElement);
+            wineCustomAdvanceService.addWineCustomElementAdvance(wineCustomAdvance);
         }catch (Exception e){
-            log.info("com.changfa.frame.website.controller.app.WineCustomElementController addWineCustomElement :{}",e.getMessage());
+            log.info(e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.ADD_FAILED);
         }
-        return getResult("新建酒贴成功");
+        return getResult("预制图新增成功");
+
     }
 
 }
