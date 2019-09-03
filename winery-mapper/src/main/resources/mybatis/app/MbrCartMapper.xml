@@ -26,6 +26,13 @@
         where cart.id = #{id}
     </select>
 
+    <select id="getByProdSkuId" resultMap="mbrCartMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from m_mbr_cart cart
+        where cart.prod_sku_id = #{prodSkuId}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrCart" >
         insert into m_mbr_cart (id, winery_id, mbr_id, prod_id, prod_sku_id, prod_sku_cnt, create_date, 
             modify_date)
