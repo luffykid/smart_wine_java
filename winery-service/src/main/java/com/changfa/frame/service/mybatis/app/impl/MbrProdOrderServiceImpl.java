@@ -332,6 +332,7 @@ public class MbrProdOrderServiceImpl extends BaseServiceImpl<MbrProdOrder, Long>
     @Override
     public MbrProdOrder addMbrAddressInfoAndChoosePayMode(Long mbrProdOrderId, Long mbrAddressId, Integer payMode) {
 
+        log.info("mbrProdOrderId" + mbrProdOrderId);
         MbrProdOrder order = mbrProdOrderMapper.getById(mbrProdOrderId);
         MbrAddress address = mbrAddressMapper.getById(mbrAddressId);
 

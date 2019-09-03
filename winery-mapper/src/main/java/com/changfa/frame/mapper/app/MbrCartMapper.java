@@ -11,4 +11,7 @@ import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.MbrCart;
 
 public interface MbrCartMapper extends BaseMapper<MbrCart, Long> {
+
+    MbrCart getByProdSkuId(Long prodSkuId);
+
 }

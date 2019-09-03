@@ -14,25 +14,23 @@
     </resultMap>
 
     <sql id="table_column" >
-        wineryAdjustAdvance.id as id, wineryAdjustAdvance.winery_adjust_wine_id as winery_adjust_wine_id, 
-        wineryAdjustAdvance.advance_name as advance_name, wineryAdjustAdvance.advance_img as advance_img, 
-        wineryAdjustAdvance.advance_remark as advance_remark, wineryAdjustAdvance.status as status, 
-        wineryAdjustAdvance.sort as sort, wineryAdjustAdvance.create_date as create_date, 
-        wineryAdjustAdvance.modify_date as modify_date
+        waa.id as id, waa.winery_adjust_wine_id as winery_adjust_wine_id, waa.advance_name as advance_name,
+        waa.advance_img as advance_img, waa.advance_remark as advance_remark, waa.status as status,
+        waa.sort as sort, waa.create_date as create_date, waa.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineryAdjustAdvanceMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from b_winery_adjust_advance wineryAdjustAdvance
-        where wineryAdjustAdvance.id = #{id}
+        from b_winery_adjust_advance waa
+        where waa.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineryAdjustAdvance" >
-        insert into b_winery_adjust_advance (id, winery_adjust_wine_id, advance_name, advance_img, advance_remark, 
-            status, sort, create_date, modify_date)
-        values (#{id}, #{wineryAdjustWineId}, #{advanceName}, #{advanceImg}, #{advanceRemark}, 
-            #{status}, #{sort}, #{createDate}, #{modifyDate})
+        insert into b_winery_adjust_advance (id, winery_adjust_wine_id, advance_name, advance_img, advance_remark,
+        status, sort, create_date, modify_date)
+        values (#{id}, #{wineryAdjustWineId}, #{advanceName}, #{advanceImg}, #{advanceRemark},
+        #{status}, #{sort}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.WineryAdjustAdvance" >
@@ -72,35 +70,45 @@
     </delete>
 
     <select id="selectList" resultMap="wineryAdjustAdvanceMap" >
-        select 
+        select
         <include refid="table_column" />
-        from b_winery_adjust_advance wineryAdjustAdvance
+        from b_winery_adjust_advance waa
         <where >
             <if test="wineryAdjustWineId != null" >
-                and wineryAdjustAdvance.winery_adjust_wine_id = #{wineryAdjustWineId}
+                and waa.winery_adjust_wine_id = #{wineryAdjustWineId}
             </if>
             <if test="advanceName != null and advanceName != ''" >
-                and wineryAdjustAdvance.advance_name = #{advanceName}
+                and waa.advance_name = #{advanceName}
             </if>
             <if test="advanceImg != null and advanceImg != ''" >
-                and wineryAdjustAdvance.advance_img = #{advanceImg}
+                and waa.advance_img = #{advanceImg}
             </if>
             <if test="advanceRemark != null and advanceRemark != ''" >
-                and wineryAdjustAdvance.advance_remark = #{advanceRemark}
+                and waa.advance_remark = #{advanceRemark}
             </if>
             <if test="status != null" >
-                and wineryAdjustAdvance.status = #{status}
+                and waa.status = #{status}
             </if>
             <if test="sort != null" >
-                and wineryAdjustAdvance.sort = #{sort}
+                and waa.sort = #{sort}
             </if>
             <if test="createDate != null" >
-                and wineryAdjustAdvance.create_date = #{createDate}
+                and waa.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and wineryAdjustAdvance.modify_date = #{modifyDate}
+                and waa.modify_date = #{modifyDate}
             </if>
         </where>
+    </select>
+    <select id="selectListByAdjustIdAndStatusOrderBySort" resultMap="wineryAdjustAdvanceMap">
+        select
+        <include refid="table_column" />
+        from b_winery_adjust_advance waa
+        <where>
+            waa.winery_adjust_wine_id = #{adjustId}
+            and waa.status = #{status}
+        </where>
+        order by sort
     </select>
 
 </mapper>

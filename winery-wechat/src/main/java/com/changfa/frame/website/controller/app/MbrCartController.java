@@ -30,16 +30,11 @@ public class MbrCartController extends BaseController {
     @PostMapping("/addProd")
     public Map<String, Object> addProd(@RequestBody MbrCart cart, HttpServletRequest request) {
 
-        Member member = getCurMember(request);
-        cart.setId(IDUtil.getId());
-        cart.setMbrId(member.getId());
-        cart.setWineryId(getCurWineryId());
-        cart.setCreateDate(new Date());
-        cart.setModifyDate(new Date());
+        MbrCart mbrCart = mbrCartServiceImpl.addProd(getCurMember(request).getId(),
+                                                     getCurWineryId(),
+                                                     cart);
 
-        mbrCartServiceImpl.save(cart);
-
-        return getResult(cart);
+        return getResult(mbrCart);
     }
 
     @ApiOperation(value = "获取购物车列表", tags = "获取购物车列表")

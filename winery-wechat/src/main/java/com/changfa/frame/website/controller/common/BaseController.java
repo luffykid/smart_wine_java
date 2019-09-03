@@ -78,6 +78,9 @@ public abstract class BaseController {
         } else if (eClass.equals(CustomException.class)) { //系统业务异常
             CustomException ce = (CustomException) ex;
             addExceptionToMap(new CustomException(ce.getErrorCode(), ce.getMessage()), map);
+        } else if (eClass.equals(MemberIntegralNotEnough.class)) {
+            MemberIntegralNotEnough notEnough = (MemberIntegralNotEnough) ex;
+            addExceptionToMap(notEnough, map);
         } else {
             addResCodeToMap(RESPONSE_CODE_ENUM.SERVER_ERROR, map);
         }
@@ -113,6 +116,17 @@ public abstract class BaseController {
      * @param map                   接口异常集合
      */
     protected void addExceptionToMap(CustomException appInterfaceException, Map<String, Object> map) {
+        map.put(ResultUtil.ERRORCODE_PARAM_NAME, appInterfaceException.getErrorCode());
+        map.put(ResultUtil.ERRORMSG_PARAM_NAME, appInterfaceException.getErrorMsg());
+    }
+
+    /**
+     * 添加异常信息到map中
+     *
+     * @param appInterfaceException 接口异常类
+     * @param map                   接口异常集合
+     */
+    protected void addExceptionToMap(MemberIntegralNotEnough appInterfaceException, Map<String, Object> map) {
         map.put(ResultUtil.ERRORCODE_PARAM_NAME, appInterfaceException.getErrorCode());
         map.put(ResultUtil.ERRORMSG_PARAM_NAME, appInterfaceException.getErrorMsg());
     }

@@ -32,6 +32,60 @@ public class WineryAdjustAdvance extends BaseEntity {
 
     /** 预置图状态0：新建1：启用2：禁用 */
     private Integer status;
+    public enum STATUS_ENUM {
+        XJ(0, "新建"),
+        QY(1, "启用"),
+        JY(2, "禁用");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         */
+        public static WineryAdjustAdvance.STATUS_ENUM getEnum(Integer value) {
+            for (WineryAdjustAdvance.STATUS_ENUM queryDayEnum : WineryAdjustAdvance.STATUS_ENUM.values()) {
+                if (value.equals(queryDayEnum.getValue())) {
+                    return queryDayEnum;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
 
     /** 排序 */
     private Integer sort;

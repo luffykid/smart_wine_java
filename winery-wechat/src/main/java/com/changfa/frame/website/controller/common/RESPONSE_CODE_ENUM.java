@@ -45,8 +45,8 @@ public enum RESPONSE_CODE_ENUM {
     CREATE_ORDER_ERROR("1056","创建订单失败"),
     SIGN_EXIST("1060","你已经报名过了！"),
     SIGN_OUT_TIME("1061","超过了报名时间"),
-    SAVE_CUSTOM_INFO_FAIL("1062","保存消息失败");
-
+    SAVE_CUSTOM_INFO_FAIL("1062","保存消息失败"),
+    MBR_INTEGRAL_NOT_ENOUGH("1063", "会员积分不足");
 
 
     /**
