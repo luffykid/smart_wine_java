@@ -220,12 +220,12 @@
     </select>
 
     <!--批量更新sku售卖数量-->
-    <update id="updateList">
+    <update id="updateSellCnt">
         <foreach collection="prodSkus" separator=";" item="item">
             update s_prod_sku
             <set>
-                <if test="ite.sellCnt != null">
-                    sell_total_cnt = sell_total_cnt + #{sellCnt},
+                <if test="item.sellCnt != null">
+                    sell_total_cnt = sell_total_cnt + #{item.sellCnt},
                 </if>
             </set>
             where id = #{item.id}

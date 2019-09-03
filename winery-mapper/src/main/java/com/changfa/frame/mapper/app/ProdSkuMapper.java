@@ -35,6 +35,6 @@ public interface ProdSkuMapper extends BaseMapper<ProdSku, Long> {
      * @param prodSkus 商品SKU集合
      * @return
      */
-    int updateSellCnt(List<ProdSku> prodSkus);
+    int updateSellCnt(@Param("prodSkus") List<ProdSku> prodSkus);
 
 }

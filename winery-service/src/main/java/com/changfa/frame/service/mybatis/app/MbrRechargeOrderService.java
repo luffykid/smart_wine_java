@@ -11,10 +11,10 @@ public interface MbrRechargeOrderService extends BaseService<MbrRechargeOrder, L
      * 会员新建订单
      * @param mbrId
      * @param wineryId
-     * @param payTotalAmt
-     * @param payRealAmt
+     * @param payAmt
+
      */
-    void recharge(Long mbrId, Long wineryId, BigDecimal payTotalAmt, BigDecimal payRealAmt);
+    void unifiedOrder(Long mbrId, Long wineryId, BigDecimal payAmt);
 
 
     /**
