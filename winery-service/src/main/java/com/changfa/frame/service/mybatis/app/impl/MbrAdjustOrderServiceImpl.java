@@ -58,7 +58,7 @@ public class MbrAdjustOrderServiceImpl extends BaseServiceImpl<MbrAdjustOrder, L
         mbrAdjustOrder.setWineryId(wineryAdjustWine.getWineryId());
         mbrAdjustOrder.setPayMode(MbrAdjustOrder.PAY_MODE_ENUM.WX_MINI_MODE.getValue());//微信支付
         mbrAdjustOrder.setPayTotalAmt(payTotalAmt);
-        mbrAdjustOrder.setPayRealAmt(mbrAdjustOrder.getPayTotalAmt());
+        mbrAdjustOrder.setPayRealAmt(payTotalAmt);
         //mbrAdjustOrder.setPrintImg();
         mbrAdjustOrder.setOrderStatus(MbrAdjustOrder.ORDER_STATUS_ENUM.PAY_NOT.getValue());//未支付
         mbrAdjustOrder.setOrderNo(orderNo);
@@ -72,7 +72,7 @@ public class MbrAdjustOrderServiceImpl extends BaseServiceImpl<MbrAdjustOrder, L
         mbrAdjustOrderRecord.setMbrAdjustOrderId(mbrAdjustOrder.getId());
         mbrAdjustOrderRecord.setWineryId(wineryAdjustWine.getWineryId());
         mbrAdjustOrderRecord.setPayTotalAmt(payTotalAmt);
-        mbrAdjustOrderRecord.setPayRealAmt(mbrAdjustOrderRecord.getPayTotalAmt());
+        mbrAdjustOrderRecord.setPayRealAmt(payTotalAmt);
         mbrAdjustOrderRecord.setOrderStatus(MbrAdjustOrderRecord.ORDER_STATUS_ENUM.PAY_NOT.getValue());
         mbrAdjustOrderRecord.setCreateDate(new Date());
 

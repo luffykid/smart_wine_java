@@ -4,6 +4,7 @@ import com.changfa.frame.model.app.MbrRechargeOrder;
 import com.changfa.frame.service.mybatis.common.BaseService;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public interface MbrRechargeOrderService extends BaseService<MbrRechargeOrder, Long> {
 
@@ -14,7 +15,7 @@ public interface MbrRechargeOrderService extends BaseService<MbrRechargeOrder, L
      * @param payAmt
 
      */
-    void unifiedOrder(Long mbrId, Long wineryId, BigDecimal payAmt);
+    Map<String, Object> unifiedOrder(Long mbrId, Long wineryId, BigDecimal payAmt);
 
 
     /**

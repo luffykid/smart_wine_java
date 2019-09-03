@@ -1,5 +1,6 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.core.weChat.WeChatPayUtil;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrRechargeOrderService;
 import com.changfa.frame.website.controller.common.BaseController;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,12 +39,19 @@ public class MbrRechargeOrderController extends BaseController {
         Member member = getCurMember(request);
         Long wineryId = getCurWineryId();
         try{
-            mbrRechargeOrderServiceImpl.unifiedOrder(member.getId(), wineryId,payAmt);
+            Map<String, Object> orderDetail = mbrRechargeOrderServiceImpl.unifiedOrder(member.getId(), wineryId, payAmt);
+            String orderNo = (String) orderDetail.get("orderNo");
+//            BigDecimal payTotalAmt = (BigDecimal) orderDetail.get("payTotalAmt");
+
+            //微信预下单
+            Map<String, Object> returnMap = WeChatPayUtil.unifiedOrderOfWxMini(orderNo,
+                    payAmt, member.getOpenId(),
+                    "/paymentNotify/async_notify/MBR_RECHARGE_ORDER.jhtml", "会员新建充值订单", request);
+            return getResult(returnMap);
         }catch (Exception e){
             log.info("此处有错误:{}", "创建订单失败");
             throw new CustomException(RESPONSE_CODE_ENUM.CREATE_ORDER_ERROR);
         }
-        return getResult(new HashMap<>());
     }
 
 }
