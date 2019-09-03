@@ -1,17 +1,20 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.file.FilePathConsts;
+import com.changfa.frame.core.file.FileUtil;
+import com.changfa.frame.core.util.OrderNoUtil;
 import com.changfa.frame.mapper.app.*;
 import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MbrWineCustomOrderService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service("mbrWineCustomOrderServiceImpl")
 public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustomOrder, Long> implements MbrWineCustomOrderService {
@@ -44,76 +47,150 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
      * 保存会员定制信息
      *
      * @param mbrWineCustomDetails 会员白酒定制详情集合
+     * @param mbrWineCustom        会员白酒定制
      * @param member               会员
      * @return
      */
-    @Override
-    public boolean saveMbrCustomInfo(List<MbrWineCustomDetail> mbrWineCustomDetails, Member member) {
-        // 封装会员
-        List<MbrWineCustomDetail> mbrCustomDetails = new ArrayList();
-        MbrWineCustom mbrWineCustom = new MbrWineCustom();
-        for (MbrWineCustomDetail detail : mbrWineCustomDetails) {
-            MbrWineCustomDetail mbrWineCustomDetail = new MbrWineCustomDetail();
-            mbrWineCustomDetail.setId(IDUtil.getId());
-            mbrWineCustomDetail.setWineCustomId(detail.getWineCustomId());
-            mbrWineCustomDetail.setWineCustomElementId(detail.getWineCustomElementId());
-            mbrWineCustomDetail.setMbrWineCustomId(null);
-            mbrWineCustomDetail.setMbrId(member.getId());
-
-//            mbrWineCustomDetail
-//            mbrWineCustomDetail
-//            mbrWineCustomDetail
-        }
-
-
-        return false;
-    }
-
     @Transactional
     @Override
-    public void addShipInfoForTheOrder(Long mbrId, Long memberAddressId, Long mbrWineCustomOrderId) {
+    public Map<String, Object> saveMbrCustomInfo(List<MbrWineCustomDetail> mbrWineCustomDetails, MbrWineCustom mbrWineCustom, Member member) {
+        // 初始化返回数据
+        Map<String, Object> returnMap = new HashMap();
+        Long mbrWineCustomId = IDUtil.getId();
+        try {
+            // 1、依据定制ID查询会员白酒定制并封装会员定制对象
+            WineCustom wineCustom = wineCustomMapper.getById(mbrWineCustom.getWineCustomId());
+            MbrWineCustom mbrWineCustomOfSave = new MbrWineCustom();
+            mbrWineCustomOfSave.setId(mbrWineCustomId);
+            mbrWineCustomOfSave.setWineCustomId(mbrWineCustom.getWineCustomId());
+            mbrWineCustomOfSave.setWineryId(member.getWineryId());
+            mbrWineCustomOfSave.setMbrId(member.getId());
+            // 定制数量
+            Integer customCnt = mbrWineCustom.getCustomCnt();
+            mbrWineCustomOfSave.setCustomCnt(customCnt);
+            // 定制价格
+            BigDecimal customPrice = wineCustom.getCustomPrice();
+            mbrWineCustomOfSave.setCustomPrice(customPrice);
 
-        Member member = memberMapper.getById(mbrId);
+            // 定制总金额
+            BigDecimal customTotalPrice = customPrice.multiply(new BigDecimal(customCnt)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            mbrWineCustomOfSave.setCustomTotalAmt(customTotalPrice);
+            mbrWineCustomOfSave.setCustomName(wineCustom.getCustomName());
+            mbrWineCustomOfSave.setCreateDate(new Date());
+            mbrWineCustomOfSave.setModifyDate(new Date());
+            mbrWineCustomMapper.save(mbrWineCustomOfSave);
 
-        MbrAddress address = mbrAddressMapper.getById(memberAddressId);
+            // 2、根据酒庄ID查询白酒定制元素内容
+            WineCustomElementContent wineCustomElementContent = new WineCustomElementContent();
+            wineCustomElementContent.setWineryId(member.getWineryId());
+            wineCustomElementContent.setWineCustomId(mbrWineCustom.getWineCustomId());
+            List<WineCustomElementContent> elementContents = wineCustomElementContentMapper.selectList(wineCustomElementContent);
 
-        MbrWineCustomOrder order = mbrWineCustomOrderMapper.getById(mbrWineCustomOrderId);
+            // 3、封装会员定制详情
+            List<MbrWineCustomDetail> mbrCustomDetails = new ArrayList();
+            for (MbrWineCustomDetail detail : mbrWineCustomDetails) {
+                MbrWineCustomDetail mbrWineCustomDetail = new MbrWineCustomDetail();
+                mbrWineCustomDetail.setId(IDUtil.getId());
+                mbrWineCustomDetail.setWineCustomId(mbrWineCustom.getWineCustomId());
+                mbrWineCustomDetail.setWineCustomElementId(detail.getWineCustomElementId());
+                mbrWineCustomDetail.setMbrWineCustomId(mbrWineCustomId);
+                mbrWineCustomDetail.setMbrId(member.getId());
+                // 设置背景图、蒙版、底图、预置图
+                for (WineCustomElementContent elementContent : elementContents) {
+                    if (elementContent.getWineCustomElementId().equals(detail.getWineCustomElementId())) {
+                        mbrWineCustomDetail.setBgImg(elementContent.getBgImg());
+                        mbrWineCustomDetail.setBottomImg(elementContent.getBottomImg());
+                        mbrWineCustomDetail.setMaskImg(elementContent.getMaskImg());
+                        mbrWineCustomDetail.setCreateDate(new Date());
+                        mbrWineCustomDetail.setModifyDate(new Date());
+                        // 获取预览图并设置
+                        String previewImg = FileUtil.copyNFSByFileName(detail.getPreviewImg(), FilePathConsts.TEST_FILE_PATH);
+                        mbrWineCustomDetail.setPreviewImg(previewImg);
+                    }
+                }
+                mbrCustomDetails.add(mbrWineCustomDetail);
+            }
+            mbrWineCustomDetailMapper.saveOfBatch(mbrCustomDetails);
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getFullStackTrace(e));
+            returnMap.put("result", false);
+            return returnMap;
+        }
 
-        checkValidate(order, member, address);
-
-        addShipInfoForTheOrder(order, address);
-
-        mbrWineCustomOrderMapper.update(order);
-
+        // 如果成功，则返回会员定制ID
+        returnMap.put("result", true);
+        returnMap.put("mbrWineCustomId", mbrWineCustomId);
+        return returnMap;
     }
 
-    private void addShipInfoForTheOrder(MbrWineCustomOrder order, MbrAddress address) {
-        order.setShippingDetailAddr(address.getDetailAddress());
-        order.setShippingProvinceId(address.getProvince());
-        order.setShippingCityId(address.getCity());
-        order.setShippingCountyId(address.getCountry());
-        order.setShippingPersonName(address.getContact());
-        order.setShippingPersonPhone(address.getPhone());
-        order.setModifyDate(new Date());
+    /**
+     * 处理会员定制预下单业务
+     *
+     * @param member          会员
+     * @param mbrWineCustomId 会员定制ID
+     * @param mbrAddressId    会员地址ID
+     * @param customCnt       定制数量
+     * @return
+     */
+    @Transactional
+    @Override
+    public Map<String, Object> handleCustomPreOrder(Member member, Long mbrWineCustomId, Long mbrAddressId, Integer customCnt) {
+        // 初始化返回数据
+        Map<String, Object> returnMap = new HashMap();
+        Long mbrWineCustomOrderId = IDUtil.getId();
+        String orderNo = OrderNoUtil.get();
 
-    }
+        // 获取会员地址
+        MbrAddress mbrAddress = mbrAddressMapper.getById(mbrAddressId);
 
-    private void checkValidate(MbrWineCustomOrder order, Member member, MbrAddress address) {
+        // 计算总金额
+        MbrWineCustom mbrWineCustom = mbrWineCustomMapper.getById(mbrWineCustomId);
+        BigDecimal payTotalAmt = mbrWineCustom.getCustomPrice().multiply(new BigDecimal(customCnt)).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        if (order == null)
-            throw new IllegalArgumentException("the mbrWineCustomOrderId don't exsit!");
+        try {
+            // 1、更新会员白酒定制
+            mbrWineCustom.setMbrWineCustomOrderId(mbrWineCustomOrderId);
+            mbrWineCustom.setCustomCnt(customCnt);
+            mbrWineCustom.setCustomTotalAmt(payTotalAmt);
+            mbrWineCustomMapper.update(mbrWineCustom);
 
-        if (member == null)
-            throw new IllegalArgumentException("the member don't exsit!");
+            // 2、保存订单信息
+            MbrWineCustomOrder customOrder = new MbrWineCustomOrder();
+            customOrder.setId(mbrWineCustomOrderId);
+            customOrder.setWineryId(member.getWineryId());
+            customOrder.setMbrId(member.getId());
+            customOrder.setCustomTotalCnt(customCnt);
+            customOrder.setPayTotalAmt(payTotalAmt);
+            customOrder.setPayRealAmt(payTotalAmt);
+            customOrder.setOrderStatus(MbrWineCustomOrder.ORDER_STATUS_ENUM.UNPAID.getValue());
+            customOrder.setShippingDetailAddr(mbrAddress.getDetailAddress());
+            customOrder.setShippingProvinceId(mbrAddress.getProvince());
+            customOrder.setShippingCityId(mbrAddress.getCity());
+            customOrder.setShippingCountyId(mbrAddress.getCounty());
+            customOrder.setOrderNo(orderNo);
+            customOrder.setCreateDate(new Date());
+            customOrder.setModifyDate(new Date());
+            mbrWineCustomOrderMapper.save(customOrder);
 
-        if (address == null)
-            throw new IllegalArgumentException("the address don't exsit!");
+            // 3、保存订单记录信息
+            MbrWineCustomOrderRecord customOrderRecord = new MbrWineCustomOrderRecord();
+            customOrderRecord.setId(IDUtil.getId());
+            customOrderRecord.setMbrWineCustomOrderId(mbrWineCustomOrderId);
+            customOrderRecord.setOrderStatus(MbrWineCustomOrderRecord.ORDER_STATUS_ENUM.UNPAID.getValue());
+            customOrderRecord.setStatusDate(new Date());
+            customOrderRecord.setCreateDate(new Date());
+            customOrderRecord.setModifyDate(new Date());
+            mbrWineCustomOrderRecordMapper.save(customOrderRecord);
+        } catch (Exception e) {
+            log.error(ExceptionUtils.getFullStackTrace(e));
+            returnMap.put("result", false);
+            return returnMap;
+        }
 
-        if (!address.getMbrId().equals(member.getId()))
-            throw new IllegalArgumentException("the address don't belong to the member!");
-
-        if (order.getOrderStatus() != MbrWineCustomOrder.ORDER_STATUS_ENUM.UNPAID.getValue())
-            throw new IllegalStateException("the operation don't allowed for the current mbrWineCustomOrder state!");
-
+        // 如果成功，则返回会员定制ID
+        returnMap.put("result", true);
+        returnMap.put("orderNo", orderNo);
+        returnMap.put("payTotalAmt", payTotalAmt);
+        return returnMap;
     }
 }

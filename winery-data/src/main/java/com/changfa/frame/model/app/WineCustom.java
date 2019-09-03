@@ -14,33 +14,50 @@ import java.util.List;
 
 /**
  * 定制酒
+ *
  * @version 1.0 2019-08-26
  */
 public class WineCustom extends BaseEntity {
-    /** 空对象 用于selectList方法查询所有WineCustom*/
+    /**
+     * 空对象 用于selectList方法查询所有WineCustom
+     */
     public static final WineCustom NULL = new WineCustom();
 
     private static final long serialVersionUID = 445866094628962304L;
 
-    /** 酒庄ID */
+    /**
+     * 酒庄ID
+     */
     private Long wineryId;
 
-    /** 商品SKU ID */
+    /**
+     * 商品SKU ID
+     */
     private Long prodSkuId;
 
-    /** 商品SKU名称 */
+    /**
+     * 商品SKU名称
+     */
     private String skuName;
 
-    /** 定制名称 */
+    /**
+     * 定制名称
+     */
     private String customName;
 
-    /** 封面图 */
+    /**
+     * 封面图
+     */
     private String customCoverImg;
 
-    /** 定制说明图 */
+    /**
+     * 定制说明图
+     */
     private String customStateImg;
 
-    /** 商品ID */
+    /**
+     * 商品ID
+     */
     private Long prodId;
 
     public Long getProdId() {
@@ -51,10 +68,12 @@ public class WineCustom extends BaseEntity {
         this.prodId = prodId;
     }
 
-    /** 定制状态
-     1：新建
-     2：发布
-     3：取消发布 */
+    /**
+     * 定制状态
+     * 1：新建
+     * 2：发布
+     * 3：取消发布
+     */
     private Integer customStatus;
 
     public enum CUSTOM_STATUS_ENUM {
@@ -114,22 +133,34 @@ public class WineCustom extends BaseEntity {
         }
     }
 
-    /** 定制价格 */
+    /**
+     * 定制价格
+     */
     private BigDecimal customPrice;
 
-    /** 销售总数量 */
+    /**
+     * 销售总数量
+     */
     private Integer sellTotalCnt;
 
-    /** 商品名称*/
-    private String  prodName;
+    /**
+     * 商品名称
+     */
+    private String prodName;
 
-    /** 定制元素*/
+    /**
+     * 定制元素
+     */
     private String elementName;
 
-    /**元素对象*/
+    /**
+     * 元素对象
+     */
     private List<WineCustomElement> wineCustomElementList;
 
-    /**定制元素内容对象*/
+    /**
+     * 定制元素内容对象
+     */
     private List<WineCustomElementContent> wineCustomElementContentList;
     ;
 
@@ -219,9 +250,9 @@ public class WineCustom extends BaseEntity {
 
     /**
      * 获取定制状态
-     1：新建
-     2：发布
-     3：取消发布
+     * 1：新建
+     * 2：发布
+     * 3：取消发布
      */
     public Integer getCustomStatus() {
         return customStatus;
@@ -229,9 +260,9 @@ public class WineCustom extends BaseEntity {
 
     /**
      * 设置定制状态
-     1：新建
-     2：发布
-     3：取消发布
+     * 1：新建
+     * 2：发布
+     * 3：取消发布
      */
     public void setCustomStatus(Integer customStatus) {
         this.customStatus = customStatus;

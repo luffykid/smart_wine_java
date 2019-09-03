@@ -1,8 +1,12 @@
 package com.changfa.frame.website.controller.app;
 
+import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.model.app.Prod;
 import com.changfa.frame.service.mybatis.app.MemberService;
+import com.changfa.frame.website.controller.common.BaseController;
+import com.changfa.frame.website.controller.common.CustomException;
+import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -27,7 +31,7 @@ import java.util.Map;
 @Api(value = "会员管理",tags = "会员管理")
 @RestController("adminMemberController")
 @RequestMapping("/admin/auth/Member")
-public class MemberController {
+public class MemberController extends BaseController {
 
 
     @Resource(name="memberServiceImpl")
@@ -38,7 +42,13 @@ public class MemberController {
     @RequestMapping(value = "/addProd", method = RequestMethod.POST)
     public Map<String,Object> addMember(HttpServletRequest request, @RequestBody Member member){
 
-
-        return null;
+        Admin admin = getCurAdmin(request);
+        try {
+            memberService.saveMember(admin,member);
+        }catch (Exception e){
+            log.info("com.changfa.frame.website.controller.app.MemberController addMember:{}",e.getMessage());
+            throw new CustomException(RESPONSE_CODE_ENUM.ADD_FAILED);
+        }
+        return getResult("新增成功");
     }
 }

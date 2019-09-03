@@ -127,6 +127,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     @Override
     public void saveMember(Admin admin,Member member) {
         member.setWineryId(admin.getWineryId());
+        member.setStatus(Member.STATUS_ENUM.NORMAL.getValue());
         try {
             member.setCreateDate(DateUtil.getCurDate());
         } catch (ParseException e) {

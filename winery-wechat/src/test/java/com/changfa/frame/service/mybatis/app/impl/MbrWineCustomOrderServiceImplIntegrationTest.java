@@ -48,9 +48,9 @@ public class MbrWineCustomOrderServiceImplIntegrationTest {
     public void testAddShipInfoForTheOrder() {
 
         Long mbrWineCustomOrderId = Long.valueOf(447185632331038720L);
-
-        mbrWineCustomOrderService.addShipInfoForTheOrder(Long.valueOf(1), Long.valueOf(446980587345936384L),
-                                                                                mbrWineCustomOrderId);
+//
+//        mbrWineCustomOrderService.addShipInfoForTheOrder(Long.valueOf(1), Long.valueOf(446980587345936384L),
+//                                                                                mbrWineCustomOrderId);
 
 
         MbrWineCustomOrder orderUpdated = mbrWineCustomOrderMapper.getById(mbrWineCustomOrderId);

@@ -127,4 +127,18 @@
         </where>
     </select>
 
+    <!-- 批量保存 -->
+    <insert id="saveOfBatch" parameterType="com.changfa.frame.model.app.MbrWineCustomDetail" >
+        insert into m_mbr_wine_custom_detail
+            (id, wine_custom_id, wine_custom_element_id, mbr_wine_custom_id, mbr_id,
+            bg_img, mask_img, preview_img, bottom_img, print_img, create_date,
+            modify_date)
+        values
+            <foreach collection="mbrWineCustomDetails" item="item" index="index" separator=",">
+                (#{item.id}, #{item.wineCustomId}, #{item.wineCustomElementId}, #{item.mbrWineCustomId}, #{item.mbrId},
+                #{item.bgImg}, #{item.maskImg}, #{item.previewImg}, #{item.bottomImg}, #{item.printImg}, #{item.createDate},
+                #{item.modifyDate})
+            </foreach>
+    </insert>
+
 </mapper>

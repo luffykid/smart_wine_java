@@ -11,7 +11,6 @@ import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * 会员白酒定制订单
@@ -55,35 +54,6 @@ public class MbrWineCustomOrder extends BaseEntity {
      * 4：支付成功（回调通知成功）
      * 5：支付失败（回调通知失败）
      */
-    private Date payDate;
-
-    public Date getPayDate() {
-        return payDate;
-    }
-
-    public void setPayDate(Date payDate) {
-        this.payDate = payDate;
-    }
-
-    /** 预支付返回包*/
-    private Map<String, Object> unifiedOrderReturnMap;
-
-    public Map<String, Object> getUnifiedOrderReturnMap() {
-        return unifiedOrderReturnMap;
-    }
-
-    /** openId */
-    private String openId;
-
-    public String getOpenId() {
-        return openId;
-    }
-
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
-
-
     private Integer orderStatus;
 
     /**
@@ -127,28 +97,6 @@ public class MbrWineCustomOrder extends BaseEntity {
      */
     private String shippingDetailAddr;
 
-    public static MbrWineCustomOrder createOrder(Long wineryId,
-                                                 MbrWineCustom mbrWineCustom,
-                                                 Long mbrWineCustomOrderId,
-                                                 String orderNo) {
-
-        checkValidate(mbrWineCustom, mbrWineCustomOrderId, orderNo);
-
-        MbrWineCustomOrder order = new MbrWineCustomOrder();
-        order.setId(mbrWineCustomOrderId);
-        order.setOrderNo(orderNo);
-        order.setCreateDate(new Date());
-        order.setModifyDate(new Date());
-        order.setWineryId(wineryId);
-
-        order.setPayTotalAmt(mbrWineCustom.getCustomTotalAmt());
-        order.setPayRealAmt(mbrWineCustom.getCustomTotalAmt());
-
-        order.setMbrId(mbrWineCustom.getMbrId());
-        order.setOrderStatus(ORDER_STATUS_ENUM.UNPAID.getValue());
-
-        return order;
-    }
     /**
      * 收获省份ID
      */
@@ -164,19 +112,6 @@ public class MbrWineCustomOrder extends BaseEntity {
      */
     private Long shippingCountyId;
 
-    private static void checkValidate(MbrWineCustom mbrWineCustom,
-                                      Long mbrWineCustomOrderId,
-                                      String orderNo) {
-
-        if (mbrWineCustom == null)
-            throw new NullPointerException("mbrWineCustom must not be null!");
-
-        if (mbrWineCustomOrderId == null)
-            throw new NullPointerException("mbrWineCustomOrderId must not be null!");
-
-        if (orderNo == null)
-            throw  new NullPointerException("orderNo must not be null!");
-    }
     /**
      * 收货人名称
      */
@@ -197,6 +132,12 @@ public class MbrWineCustomOrder extends BaseEntity {
      */
     private String orderNo;
 
+    /**
+     * 获取支付时间
+     */
+    private Date payDate;
+
+    /************** 扩展字段 ****************/
 
     /**
      * 获取酒庄ID
@@ -274,12 +215,12 @@ public class MbrWineCustomOrder extends BaseEntity {
 
     /**
      * 设置订单状态
-1：未支付（已生成预支付ID）
-2：已取消（取消订单）
-3：已支付（用户完成支付）
-4：支付成功（回调通知成功）
-5：支付失败（回调通知失败）
-    */
+     * 1：未支付（已生成预支付ID）
+     * 2：已取消（取消订单）
+     * 3：已支付（用户完成支付）
+     * 4：支付成功（回调通知成功）
+     * 5：支付失败（回调通知失败）
+     */
 
     public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
@@ -398,7 +339,17 @@ public class MbrWineCustomOrder extends BaseEntity {
     }
 
     /**
-     * 创建新订单，并且发布订单状态改变事件
+     * 获取支付时间
      */
+    public Date getPayDate() {
+        return payDate;
+    }
+
+    /**
+     * 设置支付时间
+     */
+    public void setPayDate(Date payDate) {
+        this.payDate = payDate;
+    }
 
 }

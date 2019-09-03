@@ -15,8 +15,6 @@ import java.util.List;
 
 public interface WineCustomElementContentMapper extends BaseMapper<WineCustomElementContent, Long> {
 
-    WineCustomElementContent getWineCustomElementContentByWineCustomId(Long id);
-
     List<WineCustomElementContent> getListByWineCustomId(Long id);
 
     List<Long> getIdListByWineCustomId(Long id);

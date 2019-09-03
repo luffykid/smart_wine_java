@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -97,6 +98,7 @@ public class MbrWineCustom extends BaseEntity {
     /**
      * 获取白酒定制ID
      */
+    @JsonProperty
     public Long getWineCustomId() {
         return wineCustomId;
     }
@@ -210,6 +212,7 @@ public class MbrWineCustom extends BaseEntity {
     /**
      * 设置会员白酒定制详情
      */
+    @JsonProperty
     public List<MbrWineCustomDetail> getMbrWineCustomDetails() {
         return mbrWineCustomDetails;
     }

@@ -3,6 +3,7 @@
 <mapper namespace="com.changfa.frame.mapper.app.WineCustomElementContentMapper" >
     <resultMap id="wineCustomElementContentMap" type="com.changfa.frame.model.app.WineCustomElementContent" >
         <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="INTEGER" />
         <result column="wine_custom_id" property="wineCustomId" jdbcType="BIGINT" />
         <result column="wine_custom_element_id" property="wineCustomElementId" jdbcType="BIGINT" />
         <result column="bg_img" property="bgImg" jdbcType="VARCHAR" />
@@ -10,33 +11,39 @@
         <result column="bottom_img" property="bottomImg" jdbcType="VARCHAR" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <!-- 关联查询 -->
         <association property="wineCustomElement"
                      select="com.changfa.frame.mapper.app.WineCustomElementMapper.getById"
                      column="wine_custom_element_id"/>
     </resultMap>
 
     <sql id="table_column" >
-        id, wine_custom_id, wine_custom_element_id, bg_img, mask_img, bottom_img, create_date, 
-        modify_date
+        wcec.id as id, wcec.winery_id as winery_id, wcec.wine_custom_id as wine_custom_id,
+        wcec.wine_custom_element_id as wine_custom_element_id, wcec.bg_img as bg_img, wcec.mask_img as mask_img,
+        wcec.bottom_img as bottom_img, wcec.create_date as create_date, wcec.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="wineCustomElementContentMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from b_wine_custom_element_content
-        where id = #{id}
+        from b_wine_custom_element_content wcec
+        where wcec.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.WineCustomElementContent" >
-        insert into b_wine_custom_element_content (id, wine_custom_id, wine_custom_element_id, bg_img, mask_img, bottom_img, 
-            create_date, modify_date)
-        values (#{id}, #{wineCustomId}, #{wineCustomElementId}, #{bgImg}, #{maskImg}, #{bottomImg}, 
-            #{createDate}, #{modifyDate})
+        insert into b_wine_custom_element_content (id, winery_id, wine_custom_id, wine_custom_element_id, bg_img, mask_img,
+            bottom_img, create_date, modify_date)
+        values (#{id}, #{wineryId}, #{wineCustomId}, #{wineCustomElementId}, #{bgImg}, #{maskImg},
+            #{bottomImg}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.WineCustomElementContent" >
         update b_wine_custom_element_content
         <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
             <if test="wineCustomId != null" >
                 wine_custom_id = #{wineCustomId},
             </if>
@@ -68,10 +75,13 @@
     </delete>
 
     <select id="selectList" resultMap="wineCustomElementContentMap" >
-        select 
+        select
         <include refid="table_column" />
         from b_wine_custom_element_content wcec
         <where >
+            <if test="wineryId != null" >
+                and wcec.winery_id = #{wineryId}
+            </if>
             <if test="wineCustomId != null" >
                 and wcec.wine_custom_id = #{wineCustomId}
             </if>
@@ -96,20 +106,14 @@
         </where>
     </select>
 
-    <select id="getWineCustomElementContentByWineCustomId" parameterType="java.lang.Long" resultMap="wineCustomElementContentMap">
-        select
-        <include refid="table_column"/>
-        from b_wine_custom_element_content where wine_custom_id =#{id}
-    </select>
-
     <select id="getListByWineCustomId" parameterType="java.lang.Long" resultMap="wineCustomElementContentMap">
         select
         <include refid="table_column"/>
-        from b_wine_custom_element_content where wine_custom_id =#{id}
+        from b_wine_custom_element_content wcec where wcec.wine_custom_id =#{id}
     </select>
 
     <select id="getIdListByWineCustomId" parameterType="java.lang.Long" resultType="long">
-        select id from  b_wine_custom_element_content where wine_custom_id =#{id}
+        select id from  b_wine_custom_element_content wcec where wcec.wine_custom_id =#{id}
     </select>
 
     <delete id="deleteById" parameterType="long">
