@@ -36,7 +36,7 @@ import java.util.List;
 public class MvcConfiguration implements WebMvcConfigurer {
 
     /**
-     * 跨域支持
+     * 后置跨域支持【当出现跨域请求,此处会放在拦截器最后执行，CORS失效】
      *
      * @param registry
      */
@@ -44,9 +44,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedHeaders("*")
+                .allowedMethods("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
-                .maxAge(3600 * 24);
+                .maxAge(3600);
     }
 
     /**

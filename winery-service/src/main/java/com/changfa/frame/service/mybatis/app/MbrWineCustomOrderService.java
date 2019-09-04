@@ -6,6 +6,7 @@ import com.changfa.frame.model.app.MbrWineCustomOrder;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.common.BaseService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,4 +35,14 @@ public interface MbrWineCustomOrderService extends BaseService<MbrWineCustomOrde
      * @return
      */
     Map<String, Object> saveMbrCustomInfo(List<MbrWineCustomDetail> mbrWineCustomDetails, MbrWineCustom mbrWineCustom, Member member);
+
+
+    /**
+     * 处理会员白酒定制订单支付
+     *
+     * @param outTradeNo    商品订单号
+     * @param transactionId 微信支付返回的订单号
+     * @param payDate       成功支付时间
+     */
+    void handleNotifyOfWineCustomOrder(String outTradeNo, String transactionId, Date payDate);
 }

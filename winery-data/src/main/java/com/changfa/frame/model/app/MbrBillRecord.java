@@ -68,7 +68,8 @@ public class MbrBillRecord extends BaseEntity {
         ADJUST_CUSTOM(3, "自调酒消费"),
         RECHARGE_ACCT(4, "账户充值"),
         RECHARGE_RETURN(5, "充值返现"),
-        INVITE_RETURN(6, "邀请返现");
+        INVITE_RETURN(6, "邀请返现"),
+        WINE_CUSTOM(7, "白酒定制消费");
 
         /**
          * 枚举值

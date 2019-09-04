@@ -35,11 +35,11 @@ public class MbrAddressServiceImpl extends BaseServiceImpl<MbrAddress, Long> imp
                 entity.setProvinceName(province.getName());
             }
             Area city = areaMapper.getAreaByCode(entity.getCity());
-            if(province!=null){
+            if(city!=null){
                 entity.setProvinceName(city.getName());
             }
             Area country = areaMapper.getAreaByCode(entity.getCounty());
-            if(province!=null){
+            if(country!=null){
                 entity.setProvinceName(country.getName());
             }
         }
