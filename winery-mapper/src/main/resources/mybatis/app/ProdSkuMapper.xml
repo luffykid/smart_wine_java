@@ -196,7 +196,7 @@
         psm.mbr_level_price
         from s_prod_sku ps
         left join s_prod_sku_mbr_price psm on ps.id = psm.prod_sku_id
-        where prod_id = #{id}
+        where ps.prod_id = #{id} and ps.is_del = 0
     </select>
 
     <update id="updateSkuStatusByProdId">

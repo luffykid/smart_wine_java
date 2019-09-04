@@ -106,7 +106,7 @@ public class ProdController extends BaseController {
         try{
             prodService.updateProdStatus(id,status);
         }catch (Exception e){
-            log.info("此处有错误:{}",e.getMessage());
+            log.info("com.changfa.frame.website.controller.app.ProdController prodOut : {} {}",id,status);
             throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
         }
         return getResult("修改成功");
