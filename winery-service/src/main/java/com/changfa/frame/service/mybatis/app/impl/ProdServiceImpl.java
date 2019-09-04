@@ -244,7 +244,6 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     public void addProdSku(ProdSku prodSku) {
         prodSku.setId(IDUtil.getId());
         prodSku.setSkuStatus(1);
-        prodSku.setSkuWeight(prodSku.getSkuCapacity()); //重量和容量一比一
         prodSku.setCreateDate(new Date());
         prodSku.setModifyDate(new Date());
         prodSkuMapper.save(prodSku);
@@ -347,7 +346,10 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(prodSkuMapper.getByProdId(id));
+        List<ProdSku> prodSkus = prodSkuMapper.getByProdId(id);
+        PageInfo result  = new PageInfo(prodSkus);
+
+        return result;
     }
 
     /**

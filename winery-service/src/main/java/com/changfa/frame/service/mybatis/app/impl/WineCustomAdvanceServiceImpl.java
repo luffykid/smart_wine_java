@@ -2,12 +2,15 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
+import com.changfa.frame.core.util.DateUtil;
 import com.changfa.frame.mapper.app.WineCustomAdvanceMapper;
 import com.changfa.frame.model.app.WineCustomAdvance;
 import com.changfa.frame.service.mybatis.app.WineCustomAdvanceService;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
 
 /**
  * @ClassName WineCustomAdvanceServiceImpl
@@ -26,6 +29,11 @@ public class WineCustomAdvanceServiceImpl extends BaseServiceImpl<WineCustomAdva
     @Override
     public void addWineCustomElementAdvance(WineCustomAdvance wineCustomAdvance) {
         wineCustomAdvance.setAdvanceImg(FileUtil.copyNFSByFileName(wineCustomAdvance.getAdvanceImg(),FilePathConsts.TEST_FILE_CP_PATH));
+        try {
+            wineCustomAdvance.setCreateDate(DateUtil.getCurDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         wineCustomAdvanceMapper.save(wineCustomAdvance);
     }
 }

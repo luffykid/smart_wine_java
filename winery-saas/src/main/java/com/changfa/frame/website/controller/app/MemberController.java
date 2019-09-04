@@ -51,4 +51,10 @@ public class MemberController extends BaseController {
         }
         return getResult("新增成功");
     }
+
+    @ApiOperation(value = "获取会员等级",notes = "获取会员等级")
+    @RequestMapping(value = "/getAllLevel", method = RequestMethod.GET)
+    public Map<String,Object> getAllLevel(){
+        return  getResult(memberService.getAllLevel());
+    }
 }
