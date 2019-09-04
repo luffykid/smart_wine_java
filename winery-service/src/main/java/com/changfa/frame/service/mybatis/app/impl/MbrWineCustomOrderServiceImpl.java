@@ -106,6 +106,10 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
                         // 获取预览图并设置
                         String previewImg = FileUtil.copyNFSByFileName(detail.getPreviewImg(), FilePathConsts.TEST_FILE_PATH);
                         mbrWineCustomDetail.setPreviewImg(previewImg);
+                        //获取合成图并设置
+                        String printImg = FileUtil.getUrlOfComposite(elementContent.getBottomImg(), previewImg, new BigDecimal(0), new BigDecimal(0), 1, FilePathConsts.FILE_PREVIEW_PATH);
+                        mbrWineCustomDetail.setPrintImg(printImg);
+
                     }
                 }
                 mbrCustomDetails.add(mbrWineCustomDetail);

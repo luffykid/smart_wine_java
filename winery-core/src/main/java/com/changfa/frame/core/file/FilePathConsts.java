@@ -9,4 +9,7 @@ public class FilePathConsts {
     public static final String TEST_FILE_PATH = "/upload/test/scenicimg";
     //测试图片 产品图片路径
     public static final String TEST_FILE_CP_PATH = "/upload/test/productimg";
+
+    //测试图片 产品图片路径
+    public static final String FILE_PREVIEW_PATH = "/upload/preview";
 }

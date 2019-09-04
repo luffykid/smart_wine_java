@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @MapperScan("com.changfa.frame.mapper")
-@EnableAsync
+//@EnableAsync
 public class Application {
 
     public static void main(String[] args) {

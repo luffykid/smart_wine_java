@@ -28,6 +28,12 @@
         from m_mbr_recharge_order mro
         where mro.id = #{id}
     </select>
+    <select id="getByOrderNo" resultMap="mbrRechargeOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_recharge_order mro
+        where mro.order_no = #{orderNo}
+    </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
         insert into m_mbr_recharge_order (id, winery_id, mbr_id, pay_total_amt, pay_real_amt, order_status,
