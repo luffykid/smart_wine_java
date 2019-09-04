@@ -7,8 +7,8 @@
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="prod_id" property="prodId" jdbcType="BIGINT" />
         <result column="total_sell_cnt" property="totalSellCnt" jdbcType="INTEGER" />
-        <result column="wine_prod_breif" property="wineProdBreif" javaType="VARCHAR"></result>
-        <result column="wine_prod_img" property="wineProdImg" javaType="VARCHAR"></result>
+        <result column="wine_prod_breif" property="wineProdBreif" javaType="String"/>
+        <result column="wine_prod_img" property="wineProdImg" javaType="String"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
