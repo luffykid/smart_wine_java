@@ -45,6 +45,13 @@
         where id = #{id}
     </select>
 
+    <select id="getByOrderNo" resultMap="mbrStoreOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_store_order
+        where order_no = #{outTradeNo}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrStoreOrder" >
         insert into m_mbr_store_order (id, winery_id, mbr_id, wine_cellar_activity_id, pay_mode, prod_total_cnt, 
             pay_total_amt, pay_real_amt, pay_integral_cnt, order_status, total_org_weight, 

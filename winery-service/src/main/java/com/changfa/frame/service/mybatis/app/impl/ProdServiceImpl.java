@@ -66,9 +66,20 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        prod.setProdStatus(Prod.PROD_STATUS_ENUM.QY.getValue());
         prod.setDel(true);
-        return new PageInfo(prodMapper.selectListLikeName(prod));
+        List<Prod> prods = prodMapper.selectListLikeName(prod);
+
+        for(Prod p :prods){
+            List<ProdSku> prodSkus = prodSkuMapper.getByProdId(p.getId());
+            Long totalStockCnt = 0l;
+            for (ProdSku sku :prodSkus) {
+                totalStockCnt += sku.getSkuStockCnt();
+            }
+            p.setTotalStockCnt(totalStockCnt);
+        }
+
+        PageInfo info = new PageInfo(prods);
+        return info;
     }
 
     /**
@@ -244,10 +255,12 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     public void addProdSku(ProdSku prodSku) {
         prodSku.setId(IDUtil.getId());
         prodSku.setSkuStatus(1);
+        prodSku.setSkuWeight(prodSku.getSkuCapacity().divide(new BigDecimal(500)));
         prodSku.setCreateDate(new Date());
         prodSku.setModifyDate(new Date());
+        prodSku.setDel(false);
         prodSkuMapper.save(prodSku);
-        if (prodSku.getIsIntegral()) {
+        if (prodSku.getIsIntegral()!=null && prodSku.getIsIntegral()) {
             for (ProdSkuMbrPrice prodSkuMbrPrice : prodSku.getProdSkuMbrPriceList()) {
                 prodSkuMbrPrice.setId(IDUtil.getId());
                 prodSkuMbrPrice.setProdSkuId(prodSku.getProdId());

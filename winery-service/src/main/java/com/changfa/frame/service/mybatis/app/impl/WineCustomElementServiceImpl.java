@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * @ClassName WineCustomElementServiceImpl
@@ -27,4 +28,9 @@ public class WineCustomElementServiceImpl extends BaseServiceImpl<WineCustomElem
 
 
 
+    @Override
+    public List<WineCustomElement> selectWineCustomElement(WineCustomElement wineCustomElement) {
+
+        return selectList(wineCustomElement);
+    }
 }
