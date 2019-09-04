@@ -140,4 +140,20 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     public List<MbrLevel> getAllLevel() {
         return mbrLevelMapper.getMbrLevelList();
     }
+
+
+    /**
+     * 会员邀请
+     * @param invirer  邀请人
+     * @param inviree  被邀请人
+     */
+    @Override
+    public void mbrInvite(Member invirer, Member inviree) {
+        //设置父ID
+        inviree.setMarketPid(invirer.getId());
+        //设置修改时间
+        inviree.setModifyDate(new Date());
+        //update
+        memberMapper.update(inviree);
+    }
 }

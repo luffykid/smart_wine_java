@@ -75,6 +75,11 @@ public interface MemberService extends BaseService<Member, Long> {
     void saveMember(Admin admin,Member member);
 
     List<MbrLevel> getAllLevel();
-
+    /**
+     * 会员邀请
+     * @param invirer  邀请人
+     * @param inviree  被邀请人
+     */
+    void mbrInvite(Member invirer, Member inviree);
 }
 
