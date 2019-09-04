@@ -5,9 +5,7 @@ import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MbrCartService;
 import com.changfa.frame.service.mybatis.common.IDUtil;
 import com.changfa.frame.website.controller.common.BaseController;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -60,7 +58,9 @@ public class MbrCartController extends BaseController {
     }
 
     @ApiOperation(value = "更新一条购物车项", tags = "更新一条购物车项")
-    @ApiImplicitParam(name = "cart", value = "购物车项", dataType = "MbrCart")
+    @ApiImplicitParam(name = "cart", paramType = "body", examples = @Example({
+            @ExampleProperty(value = "{id: 1, prodSkuCnt: 10}", mediaType = "application/json")
+    }))
     @PostMapping("/update")
     public Map<String, Object> update(@RequestBody MbrCart cart) {
 

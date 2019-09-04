@@ -95,6 +95,7 @@ public class WineryWineProdServiceImpl extends BaseServiceImpl<WineryWineProd, L
 
     private ProdSkuMbrPrice getMbrPriceUnderTheMember(Member member, ProdSku prodSku) {
 
+        log.info("member id:" + member.getId());
         log.info("member level:" + member.getMbrLevelId());
         log.info("prodSku id:" + prodSku.getId());
 
