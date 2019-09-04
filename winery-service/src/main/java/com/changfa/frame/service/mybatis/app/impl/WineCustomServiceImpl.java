@@ -290,6 +290,7 @@ public class WineCustomServiceImpl extends BaseServiceImpl<WineCustom, Long> imp
                                                 ProdSku sku = prodSkuMapper.getById(wineCustom.getProdSkuId());
                                                 log.info("prod sku id:" + wineCustom.getProdSkuId());
                                                 sku.setWineCustomPrice(wineCustom.getCustomPrice());
+                                                sku.setWineCustomId(wineCustom.getId());
                                                 return sku;
                                             }).collect(Collectors.toList());
 

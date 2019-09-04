@@ -199,7 +199,7 @@ public class WeChatMiniUtil {
 
         // 创建二维码空白文件
         String filePath = PropConfig.getProperty(PropAttributes.NFS__SERVICE_FILE_SHARE_PATH) + "/" + "qrCode";
-        String fileName = System.currentTimeMillis() + ".jpg";
+        String fileName = System.currentTimeMillis() + ".jpeg";
         File tempFile = new File(filePath, fileName);
         if (!tempFile.exists()) {
             try {

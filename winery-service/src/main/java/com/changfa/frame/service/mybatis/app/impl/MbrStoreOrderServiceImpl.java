@@ -149,7 +149,7 @@ public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Lon
         mbrStoreOrderRecord.setId(IDUtil.getId());
         mbrStoreOrderRecord.setMbrStoreOrderId(mbrStoreOrder.getId());
         mbrStoreOrderRecord.setOrderStatus(mbrStoreOrder.getOrderStatus());
-        mbrStoreOrderRecord.setOrderRemark("");
+        mbrStoreOrderRecord.setOrderRemark("储酒订单预下单");
         mbrStoreOrderRecord.setCreateDate(new Date());
         mbrStoreOrderRecordMapper.save(mbrStoreOrderRecord);
         // 4.返回订单号和金额 用于微信预下单

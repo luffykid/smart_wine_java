@@ -30,20 +30,20 @@
     </resultMap>
 
     <sql id="table_column" >
-        mir.id as id, mir.winery_id as winery_id, mir.mbr_id as mbr_id, mir.pay_mode as pay_mode,
-        mir.prod_total_cnt as prod_total_cnt, mir.pay_total_amt as pay_total_amt, mir.pay_real_amt as pay_real_amt,
-        mir.pay_integral_cnt as pay_integral_cnt, mir.order_status as order_status, mir.shipping_detail_addr as shipping_detail_addr,
-        mir.shipping_province_id as shipping_province_id, mir.shipping_city_id as shipping_city_id,
-        mir.shipping_county_id as shipping_county_id, mir.shipping_person_name as shipping_person_name,
-        mir.shipping_person_phone as shipping_person_phone, mir.order_no as order_no, mir.transaction_no as transaction_no,
-        mir.pay_date as pay_date, mir.create_date as create_date, mir.modify_date as modify_date
+        mpo.id as id, mpo.winery_id as winery_id, mpo.mbr_id as mbr_id, mpo.pay_mode as pay_mode,
+        mpo.prod_total_cnt as prod_total_cnt, mpo.pay_total_amt as pay_total_amt, mpo.pay_real_amt as pay_real_amt,
+        mpo.pay_integral_cnt as pay_integral_cnt, mpo.order_status as order_status, mpo.shipping_detail_addr as shipping_detail_addr,
+        mpo.shipping_province_id as shipping_province_id, mpo.shipping_city_id as shipping_city_id,
+        mpo.shipping_county_id as shipping_county_id, mpo.shipping_person_name as shipping_person_name,
+        mpo.shipping_person_phone as shipping_person_phone, mpo.order_no as order_no, mpo.transaction_no as transaction_no,
+        mpo.pay_date as pay_date, mpo.create_date as create_date, mpo.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrProdOrderMap" parameterType="java.lang.Long" >
         select
         <include refid="table_column" />
-        from m_mbr_prod_order mir
-        where mir.id = #{id}
+        from m_mbr_prod_order mpo
+        where mpo.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrder" >
@@ -129,64 +129,64 @@
     <select id="selectList" resultMap="mbrProdOrderMap" >
         select
         <include refid="table_column" />
-        from m_mbr_prod_order mir
+        from m_mbr_prod_order mpo
         <where >
             <if test="wineryId != null" >
-                and mir.winery_id = #{wineryId}
+                and mpo.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and mir.mbr_id = #{mbrId}
+                and mpo.mbr_id = #{mbrId}
             </if>
             <if test="payMode != null" >
-                and mir.pay_mode = #{payMode}
+                and mpo.pay_mode = #{payMode}
             </if>
             <if test="prodTotalCnt != null" >
-                and mir.prod_total_cnt = #{prodTotalCnt}
+                and mpo.prod_total_cnt = #{prodTotalCnt}
             </if>
             <if test="payTotalAmt != null" >
-                and mir.pay_total_amt = #{payTotalAmt}
+                and mpo.pay_total_amt = #{payTotalAmt}
             </if>
             <if test="payRealAmt != null" >
-                and mir.pay_real_amt = #{payRealAmt}
+                and mpo.pay_real_amt = #{payRealAmt}
             </if>
             <if test="payIntegralCnt != null" >
-                and mir.pay_integral_cnt = #{payIntegralCnt}
+                and mpo.pay_integral_cnt = #{payIntegralCnt}
             </if>
             <if test="orderStatus != null" >
-                and mir.order_status = #{orderStatus}
+                and mpo.order_status = #{orderStatus}
             </if>
             <if test="shippingDetailAddr != null and shippingDetailAddr != ''" >
-                and mir.shipping_detail_addr = #{shippingDetailAddr}
+                and mpo.shipping_detail_addr = #{shippingDetailAddr}
             </if>
             <if test="shippingProvinceId != null" >
-                and mir.shipping_province_id = #{shippingProvinceId}
+                and mpo.shipping_province_id = #{shippingProvinceId}
             </if>
             <if test="shippingCityId != null" >
-                and mir.shipping_city_id = #{shippingCityId}
+                and mpo.shipping_city_id = #{shippingCityId}
             </if>
             <if test="shippingCountyId != null" >
-                and mir.shipping_county_id = #{shippingCountyId}
+                and mpo.shipping_county_id = #{shippingCountyId}
             </if>
             <if test="shippingPersonName != null and shippingPersonName != ''" >
-                and mir.shipping_person_name = #{shippingPersonName}
+                and mpo.shipping_person_name = #{shippingPersonName}
             </if>
             <if test="shippingPersonPhone != null and shippingPersonPhone != ''" >
-                and mir.shipping_person_phone = #{shippingPersonPhone}
+                and mpo.shipping_person_phone = #{shippingPersonPhone}
             </if>
             <if test="orderNo != null and orderNo != ''" >
-                and mir.order_no = #{orderNo}
+                and mpo.order_no = #{orderNo}
             </if>
             <if test="transactionNo != null and transactionNo != ''" >
-                and mir.transaction_no = #{transactionNo}
+                and mpo.transaction_no = #{transactionNo}
             </if>
             <if test="payDate != null" >
-                and mir.pay_date = #{payDate}
+                and mpo.pay_date = #{payDate}
             </if>
             <if test="createDate != null" >
-                and mir.create_date = #{createDate}
+                and mpo.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and mir.modify_date = #{modifyDate}
+                and mpo.modify_date = #{modifyDate}
             </if>
         </where>
     </select>
@@ -203,16 +203,16 @@
     <select id="getListByStatus" resultMap="mbrProdOrderMap" >
         select
         <include refid="table_column" />
-        from m_mbr_prod_order mir
-        where mir.mbr_id = #{mbrId} and mir.order_status =#{status}
-        order by mir.create_date DESC
+        from m_mbr_prod_order mpo
+        where mpo.mbr_id = #{mbrId} and mpo.order_status =#{status}
+        order by mpo.create_date DESC
     </select>
 
     <select id="getListByMbrId" resultMap="mbrProdOrderMap" >
         select
         <include refid="table_column" />
-        from m_mbr_prod_order mir
-        where mir.mbr_id = #{mbrId}
-        order by mir.create_date DESC
+        from m_mbr_prod_order mpo
+        where mpo.mbr_id = #{mbrId}
+        order by mpo.create_date DESC
     </select>
 </mapper>

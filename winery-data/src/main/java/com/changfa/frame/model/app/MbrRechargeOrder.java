@@ -10,6 +10,7 @@ package com.changfa.frame.model.app;
 import com.changfa.frame.model.common.BaseEntity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @version 1.0 2019-08-25
@@ -37,6 +38,24 @@ public class MbrRechargeOrder extends BaseEntity {
      * 支付实际金额
      */
     private BigDecimal payRealAmt;
+
+
+    /**
+     * 交易单号【三方支付返回单号】
+     */
+    private String transactionNo;
+
+
+    /**
+     * 订单号
+     */
+    private String orderNo;
+
+    /**
+     * 支付时间
+
+     */
+    private Date payDate;
 
     /**
      * 订单状态
@@ -83,8 +102,8 @@ public class MbrRechargeOrder extends BaseEntity {
          * @param value 枚举值
          * @return
          */
-        public static MbrProdOrder.ORDER_STATUS_ENUM getEnum(Integer value) {
-            for (MbrProdOrder.ORDER_STATUS_ENUM statusEnum : MbrProdOrder.ORDER_STATUS_ENUM.values()) {
+        public static ORDER_STATUS_ENUM getEnum(Integer value) {
+            for (ORDER_STATUS_ENUM statusEnum : ORDER_STATUS_ENUM.values()) {
                 if (value.equals(statusEnum.getValue())) {
                     return statusEnum;
                 }
@@ -184,4 +203,43 @@ public class MbrRechargeOrder extends BaseEntity {
     public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
     }
+    /**
+     * 获取交易单号【三方支付返回单号】
+     */
+    public String getTransactionNo() {
+        return transactionNo;
+    }
+    /**
+     * 设置交易单号【三方支付返回单号】
+     */
+    public void setTransactionNo(String transactionNo) {
+        this.transactionNo = transactionNo;
+    }
+    /**
+     * 获取订单号
+     */
+    public String getOrderNo() {
+        return orderNo;
+    }
+    /**
+     * 设置订单号
+     */
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+    /**
+     * 获取支付时间
+
+     */
+    public Date getPayDate() {
+        return payDate;
+    }
+    /**
+     * 设置支付时间
+
+     */
+    public void setPayDate(Date payDate) {
+        this.payDate = payDate;
+    }
+
 }

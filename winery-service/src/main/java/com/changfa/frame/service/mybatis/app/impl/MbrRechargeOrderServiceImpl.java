@@ -1,5 +1,6 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
+import com.changfa.frame.core.util.OrderNoUtil;
 import com.changfa.frame.mapper.app.MbrRechargeOrderMapper;
 import com.changfa.frame.mapper.app.MbrRechargeOrderRecordMapper;
 import com.changfa.frame.model.app.MbrRechargeOrder;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service("mbrRechargeOrderServiceImpl")
 public class MbrRechargeOrderServiceImpl extends BaseServiceImpl<MbrRechargeOrder, Long> implements MbrRechargeOrderService {
@@ -25,27 +28,41 @@ public class MbrRechargeOrderServiceImpl extends BaseServiceImpl<MbrRechargeOrde
      * 会员新建订单
      * @param mbrId
      * @param wineryId
-     * @param payTotalAmt
-     * @param payRealAmt
+     * @param payAmt
+
      */
     @Transactional
     @Override
-    public void recharge(Long mbrId, Long wineryId, BigDecimal payTotalAmt, BigDecimal payRealAmt) {
+    public Map<String, Object> unifiedOrder(Long mbrId, Long wineryId, BigDecimal payAmt) {
+        //1.获取相关信息
+        String orderNo = OrderNoUtil.get();
+
+        //2.保存会员充值订单
         MbrRechargeOrder mbrRechargeOrder = new MbrRechargeOrder();
         mbrRechargeOrder.setId(IDUtil.getId());
         mbrRechargeOrder.setMbrId(mbrId);
         mbrRechargeOrder.setWineryId(wineryId);
-        mbrRechargeOrder.setPayTotalAmt(payTotalAmt);
-        mbrRechargeOrder.setPayRealAmt(payRealAmt);
-        mbrRechargeOrder.setOrderStatus(1);
+        mbrRechargeOrder.setPayTotalAmt(payAmt);
+        mbrRechargeOrder.setPayRealAmt(payAmt);
+        mbrRechargeOrder.setOrderStatus(MbrRechargeOrder.ORDER_STATUS_ENUM.PAY_NOT.getValue());//支付状态 1.未支付
+        mbrRechargeOrder.setOrderNo(orderNo);
         mbrRechargeOrder.setCreateDate(new Date());
+        mbrRechargeOrder.setModifyDate(mbrRechargeOrder.getCreateDate());
         mbrRechargeOrderMapper.save(mbrRechargeOrder);
+
+        //3.插入会员充值订单记录
         MbrRechargeOrderRecord mbrRechargeOrderRecord = new MbrRechargeOrderRecord();
         mbrRechargeOrderRecord.setId(IDUtil.getId());
         mbrRechargeOrderRecord.setMbrRechargeOrderId(mbrRechargeOrder.getId());
-        mbrRechargeOrderRecord.setOrderStatus(1);
+        mbrRechargeOrderRecord.setOrderStatus(MbrRechargeOrderRecord.ORDER_STATUS_ENUM.PAY_NOT.getValue());
         mbrRechargeOrderRecord.setCreateDate(new Date());
+        mbrRechargeOrderRecord.setModifyDate(mbrRechargeOrderRecord.getCreateDate());
         mbrRechargeOrderRecordMapper.save(mbrRechargeOrderRecord);
+
+        //4.// 4.返回订单号,用于微信预下单
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("orderNo",orderNo);
+        return returnMap;
     }
 
     /**
