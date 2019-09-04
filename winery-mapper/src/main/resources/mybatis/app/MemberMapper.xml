@@ -49,11 +49,11 @@
     <insert id="save" parameterType="com.changfa.frame.model.app.Member" >
         insert into m_member (id, mbr_level_id, winery_id, mbr_name, phone, open_id, user_icon,
             status, status_time, total_integral, total_store_remain, total_store_increment,
-            market_qr_code, market_pid, acct_balance, age, gender, return_amt,
+            market_qr_code, market_pid, acct_balance, age, gender, invite_return_amt,recharge_return_amt,
             create_date, modify_date)
         values (#{id}, #{mbrLevelId}, #{wineryId}, #{mbrName}, #{phone}, #{openId}, #{userIcon},
             #{status}, #{statusTime}, #{totalIntegral}, #{totalStoreRemain}, #{totalStoreIncrement},
-            #{marketQrCode}, #{marketPid}, #{acctBalance}, #{age}, #{gender}, #{invite_return_amt}, #{recharge_return_amt},
+            #{marketQrCode}, #{marketPid}, #{acctBalance}, #{age}, #{gender}, #{inviteReturnAmt}, #{rechargeReturnAmt},
             #{createDate}, #{modifyDate})
     </insert>
 
