@@ -68,6 +68,14 @@ public class WeChatController extends BaseController {
             member.setTotalStoreRemain(new BigDecimal("0.00"));
             member.setTotalStoreIncrement(new BigDecimal("0.00"));
             member.setAcctBalance(new BigDecimal("0.00"));
+            Object nickName = jsonObject.get("nickName");
+            member.setMbrName(String.valueOf(nickName));
+            Object avatarUrl = jsonObject.get("avatarUrl");
+            member.setUserIcon(String.valueOf(avatarUrl));
+            Object gender = jsonObject.get("gender");
+            member.setGender(Integer.valueOf(String.valueOf(gender)));
+            member.setInviteReturnAmt(new BigDecimal("0.00"));
+            member.setRechargeReturnAmt(new BigDecimal("0.00"));
             memberService.save(member);
         }
 
