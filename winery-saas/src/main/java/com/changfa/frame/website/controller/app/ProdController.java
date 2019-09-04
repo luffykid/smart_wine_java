@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -202,7 +203,13 @@ public class ProdController extends BaseController {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
-        return getResult(prodService.getProdSkuList(id,pageInfo).getList());
+        PageInfo<ProdSku> prodSkuList = prodService.getProdSkuList(id, pageInfo);
+        Map<String,Object> map = new HashMap<>();
+        map.put("prodSkus",prodSkuList.getList());
+        map.put("pageNum",pageNum);
+        map.put("pageSize",pageSize);
+        map.put("total",prodSkuList.getTotal());
+        return getResult(map);
     }
 
 
