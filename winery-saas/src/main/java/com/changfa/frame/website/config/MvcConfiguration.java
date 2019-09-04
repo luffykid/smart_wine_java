@@ -38,16 +38,16 @@ public class MvcConfiguration implements WebMvcConfigurer {
      *
      * @param registry
      */
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedHeaders("*")
-                .exposedHeaders("*")
-                .allowedMethods("*")
-                .allowCredentials(true)
-                .maxAge(3600);
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOrigins("*")
+//                .allowedHeaders("*")
+//                .exposedHeaders("*")
+//                .allowedMethods("*")
+//                .allowCredentials(true)
+//                .maxAge(3600);
+//    }
 
     /**
      * 配置消息转换器--这里我用的是alibaba 开源的 fastjson
