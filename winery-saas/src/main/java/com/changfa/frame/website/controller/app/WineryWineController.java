@@ -2,8 +2,10 @@ package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.model.app.Admin;
+import com.changfa.frame.model.app.Prod;
 import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.model.app.WineryWine;
+import com.changfa.frame.service.mybatis.app.ProdService;
 import com.changfa.frame.service.mybatis.app.WineryWineService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
@@ -39,7 +41,21 @@ public class WineryWineController extends BaseController {
 
     @Resource(name = "wineryWineServiceImpl")
     private WineryWineService wineryWineService;
+    @Resource(name = "prodServiceImpl")
+    private ProdService prodService;
 
+    @ApiOperation(value = "查询所有已上架SPU",notes = "查询所有已上架SPU")
+    @ApiImplicitParams(@ApiImplicitParam(name = "prod", value = "spu对象", dataType = "prod"))
+    @RequestMapping(value = "/getAllSpu", method = RequestMethod.GET)
+    public Map<String,Object> getAllSpu(){
+        Prod prod = new Prod();
+        PageInfo<Prod> prodPageInfo = new PageInfo<>();
+        prodPageInfo.setPageNum(1);
+        prodPageInfo.setPageSize(Integer.MAX_VALUE);
+        prod.setProdStatus(Prod.PROD_STATUS_ENUM.QY.getValue());
+        PageInfo prodList = prodService.getProdList(prod, prodPageInfo);
+        return getResult(prodList.getList());
+    }
 
     /**
      * 查询酒庄酒列表

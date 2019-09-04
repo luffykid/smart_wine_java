@@ -66,7 +66,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        prod.setDel(true);
+        prod.setDel(false);
         List<Prod> prods = prodMapper.selectListLikeName(prod);
 
         for(Prod p :prods){
