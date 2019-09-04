@@ -49,7 +49,7 @@ public class WeChatController extends BaseController {
         JSONObject jsonObject = WeChatMiniUtil.jsCode2session(jsCode);
         Object openId = jsonObject.get("openid");
         Object sessionKey = jsonObject.get("session_key");
-        if (openId == null || sessionKey==null) {
+        if (openId == null || sessionKey == null) {
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
         if (jsonObject.isNullObject() || jsonObject.isEmpty()) {
@@ -69,11 +69,17 @@ public class WeChatController extends BaseController {
             member.setTotalStoreIncrement(new BigDecimal("0.00"));
             member.setAcctBalance(new BigDecimal("0.00"));
             Object nickName = jsonObject.get("nickName");
-            member.setMbrName(String.valueOf(nickName));
+            if (nickName != null) {
+                member.setMbrName(String.valueOf(nickName));
+            }
             Object avatarUrl = jsonObject.get("avatarUrl");
-            member.setUserIcon(String.valueOf(avatarUrl));
+            if (avatarUrl != null) {
+                member.setUserIcon(String.valueOf(avatarUrl));
+            }
             Object gender = jsonObject.get("gender");
-            member.setGender(Integer.valueOf(String.valueOf(gender)));
+            if (gender != null) {
+                member.setGender(Integer.valueOf(String.valueOf(gender)));
+            }
             member.setInviteReturnAmt(new BigDecimal("0.00"));
             member.setRechargeReturnAmt(new BigDecimal("0.00"));
             memberService.save(member);

@@ -16,7 +16,7 @@ import org.springframework.web.filter.CorsFilter;
 public class CORSFilter {
 
     /**
-     * 重制跨域过滤
+     * 前置跨域设置【过滤器方式先于拦截器生效】
      *
      * @return
      */
