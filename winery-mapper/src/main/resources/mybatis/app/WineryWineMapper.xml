@@ -92,7 +92,7 @@
         </where>
     </select>
 
-    <select id="getWineryWineList" resultMap="wineryWineMap" >
+    <select id="getWineryWineList" parameterType="com.changfa.frame.model.app.WineryWine" resultMap="wineryWineMap" >
         select
         <include refid="table_column" />
         from b_winery_wine ww
