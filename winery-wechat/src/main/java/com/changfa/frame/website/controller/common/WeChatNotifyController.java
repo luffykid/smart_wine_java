@@ -7,8 +7,7 @@ import com.changfa.frame.core.weChat.res.PaymentResult;
 import com.changfa.frame.core.weChat.util.ResMessageUtil;
 import com.changfa.frame.core.weChat.util.WXPayXmlUtil;
 import com.changfa.frame.core.weChat.util.WeChatSignUtil;
-import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
-import com.changfa.frame.service.mybatis.app.WineCustomService;
+import com.changfa.frame.service.mybatis.app.*;
 import com.changfa.frame.website.utils.ORDER_TYPE_ENUM;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +30,18 @@ public class WeChatNotifyController extends BaseController {
 
     @Resource(name = "mbrProdOrderServiceImpl")
     private MbrProdOrderService mbrProdOrderService;
+
+    @Resource(name = "mbrStoreOrderServiceImpl")
+    private MbrStoreOrderService mbrStoreOrderService;
+
+    @Resource(name = "mbrRechargeOrderServiceImpl")
+    private MbrRechargeOrderService mbrRechargeOrderService;
+
+    @Resource(name = "mbrAdjustOrderServiceImpl")
+    private MbrAdjustOrderService mbrAdjustOrderService;
+
+    @Resource(name = "mbrWineCustomOrderServiceImpl")
+    private MbrWineCustomOrderService mbrWineCustomOrderService;
 
     @Resource(name = "wineCustomServiceImpl")
     private WineCustomService wineCustomService;
@@ -82,15 +93,27 @@ public class WeChatNotifyController extends BaseController {
                         break;
                     }
                     case WINE_CUSTOM_ORDER: {// 定制酒订单
+                        String time_end = map.get("time_end");
+                        Date payDate = DateUtil.convertStrToDate(time_end, "yyyyMMddHHmmss");
+                        mbrWineCustomOrderService.handleNotifyOfWineCustomOrder(map.get("out_trade_no"), map.get("transaction_id"), payDate);
                         break;
                     }
                     case MBR_ADJUST_ORDER: {// 会员自调酒订单
+                        String time_end = map.get("time_end");
+                        Date payDate = DateUtil.convertStrToDate(time_end, "yyyyMMddHHmmss");
+                        mbrAdjustOrderService.handleNotifyOfAdjustOrder(map.get("out_trade_no"), map.get("transaction_id"), payDate);
                         break;
                     }
                     case MBR_RECHARGE_ORDER: {// 会员充值订单
+                        String time_end = map.get("time_end");
+                        Date payDate = DateUtil.convertStrToDate(time_end, "yyyyMMddHHmmss");
+                        mbrRechargeOrderService.handleNotifyOfRechargeOrder(map.get("out_trade_no"), map.get("transaction_id"), payDate);
                         break;
                     }
                     case MBR_STORE_ORDER: {// 会员储酒订单
+                        String time_end = map.get("time_end");
+                        Date payDate = DateUtil.convertStrToDate(time_end, "yyyyMMddHHmmss");
+                        mbrStoreOrderService.handleNotifyOfStoreOrder(map.get("out_trade_no"), map.get("transaction_id"), payDate);
                         break;
                     }
                     default: {

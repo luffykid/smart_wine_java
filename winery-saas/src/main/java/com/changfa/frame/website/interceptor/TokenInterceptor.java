@@ -28,12 +28,12 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     /**
      * 接口Token令牌
      */
-    public static final String REQUEST_HEADER_TOKEN_KEY = "request-header-token";
+    public static final String REQUEST_HEADER_TOKEN_KEY = "admin-token";
 
     /**
      * 接口用户名(手机号)
      */
-    public static final String REQUEST_HEADER_ACCT_KEY = "request-header-acct";
+    public static final String REQUEST_HEADER_ACCT_KEY = "admin-acct";
 
     @Resource(name = "redisClient")
     private RedisClient redisClient;
@@ -52,6 +52,9 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        // 取出token
 //        String headerToken = request.getHeader(REQUEST_HEADER_TOKEN_KEY);
+//        log.info("\r\n***************进入拦截器，token：{}",headerToken);
+//        log.info("\r\nn****************进入拦截器，token：{}",request.getHeaderNames());
+//
 //
 //        // 取出登陆账号
 //        String headerAcctName = request.getHeader(REQUEST_HEADER_ACCT_KEY);

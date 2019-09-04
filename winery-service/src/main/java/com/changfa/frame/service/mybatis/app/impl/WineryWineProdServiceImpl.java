@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service("wineryWineProdServiceImpl")
-public class WineryWineProdServiceImpl extends BaseServiceImpl<WineryWineProd, Long>
-                                        implements WineryWineProdService {
+public class WineryWineProdServiceImpl extends BaseServiceImpl<WineryWineProd, Long> implements WineryWineProdService {
 
     @Autowired
     private ProdSkuMbrPriceMapper prodSkuMbrPriceMapper;
@@ -29,8 +28,6 @@ public class WineryWineProdServiceImpl extends BaseServiceImpl<WineryWineProd, L
 
     @Autowired
     private ProdMapper prodMapper;
-
-
 
     @Override
     public List<WineryWineProd> getAllByWineryWineId(Member member, Long wineryWineId) {

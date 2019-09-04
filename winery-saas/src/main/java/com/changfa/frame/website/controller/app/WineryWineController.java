@@ -2,8 +2,10 @@ package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.core.file.FileUtil;
 import com.changfa.frame.model.app.Admin;
+import com.changfa.frame.model.app.Prod;
 import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.model.app.WineryWine;
+import com.changfa.frame.service.mybatis.app.ProdService;
 import com.changfa.frame.service.mybatis.app.WineryWineService;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +42,21 @@ public class WineryWineController extends BaseController {
 
     @Resource(name = "wineryWineServiceImpl")
     private WineryWineService wineryWineService;
+    @Resource(name = "prodServiceImpl")
+    private ProdService prodService;
 
+    @ApiOperation(value = "查询所有已上架SPU",notes = "查询所有已上架SPU")
+    @ApiImplicitParams(@ApiImplicitParam(name = "prod", value = "spu对象", dataType = "prod"))
+    @RequestMapping(value = "/getAllSpu", method = RequestMethod.GET)
+    public Map<String,Object> getAllSpu(){
+        Prod prod = new Prod();
+        PageInfo<Prod> prodPageInfo = new PageInfo<>();
+        prodPageInfo.setPageNum(1);
+        prodPageInfo.setPageSize(Integer.MAX_VALUE);
+        prod.setProdStatus(Prod.PROD_STATUS_ENUM.QY.getValue());
+        PageInfo prodList = prodService.getProdList(prod, prodPageInfo);
+        return getResult(prodList.getList());
+    }
 
     /**
      * 查询酒庄酒列表
@@ -56,7 +73,12 @@ public class WineryWineController extends BaseController {
         pageInfo.setPageSize(pageSize);
         PageInfo<WineryWine> list = wineryWineService.getWineryWineList(wineryWine,pageInfo);
         if(list != null && list.getList().size() > 0){
-            return getResult(list);
+            Map<String,Object> map = new HashMap<>();
+            map.put("total",list.getTotal());
+            map.put("list",list.getList());
+            map.put("pageNum",pageNum);
+            map.put("pageSize",pageSize);
+            return getResult(map);
         }
         return getResult("未查询到产品");
 
@@ -127,9 +149,9 @@ public class WineryWineController extends BaseController {
     @ApiOperation(value = "编辑酒庄酒",notes = "编辑酒庄酒")
     @ApiImplicitParams(@ApiImplicitParam(name = "wineryWine", value = "酒庄酒对象", dataType = "WineryWine"))
     @RequestMapping(value = "/updateWineryWine", method = RequestMethod.POST)
-    public Map<String, Object> updateWineryWine(@RequestBody WineryWine wineryWine){
+    public Map<String, Object> updateWineryWine(@RequestBody WineryWine wineryWine, HttpServletRequest request){
         try{
-            wineryWineService.updateWineryWine(wineryWine,1L);
+            wineryWineService.updateWineryWine(wineryWine,getCurAdmin(request).getWineryId());
         }catch (Exception e){
             log.info("此处有错误:{}",e.getMessage());
             throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
@@ -143,7 +165,7 @@ public class WineryWineController extends BaseController {
      * @param id 酒庄酒id
      * @return Map<String, Object>
      */
-   @ApiOperation(value = "酒庄酒上下架",notes = "酒庄酒上下架")
+    @ApiOperation(value = "酒庄酒上下架",notes = "酒庄酒上下架")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "酒庄酒id", dataType = "Long"),
             @ApiImplicitParam(name = "status", value = "下上架参数", dataType = "Integer")})
     @RequestMapping(value = "/wineryWineOut", method = RequestMethod.POST)

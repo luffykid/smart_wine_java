@@ -23,6 +23,12 @@
         <result column="is_del" property="isDel" jdbcType="BIT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <collection property="prodSkuMbrPriceList" ofType="com.changfa.frame.model.app.ProdSkuMbrPrice">
+            <result column="mbrId" property="id"></result>
+            <result column="mbr_level_id" property="mbrLevelId"></result>
+            <result column="mbr_level_price" property="mbrLevelPrice"></result>
+        </collection>
     </resultMap>
 
     <sql id="table_column" >
@@ -184,8 +190,13 @@
 
     <select id="getByProdId" parameterType="java.lang.Long" resultMap="prodSkuMap">
         select
-        <include refid="table_column"/>
-        from s_prod_sku ps where prod_id = #{id}
+        <include refid="table_column"/> ,
+        psm.id as mbrId,
+        psm.mbr_level_id,
+        psm.mbr_level_price
+        from s_prod_sku ps
+        left join s_prod_sku_mbr_price psm on ps.id = psm.prod_sku_id
+        where ps.prod_id = #{id} and ps.is_del = 0
     </select>
 
     <update id="updateSkuStatusByProdId">
@@ -220,12 +231,12 @@
     </select>
 
     <!--批量更新sku售卖数量-->
-    <update id="updateList">
+    <update id="updateSellCnt">
         <foreach collection="prodSkus" separator=";" item="item">
             update s_prod_sku
             <set>
-                <if test="ite.sellCnt != null">
-                    sell_total_cnt = sell_total_cnt + #{sellCnt},
+                <if test="item.sellCnt != null">
+                    sell_total_cnt = sell_total_cnt + #{item.sellCnt},
                 </if>
             </set>
             where id = #{item.id}

@@ -34,7 +34,7 @@ import java.util.List;
 public class MvcConfiguration implements WebMvcConfigurer {
 
     /**
-     * 跨域支持
+     * 后置跨域支持【当出现跨域请求,此处会放在拦截器最后执行，CORS失效】
      *
      * @param registry
      */
@@ -42,9 +42,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedHeaders("*")
+                .allowedMethods("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
-                .maxAge(3600 * 24);
+                .maxAge(3600);
     }
 
     /**
@@ -85,7 +86,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
         serializeConfig.put(BigInteger.class, ToStringSerializer.instance);
         serializeConfig.put(Long.class, ToStringSerializer.instance);
         serializeConfig.put(Long.TYPE, ToStringSerializer.instance);
-        serializeConfig.setPropertyNamingStrategy( PropertyNamingStrategy.CamelCase);
+        serializeConfig.setPropertyNamingStrategy(PropertyNamingStrategy.CamelCase);
         fastJsonConfig.setSerializeConfig(serializeConfig);
 
         //3处理中文乱码问题

@@ -66,9 +66,20 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        prod.setProdStatus(Prod.PROD_STATUS_ENUM.QY.getValue());
-        prod.setDel(true);
-        return new PageInfo(prodMapper.selectListLikeName(prod));
+        prod.setDel(false);
+        List<Prod> prods = prodMapper.selectListLikeName(prod);
+
+        for(Prod p :prods){
+            List<ProdSku> prodSkus = prodSkuMapper.getByProdId(p.getId());
+            Long totalStockCnt = 0l;
+            for (ProdSku sku :prodSkus) {
+                totalStockCnt += sku.getSkuStockCnt();
+            }
+            p.setTotalStockCnt(totalStockCnt);
+        }
+
+        PageInfo info = new PageInfo(prods);
+        return info;
     }
 
     /**
@@ -171,7 +182,7 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
                     ProdDetail prodDetailvo = prodDetailMapper.getById(prodDetail.getId());
                     if (!StringUtils.equals(prodDetailvo.getDetailImg(), prodDetail.getDetailImg())) {
                         String newFileUrl = FileUtil.copyNFSByFileName(prodDetail.getDetailImg(), FilePathConsts.TEST_FILE_CP_PATH);
-                        FileUtil.deleteNFSByFileUrl(prodDetailvo.getDetailImg(), newFileUrl);
+                        FileUtil.deleteNFSByFileUrl(prodDetailvo.getDetailImg());
                         prodDetail.setDetailImg(newFileUrl);
                     }
                     prodDetail.setModifyDate(new Date());
@@ -244,11 +255,12 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
     public void addProdSku(ProdSku prodSku) {
         prodSku.setId(IDUtil.getId());
         prodSku.setSkuStatus(1);
-        prodSku.setSkuWeight(prodSku.getSkuCapacity()); //重量和容量一比一
+        prodSku.setSkuWeight(prodSku.getSkuCapacity().divide(new BigDecimal(500)));
         prodSku.setCreateDate(new Date());
         prodSku.setModifyDate(new Date());
+        prodSku.setDel(false);
         prodSkuMapper.save(prodSku);
-        if (prodSku.getIsIntegral()) {
+        if (prodSku.getIsIntegral()!=null && prodSku.getIsIntegral()) {
             for (ProdSkuMbrPrice prodSkuMbrPrice : prodSku.getProdSkuMbrPriceList()) {
                 prodSkuMbrPrice.setId(IDUtil.getId());
                 prodSkuMbrPrice.setProdSkuId(prodSku.getProdId());
@@ -347,7 +359,10 @@ public class ProdServiceImpl extends BaseServiceImpl<Prod, Long> implements Prod
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(prodSkuMapper.getByProdId(id));
+        List<ProdSku> prodSkus = prodSkuMapper.getByProdId(id);
+        PageInfo result  = new PageInfo(prodSkus);
+
+        return result;
     }
 
     /**

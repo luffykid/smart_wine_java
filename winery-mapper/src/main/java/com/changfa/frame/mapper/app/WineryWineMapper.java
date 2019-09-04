@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface WineryWineMapper extends BaseMapper<WineryWine, Long> {
 
-    List<WineryWine> getWineryWineList();
+    List<WineryWine> getWineryWineList(WineryWine wineryWine);
 
     List<WineryWine> getWineryWineListByName(@Param("name") String name, @Param("status") Integer status);
 

@@ -50,8 +50,7 @@ public class WineryWineController extends BaseController {
 
     @ApiOperation(value = "获取所有的酒庄酒产品")
     @GetMapping("/{id}/WineryWineProd/")
-    public Map<String, Object> getWineryWineDetail(@PathVariable("id") Long id,
-                                                   HttpServletRequest request) {
+    public Map<String, Object> getWineryWineDetail(@PathVariable("id") Long id, HttpServletRequest request) {
 
         Member member = getCurMember(request);
         return getResult(wineryWineProdServiceImpl.getAllByWineryWineId(member, id));

@@ -8,6 +8,8 @@
         <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
         <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
         <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
         <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
@@ -15,8 +17,9 @@
 
     <sql id="table_column" >
         mro.id as id, mro.winery_id as winery_id, mro.mbr_id as mbr_id, mro.pay_total_amt as pay_total_amt,
-        mro.pay_real_amt as pay_real_amt, mro.order_status as order_status, mro.pay_date as pay_date,
-        mro.create_date as create_date, mro.modify_date as modify_date
+        mro.pay_real_amt as pay_real_amt, mro.order_status as order_status, mro.transaction_no as transaction_no,
+        mro.order_no as order_no, mro.pay_date as pay_date, mro.create_date as create_date,
+        mro.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrRechargeOrderMap" parameterType="java.lang.Long" >
@@ -25,12 +28,18 @@
         from m_mbr_recharge_order mro
         where mro.id = #{id}
     </select>
+    <select id="getByOrderNo" resultMap="mbrRechargeOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_recharge_order mro
+        where mro.order_no = #{orderNo}
+    </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
         insert into m_mbr_recharge_order (id, winery_id, mbr_id, pay_total_amt, pay_real_amt, order_status,
-            pay_date, create_date, modify_date)
+        transaction_no, order_no, pay_date, create_date, modify_date)
         values (#{id}, #{wineryId}, #{mbrId}, #{payTotalAmt}, #{payRealAmt}, #{orderStatus},
-            #{payDate}, #{createDate}, #{modifyDate})
+        #{transactionNo}, #{orderNo}, #{payDate}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrRechargeOrder" >
@@ -50,6 +59,12 @@
             </if>
             <if test="orderStatus != null" >
                 order_status = #{orderStatus},
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                transaction_no = #{transactionNo},
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                order_no = #{orderNo},
             </if>
             <if test="payDate != null" >
                 pay_date = #{payDate},
@@ -88,6 +103,12 @@
             </if>
             <if test="orderStatus != null" >
                 and mro.order_status = #{orderStatus}
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                and mro.transaction_no = #{transactionNo}
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                and mro.order_no = #{orderNo}
             </if>
             <if test="payDate != null" >
                 and mro.pay_date = #{payDate}

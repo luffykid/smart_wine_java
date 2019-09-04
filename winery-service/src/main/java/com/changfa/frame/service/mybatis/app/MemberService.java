@@ -1,6 +1,7 @@
 package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.model.app.Admin;
+import com.changfa.frame.model.app.MbrLevel;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
@@ -73,5 +74,12 @@ public interface MemberService extends BaseService<Member, Long> {
      */
     void saveMember(Admin admin,Member member);
 
+    List<MbrLevel> getAllLevel();
+    /**
+     * 会员邀请
+     * @param invirer  邀请人
+     * @param inviree  被邀请人
+     */
+    void mbrInvite(Member invirer, Member inviree);
 }
 

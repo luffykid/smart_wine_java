@@ -167,7 +167,7 @@ public class WineryActivityController extends BaseController {
 
             //是否已经报过名了
             if(mbrWineryActivitySignServiceImpl.IsExistSingUp(wineryActivityId,member.getId())){
-                throw new CustomException(RESPONSE_CODE_ENUM.SIGN_EXIST);
+                throw new CustomException(RESPONSE_CODE_ENUM.SIGN_UP_EXIST);
             }
         try {
             mbrWineryActivitySignServiceImpl.signUp(wineryActivityId, member.getId());

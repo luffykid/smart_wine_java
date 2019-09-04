@@ -39,6 +39,13 @@
         where mco.id = #{id}
     </select>
 
+    <select id="getByOrderNo" resultMap="mbrWineCustomOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_wine_custom_order mco
+        where mco.order_no = #{orderNo}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomOrder" >
         insert into m_mbr_wine_custom_order (id, winery_id, mbr_id, custom_total_cnt, pay_total_amt, pay_real_amt,
             order_status, shipping_detail_addr, shipping_province_id, shipping_city_id,

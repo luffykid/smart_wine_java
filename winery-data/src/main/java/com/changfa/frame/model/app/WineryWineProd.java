@@ -32,6 +32,13 @@ public class WineryWineProd extends BaseEntity {
     /** 售卖总数量 */
     private Integer totalSellCnt;
 
+
+    /** 酒商品简介*/
+    private String wineProdBreif;
+
+    /** 酒商品图片*/
+    private String wineProdImg;
+
     /**
      * 扩展字段
      * 酒庄酒产品价格
@@ -126,5 +133,22 @@ public class WineryWineProd extends BaseEntity {
     */
     public void setTotalSellCnt(Integer totalSellCnt) {
         this.totalSellCnt = totalSellCnt;
+    }
+
+
+    public String getWineProdBreif() {
+        return wineProdBreif;
+    }
+
+    public void setWineProdBreif(String wineProdBreif) {
+        this.wineProdBreif = wineProdBreif;
+    }
+
+    public String getWineProdImg() {
+        return wineProdImg;
+    }
+
+    public void setWineProdImg(String wineProdImg) {
+        this.wineProdImg = wineProdImg;
     }
 }

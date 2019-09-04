@@ -295,7 +295,7 @@
                 and p.admin_id = #{adminId}
             </if>
             <choose>
-                <when test="isDel != null">
+                <when test="isDel != null and isDel == 0">
                     and p.is_del = 0
                 </when>
                 <otherwise>

@@ -36,8 +36,8 @@ public class WineCustomElementController extends BaseController {
 
     @Resource(name = "wineCustomAdvanceServiceImpl")
     private WineCustomAdvanceService wineCustomAdvanceService;
-
-
+    @Resource(name = "wineCustomElementServiceImpl")
+    private WineCustomElementService wineCustomElementService;
 
     @ApiOperation(value = "新建预制图",notes = "新建预制图")
     @ApiImplicitParams(@ApiImplicitParam(name = "winecustomAdcance", value = "预制图新建", dataType = "winecustomAdvance"))
@@ -53,5 +53,15 @@ public class WineCustomElementController extends BaseController {
         return getResult("预制图新增成功");
 
     }
+
+
+    @ApiOperation(value = "获取所有定制元素",notes = "获取所有定制元素")
+    @RequestMapping(value = "/getAllWineCustomElement", method = RequestMethod.GET)
+    public Map<String,Object> getAllWineCustomElement(){
+       WineCustomElement wineCustomElement = new WineCustomElement();
+       wineCustomElement.setElementStatus(WineCustomElement.ELEMENT_STATUS_ENUM.QY.getValue());
+       return getResult(wineCustomElementService.selectWineCustomElement(wineCustomElement));
+    }
+
 
 }

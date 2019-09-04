@@ -2,12 +2,10 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.util.DateUtil;
 import com.changfa.frame.mapper.app.MbrIntegralRecordMapper;
+import com.changfa.frame.mapper.app.MbrLevelMapper;
 import com.changfa.frame.mapper.app.MbrWechatMapper;
 import com.changfa.frame.mapper.app.MemberMapper;
-import com.changfa.frame.model.app.Admin;
-import com.changfa.frame.model.app.MbrIntegralRecord;
-import com.changfa.frame.model.app.MbrWechat;
-import com.changfa.frame.model.app.Member;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MemberService;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -37,6 +35,8 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     private MbrWechatMapper mbrWechatMapper;
     @Autowired
     private MbrIntegralRecordMapper mbrIntegralRecordMapper;
+    @Autowired
+    private MbrLevelMapper mbrLevelMapper;
 
     /**
      * 根据手机号查询会员
@@ -134,5 +134,26 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
             e.printStackTrace();
         }
         memberMapper.save(member);
+    }
+
+    @Override
+    public List<MbrLevel> getAllLevel() {
+        return mbrLevelMapper.getMbrLevelList();
+    }
+
+
+    /**
+     * 会员邀请
+     * @param invirer  邀请人
+     * @param inviree  被邀请人
+     */
+    @Override
+    public void mbrInvite(Member invirer, Member inviree) {
+        //设置父ID
+        inviree.setMarketPid(invirer.getId());
+        //设置修改时间
+        inviree.setModifyDate(new Date());
+        //update
+        memberMapper.update(inviree);
     }
 }
