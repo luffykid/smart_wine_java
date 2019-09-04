@@ -50,31 +50,31 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 取出token
-        String headerToken = request.getHeader(REQUEST_HEADER_TOKEN_KEY);
-        log.info("\r\n***************进入拦截器，token：{}",headerToken);
-        log.info("\r\nn****************进入拦截器，token：{}",request.getHeaderNames());
-
-
-        // 取出登陆账号
-        String headerAcctName = request.getHeader(REQUEST_HEADER_ACCT_KEY);
-        if (StringUtils.isBlank(headerToken) || StringUtils.isBlank(headerAcctName)) {
-            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
-        }
-
-        // 获取redis中的token
-        Object redisToken = redisClient.get(RedisConsts.ADMIN_ACCTNAME + headerAcctName);
-        if (redisToken == null) {
-            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
-        }
-
-        // token不相同则重新登陆
-        if (!StringUtils.equals(headerToken, redisToken.toString())) {
-            throw new CustomException(RESPONSE_CODE_ENUM.TOKEN_IS_NOT_EXIST);
-        }
-
-        // 重置token时间
-        redisClient.setAndExpire(RedisConsts.ADMIN_ACCTNAME + headerAcctName, headerToken, RedisConsts.ADMIN_ACCTNAME_EXPIRE);
+//        // 取出token
+//        String headerToken = request.getHeader(REQUEST_HEADER_TOKEN_KEY);
+//        log.info("\r\n***************进入拦截器，token：{}",headerToken);
+//        log.info("\r\nn****************进入拦截器，token：{}",request.getHeaderNames());
+//
+//
+//        // 取出登陆账号
+//        String headerAcctName = request.getHeader(REQUEST_HEADER_ACCT_KEY);
+//        if (StringUtils.isBlank(headerToken) || StringUtils.isBlank(headerAcctName)) {
+//            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
+//        }
+//
+//        // 获取redis中的token
+//        Object redisToken = redisClient.get(RedisConsts.ADMIN_ACCTNAME + headerAcctName);
+//        if (redisToken == null) {
+//            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
+//        }
+//
+//        // token不相同则重新登陆
+//        if (!StringUtils.equals(headerToken, redisToken.toString())) {
+//            throw new CustomException(RESPONSE_CODE_ENUM.TOKEN_IS_NOT_EXIST);
+//        }
+//
+//        // 重置token时间
+//        redisClient.setAndExpire(RedisConsts.ADMIN_ACCTNAME + headerAcctName, headerToken, RedisConsts.ADMIN_ACCTNAME_EXPIRE);
         return true;
     }
 
