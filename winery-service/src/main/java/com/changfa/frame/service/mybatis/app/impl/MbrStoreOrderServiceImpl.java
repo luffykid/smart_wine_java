@@ -13,16 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("mbrStoreOrderServiceImpl")
 public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Long> implements MbrStoreOrderService {
 
     @Autowired
     private MbrStoreOrderMapper mbrStoreOrderMapper;
+
     @Autowired
     private MbrStoreOrderItemMapper mbrStoreOrderItemMapper;
 
@@ -220,6 +218,19 @@ public class MbrStoreOrderServiceImpl extends BaseServiceImpl<MbrStoreOrder, Lon
         mbrBillRecord.setCreateDate(new Date());
         mbrBillRecord.setModifyDate(new Date());
         mbrBillRecordMapper.save(mbrBillRecord);
+
+        // 批量更新更新对应SKU销售数量
+        MbrStoreOrderItem mbrStoreOrderItem = new MbrStoreOrderItem();
+        mbrStoreOrderItem.setMbrStoreOrderId(dbOrder.getId());
+        List<MbrStoreOrderItem> mbrStoreOrderItems = mbrStoreOrderItemMapper.selectList(mbrStoreOrderItem);
+        List<ProdSku> prodSkus = new ArrayList();
+        for (MbrStoreOrderItem prodOrderItem : mbrStoreOrderItems) {
+            ProdSku prodSku = new ProdSku();
+            prodSku.setId(prodOrderItem.getProdSkuId());
+            prodSku.setSellCnt(prodOrderItem.getProdSkuCnt());
+            prodSkus.add(prodSku);
+        }
+        prodSkuMapper.updateSellCnt(prodSkus);
 
         // 消费送积分
         handleConsumeIntegral(dbOrder);

@@ -127,6 +127,67 @@ public class MbrWineCustomOrderServiceImpl extends BaseServiceImpl<MbrWineCustom
         return returnMap;
     }
 
+
+
+    /**
+     * 处理会员白酒定制订单支付
+     *
+     * @param outTradeNo    商品订单号
+     * @param transactionId 微信支付返回的订单号
+     * @param payDate       成功支付时间
+     */
+    @Override
+    public void handleNotifyOfWineCustomOrder(String outTradeNo, String transactionId, Date payDate) {
+
+    }
+//    @Transactional
+//    @Override
+//    public void handleNotifyOfProdOrder(String outTradeNo, String transactionId, Date payDate) {
+//        // 根据订单号查询订单信息
+//        MbrProdOrder dbOrder = mbrProdOrderMapper.getByOrderNo(outTradeNo);
+//        if (dbOrder == null) {
+//            return;
+//        }
+//
+//        // 如果订单已经处理则不在处理订单
+//        if (dbOrder.getOrderStatus().equals(MbrProdOrder.ORDER_STATUS_ENUM.PAY_SUCCESS.getValue())) {
+//            return;
+//        }
+//
+//        // 更新商品订单
+//        MbrProdOrder updateOrder = new MbrProdOrder();
+//        updateOrder.setId(dbOrder.getId());
+//        updateOrder.setOrderStatus(MbrProdOrder.ORDER_STATUS_ENUM.PAY_SUCCESS.getValue());
+//        updateOrder.setTransactionNo(transactionId);
+//        updateOrder.setPayDate(payDate);
+//        updateOrder.setModifyDate(new Date());
+//        mbrProdOrderMapper.update(updateOrder);
+//
+//        // 插入订单记录
+//        MbrProdOrderRecord saveOrderRecord = new MbrProdOrderRecord();
+//        saveOrderRecord.setId(IDUtil.getId());
+//        saveOrderRecord.setMbrProdOrderId(dbOrder.getId());
+//        saveOrderRecord.setOrderRemark("订单支付成功");
+//        saveOrderRecord.setOrderStatus(MbrProdOrderRecord.ORDER_STATUS_ENUM.PAY_SUCCESS.getValue());
+//        saveOrderRecord.setCreateDate(new Date());
+//        saveOrderRecord.setModifyDate(new Date());
+//        mbrProdOrderRecordMapper.save(saveOrderRecord);
+//
+//        // 插入会员账户流水信息
+//        MbrBillRecord mbrBillRecord = new MbrBillRecord();
+//        mbrBillRecord.setId(IDUtil.getId());
+//        mbrBillRecord.setPkId(dbOrder.getId());
+//        mbrBillRecord.setWineryId(dbOrder.getWineryId());
+//        mbrBillRecord.setSignType(0);
+//        mbrBillRecord.setBillType(MbrBillRecord.BILL_TYPE_ENUM.PROD_CUSTOM.getValue());
+//        mbrBillRecord.setBillRemark("商品消费");
+//        mbrBillRecord.setBillAmt(dbOrder.getPayRealAmt());
+//        mbrBillRecord.setCreateDate(new Date());
+//        mbrBillRecord.setModifyDate(new Date());
+//        mbrBillRecordMapper.save(mbrBillRecord);
+//
+//    }
+
     /**
      * 处理会员定制预下单业务
      *

@@ -40,6 +40,9 @@ public class WeChatNotifyController extends BaseController {
     @Resource(name = "mbrAdjustOrderServiceImpl")
     private MbrAdjustOrderService mbrAdjustOrderService;
 
+    @Resource(name = "mbrWineCustomOrderServiceImpl")
+    private MbrWineCustomOrderService mbrWineCustomOrderService;
+
     @Resource(name = "wineCustomServiceImpl")
     private WineCustomService wineCustomService;
 
@@ -90,6 +93,9 @@ public class WeChatNotifyController extends BaseController {
                         break;
                     }
                     case WINE_CUSTOM_ORDER: {// 定制酒订单
+                        String time_end = map.get("time_end");
+                        Date payDate = DateUtil.convertStrToDate(time_end, "yyyyMMddHHmmss");
+                        mbrWineCustomOrderService.handleNotifyOfWineCustomOrder(map.get("out_trade_no"), map.get("transaction_id"), payDate);
                         break;
                     }
                     case MBR_ADJUST_ORDER: {// 会员自调酒订单
