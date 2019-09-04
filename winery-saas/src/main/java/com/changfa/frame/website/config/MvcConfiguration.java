@@ -42,9 +42,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedHeaders("*")
+                .exposedHeaders("*")
+                .allowedMethods("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT","OPTIONS")
-                .maxAge(3600 * 24);
+                .maxAge(3600);
     }
 
     /**
