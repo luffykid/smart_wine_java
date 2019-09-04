@@ -33,6 +33,13 @@
         where mao.id = #{id}
     </select>
 
+    <select id="getByOrderNo" resultMap="mbrAdjustOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_adjust_order mao
+        where mao.order_no = #{orderNo}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrAdjustOrder" >
         insert into m_mbr_adjust_order (id, winery_adjust_wine_id, mbr_id, winery_id, pay_mode, pay_total_amt,
         pay_real_amt, print_img, order_status, transaction_no, order_no, pay_date,

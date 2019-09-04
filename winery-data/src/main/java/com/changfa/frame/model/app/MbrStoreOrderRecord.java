@@ -26,7 +26,68 @@ public class MbrStoreOrderRecord extends BaseEntity {
     /** 订单备注 */
     private String orderRemark;
 
-    
+    /**
+     * 订单状态
+     */
+    public enum ORDER_STATUS_ENUM {
+        PAY_NOT(1, "未支付"),
+        PAY_CANCEL(2, "已取消"),
+        PAY_SUCCESS(3, "支付成功"),
+        PAY_FAIL(4, "支付失败");
+
+        /**
+         * 枚举值
+         */
+        private Integer value;
+
+        /**
+         * 枚举名称
+         */
+        private String name;
+
+        /**
+         * 枚举有参构造函数
+         *
+         * @param value 枚举值
+         * @param name  枚举名
+         */
+        ORDER_STATUS_ENUM(Integer value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        /**
+         * 根据枚举值获取枚举对象
+         *
+         * @param value 枚举值
+         * @return
+         */
+        public static MbrStoreOrder.ORDER_STATUS_ENUM getEnum(Integer value) {
+            for (MbrStoreOrder.ORDER_STATUS_ENUM statusEnum : MbrStoreOrder.ORDER_STATUS_ENUM.values()) {
+                if (value.equals(statusEnum.getValue())) {
+                    return statusEnum;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * 获取枚举值
+         */
+        public Integer getValue() {
+            return value;
+        }
+
+        /**
+         * 获取枚举名
+         */
+        public String getName() {
+            return name;
+        }
+    }
+
+
+
     /**
      * 获取会员储酒订单ID
     */

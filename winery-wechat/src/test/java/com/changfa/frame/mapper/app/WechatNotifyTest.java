@@ -3,7 +3,10 @@ package com.changfa.frame.mapper.app;
 import com.alibaba.fastjson.JSONObject;
 import com.changfa.frame.model.app.MbrWineCustom;
 import com.changfa.frame.model.app.MbrWineCustomDetail;
+import com.changfa.frame.service.mybatis.app.MbrAdjustOrderService;
 import com.changfa.frame.service.mybatis.app.MbrProdOrderService;
+import com.changfa.frame.service.mybatis.app.MbrRechargeOrderService;
+import com.changfa.frame.service.mybatis.app.MbrStoreOrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,10 +28,26 @@ public class WechatNotifyTest {
     @Resource(name = "mbrProdOrderServiceImpl")
     private MbrProdOrderService mbrProdOrderService;
 
+    @Resource(name = "mbrRechargeOrderServiceImpl")
+    private MbrRechargeOrderService mbrRechargeOrderService;
+
+    @Resource(name = "mbrAdjustOrderServiceImpl")
+    private MbrAdjustOrderService mbrAdjustOrderService;
+
+    @Resource(name = "mbrStoreOrderServiceImpl")
+    private MbrStoreOrderService mbrStoreOrderService;
+
+
     @Test
     public void test() {
 
-        mbrProdOrderService.handleNotifyOfProdOrder("1", "1", new Date());
+//        mbrProdOrderService.handleNotifyOfProdOrder("1", "1", new Date());
+
+        mbrRechargeOrderService.handleNotifyOfRechargeOrder("1", "1", new Date());
+
+        mbrAdjustOrderService.handleNotifyOfAdjustOrder("1", "1", new Date());
+
+        mbrStoreOrderService.handleNotifyOfStoreOrder("1", "1", new Date());
     }
 
     @Test

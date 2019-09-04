@@ -11,4 +11,7 @@ import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.MbrRechargeOrder;
 
 public interface MbrRechargeOrderMapper extends BaseMapper<MbrRechargeOrder, Long> {
+
+    //根据订单号获取订单
+    MbrRechargeOrder getByOrderNo(String outTradeNo);
 }
