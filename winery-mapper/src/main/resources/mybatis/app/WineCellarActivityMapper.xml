@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCellarActivityMapper" >
+    <resultMap id="wineCellarActivityMap" type="com.changfa.frame.model.app.WineCellarActivity" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="act_title" property="actTitle" jdbcType="VARCHAR" />
+        <result column="act_cover_img" property="actCoverImg" jdbcType="VARCHAR" />
+        <result column="act_breif" property="actBreif" jdbcType="VARCHAR" />
+        <result column="act_detail_img" property="actDetailImg" jdbcType="VARCHAR" />
+        <result column="is_platform" property="isPlatform" jdbcType="TINYINT" />
+        <result column="is_now" property="isNow" jdbcType="INTEGER" />
+        <result column="take_date" property="takeDate" jdbcType="TIMESTAMP" />
+        <result column="like_total_cnt" property="likeTotalCnt" jdbcType="INTEGER" />
+        <result column="share_total_cnt" property="shareTotalCnt" jdbcType="INTEGER" />
+        <result column="act_status" property="actStatus" jdbcType="INTEGER" />
+        <result column="present_detail" property="presentDetail" jdbcType="VARCHAR" />
+        <result column="is_increase" property="isIncrease" jdbcType="TINYINT" />
+        <result column="increase_scale" property="increaseScale" jdbcType="DECIMAL" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <!-- 扩展字段 -->
+        <result column="like_status" property="likeStatus" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="table_column" >
+        a.id as id, a.winery_id as winery_id, a.act_title as act_title, a.act_cover_img as act_cover_img, 
+        a.act_breif as act_breif, a.act_detail_img as act_detail_img, a.is_platform as is_platform, 
+        a.is_now as is_now, a.take_date as take_date, a.like_total_cnt as like_total_cnt, 
+        a.share_total_cnt as share_total_cnt, a.act_status as act_status, a.present_detail as present_detail, 
+        a.is_increase as is_increase, a.increase_scale as increase_scale, a.create_date as create_date, 
+        a.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCellarActivityMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar_activity a
+        where a.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCellarActivity" >
+        insert into b_wine_cellar_activity (id, winery_id, act_title, act_cover_img, act_breif, act_detail_img, 
+            is_platform, is_now, take_date, like_total_cnt, share_total_cnt, act_status, 
+            present_detail, is_increase, increase_scale, create_date, modify_date
+            )
+        values (#{id}, #{wineryId}, #{actTitle}, #{actCoverImg}, #{actBreif}, #{actDetailImg}, 
+            #{isPlatform}, #{isNow}, #{takeDate}, #{likeTotalCnt}, #{shareTotalCnt}, #{actStatus}, 
+            #{presentDetail}, #{isIncrease}, #{increaseScale}, #{createDate}, #{modifyDate}
+            )
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCellarActivity" >
+        update b_wine_cellar_activity
+        <set >
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="actTitle != null and actTitle != ''" >
+                act_title = #{actTitle},
+            </if>
+            <if test="actCoverImg != null and actCoverImg != ''" >
+                act_cover_img = #{actCoverImg},
+            </if>
+            <if test="actBreif != null and actBreif != ''" >
+                act_breif = #{actBreif},
+            </if>
+            <if test="actDetailImg != null and actDetailImg != ''" >
+                act_detail_img = #{actDetailImg},
+            </if>
+            <if test="isPlatform != null" >
+                is_platform = #{isPlatform},
+            </if>
+            <if test="isNow != null" >
+                is_now = #{isNow},
+            </if>
+            <if test="takeDate != null" >
+                take_date = #{takeDate},
+            </if>
+            <if test="likeTotalCnt != null" >
+                like_total_cnt = #{likeTotalCnt},
+            </if>
+            <if test="shareTotalCnt != null" >
+                share_total_cnt = #{shareTotalCnt},
+            </if>
+            <if test="actStatus != null" >
+                act_status = #{actStatus},
+            </if>
+            <if test="presentDetail != null and presentDetail != ''" >
+                present_detail = #{presentDetail},
+            </if>
+            <if test="isIncrease != null" >
+                is_increase = #{isIncrease},
+            </if>
+            <if test="increaseScale != null" >
+                increase_scale = #{increaseScale},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_cellar_activity
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCellarActivityMap" >
+        select 
+        <include refid="table_column" />
+        from b_wine_cellar_activity a
+        <where >
+            <if test="wineryId != null" >
+                and a.winery_id = #{wineryId}
+            </if>
+            <if test="actTitle != null and actTitle != ''" >
+                and a.act_title = #{actTitle}
+            </if>
+            <if test="actCoverImg != null and actCoverImg != ''" >
+                and a.act_cover_img = #{actCoverImg}
+            </if>
+            <if test="actBreif != null and actBreif != ''" >
+                and a.act_breif = #{actBreif}
+            </if>
+            <if test="actDetailImg != null and actDetailImg != ''" >
+                and a.act_detail_img = #{actDetailImg}
+            </if>
+            <if test="isPlatform != null" >
+                and a.is_platform = #{isPlatform}
+            </if>
+            <if test="isNow != null" >
+                and a.is_now = #{isNow}
+            </if>
+            <if test="takeDate != null" >
+                and a.take_date = #{takeDate}
+            </if>
+            <if test="likeTotalCnt != null" >
+                and a.like_total_cnt = #{likeTotalCnt}
+            </if>
+            <if test="shareTotalCnt != null" >
+                and a.share_total_cnt = #{shareTotalCnt}
+            </if>
+            <if test="actStatus != null" >
+                and a.act_status = #{actStatus}
+            </if>
+            <if test="presentDetail != null and presentDetail != ''" >
+                and a.present_detail = #{presentDetail}
+            </if>
+            <if test="isIncrease != null" >
+                and a.is_increase = #{isIncrease}
+            </if>
+            <if test="increaseScale != null" >
+                and a.increase_scale = #{increaseScale}
+            </if>
+            <if test="createDate != null" >
+                and a.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and a.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectSecById" resultMap="wineCellarActivityMap">
+        select a.*,ifnull(l.like_status,0) like_status from b_wine_cellar_activity a
+        left join b_wine_cellar_activity_like l on a.id = l.winery_id and l.mbr_id=#{mbrId}
+        where a.id = #{id}
+    </select>
+
+    <select id="selectSecList" parameterType="Long" resultMap="wineCellarActivityMap">
+        select a.*,ifnull(l.like_status,0) like_status from b_wine_cellar_activity a
+        left join b_wine_cellar_activity_like l on a.id = l.winery_id and l.mbr_id=#{mbrId}
+        where a.act_status = 2
+    </select>
+
+    <select id="selectListByWinerySightId" parameterType="Long" resultMap="wineCellarActivityMap">
+        select a.* from b_wine_cellar_activity a
+        left join b_winery_sight_detail d on a.id = d.wine_cellar_activity_id
+        where a.act_status = 2 and d.winery_sight_id = #{winerySightId}
+        order by a.create_date desc
+
+    </select>
+</mapper>

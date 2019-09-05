@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrStoreOrderRecordMapper" >
+    <resultMap id="mbrStoreOrderRecordMap" type="com.changfa.frame.model.app.MbrStoreOrderRecord" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="mbr_store_order_id" property="mbrStoreOrderId" jdbcType="BIGINT" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="order_remark" property="orderRemark" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        msor.id as id, msor.mbr_store_order_id as mbr_store_order_id, msor.order_status as order_status, 
+        msor.order_remark as order_remark, msor.create_date as create_date, msor.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrStoreOrderRecordMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_store_order_record msor
+        where msor.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrStoreOrderRecord" >
+        insert into m_mbr_store_order_record (id, mbr_store_order_id, order_status, order_remark, create_date, 
+            modify_date)
+        values (#{id}, #{mbrStoreOrderId}, #{orderStatus}, #{orderRemark}, #{createDate}, 
+            #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrStoreOrderRecord" >
+        update m_mbr_store_order_record
+        <set >
+            <if test="mbrStoreOrderId != null" >
+                mbr_store_order_id = #{mbrStoreOrderId},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="orderRemark != null and orderRemark != ''" >
+                order_remark = #{orderRemark},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_store_order_record
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrStoreOrderRecordMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_store_order_record msor
+        <where >
+            <if test="mbrStoreOrderId != null" >
+                and msor.mbr_store_order_id = #{mbrStoreOrderId}
+            </if>
+            <if test="orderStatus != null" >
+                and msor.order_status = #{orderStatus}
+            </if>
+            <if test="orderRemark != null and orderRemark != ''" >
+                and msor.order_remark = #{orderRemark}
+            </if>
+            <if test="createDate != null" >
+                and msor.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and msor.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

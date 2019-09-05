@@ -1,11 +1,11 @@
 package com.changfa.frame.service.mybatis.app.impl;
 
-import com.changfa.frame.mapper.app.MbrIntegralDetailMapper;
+import com.changfa.frame.core.util.DateUtil;
+import com.changfa.frame.mapper.app.MbrIntegralRecordMapper;
+import com.changfa.frame.mapper.app.MbrLevelMapper;
 import com.changfa.frame.mapper.app.MbrWechatMapper;
 import com.changfa.frame.mapper.app.MemberMapper;
-import com.changfa.frame.model.app.MbrIntegralDetail;
-import com.changfa.frame.model.app.MbrWechat;
-import com.changfa.frame.model.app.Member;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MemberService;
 import com.changfa.frame.service.mybatis.common.impl.BaseServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     @Autowired
     private MbrWechatMapper mbrWechatMapper;
     @Autowired
-    private MbrIntegralDetailMapper mbrIntegralDetailMapper;
+    private MbrIntegralRecordMapper mbrIntegralRecordMapper;
+    @Autowired
+    private MbrLevelMapper mbrLevelMapper;
 
     /**
      * 根据手机号查询会员
@@ -58,9 +61,7 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        MbrIntegralDetail mbrIntegralDetail = new MbrIntegralDetail();
-        mbrIntegralDetail.setMbrId(mbrId);
-        return new PageInfo(mbrIntegralDetailMapper.selectList(mbrIntegralDetail));
+        return new PageInfo(memberMapper.selectSubList(mbrId));
     }
 
     /**
@@ -73,7 +74,9 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        return new PageInfo(memberMapper.selectSubList(mbrId));
+        MbrIntegralRecord mbrIntegralRecord = new MbrIntegralRecord();
+        mbrIntegralRecord.setMbrId(mbrId);
+        return new PageInfo(mbrIntegralRecordMapper.selectList(mbrIntegralRecord));
     }
 
     /**
@@ -87,37 +90,27 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
         return memberMapper.selectSubStatis(mbrId);
     }
 
+
     /**
      * 修改会员信息
      *
      * @param mbrId
-     * @param userIcon 头像
-     * @param nickName 名称
-     * @param birthday 生日
-     * @param sex      性别
+     * @param mbrName  会员名称
+     * @param phone    手机
+     * @param gender   性别
+     * @param age      年龄
      * @param phone    电话
      */
     @Transactional
     @Override
-    public void updateMember(Long mbrId, String userIcon, String nickName, String birthday, Integer gender, String phone) {
+    public void updateMember(Long mbrId, String mbrName, String phone, Integer gender,Integer age) {
         Member member = memberMapper.getById(mbrId);
-        member.setNickName(nickName);
+        member.setMbrName(mbrName);
+        member.setGender(gender);
         member.setPhone(phone);
+        member.setAge(age);
         memberMapper.update(member);
-        List<MbrWechat> mbrWechats = mbrWechatMapper.selectListByMbrIdAndWineryId(member.getId());
-        if (mbrWechats.size() == 0) {
-            MbrWechat mbrWechat = new MbrWechat();
-            mbrWechat.setNickName(nickName);
-            mbrWechat.setBirthday(new Date(birthday));
-            mbrWechat.setGender(gender);
-            mbrWechatMapper.save(mbrWechat);
-        } else {
-            MbrWechat mbrWechat = mbrWechats.get(0);
-            mbrWechat.setNickName(nickName);
-            mbrWechat.setBirthday(new Date(birthday));
-            mbrWechat.setGender(gender);
-            mbrWechatMapper.update(mbrWechat);
-        }
+
     }
 
     /**
@@ -129,5 +122,38 @@ public class MemberServiceImpl extends BaseServiceImpl<Member, Long> implements 
     @Override
     public Member getByOpenId(String openId) {
         return memberMapper.selectByOpenId(openId);
+    }
+
+    @Override
+    public void saveMember(Admin admin,Member member) {
+        member.setWineryId(admin.getWineryId());
+        member.setStatus(Member.STATUS_ENUM.NORMAL.getValue());
+        try {
+            member.setCreateDate(DateUtil.getCurDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        memberMapper.save(member);
+    }
+
+    @Override
+    public List<MbrLevel> getAllLevel() {
+        return mbrLevelMapper.getMbrLevelList();
+    }
+
+
+    /**
+     * 会员邀请
+     * @param invirer  邀请人
+     * @param inviree  被邀请人
+     */
+    @Override
+    public void mbrInvite(Member invirer, Member inviree) {
+        //设置父ID
+        inviree.setMarketPid(invirer.getId());
+        //设置修改时间
+        inviree.setModifyDate(new Date());
+        //update
+        memberMapper.update(inviree);
     }
 }

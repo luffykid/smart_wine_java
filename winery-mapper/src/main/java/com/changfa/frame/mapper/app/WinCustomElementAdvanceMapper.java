@@ -9,6 +9,7 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WinCustomElementAdvance;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface WinCustomElementAdvanceMapper extends BaseMapper<WinCustomEleme
 
     List<WinCustomElementAdvance> getByWineCustomElementContentId(Long wineCustomElementContentId);
 
+    int saveList(@Param("winCustomElementAdvanceList") List<WinCustomElementAdvance> winCustomElementAdvanceList);
+
+    int deleteByWineCustomElementContentIdList(@Param("list") List<Long> wineCustomElementContentIdList);
 }

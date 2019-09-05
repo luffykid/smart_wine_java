@@ -4,6 +4,7 @@ import com.changfa.frame.core.prop.PropAttributes;
 import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.model.app.Member;
 import com.changfa.frame.service.mybatis.app.MemberService;
+import com.changfa.frame.website.interceptor.TokenInterceptor;
 import net.sf.json.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -77,7 +78,13 @@ public abstract class BaseController {
         } else if (eClass.equals(CustomException.class)) { //系统业务异常
             CustomException ce = (CustomException) ex;
             addExceptionToMap(new CustomException(ce.getErrorCode(), ce.getMessage()), map);
-        } else {
+        } else if (eClass.equals(MemberIntegralNotEnough.class)) {
+            MemberIntegralNotEnough notEnough = (MemberIntegralNotEnough) ex;
+            addExceptionToMap(notEnough, map);
+        } else if (eClass.equals(IllegalArgumentException.class)) {
+            addResCodeToMap((RuntimeException) ex, RESPONSE_CODE_ENUM.BAD_REQUEST, map);
+        }
+        else {
             addResCodeToMap(RESPONSE_CODE_ENUM.SERVER_ERROR, map);
         }
 
@@ -108,10 +115,32 @@ public abstract class BaseController {
     /**
      * 添加异常信息到map中
      *
+     * @param responseCodeEnum 错误响应编码枚举类对象
+     * @param map              响应错误编码集合
+     */
+    protected void addResCodeToMap(RuntimeException ex, RESPONSE_CODE_ENUM responseCodeEnum, Map<String, Object> map) {
+        map.put(ResultUtil.ERRORCODE_PARAM_NAME, responseCodeEnum.getCode());
+        map.put(ResultUtil.ERRORMSG_PARAM_NAME, ex.getMessage());
+    }
+
+    /**
+     * 添加异常信息到map中
+     *
      * @param appInterfaceException 接口异常类
      * @param map                   接口异常集合
      */
     protected void addExceptionToMap(CustomException appInterfaceException, Map<String, Object> map) {
+        map.put(ResultUtil.ERRORCODE_PARAM_NAME, appInterfaceException.getErrorCode());
+        map.put(ResultUtil.ERRORMSG_PARAM_NAME, appInterfaceException.getErrorMsg());
+    }
+
+    /**
+     * 添加异常信息到map中
+     *
+     * @param appInterfaceException 接口异常类
+     * @param map                   接口异常集合
+     */
+    protected void addExceptionToMap(MemberIntegralNotEnough appInterfaceException, Map<String, Object> map) {
         map.put(ResultUtil.ERRORCODE_PARAM_NAME, appInterfaceException.getErrorCode());
         map.put(ResultUtil.ERRORMSG_PARAM_NAME, appInterfaceException.getErrorMsg());
     }
@@ -135,9 +164,11 @@ public abstract class BaseController {
      * @param request 请求对象
      */
     public Member getCurMember(HttpServletRequest request) {
-        /************ 生产环境使用 ****************/
+//        /************ 生产环境使用 ****************/
 //        // 获取会员openId，并查询会员数据
+//        log.info("*********** getCurMember *********");
 //        String openId = request.getHeader(TokenInterceptor.REQUEST_HEADER_OPENID_KEY);
+//        log.info("获取当前openId：{}",openId);
 //
 //        // 根据手机号查询会员
 //        Member member = memberService.getByOpenId(openId);
@@ -146,7 +177,7 @@ public abstract class BaseController {
 //        }
 
         /************ 开发环境中使用 ****************/
-        Member member = memberService.getById(1L);
+        Member member = memberService.getByOpenId("o1tUJ42W_-5d0DTBB-lI-S7ukgow");
 
         return member;
     }

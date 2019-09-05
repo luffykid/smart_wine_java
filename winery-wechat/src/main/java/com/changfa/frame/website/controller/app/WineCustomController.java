@@ -1,7 +1,8 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.WineCustom;
-import com.changfa.frame.model.app.WineCustomElementContent;
+import com.changfa.frame.model.app.*;
+import com.changfa.frame.service.mybatis.app.ProdDetailService;
+import com.changfa.frame.service.mybatis.app.ProdService;
 import com.changfa.frame.service.mybatis.app.WineCustomService;
 import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
@@ -19,11 +20,17 @@ import java.util.Map;
 
 @Api(value = "定制酒接口", tags = "定制酒接口")
 @RestController("wineCustomController")
-@RequestMapping("/wxMini/wineCustom/")
+@RequestMapping("/wxMini/auth/wineCustom/")
 public class WineCustomController extends BaseController {
 
     @Resource(name = "wineCustomServiceImpl")
     private WineCustomService wineCustomService;
+
+    @Resource(name = "prodServiceImpl")
+    private ProdService prodServiceImpl;
+
+    @Resource(name = "prodDetailServiceImpl")
+    private ProdDetailService prodDetailServiceImpl;
 
     @ApiOperation(value = "获取定制酒列表")
     @GetMapping
@@ -68,6 +75,34 @@ public class WineCustomController extends BaseController {
                                                     @PathVariable("elem_cont_id") Long elemContId) {
 
         return getResult(wineCustomService.getWineCustomAdvancesUnderTheWineCustomElementContent(id, elemContId));
+
+    }
+
+    @ApiOperation(value = "获取酒庄酒产品详情")
+    @ApiImplicitParam(name = "id", value = "酒庄酒产品id", required = true, dataType = "Long")
+    @GetMapping("{id}/detail")
+    public Map<String, Object> getWineCustomDetail(@PathVariable("id") Long id) {
+
+        WineCustom wineCustom = wineCustomService.getById(id);
+
+        Prod prod = prodServiceImpl.getProd(wineCustom.getProdId());
+
+        ProdDetail queryForTheProd = new ProdDetail();
+        queryForTheProd.setProdId(prod.getId());
+        List<ProdDetail> prodDetails = prodDetailServiceImpl.selectList(queryForTheProd);
+
+        prod.setProdDetailList(prodDetails);
+
+        return getResult(prod);
+
+    }
+
+    @ApiOperation(value = "获取所有产品规格")
+    @ApiImplicitParam(name = "prodId", value = "产品id", required = true, dataType = "Long")
+    @GetMapping("{prodId}/sku/")
+    public Map<String, Object> getAllSkus(@PathVariable("prodId") Long prodId) {
+
+       return  getResult(wineCustomService.getProdSkus(prodId));
 
     }
 

@@ -9,7 +9,6 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
-import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -33,24 +32,14 @@ public class Member extends BaseEntity {
     private Long wineryId;
 
     /**
-     * 令牌
-     */
-    private String token;
-
-    /**
      * 昵称
      */
-    private String nickName;
+    private String mbrName;
 
     /**
      * 手机号
      */
     private String phone;
-
-    /**
-     * 微信号
-     */
-    private String wechat;
 
     /**
      * 微信openId
@@ -160,14 +149,58 @@ public class Member extends BaseEntity {
     /**
      * 账户余额
      */
-    public BigDecimal acctBalance;
+    private BigDecimal acctBalance;
+
+    /**
+     * 年龄
+     */
+    private Integer age;
+
+    /**
+     * 性别
+     */
+    private Integer gender;
+
+    /**
+     * 邀请返现金额
+     */
+    private BigDecimal inviteReturnAmt;
+
+    /**
+     * 充值返现金额
+     */
+    private BigDecimal rechargeReturnAmt;
 
     /******************** 扩展属性 ***********************/
     /**
      * 优惠券数量
      */
-    @Transient
     private Integer voucherCount;
+
+    /**
+     * 会员微信昵称
+     */
+    private String nickName;
+
+    /**
+     * 会员等级名称
+     */
+    private String levelName;
+
+    /**
+     * 是否为荣誉庄主
+     */
+    private Boolean isMaster;
+
+    /**
+     * 体验次数【会员当前酒庄各景点签到总次数】
+     */
+    private Integer mbrSightSignCnt;
+
+    /**
+     * 会员消费总金额
+     */
+    private BigDecimal TotalMbrCustomAmt;
 
     /**
      * 获取会员等级ID
@@ -198,31 +231,17 @@ public class Member extends BaseEntity {
     }
 
     /**
-     * 获取令牌
-     */
-    public String getToken() {
-        return token;
-    }
-
-    /**
-     * 设置令牌
-     */
-    public void setToken(String token) {
-        this.token = token == null ? null : token.trim();
-    }
-
-    /**
      * 获取昵称
      */
-    public String getNickName() {
-        return nickName;
+    public String getMbrName() {
+        return mbrName;
     }
 
     /**
      * 设置昵称
      */
-    public void setNickName(String nickName) {
-        this.nickName = nickName == null ? null : nickName.trim();
+    public void setMbrName(String nickName) {
+        this.mbrName = nickName == null ? null : nickName.trim();
     }
 
     /**
@@ -237,20 +256,6 @@ public class Member extends BaseEntity {
      */
     public void setPhone(String phone) {
         this.phone = phone == null ? null : phone.trim();
-    }
-
-    /**
-     * 获取微信号
-     */
-    public String getWechat() {
-        return wechat;
-    }
-
-    /**
-     * 设置微信号
-     */
-    public void setWechat(String wechat) {
-        this.wechat = wechat == null ? null : wechat.trim();
     }
 
     /**
@@ -409,5 +414,131 @@ public class Member extends BaseEntity {
      */
     public void setAcctBalance(BigDecimal acctBalance) {
         this.acctBalance = acctBalance;
+    }
+
+    /**
+     * 获取年龄
+     */
+    public Integer getAge() {
+        return age;
+    }
+
+    /**
+     * 设置年龄
+     */
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    /**
+     * 获取性别
+     */
+    public Integer getGender() {
+        return gender;
+    }
+
+    /**
+     * 设置性别
+     */
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * 获取会员微信昵称
+     */
+    public String getNickName() {
+        return nickName;
+    }
+
+    /**
+     * 设置会员微信昵称
+     */
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    /**
+     * 获取会员等级名称
+     */
+    public String getLevelName() {
+        return levelName;
+    }
+
+    /**
+     * 设置会员等级名称
+     */
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
+    /**
+     * 获取邀请返现
+     */
+    public BigDecimal getInviteReturnAmt() {
+        return inviteReturnAmt;
+    }
+
+    /**
+     * 设置邀请返现
+     */
+    public void setInviteReturnAmt(BigDecimal inviteReturnAmt) {
+        this.inviteReturnAmt = inviteReturnAmt;
+    }
+
+    /**
+     * 获取充值返现
+     */
+    public BigDecimal getRechargeReturnAmt() {
+        return rechargeReturnAmt;
+    }
+
+    /**
+     * 设置充值返现
+     */
+    public void setRechargeReturnAmt(BigDecimal rechargeReturnAmt) {
+        this.rechargeReturnAmt = rechargeReturnAmt;
+    }
+
+    /**
+     * 获取是否为荣誉庄主
+     */
+    public Boolean getMaster() {
+        return isMaster;
+    }
+
+    /**
+     * 设置是否为荣誉庄主
+     */
+    public void setMaster(Boolean master) {
+        isMaster = master;
+    }
+
+    /**
+     * 会员签到次数
+     */
+    public Integer getMbrSightSignCnt() {
+        return mbrSightSignCnt;
+    }
+
+    /**
+     * 会员签到次数
+     */
+    public void setMbrSightSignCnt(Integer mbrSightSignCnt) {
+        this.mbrSightSignCnt = mbrSightSignCnt;
+    }
+
+    /**
+     * 获取会员消费总金额
+     */
+    public BigDecimal getTotalMbrCustomAmt() {
+        return TotalMbrCustomAmt;
+    }
+
+    /**
+     * 设置会员消费总金额
+     */
+    public void setTotalMbrCustomAmt(BigDecimal totalMbrCustomAmt) {
+        TotalMbrCustomAmt = totalMbrCustomAmt;
     }
 }

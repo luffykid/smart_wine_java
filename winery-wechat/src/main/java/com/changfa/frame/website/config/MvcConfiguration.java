@@ -1,6 +1,10 @@
 package com.changfa.frame.website.config;
 
+import com.alibaba.fastjson.PropertyNamingStrategy;
+import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.changfa.frame.website.interceptor.SettingInterceptor;
@@ -16,6 +20,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.*;
 
+import java.io.Serializable;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +36,7 @@ import java.util.List;
 public class MvcConfiguration implements WebMvcConfigurer {
 
     /**
-     * 跨域支持
+     * 后置跨域支持【当出现跨域请求,此处会放在拦截器最后执行，CORS失效】
      *
      * @param registry
      */
@@ -37,9 +44,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
+                .allowedHeaders("*")
+                .allowedMethods("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
-                .maxAge(3600 * 24);
+                .maxAge(3600);
     }
 
     /**
@@ -63,12 +71,25 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
         //2.添加fastJson的配置信息，比如：是否要格式化返回的json数据;
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,
+        fastJsonConfig.setSerializerFeatures(
+                SerializerFeature.PrettyFormat,
                 SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteNullStringAsEmpty,
                 SerializerFeature.DisableCircularReferenceDetect,
                 SerializerFeature.WriteNullListAsEmpty,
+                SerializerFeature.BrowserCompatible,
                 SerializerFeature.WriteDateUseDateFormat);
+        // 设置编码
+        fastJsonConfig.setCharset(Charset.forName("UTF-8"));
+        fastJsonConfig.setDateFormat("yyyyMMdd HH:mm:ss");
+
+        // 设置数字转化问题
+        SerializeConfig serializeConfig = SerializeConfig.globalInstance;
+        serializeConfig.put(BigInteger.class, ToStringSerializer.instance);
+        serializeConfig.put(Long.class, ToStringSerializer.instance);
+        serializeConfig.put(Long.TYPE, ToStringSerializer.instance);
+        serializeConfig.setPropertyNamingStrategy( PropertyNamingStrategy.CamelCase);
+        fastJsonConfig.setSerializeConfig(serializeConfig);
 
         //3处理中文乱码问题
         List<MediaType> fastMediaTypes = new ArrayList<>();
@@ -109,6 +130,25 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+
+    /********************************* 需要注入Bean的拦截器 开始****************************/
+    /**
+     * 令牌拦截器
+     */
+    @Bean
+    public TokenInterceptor TokenInterceptor() {
+        return new TokenInterceptor();
+    }
+
+    /**
+     * 设置拦截器
+     */
+    @Bean
+    public SettingInterceptor SettingInterceptor() {
+        return new SettingInterceptor();
+    }
+    /********************************* 需要注入Bean的拦截器 结束****************************/
+
     /**
      * 注册拦截器
      *
@@ -117,8 +157,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 令牌拦截器
-        registry.addInterceptor(new SettingInterceptor()).addPathPatterns("/wxMini/**");
-        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/wxMini/auth/**");
+        registry.addInterceptor(SettingInterceptor()).addPathPatterns("/wxMini/**");
+        registry.addInterceptor(TokenInterceptor()).addPathPatterns("/wxMini/auth/**");
     }
 
     /**

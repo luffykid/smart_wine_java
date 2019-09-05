@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrAdjustOrderRecordMapper" >
+    <resultMap id="mbrAdjustOrderRecordMap" type="com.changfa.frame.model.app.MbrAdjustOrderRecord" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="mbr_adjust_order_id" property="mbrAdjustOrderId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
+        <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        maor.id as id, maor.mbr_adjust_order_id as mbr_adjust_order_id, maor.mbr_id as mbr_id, 
+        maor.winery_id as winery_id, maor.pay_total_amt as pay_total_amt, maor.pay_real_amt as pay_real_amt, 
+        maor.order_status as order_status, maor.create_date as create_date, maor.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrAdjustOrderRecordMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_adjust_order_record maor
+        where maor.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrAdjustOrderRecord" >
+        insert into m_mbr_adjust_order_record (id, mbr_adjust_order_id, mbr_id, winery_id, pay_total_amt, pay_real_amt, 
+            order_status, create_date, modify_date)
+        values (#{id}, #{mbrAdjustOrderId}, #{mbrId}, #{wineryId}, #{payTotalAmt}, #{payRealAmt}, 
+            #{orderStatus}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrAdjustOrderRecord" >
+        update m_mbr_adjust_order_record
+        <set >
+            <if test="mbrAdjustOrderId != null" >
+                mbr_adjust_order_id = #{mbrAdjustOrderId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="payTotalAmt != null" >
+                pay_total_amt = #{payTotalAmt},
+            </if>
+            <if test="payRealAmt != null" >
+                pay_real_amt = #{payRealAmt},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_adjust_order_record
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrAdjustOrderRecordMap" >
+        select 
+        <include refid="table_column" />
+        from m_mbr_adjust_order_record maor
+        <where >
+            <if test="mbrAdjustOrderId != null" >
+                and maor.mbr_adjust_order_id = #{mbrAdjustOrderId}
+            </if>
+            <if test="mbrId != null" >
+                and maor.mbr_id = #{mbrId}
+            </if>
+            <if test="wineryId != null" >
+                and maor.winery_id = #{wineryId}
+            </if>
+            <if test="payTotalAmt != null" >
+                and maor.pay_total_amt = #{payTotalAmt}
+            </if>
+            <if test="payRealAmt != null" >
+                and maor.pay_real_amt = #{payRealAmt}
+            </if>
+            <if test="orderStatus != null" >
+                and maor.order_status = #{orderStatus}
+            </if>
+            <if test="createDate != null" >
+                and maor.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and maor.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

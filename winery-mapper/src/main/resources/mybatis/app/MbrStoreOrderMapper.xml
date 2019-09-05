@@ -10,7 +10,7 @@
         <result column="prod_total_cnt" property="prodTotalCnt" jdbcType="INTEGER" />
         <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
         <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
-        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="BIGINT" />
+        <result column="pay_integral_cnt" property="payIntegralCnt" jdbcType="DECIMAL" />
         <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
         <result column="total_org_weight" property="totalOrgWeight" jdbcType="DECIMAL" />
         <result column="total_org_capacity" property="totalOrgCapacity" jdbcType="DECIMAL" />
@@ -19,16 +19,23 @@
         <result column="total_remain_weight" property="totalRemainWeight" jdbcType="DECIMAL" />
         <result column="total_remain_capacity" property="totalRemainCapacity" jdbcType="DECIMAL" />
         <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="store_position" property="storePosition" jdbcType="VARCHAR" />
         <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="is_now" property="isNow" jdbcType="INTEGER" />
+        <result column="take_date" property="takeDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <!-- 扩展字段 -->
+        <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+        <result column="list_img" property="prodImg" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="table_column" >
         id, winery_id, mbr_id, wine_cellar_activity_id, pay_mode, prod_total_cnt, pay_total_amt, 
         pay_real_amt, pay_integral_cnt, order_status, total_org_weight, total_org_capacity, 
         total_increase_weight, total_increase_capacity, total_remain_weight, total_remain_capacity, 
-        transaction_no, order_no, create_date, modify_date
+        transaction_no, order_no, is_now,take_date,create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="mbrStoreOrderMap" parameterType="java.lang.Long" >
@@ -38,16 +45,23 @@
         where id = #{id}
     </select>
 
+    <select id="getByOrderNo" resultMap="mbrStoreOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_store_order
+        where order_no = #{outTradeNo}
+    </select>
+
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrStoreOrder" >
         insert into m_mbr_store_order (id, winery_id, mbr_id, wine_cellar_activity_id, pay_mode, prod_total_cnt, 
             pay_total_amt, pay_real_amt, pay_integral_cnt, order_status, total_org_weight, 
             total_org_capacity, total_increase_weight, total_increase_capacity, total_remain_weight, 
-            total_remain_capacity, transaction_no, order_no, create_date, modify_date
+            total_remain_capacity, transaction_no, order_no,is_now,take_date, create_date, modify_date
             )
         values (#{id}, #{wineryId}, #{mbrId}, #{wineCellarActivityId}, #{payMode}, #{prodTotalCnt}, 
             #{payTotalAmt}, #{payRealAmt}, #{payIntegralCnt}, #{orderStatus}, #{totalOrgWeight}, 
             #{totalOrgCapacity}, #{totalIncreaseWeight}, #{totalIncreaseCapacity}, #{totalRemainWeight}, 
-            #{totalRemainCapacity}, #{transactionNo}, #{orderNo}, #{createDate}, #{modifyDate}
+            #{totalRemainCapacity}, #{transactionNo}, #{orderNo},#{isNow},#{takeDate}, #{createDate}, #{modifyDate}
             )
     </insert>
 
@@ -104,6 +118,12 @@
             </if>
             <if test="orderNo != null and orderNo != ''" >
                 order_no = #{orderNo},
+            </if>
+            <if test="isNow != null and isNow != ''" >
+                is_now = #{isNow},
+            </if>
+            <if test="takeDate != null" >
+                take_date = #{takeDate},
             </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
@@ -176,6 +196,12 @@
             <if test="orderNo != null and orderNo != ''" >
                 and mbrStoreOrder.order_no = #{orderNo}
             </if>
+            <if test="isNow != null and isNow != ''" >
+                and mbrStoreOrder.is_now = #{isNow}
+            </if>
+            <if test="takeDate != null" >
+                and mbrStoreOrder.take_date = #{takeDate}
+            </if>
             <if test="createDate != null" >
                 and mbrStoreOrder.create_date = #{createDate}
             </if>
@@ -185,9 +211,11 @@
         </where>
     </select>
 
-    <select id="selectStoreList" parameterType="Long" resultType="java.util.Map">
-        select o.id,o.total_increase_weight,o.total_org_weight,o.total_remain_weight,i.sku_name from m_mbr_store_order o
+    <select id="selectStoreList" parameterType="Long" resultMap="mbrStoreOrderMap">
+        select o.*,i.sku_name,p.list_img from m_mbr_store_order o
         inner join m_mbr_store_order_item i on o.id = i.mbr_store_order_id
+        left join s_prod_sku s on i.prod_sku_id = s.id
+        left join s_prod p on p.id = s.prod_id
         where o.order_status = 4 and o.mbr_id=#{mbrId}
     </select>
 </mapper>

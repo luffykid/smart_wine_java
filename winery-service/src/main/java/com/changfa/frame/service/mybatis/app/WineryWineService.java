@@ -11,6 +11,7 @@
 package com.changfa.frame.service.mybatis.app;
 
 import com.changfa.frame.model.app.ProdSku;
+import com.changfa.frame.model.app.Winery;
 import com.changfa.frame.model.app.WineryWine;
 import com.changfa.frame.service.mybatis.common.BaseService;
 import com.github.pagehelper.PageInfo;
@@ -31,7 +32,7 @@ public interface WineryWineService extends BaseService<WineryWine, Long> {
      * @param pageInfo 分页对象
      * @return List<WineryWine>
      */
-    PageInfo<WineryWine> getWineryWineList(PageInfo pageInfo);
+    PageInfo<WineryWine> getWineryWineList(WineryWine wineryWine,PageInfo pageInfo);
 
     /**
      * 搜索酒庄酒
@@ -81,5 +82,6 @@ public interface WineryWineService extends BaseService<WineryWine, Long> {
      * @return boolean
      */
     boolean deleteWineryWine(Long id);
+
 }
  

@@ -3,12 +3,15 @@ package com.changfa.frame.service.mybatis.app;
 import com.changfa.frame.model.app.MbrWineryVoucher;
 import com.changfa.frame.service.mybatis.common.BaseService;
 
+import java.util.Date;
+import java.util.List;
+
 public interface MbrWineryVoucherService extends BaseService<MbrWineryVoucher, Long> {
 
     /**
-     * 获取可用优惠券的张数
-     * @param mbrId
+     * 根据会员id和时间查询有效优惠券
+     * @param nowDate
      * @return
      */
-    Integer getEnableVoucherCount(Long mbrId);
+    List<MbrWineryVoucher> selectEffectByMbrId(Long mbrId ,Date nowDate);
 }

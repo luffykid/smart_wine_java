@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -50,7 +49,7 @@ public class WeChatController extends BaseController {
         JSONObject jsonObject = WeChatMiniUtil.jsCode2session(jsCode);
         Object openId = jsonObject.get("openid");
         Object sessionKey = jsonObject.get("session_key");
-        if (openId == null || sessionKey==null) {
+        if (openId == null || sessionKey == null) {
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
         if (jsonObject.isNullObject() || jsonObject.isEmpty()) {
@@ -69,6 +68,20 @@ public class WeChatController extends BaseController {
             member.setTotalStoreRemain(new BigDecimal("0.00"));
             member.setTotalStoreIncrement(new BigDecimal("0.00"));
             member.setAcctBalance(new BigDecimal("0.00"));
+            Object nickName = jsonObject.get("nickName");
+            if (nickName != null) {
+                member.setMbrName(String.valueOf(nickName));
+            }
+            Object avatarUrl = jsonObject.get("avatarUrl");
+            if (avatarUrl != null) {
+                member.setUserIcon(String.valueOf(avatarUrl));
+            }
+            Object gender = jsonObject.get("gender");
+            if (gender != null) {
+                member.setGender(Integer.valueOf(String.valueOf(gender)));
+            }
+            member.setInviteReturnAmt(new BigDecimal("0.00"));
+            member.setRechargeReturnAmt(new BigDecimal("0.00"));
             memberService.save(member);
         }
 

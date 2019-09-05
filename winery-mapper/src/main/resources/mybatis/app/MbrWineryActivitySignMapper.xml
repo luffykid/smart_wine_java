@@ -101,7 +101,7 @@
     </select>
 
     <select id="selectSignUpOne" parameterType="Long" resultType="Integer">
-        select count(id) count from b_winery_activity id = #{wineryActivityId} where now() between sign_start_date and sign_end_date
+        select count(id) count from b_winery_activity where id = #{wineryActivityId} and now() between sign_start_date and sign_end_date
     </select>
 
     <select id="selectSignUpTwo" resultType="Integer">
@@ -109,8 +109,8 @@
     </select>
 
     <insert id="signUp">
-        insert into m_mbr_winery_activity_sign (winery_activity_id, mbr_id, mbr_act_status, sign_up_date, create_date)
-        values (#{wineryActivityId}, #{mbrId}, 1, now(), now())
+        insert into m_mbr_winery_activity_sign (id, winery_activity_id, mbr_id, mbr_act_status, sign_up_date, create_date)
+        values (#{id}, #{wineryActivityId}, #{mbrId}, 1, now(), now())
     </insert>
 
     <select id="selectSignIn" resultType="Integer">

@@ -295,6 +295,42 @@ public class HttpUtil {
     /**
      * HTTPS协议POST请求
      *
+     * @param url          Https请求URL
+     * @param charsetCode 请求编码
+     * @param parameterMap Https请求参数集合
+     * @return String 返回字符串
+     */
+    public static byte[] httpsPost(String url,String charsetCode, Map<String, Object> parameterMap) {
+        // 初始化HTTPS客户端
+        CloseableHttpClient httpsClient = createSSLClientDefault();
+        byte[] result = null;
+        try {
+            HttpPost post = new HttpPost(url);
+            List<NameValuePair> nameValuePairs = getNameValuePair(parameterMap);
+            post.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
+            HttpResponse response = httpsClient.execute(post);
+            HttpEntity httpEntity = response.getEntity();
+            if (httpEntity.isStreaming()) {
+                result = EntityUtils.toByteArray(httpEntity);
+            } else {
+                log.info("\r\n ****** Https请求错误：{}", EntityUtils.toString(httpEntity, "UTF-8"));
+            }
+            EntityUtils.consume(httpEntity);
+        } catch (Exception e) {
+            log.error("\r\n *****************HTTP_POST【parameterMap】请求失败:{}", ExceptionUtils.getFullStackTrace(e));
+        } finally {
+            try {
+                httpsClient.close();
+            } catch (IOException e) {
+                log.error("\r\n *****************HTTP_POST【parameterMap】关闭httpClient失败:{}", ExceptionUtils.getFullStackTrace(e));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * HTTPS协议POST请求
+     *
      * @param url         Https请求URL
      * @param paramList   HTTPS请求参数集合
      * @param charsetCode HTTPS请求编码

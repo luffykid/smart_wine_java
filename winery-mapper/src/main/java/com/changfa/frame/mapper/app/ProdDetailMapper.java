@@ -9,6 +9,7 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.ProdDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface ProdDetailMapper extends BaseMapper<ProdDetail, Long> {
     int deleteProdDetailImg(Long id);
 
     int add(ProdDetail prodDetail);
+
+    int saveProdDetailList(@Param("list") List<ProdDetail> saveProdDetailList);
+
+    int updateProdDetailList(List<ProdDetail> updateProdDetailList);
 }

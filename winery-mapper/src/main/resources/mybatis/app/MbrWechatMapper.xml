@@ -31,7 +31,7 @@
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWechat" >
         insert into m_mbr_wechat (id, mbr_id, nick_name, gender, province, city, country,
-            avatar_url, unionId, create_date, modify_date)
+            avatar_url, unionId, birthday, create_date, modify_date)
         values (#{id}, #{mbrId}, #{nickName}, #{gender}, #{province}, #{city}, #{country},
             #{avatarUrl}, #{unionid}, #{birthday}, #{createDate}, #{modifyDate})
     </insert>

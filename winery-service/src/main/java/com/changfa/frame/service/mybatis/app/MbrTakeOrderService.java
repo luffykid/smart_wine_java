@@ -14,7 +14,7 @@ public interface MbrTakeOrderService extends BaseService<MbrTakeOrder, Long> {
      * @param mbrStoreOrderId
      * @return
      */
-    public PageInfo getListByMbrStoreOrderId(Long mbrStoreOrderId, PageInfo pageInfo);
+    PageInfo getListByMbrStoreOrderId(Long mbrStoreOrderId, PageInfo pageInfo);
     /**
      * 自提
      *
@@ -22,5 +22,5 @@ public interface MbrTakeOrderService extends BaseService<MbrTakeOrder, Long> {
      * @param takeWeight 取酒重量
      * @return
      */
-    public boolean takeInPerson(Long mbrStoreOrderId, BigDecimal takeWeight);
+    Long takeInPerson(Long mbrStoreOrderId, BigDecimal takeWeight) throws Exception;
 }

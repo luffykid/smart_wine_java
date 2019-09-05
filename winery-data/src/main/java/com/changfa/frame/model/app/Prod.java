@@ -180,6 +180,38 @@ public class Prod extends BaseEntity {
     /** 创建人 */
     private Long adminId;
 
+    /**
+     * 商品详情
+     */
+    private List<ProdDetail> prodDetails;
+
+
+
+    /**
+     * 产品详情图片
+     */
+    private List<ProdImg> prodImgs;
+
+
+
+    public List<ProdImg> getProdImgs() {
+        return prodImgs;
+    }
+
+    public void setProdImgs(List<ProdImg> prodImgs) {
+        this.prodImgs = prodImgs;
+    }
+
+
+
+    public List<ProdDetail> getProdDetails() {
+        return prodDetails;
+    }
+
+    public void setProdDetails(List<ProdDetail> prodDetails) {
+        this.prodDetails = prodDetails;
+    }
+
     /**是否删除
      0：否
      1：是*/

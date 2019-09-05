@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="prod_id" property="prodId" jdbcType="BIGINT" />
         <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
+        <result column="sku_img" property="prodImg" jdbcType="VARCHAR" />
         <result column="sku_status" property="skuStatus" jdbcType="INTEGER" />
         <result column="sku_stock_cnt" property="skuStockCnt" jdbcType="BIGINT" />
         <result column="fragrance_type" property="fragranceType" jdbcType="VARCHAR" />
@@ -18,31 +19,39 @@
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
         <result column="integral_cnt" property="integralCnt" jdbcType="DECIMAL" />
+        <result column="package_price" property="packagePrice" jdbcType="DECIMAL" />
         <result column="is_del" property="isDel" jdbcType="BIT" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+
+        <collection property="prodSkuMbrPriceList" ofType="com.changfa.frame.model.app.ProdSkuMbrPrice">
+            <result column="mbrId" property="id"></result>
+            <result column="mbr_level_id" property="mbrLevelId"></result>
+            <result column="mbr_level_price" property="mbrLevelPrice"></result>
+        </collection>
     </resultMap>
 
     <sql id="table_column" >
-        id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type,alcohol_cnt, sku_weight, sku_capacity, sku_sell_price,
-        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, is_del,
-        create_date, modify_date
+        ps.id as id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type,alcohol_cnt, sku_weight, sku_capacity, sku_sell_price,
+        sku_market_price, sell_total_cnt, sort, is_integral, integral_amt, integral_cnt, package_price, ps.is_del as is_del,
+        ps.create_date as create_date, ps.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="prodSkuMap" parameterType="java.lang.Long" >
         select 
-        <include refid="table_column" />
-        from s_prod_sku
-        where id = #{id}
+        <include refid="table_column" />,p.list_img as sku_img
+        from s_prod_sku ps
+        left join s_prod p on p.id = ps.prod_id
+        where ps.id = #{id}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.ProdSku" >
         insert into s_prod_sku (id, prod_id, sku_name, sku_status, sku_stock_cnt, fragrance_type, alcohol_cnt, sku_weight,
             sku_capacity, sku_sell_price, sku_market_price, sell_total_cnt, sort, 
-            is_integral, integral_amt, integral_cnt, is_del, create_date, modify_date)
+            is_integral, integral_amt, integral_cnt, package_price, is_del, create_date, modify_date)
         values (#{id}, #{prodId}, #{skuName}, #{skuStatus}, #{skuStockCnt}, #{fragranceType}, #{alcoholCnt}, #{skuWeight},
             #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort}, 
-            #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
+            #{isIntegral}, #{integralAmt}, #{integralCnt}, #{packagePrice}, #{isDel}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.ProdSku" >
@@ -92,6 +101,9 @@
             </if>
             <if test="integralCnt != null" >
                 integral_cnt = #{integralCnt},
+            </if>
+            <if test="packagePrice != null" >
+                package_price = #{packagePrice},
             </if>
             <if test="isDel != null" >
                 is_del = #{isDel},
@@ -161,6 +173,9 @@
             <if test="integralCnt != null" >
                 and ps.integral_cnt = #{integralCnt}
             </if>
+            <if test="packagePrice != null" >
+                and ps.package_price = #{packagePrice}
+            </if>
             <if test="isDel != null" >
                 and ps.is_del = #{isDel}
             </if>
@@ -175,26 +190,31 @@
 
     <select id="getByProdId" parameterType="java.lang.Long" resultMap="prodSkuMap">
         select
-        <include refid="table_column"/>
-        from s_prod_sku where prod_id = #{id}
+        <include refid="table_column"/> ,
+        psm.id as mbrId,
+        psm.mbr_level_id,
+        psm.mbr_level_price
+        from s_prod_sku ps
+        left join s_prod_sku_mbr_price psm on ps.id = psm.prod_sku_id
+        where ps.prod_id = #{id} and ps.is_del = 0
     </select>
 
     <update id="updateSkuStatusByProdId">
-        update s_prod_sku set sku_status =#{skuStatus} where prod_id = #{id}
+        update s_prod_sku ps set sku_status =#{status} where prod_id = #{id}
     </update>
 
     <select id="selectProdSkuStatusByProdId" parameterType="java.lang.Long" resultType="com.changfa.frame.model.app.ProdSku">
         select
         <include refid="table_column"/>
-        from s_prod_sku where prod_id = #{id} and is_del =#{status}
+        from s_prod_sku ps where prod_id = #{id} and is_del =#{status}
     </select>
 
     <update id="updateProdSkuStatus">
-        update s_prod_sku set sku_status = #{skuStatus} where id =#{id}
+        update s_prod_sku ps set sku_status = #{skuStatus} where id =#{id}
     </update>
 
     <update id="deleteProdSku">
-        update s_prod_sku set is_del = 1 where id =#{id}
+        update s_prod_sku ps set is_del = 1 where id =#{id}
     </update>
 
     <insert id="add" parameterType="com.changfa.frame.model.app.ProdSku" >
@@ -205,5 +225,22 @@
             #{skuCapacity}, #{skuSellPrice}, #{skuMarketPrice}, #{sellTotalCnt}, #{sort},
             #{isIntegral}, #{integralAmt}, #{integralCnt}, #{isDel}, #{createDate}, #{modifyDate})
     </insert>
+
+    <select id="getProdNameBySkuId" parameterType="java.lang.Long" resultType="string">
+        select p.prod_name from s_prod_sku ps left join s_prod p on ps.prod_id = p.id where ps.id =#{prodSkuId}
+    </select>
+
+    <!--批量更新sku售卖数量-->
+    <update id="updateSellCnt">
+        <foreach collection="prodSkus" separator=";" item="item">
+            update s_prod_sku
+            <set>
+                <if test="item.sellCnt != null">
+                    sell_total_cnt = sell_total_cnt + #{item.sellCnt},
+                </if>
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
 
 </mapper>

@@ -33,9 +33,13 @@ public class MbrBillRecordController extends BaseController {
      */
     @ApiOperation(value = "获取消费流水记录", notes = "获取消费流水记录")
     @RequestMapping(value = "/getFlowList", method = RequestMethod.GET)
-    public Map<String, Object> getFlowList(HttpServletRequest request, PageInfo pageInfo) {
+    public Map<String, Object> getFlowList(HttpServletRequest request, int pageSize, int pageNum) {
         Member member = getCurMember(request);
-        return getResult(mbrBillRecordServiceImpl.getFlowList(member.getId(), pageInfo));
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = mbrBillRecordServiceImpl.getFlowList(member.getId(), pageInfo);
+        return getResult(pageInfo.getList());
     }
 
 }

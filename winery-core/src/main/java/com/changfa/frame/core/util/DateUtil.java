@@ -122,4 +122,20 @@ public class DateUtil {
         return sdf.format(date);
     }
 
+    /**
+     * 解析日期
+     *
+     * @param strDate
+     * @return
+     * @throws ParseException
+     */
+    public static Date convertStrToDate(String strDate, String pattern) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            return sdf.parse(strDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

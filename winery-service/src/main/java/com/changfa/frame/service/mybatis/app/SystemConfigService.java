@@ -17,12 +17,12 @@ public interface SystemConfigService extends BaseService<SystemConfig, Long> {
      *
      * @return
      */
-    Setting get();
+    Setting get(Long wineryId);
 
     /**
      * 将系统配置对象数据加入Redis缓存
      *
      * @param settingTemp 系统配置对象
      */
-    void set(Setting settingTemp);
+    void set(Setting settingTemp,Long wineryId);
 }

@@ -14,27 +14,33 @@ import java.util.List;
 
 /**
  * 商品sku表
+ *
  * @version 1.0 2019-08-22
  */
 public class ProdSku extends BaseEntity {
 
     private static final long serialVersionUID = 444291406656176128L;
 
-    /** 商品ID */
+    /**
+     * 商品ID
+     */
     private Long prodId;
 
-    /** 商品sku名称 */
+    /**
+     * 商品sku名称
+     */
     private String skuName;
 
-    /** sku状态
-    0：未上架
-    1：已上架 */
+    /**
+     * sku状态
+     * 0：未上架
+     * 1：已上架
+     */
     private Integer skuStatus;
 
     public enum SKU_STATUS_ENUM {
         WSJ(0, "未上架"),
         YSJ(1, "已上架");
-
 
         /**
          * 枚举值
@@ -71,7 +77,6 @@ public class ProdSku extends BaseEntity {
             return null;
         }
 
-
         /**
          * 获取枚举值
          */
@@ -87,234 +92,296 @@ public class ProdSku extends BaseEntity {
         }
     }
 
-    /** 库存 */
+    /**
+     * 库存
+     */
     private Long skuStockCnt;
 
-    /** sku重量（单位：g） */
+    /**
+     * sku重量（单位：g）
+     */
     private BigDecimal skuWeight;
 
-    /** sku容量（单位：ml） */
+    /**
+     * sku容量（单位：ml）
+     */
     private BigDecimal skuCapacity;
 
-    /** sku销售价 */
+    /**
+     * sku销售价
+     */
     private BigDecimal skuSellPrice;
 
-    /** sku市场价 */
+    /**
+     * sku市场价
+     */
     private BigDecimal skuMarketPrice;
 
-    /** 销售总数量 */
+    /**
+     * 销售总数量
+     */
     private Integer sellTotalCnt;
 
-    /** 排序 */
+    /**
+     * 排序
+     */
     private Integer sort;
 
-    /** 是否支持积分购买 */
+    /**
+     * 是否支持积分购买
+     */
     private Boolean isIntegral;
 
-    /** 积分金额 */
+    /**
+     * 积分金额
+     */
     private BigDecimal integralAmt;
 
-    /** 积分数量 */
+    /**
+     * 积分数量
+     */
     private BigDecimal integralCnt;
 
-    /** 香型*/
+    /**
+     * 香型
+     */
     private String fragranceType;
 
-    /**酒精度*/
+    /**
+     * 酒精度
+     */
     private BigDecimal alcoholCnt;
 
-    /**是否删除
-     0：否
-     1：是*/
+    /**
+     * 包装费【每斤酒的包装价格】
+     */
+    private BigDecimal packagePrice;
+
+    /**
+     * 是否删除
+     * 0：否
+     * 1：是
+     */
     private Boolean isDel;
 
+    /**
+     * 定制价格
+     */
+    private BigDecimal wineCustomPrice;
+
+    /*********** 扩展属性 **************/
     /**
      * 产品规格会员价对象
      */
     private List<ProdSkuMbrPrice> prodSkuMbrPriceList;
 
     /**
+     * 产品规格会员价
+     */
+    private BigDecimal mbrPrice;
+
+    /**
+     * 商品名称
+     */
+    private String prodName;
+
+    /**
+     * 商品图片
+     */
+    private String prodImg;
+
+    /**
+     * 销售数量【订单回调中使用】
+     */
+    private Integer sellCnt;
+
+    /**
+     * 白酒定制ID
+     */
+    private Long wineCustomId;
+
+    /**
      * 获取商品ID
-    */
+     */
     public Long getProdId() {
         return prodId;
     }
-    
+
     /**
      * 设置商品ID
-    */
+     */
     public void setProdId(Long prodId) {
         this.prodId = prodId;
     }
-    
+
     /**
      * 获取商品sku名称
-    */
+     */
     public String getSkuName() {
         return skuName;
     }
-    
+
     /**
      * 设置商品sku名称
-    */
+     */
     public void setSkuName(String skuName) {
         this.skuName = skuName;
     }
 
     /**
      * 获取sku状态
-    0：未上架
-    1：已上架
-    */
+     * 0：未上架
+     * 1：已上架
+     */
     public Integer getSkuStatus() {
         return skuStatus;
     }
-    
+
     /**
      * 设置sku状态
-    0：未上架
-    1：已上架
-    */
+     * 0：未上架
+     * 1：已上架
+     */
     public void setSkuStatus(Integer skuStatus) {
         this.skuStatus = skuStatus;
     }
-    
+
     /**
      * 获取库存
-    */
+     */
     public Long getSkuStockCnt() {
         return skuStockCnt;
     }
-    
+
     /**
      * 设置库存
-    */
+     */
     public void setSkuStockCnt(Long skuStockCnt) {
         this.skuStockCnt = skuStockCnt;
     }
-    
+
     /**
      * 获取sku重量（单位：g）
-    */
+     */
     public BigDecimal getSkuWeight() {
         return skuWeight;
     }
-    
+
     /**
      * 设置sku重量（单位：g）
-    */
+     */
     public void setSkuWeight(BigDecimal skuWeight) {
         this.skuWeight = skuWeight;
     }
-    
+
     /**
      * 获取sku容量（单位：ml）
-    */
+     */
     public BigDecimal getSkuCapacity() {
         return skuCapacity;
     }
-    
+
     /**
      * 设置sku容量（单位：ml）
-    */
+     */
     public void setSkuCapacity(BigDecimal skuCapacity) {
         this.skuCapacity = skuCapacity;
     }
-    
+
     /**
      * 获取sku销售价
-    */
+     */
     public BigDecimal getSkuSellPrice() {
         return skuSellPrice;
     }
-    
+
     /**
      * 设置sku销售价
-    */
+     */
     public void setSkuSellPrice(BigDecimal skuSellPrice) {
         this.skuSellPrice = skuSellPrice;
     }
-    
+
     /**
      * 获取sku市场价
-    */
+     */
     public BigDecimal getSkuMarketPrice() {
         return skuMarketPrice;
     }
-    
+
     /**
      * 设置sku市场价
-    */
+     */
     public void setSkuMarketPrice(BigDecimal skuMarketPrice) {
         this.skuMarketPrice = skuMarketPrice;
     }
-    
+
     /**
      * 获取销售总数量
-    */
+     */
     public Integer getSellTotalCnt() {
         return sellTotalCnt;
     }
-    
+
     /**
      * 设置销售总数量
-    */
+     */
     public void setSellTotalCnt(Integer sellTotalCnt) {
         this.sellTotalCnt = sellTotalCnt;
     }
-    
+
     /**
      * 获取排序
-    */
+     */
     public Integer getSort() {
         return sort;
     }
-    
+
     /**
      * 设置排序
-    */
+     */
     public void setSort(Integer sort) {
         this.sort = sort;
     }
-    
+
     /**
      * 获取是否支持积分购买
-    */
+     */
     public Boolean getIsIntegral() {
         return isIntegral;
     }
-    
+
     /**
      * 设置是否支持积分购买
-    */
+     */
     public void setIsIntegral(Boolean isIntegral) {
         this.isIntegral = isIntegral;
     }
-    
+
     /**
      * 获取积分金额
-    */
+     */
     public BigDecimal getIntegralAmt() {
         return integralAmt;
     }
-    
+
     /**
      * 设置积分金额
-    */
+     */
     public void setIntegralAmt(BigDecimal integralAmt) {
         this.integralAmt = integralAmt;
     }
-    
+
     /**
      * 获取积分数量
-    */
+     */
     public BigDecimal getIntegralCnt() {
         return integralCnt;
     }
-    
+
     /**
      * 设置积分数量
-    */
+     */
     public void setIntegralCnt(BigDecimal integralCnt) {
         this.integralCnt = integralCnt;
     }
@@ -347,25 +414,162 @@ public class ProdSku extends BaseEntity {
         this.alcoholCnt = alcoholCnt;
     }
 
-    /**是否删除
-     0：否
-     1：是*/
+    /**
+     * 是否删除
+     * 0：否
+     * 1：是
+     */
     public Boolean getDel() {
         return isDel;
     }
 
-    /**是否删除
-     0：否
-     1：是*/
+    /**
+     * 是否删除
+     * 0：否
+     * 1：是
+     */
     public void setDel(Boolean del) {
         isDel = del;
     }
 
+    /**
+     * 获取产品规格会员价对象
+     */
     public List<ProdSkuMbrPrice> getProdSkuMbrPriceList() {
         return prodSkuMbrPriceList;
     }
 
+    /**
+     * 设置产品规格会员价对象
+     */
     public void setProdSkuMbrPriceList(List<ProdSkuMbrPrice> prodSkuMbrPriceList) {
         this.prodSkuMbrPriceList = prodSkuMbrPriceList;
+    }
+
+    /**
+     * 获取商品名称
+     */
+    public String getProdName() {
+        return prodName;
+    }
+
+    /**
+     * 设置商品名称
+     */
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    /**
+     * 白酒定制价格
+     */
+    public BigDecimal getWineCustomPrice() {
+        return wineCustomPrice;
+    }
+
+    /**
+     * 白酒定制价格
+     */
+    public void setWineCustomPrice(BigDecimal wineCustomPrice) {
+        this.wineCustomPrice = wineCustomPrice;
+    }
+
+    /**
+     * 会员价格
+     */
+    public BigDecimal getMbrPrice() {
+        return mbrPrice;
+    }
+
+    /**
+     * 会员价格
+     */
+    public void setMbrPrice(BigDecimal mbrPrice) {
+        this.mbrPrice = mbrPrice;
+    }
+
+    /**
+     * 包装费
+     */
+    public BigDecimal getPackagePrice() {
+        return packagePrice;
+    }
+
+    /**
+     * 包装费
+     */
+    public void setPackagePrice(BigDecimal packagePrice) {
+        this.packagePrice = packagePrice;
+    }
+
+    /**
+     * 获取销售数量
+     */
+    public Integer getSellCnt() {
+        return sellCnt;
+    }
+
+    /**
+     * 设置销售数量
+     */
+    public void setSellCnt(Integer sellCnt) {
+        this.sellCnt = sellCnt;
+    }
+
+    /**
+     * 获取商品图片
+     */
+    public String getProdImg() {
+        return prodImg;
+    }
+
+    /**
+     * 设置商品图片
+     */
+    public void setProdImg(String prodImg) {
+        this.prodImg = prodImg;
+    }
+
+    /**
+     * 设置白酒定制ID
+     */
+    public Long getWineCustomId() {
+        return wineCustomId;
+    }
+
+    /**
+     * 设置白酒定制ID
+     */
+    public void setWineCustomId(Long wineCustomId) {
+        this.wineCustomId = wineCustomId;
+    }
+
+    @Override
+    public String toString() {
+        return "ProdSku{" +
+                "prodId=" + prodId +
+                ", skuName='" + skuName + '\'' +
+                ", skuStatus=" + skuStatus +
+                ", skuStockCnt=" + skuStockCnt +
+                ", skuWeight=" + skuWeight +
+                ", skuCapacity=" + skuCapacity +
+                ", skuSellPrice=" + skuSellPrice +
+                ", skuMarketPrice=" + skuMarketPrice +
+                ", sellTotalCnt=" + sellTotalCnt +
+                ", sort=" + sort +
+                ", isIntegral=" + isIntegral +
+                ", integralAmt=" + integralAmt +
+                ", integralCnt=" + integralCnt +
+                ", fragranceType='" + fragranceType + '\'' +
+                ", alcoholCnt=" + alcoholCnt +
+                ", packagePrice=" + packagePrice +
+                ", isDel=" + isDel +
+                ", wineCustomPrice=" + wineCustomPrice +
+                ", prodSkuMbrPriceList=" + prodSkuMbrPriceList +
+                ", mbrPrice=" + mbrPrice +
+                ", prodName='" + prodName + '\'' +
+                ", prodImg='" + prodImg + '\'' +
+                ", sellCnt=" + sellCnt +
+                '}';
     }
 }

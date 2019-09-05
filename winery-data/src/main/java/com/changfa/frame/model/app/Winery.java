@@ -143,6 +143,11 @@ public class Winery extends BaseEntity {
      */
     private BigDecimal dLongitude;
 
+    /**
+     * 酒庄酒底图
+     */
+    private String  mapBottom;
+
 
     /**
      * 获取酒庄名称
@@ -328,5 +333,19 @@ public class Winery extends BaseEntity {
      */
     public void setdLongitude(BigDecimal dLongitude) {
         this.dLongitude = dLongitude;
+    }
+
+    /**
+     * 获取酒庄底图
+     */
+    public String getMapBottom() {
+        return mapBottom;
+    }
+
+    /**
+     * 设置获取酒庄底图
+     */
+    public void setMapBottom(String mapBottom) {
+        this.mapBottom = mapBottom;
     }
 }

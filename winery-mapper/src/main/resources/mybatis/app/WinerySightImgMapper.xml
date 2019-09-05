@@ -85,8 +85,8 @@
         </where>
     </select>
 
-    <select id="findScenicImgById" parameterType="java.lang.Long" resultType="string">
-        select img_addr from b_winery_sight_img  where winery_sight_id = #{id} order by create_date desc
+    <select id="findScenicImgById" parameterType="java.lang.Long" resultMap="winerySightImgMap">
+        select <include refid="table_column"/> from b_winery_sight_img  where winery_sight_id = #{id} order by create_date desc
     </select>
 
     <delete id="deleteWinerySightImgById" parameterType="java.lang.Long">
@@ -102,5 +102,37 @@
     <delete id="deleteByWinerySightId" parameterType="java.lang.Long">
         delete from b_winery_sight_img  where winery_sight_id =#{id}
     </delete>
+    
+    <insert id="saveList" parameterType="java.util.List" >
+        insert into b_winery_sight_img (<include refid="table_column"/>)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.id},
+                #{item.winerySightId},
+                #{item.imgName},
+                #{item.imgAddr},
+                #{item.imgRemark},
+                #{item.createDate},
+                #{item.modifyDate}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=",">
+            update b_winery_sight_img
+            <set>
+                winery_sight_id =#{item.winerySightId},
+                img_name =#{item.imgName},
+                img_addr =#{item.imgAddr},
+                img_remark = #{item.imgRemark},
+                modify_date = #{item.modifyDate}
+            </set>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
 
 </mapper>

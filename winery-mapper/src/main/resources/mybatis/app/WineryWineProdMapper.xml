@@ -7,12 +7,14 @@
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="prod_id" property="prodId" jdbcType="BIGINT" />
         <result column="total_sell_cnt" property="totalSellCnt" jdbcType="INTEGER" />
+        <result column="wine_prod_breif" property="wineProdBreif" javaType="String"/>
+        <result column="wine_prod_img" property="wineProdImg" javaType="String"/>
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        id, winery_wine_id, winery_id, prod_id, total_sell_cnt, create_date, modify_date
+        id, winery_wine_id, winery_id, prod_id, total_sell_cnt,wine_prod_breif, wine_prod_img, create_date, modify_date
     </sql>
 
     <select id="getById" resultMap="wineryWineProdMap" parameterType="java.lang.Long" >

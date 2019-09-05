@@ -9,6 +9,7 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.ProdSkuMbrPrice;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface ProdSkuMbrPriceMapper extends BaseMapper<ProdSkuMbrPrice, Long>
     int deleteByProdSkuId(Long id);
 
     List<ProdSkuMbrPrice> findProdSkuMbrPriceListByProdSkuId(Long id);
+
+    ProdSkuMbrPrice getBySkuIdAndMbrLevelId(@Param("id") Long id, @Param("mbrLevelId") Long mbrLevelId);
+
 }

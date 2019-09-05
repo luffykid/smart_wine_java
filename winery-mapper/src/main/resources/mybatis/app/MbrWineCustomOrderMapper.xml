@@ -17,37 +17,44 @@
         <result column="shipping_person_phone" property="shippingPersonPhone" jdbcType="VARCHAR" />
         <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
         <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        MbrWineCustomOrder.id as id, MbrWineCustomOrder.winery_id as winery_id, MbrWineCustomOrder.mbr_id as mbr_id, 
-        MbrWineCustomOrder.custom_total_cnt as custom_total_cnt, MbrWineCustomOrder.pay_total_amt as pay_total_amt, 
-        MbrWineCustomOrder.pay_real_amt as pay_real_amt, MbrWineCustomOrder.order_status as order_status, 
-        MbrWineCustomOrder.shipping_detail_addr as shipping_detail_addr, MbrWineCustomOrder.shipping_province_id as shipping_province_id, 
-        MbrWineCustomOrder.shipping_city_id as shipping_city_id, MbrWineCustomOrder.shipping_county_id as shipping_county_id, 
-        MbrWineCustomOrder.shipping_person_name as shipping_person_name, MbrWineCustomOrder.shipping_person_phone as shipping_person_phone, 
-        MbrWineCustomOrder.transaction_no as transaction_no, MbrWineCustomOrder.order_no as order_no, 
-        MbrWineCustomOrder.create_date as create_date, MbrWineCustomOrder.modify_date as modify_date
+        mco.id as id, mco.winery_id as winery_id, mco.mbr_id as mbr_id, mco.custom_total_cnt as custom_total_cnt,
+        mco.pay_total_amt as pay_total_amt, mco.pay_real_amt as pay_real_amt, mco.order_status as order_status,
+        mco.shipping_detail_addr as shipping_detail_addr, mco.shipping_province_id as shipping_province_id,
+        mco.shipping_city_id as shipping_city_id, mco.shipping_county_id as shipping_county_id,
+        mco.shipping_person_name as shipping_person_name, mco.shipping_person_phone as shipping_person_phone,
+        mco.transaction_no as transaction_no, mco.order_no as order_no, mco.pay_date as pay_date,
+        mco.create_date as create_date, mco.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrWineCustomOrderMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_wine_custom_order MbrWineCustomOrder
-        where MbrWineCustomOrder.id = #{id}
+        from m_mbr_wine_custom_order mco
+        where mco.id = #{id}
+    </select>
+
+    <select id="getByOrderNo" resultMap="mbrWineCustomOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_wine_custom_order mco
+        where mco.order_no = #{orderNo}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustomOrder" >
-        insert into m_mbr_wine_custom_order (id, winery_id, mbr_id, custom_total_cnt, pay_total_amt, pay_real_amt, 
-            order_status, shipping_detail_addr, shipping_province_id, shipping_city_id, 
-            shipping_county_id, shipping_person_name, shipping_person_phone, transaction_no, 
-            order_no, create_date, modify_date)
-        values (#{id}, #{wineryId}, #{mbrId}, #{customTotalCnt}, #{payTotalAmt}, #{payRealAmt}, 
-            #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId}, #{shippingCityId}, 
-            #{shippingCountyId}, #{shippingPersonName}, #{shippingPersonPhone}, #{transactionNo}, 
-            #{orderNo}, #{createDate}, #{modifyDate})
+        insert into m_mbr_wine_custom_order (id, winery_id, mbr_id, custom_total_cnt, pay_total_amt, pay_real_amt,
+            order_status, shipping_detail_addr, shipping_province_id, shipping_city_id,
+            shipping_county_id, shipping_person_name, shipping_person_phone, transaction_no,
+            order_no, pay_date, create_date, modify_date)
+        values (#{id}, #{wineryId}, #{mbrId}, #{customTotalCnt}, #{payTotalAmt}, #{payRealAmt},
+            #{orderStatus}, #{shippingDetailAddr}, #{shippingProvinceId}, #{shippingCityId},
+            #{shippingCountyId}, #{shippingPersonName}, #{shippingPersonPhone}, #{transactionNo},
+            #{orderNo}, #{payDate}, #{createDate}, #{modifyDate})
     </insert>
 
     <update id="update" parameterType="com.changfa.frame.model.app.MbrWineCustomOrder" >
@@ -95,6 +102,9 @@
             <if test="orderNo != null and orderNo != ''" >
                 order_no = #{orderNo},
             </if>
+            <if test="payDate != null" >
+                pay_date = #{payDate},
+            </if>
             <if test="createDate != null" >
                 create_date = #{createDate},
             </if>
@@ -111,57 +121,60 @@
     </delete>
 
     <select id="selectList" resultMap="mbrWineCustomOrderMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_wine_custom_order MbrWineCustomOrder
+        from m_mbr_wine_custom_order mco
         <where >
             <if test="wineryId != null" >
-                and MbrWineCustomOrder.winery_id = #{wineryId}
+                and mco.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and MbrWineCustomOrder.mbr_id = #{mbrId}
+                and mco.mbr_id = #{mbrId}
             </if>
             <if test="customTotalCnt != null" >
-                and MbrWineCustomOrder.custom_total_cnt = #{customTotalCnt}
+                and mco.custom_total_cnt = #{customTotalCnt}
             </if>
             <if test="payTotalAmt != null" >
-                and MbrWineCustomOrder.pay_total_amt = #{payTotalAmt}
+                and mco.pay_total_amt = #{payTotalAmt}
             </if>
             <if test="payRealAmt != null" >
-                and MbrWineCustomOrder.pay_real_amt = #{payRealAmt}
+                and mco.pay_real_amt = #{payRealAmt}
             </if>
             <if test="orderStatus != null" >
-                and MbrWineCustomOrder.order_status = #{orderStatus}
+                and mco.order_status = #{orderStatus}
             </if>
             <if test="shippingDetailAddr != null and shippingDetailAddr != ''" >
-                and MbrWineCustomOrder.shipping_detail_addr = #{shippingDetailAddr}
+                and mco.shipping_detail_addr = #{shippingDetailAddr}
             </if>
             <if test="shippingProvinceId != null" >
-                and MbrWineCustomOrder.shipping_province_id = #{shippingProvinceId}
+                and mco.shipping_province_id = #{shippingProvinceId}
             </if>
             <if test="shippingCityId != null" >
-                and MbrWineCustomOrder.shipping_city_id = #{shippingCityId}
+                and mco.shipping_city_id = #{shippingCityId}
             </if>
             <if test="shippingCountyId != null" >
-                and MbrWineCustomOrder.shipping_county_id = #{shippingCountyId}
+                and mco.shipping_county_id = #{shippingCountyId}
             </if>
             <if test="shippingPersonName != null and shippingPersonName != ''" >
-                and MbrWineCustomOrder.shipping_person_name = #{shippingPersonName}
+                and mco.shipping_person_name = #{shippingPersonName}
             </if>
             <if test="shippingPersonPhone != null and shippingPersonPhone != ''" >
-                and MbrWineCustomOrder.shipping_person_phone = #{shippingPersonPhone}
+                and mco.shipping_person_phone = #{shippingPersonPhone}
             </if>
             <if test="transactionNo != null and transactionNo != ''" >
-                and MbrWineCustomOrder.transaction_no = #{transactionNo}
+                and mco.transaction_no = #{transactionNo}
             </if>
             <if test="orderNo != null and orderNo != ''" >
-                and MbrWineCustomOrder.order_no = #{orderNo}
+                and mco.order_no = #{orderNo}
+            </if>
+            <if test="payDate != null" >
+                and mco.pay_date = #{payDate}
             </if>
             <if test="createDate != null" >
-                and MbrWineCustomOrder.create_date = #{createDate}
+                and mco.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and MbrWineCustomOrder.modify_date = #{modifyDate}
+                and mco.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

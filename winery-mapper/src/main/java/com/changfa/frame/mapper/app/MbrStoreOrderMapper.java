@@ -12,9 +12,10 @@ import com.changfa.frame.model.app.MbrStoreOrder;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface MbrStoreOrderMapper extends BaseMapper<MbrStoreOrder, Long> {
 
-    List<Map> selectStoreList(@Param("mbrId") Long mbrId);
+    List<MbrStoreOrder> selectStoreList(@Param("mbrId") Long mbrId);
+    //根据订单号查询订单
+    MbrStoreOrder getByOrderNo(String outTradeNo);
 }

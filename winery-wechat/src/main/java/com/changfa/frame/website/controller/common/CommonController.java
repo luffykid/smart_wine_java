@@ -4,8 +4,11 @@ import com.changfa.frame.core.redis.RedisClient;
 import com.changfa.frame.core.redis.RedisConsts;
 import com.changfa.frame.model.app.MbrWechat;
 import com.changfa.frame.model.app.Member;
+import com.changfa.frame.model.app.WinerySight;
+import com.changfa.frame.service.mybatis.app.MbrSightSignService;
 import com.changfa.frame.service.mybatis.app.MbrWechatService;
 import com.changfa.frame.service.mybatis.app.MemberService;
+import com.changfa.frame.service.mybatis.app.WinerySightService;
 import com.changfa.frame.service.mybatis.common.SMSService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +40,7 @@ public class CommonController extends BaseController {
     @Resource(name = "memberServiceImpl")
     private MemberService memberService;
 
-    @Autowired
+    @Resource(name = "redisClient")
     private RedisClient redisClient;
 
     @Resource(name = "SMSServiceImpl")
@@ -46,6 +48,15 @@ public class CommonController extends BaseController {
 
     @Resource(name = "mbrWechatServiceImpl")
     private MbrWechatService mbrWechatService;
+
+    @Resource(name = "mbrSightSignServiceImpl")
+    private MbrSightSignService mbrSightSignService;
+
+    @Resource(name = "winerySightServiceImpl")
+    private WinerySightService winerySightService;
+
+
+
 
     /**
      * 会员登录
@@ -80,6 +91,16 @@ public class CommonController extends BaseController {
             throw new CustomException(RESPONSE_CODE_ENUM.ACCT_PHONE_NO_SAME);
         }
 
+        // 判断验证码是否一致
+        Object redisPhoneCodeObj = redisClient.get(RedisConsts.WXMEMBER_MOBILE_CAPTCHA + phone);
+        if (redisPhoneCodeObj == null) {
+            throw new CustomException(RESPONSE_CODE_ENUM.CAPTCHA_CODE_INVALID);
+        }
+        String redisPhoneCode = String.valueOf(redisPhoneCodeObj);
+        if (!StringUtils.equalsIgnoreCase(redisPhoneCode, phoneCode)) {
+            throw new CustomException(RESPONSE_CODE_ENUM.CAPTCHA_CODE_ERROR);
+        }
+
         // 设置redis中的token
         String redisTokenKey = RedisConsts.WXMINI_OPENID + curMember.getOpenId();
         String token = RandomStringUtils.randomNumeric(10) + phone;
@@ -107,14 +128,21 @@ public class CommonController extends BaseController {
         Member curMember = getCurMember(request);
         MbrWechat mbrWechatTemp = new MbrWechat();
         mbrWechatTemp.setMbrId(curMember.getId());
+
+        // 更新会员微信信息
         List<MbrWechat> mbrWechats = mbrWechatService.selectList(mbrWechat);
         mbrWechat.setMbrId(curMember.getId());
         if (CollectionUtils.isEmpty(mbrWechats)) {
             mbrWechatService.save(mbrWechat);
-        }else {
+        } else {
             mbrWechatService.update(mbrWechat);
         }
-        return getResult(null);
+
+        // 更新会员信息
+        curMember.setGender(mbrWechat.getGender());
+        curMember.setUserIcon(mbrWechat.getAvatarUrl());
+
+        return getResult("保存成功");
     }
 
     /**
@@ -144,4 +172,92 @@ public class CommonController extends BaseController {
         resultMap.put("success", true);
         return getResult(resultMap);
     }
+
+    /**
+     * 会员景点签到
+     *
+     * @param sightId     景点ID
+     * @param openId    会员openId
+     * @return
+     */
+    @ApiOperation(value = "会员景点签到", notes = "会员景点签到", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "sightId", value = "景点ID", dataType = "Long"),
+            @ApiImplicitParam(name = "openId", value = "会员openId", dataType = "String")
+    })
+    @PostMapping(value = "/mbrSightSignIn")
+    public Map<String, Object> mbrSightSignIn(Long sightId, String openId, HttpServletRequest request) {
+
+        // 参数校验
+        if (sightId == null || StringUtils.isBlank(openId)) {
+            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
+        }
+        //通过openID获取用户
+        Member signMember = memberService.getByOpenId(openId);
+        if(signMember==null){
+            throw new CustomException(RESPONSE_CODE_ENUM.ACCONAME_NOT_EXIST);
+        }
+        //是否存在该景点
+        WinerySight winerySight = winerySightService.getById(sightId);
+        if(winerySight==null){
+            throw new CustomException(RESPONSE_CODE_ENUM.REQUIRED_IDENTIFY_NOT_EXIST);
+        }
+        //判断此景点是否为签到景点
+        if("0".equals(winerySight.getIsSign())){
+            throw new CustomException(RESPONSE_CODE_ENUM.IS_NOT_SIGNSIGHT);
+        }
+        //传入景点 和 用户 进行景点签到
+        Boolean result = mbrSightSignService.mbrSightSignIn(winerySight,signMember);
+
+        //结果为false  ，已经签过到了
+        if(result ==false){
+            throw new CustomException(RESPONSE_CODE_ENUM.SIGN_IN_EXIST);
+        }
+        return getResult(new HashMap<>());
+    }
+
+    /**
+     *
+     * 会员邀请
+     *
+     * @param invirerOpenId     邀请人openId
+     * @param invireeId      被邀请人Id
+     * @return
+     */
+    @ApiOperation(value = "会员邀请", notes = "会员邀请", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "invirerOpenId", value = "邀请人openId", dataType = "String"),
+            @ApiImplicitParam(name = "invireeId", value = "被邀请人Id", dataType = "Long")
+    })
+    @PostMapping(value = "/mbrInvite")
+    public Map<String, Object> mbrInvite(String invirerOpenId, Long invireeId, HttpServletRequest request) {
+
+        // 参数校验
+        if (invireeId == null || StringUtils.isBlank(invirerOpenId)) {
+            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
+        }
+
+        //通过ID获取被邀请人会员信息
+        Member inviree = memberService.getById(invireeId);
+        if(inviree==null){
+            throw new CustomException(RESPONSE_CODE_ENUM.ACCONAME_NOT_EXIST);
+        }
+        //判断被邀请人是否已经接受过邀请了
+        if(inviree.getMarketPid()!=null){
+            throw new CustomException(RESPONSE_CODE_ENUM.MBR_PID_EXIST);
+        }
+
+        //通过openID获取邀请人会员信息
+        Member invirer = memberService.getByOpenId(invirerOpenId);
+        if(invirer==null){
+            throw new CustomException(RESPONSE_CODE_ENUM.ACCONAME_NOT_EXIST);
+        }
+
+        //会员邀请：传入邀请人和被邀请人
+        memberService.mbrInvite(invirer,inviree);
+
+        return getResult(new HashMap<>());
+    }
+
+
 }

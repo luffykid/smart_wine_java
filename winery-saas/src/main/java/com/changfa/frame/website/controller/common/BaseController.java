@@ -1,5 +1,7 @@
 package com.changfa.frame.website.controller.common;
 
+import com.changfa.frame.core.prop.PropAttributes;
+import com.changfa.frame.core.prop.PropConfig;
 import com.changfa.frame.model.app.Admin;
 import com.changfa.frame.service.mybatis.app.AdminService;
 import net.sf.json.JSONObject;
@@ -134,7 +136,7 @@ public abstract class BaseController {
      * @param request 请求对象
      */
     public Admin getCurAdmin(HttpServletRequest request) {
-        /*************************** 生产环境 **************************/
+//        /*************************** 生产环境 **************************/
 //        // 取出登陆账号
 //        String headerAcctName = request.getHeader("request-header-acct");
 //        if (StringUtils.isBlank(headerAcctName)) {
@@ -151,4 +153,13 @@ public abstract class BaseController {
         return adminUser;
     }
 
+    /**
+     * 获取当前酒庄Id
+     *
+     * @return
+     */
+    public Long getCurWineryId() {
+        String wineryIdStr = PropConfig.getProperty(PropAttributes.SYSTEM_SETTING_WINERY_ID);
+        return Long.valueOf(wineryIdStr);
+    }
 }

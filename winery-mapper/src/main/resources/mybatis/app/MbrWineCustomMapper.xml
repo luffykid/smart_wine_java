@@ -5,7 +5,6 @@
         <id column="id" property="id" jdbcType="BIGINT" />
         <result column="mbr_wine_custom_order_id" property="mbrWineCustomOrderId" jdbcType="BIGINT" />
         <result column="wine_custom_id" property="wineCustomId" jdbcType="BIGINT" />
-        <result column="win_custom_id" property="winCustomId" jdbcType="BIGINT" />
         <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
         <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
         <result column="custom_cnt" property="customCnt" jdbcType="INTEGER" />
@@ -19,7 +18,7 @@
 
     <sql id="table_column" >
         MbrWineCustom.id as id, MbrWineCustom.mbr_wine_custom_order_id as mbr_wine_custom_order_id, 
-        MbrWineCustom.wine_custom_id as wine_custom_id, MbrWineCustom.win_custom_id as win_custom_id, 
+        MbrWineCustom.wine_custom_id as wine_custom_id,
         MbrWineCustom.winery_id as winery_id, MbrWineCustom.mbr_id as mbr_id, MbrWineCustom.custom_cnt as custom_cnt, 
         MbrWineCustom.custom_price as custom_price, MbrWineCustom.custom_total_amt as custom_total_amt, 
         MbrWineCustom.custom_name as custom_name, MbrWineCustom.sku_name as sku_name, MbrWineCustom.create_date as create_date, 
@@ -34,10 +33,10 @@
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrWineCustom" >
-        insert into m_mbr_wine_custom (id, mbr_wine_custom_order_id, wine_custom_id, win_custom_id, winery_id, 
+        insert into m_mbr_wine_custom (id, mbr_wine_custom_order_id, wine_custom_id, winery_id,
             mbr_id, custom_cnt, custom_price, custom_total_amt, custom_name, sku_name, 
             create_date, modify_date)
-        values (#{id}, #{mbrWineCustomOrderId}, #{wineCustomId}, #{winCustomId}, #{wineryId}, 
+        values (#{id}, #{mbrWineCustomOrderId}, #{wineCustomId}, #{wineryId},
             #{mbrId}, #{customCnt}, #{customPrice}, #{customTotalAmt}, #{customName}, #{skuName}, 
             #{createDate}, #{modifyDate})
     </insert>
@@ -50,9 +49,6 @@
             </if>
             <if test="wineCustomId != null" >
                 wine_custom_id = #{wineCustomId},
-            </if>
-            <if test="winCustomId != null" >
-                win_custom_id = #{winCustomId},
             </if>
             <if test="wineryId != null" >
                 winery_id = #{wineryId},
@@ -100,9 +96,6 @@
             </if>
             <if test="wineCustomId != null" >
                 and MbrWineCustom.wine_custom_id = #{wineCustomId}
-            </if>
-            <if test="winCustomId != null" >
-                and MbrWineCustom.win_custom_id = #{winCustomId}
             </if>
             <if test="wineryId != null" >
                 and MbrWineCustom.winery_id = #{wineryId}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.WineCellarActivityDetailMapper" >
+    <resultMap id="wineCellarActivityDetailMap" type="com.changfa.frame.model.app.WineCellarActivityDetail" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="wine_cellar_activity" property="wineCellarActivity" jdbcType="BIGINT" />
+        <result column="detail_title" property="detailTitle" jdbcType="VARCHAR" />
+        <result column="detail_brief" property="detailBrief" jdbcType="VARCHAR" />
+        <result column="detail_img" property="detailImg" jdbcType="VARCHAR" />
+        <result column="detail_status" property="detailStatus" jdbcType="INTEGER" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        wcad.id as id, wcad.wine_cellar_activity as wine_cellar_activity, wcad.detail_title as detail_title,
+        wcad.detail_brief as detail_brief, wcad.detail_img as detail_img, wcad.detail_status as detail_status,
+        wcad.sort as sort, wcad.create_date as create_date, wcad.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="wineCellarActivityDetailMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from b_wine_cellar_activity_detail wcad
+        where wcad.id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.WineCellarActivityDetail" >
+        insert into b_wine_cellar_activity_detail (id, wine_cellar_activity, detail_title, detail_brief, detail_img,
+            detail_status, sort, create_date, modify_date)
+        values (#{id}, #{wineCellarActivity}, #{detailTitle}, #{detailBrief}, #{detailImg},
+            #{detailStatus}, #{sort}, #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.WineCellarActivityDetail" >
+        update b_wine_cellar_activity_detail
+        <set >
+            <if test="wineCellarActivity != null" >
+                wine_cellar_activity = #{wineCellarActivity},
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                detail_title = #{detailTitle},
+            </if>
+            <if test="detailBrief != null and detailBrief != ''" >
+                detail_brief = #{detailBrief},
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                detail_img = #{detailImg},
+            </if>
+            <if test="detailStatus != null" >
+                detail_status = #{detailStatus},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from b_wine_cellar_activity_detail
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="wineCellarActivityDetailMap" >
+        select
+        <include refid="table_column" />
+        from b_wine_cellar_activity_detail wcad
+        <where >
+            <if test="wineCellarActivity != null" >
+                and wcad.wine_cellar_activity = #{wineCellarActivity}
+            </if>
+            <if test="detailTitle != null and detailTitle != ''" >
+                and wcad.detail_title = #{detailTitle}
+            </if>
+            <if test="detailBrief != null and detailBrief != ''" >
+                and wcad.detail_brief = #{detailBrief}
+            </if>
+            <if test="detailImg != null and detailImg != ''" >
+                and wcad.detail_img = #{detailImg}
+            </if>
+            <if test="detailStatus != null" >
+                and wcad.detail_status = #{detailStatus}
+            </if>
+            <if test="sort != null" >
+                and wcad.sort = #{sort}
+            </if>
+            <if test="createDate != null" >
+                and wcad.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and wcad.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

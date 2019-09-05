@@ -186,7 +186,9 @@
     </select>
     <select id="selectListByMbrStoreOrderId" parameterType="Long" resultMap="mbrTakeOrderMap">
         select
-        <include refid="table_column" />
-        from m_mbr_take_order where order_status=4 and mbr_store_order_id=#{mbrStoreOrderId}
+            <include refid="table_column" />
+        from m_mbr_take_order
+        where order_status=4 and mbr_store_order_id=#{mbrStoreOrderId}
+        order by create_date desc
     </select>
 </mapper>

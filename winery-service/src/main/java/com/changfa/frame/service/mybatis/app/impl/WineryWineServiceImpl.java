@@ -2,6 +2,7 @@ package com.changfa.frame.service.mybatis.app.impl;
 
 import com.changfa.frame.core.file.FilePathConsts;
 import com.changfa.frame.core.file.FileUtil;
+import com.changfa.frame.core.util.DateUtil;
 import com.changfa.frame.mapper.app.ProdMapper;
 import com.changfa.frame.mapper.app.ProdSkuMapper;
 import com.changfa.frame.mapper.app.WineryWineMapper;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,19 +50,20 @@ public class WineryWineServiceImpl extends BaseServiceImpl<WineryWine, Long> imp
      * @return
      */
     @Override
-    public PageInfo<WineryWine> getWineryWineList(PageInfo pageInfo) {
+    public PageInfo<WineryWine> getWineryWineList(WineryWine wineryWine,PageInfo pageInfo) {
         if (pageInfo != null) {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         }
-        List<WineryWine> wineryWineListContainProdNum = new ArrayList<WineryWine>();
-        List<WineryWine> wineryWineList = wineryWineMapper.getWineryWineList();
+        List<WineryWine> wineryWineList = wineryWineMapper.getWineryWineList(wineryWine);
         if(wineryWineList != null && wineryWineList.size() > 0){
-            for (WineryWine wineryWine : wineryWineList) {
-                wineryWine.setRelationCount(wineryWineProdMapper.getProdListByWinerWineId(wineryWine.getId()).size());
-                wineryWineListContainProdNum.add(wineryWine);
+            for (WineryWine wineryWinevo : wineryWineList) {
+                WineryWineProd wineryWineProd = new WineryWineProd();
+                wineryWineProd.setWineryWineId(wineryWinevo.getId());
+                List<WineryWineProd> wineryWineProds = wineryWineProdMapper.selectList(wineryWineProd);
+                wineryWinevo.setRelationCount(wineryWineProds.size());
             }
         }
-        return new PageInfo(wineryWineListContainProdNum);
+        return new PageInfo(wineryWineList);
     }
 
     /**
@@ -102,15 +105,13 @@ public class WineryWineServiceImpl extends BaseServiceImpl<WineryWine, Long> imp
         wineryWineMapper.save(wineryWine);
         if(wineryWine.getWineryWineProdList() != null && wineryWine.getWineryWineProdList().size() > 0){
             for (WineryWineProd wineryWineProdvo :wineryWine.getWineryWineProdList()) {
-                WineryWineProd wineryWineProd = new WineryWineProd();
-                wineryWineProd.setId(IDUtil.getId());
-                wineryWineProd.setWineryWineId(wineryWine.getId());
-                wineryWineProd.setWineryId(wineryId);
-                wineryWineProd.setProdId(wineryWineProdvo.getWineryWineId());
-                wineryWineProd.setTotalSellCnt(wineryWineProdvo.getTotalSellCnt());
-                wineryWineProd.setCreateDate(new Date());
-                wineryWineProd.setModifyDate(new Date());
-                wineryWineProdMapper.save(wineryWineProd);
+                wineryWineProdvo.setId(IDUtil.getId());
+                wineryWineProdvo.setWineryWineId(wineryWine.getId());
+                wineryWineProdvo.setWineryId(wineryId);
+                wineryWineProdvo.setWineProdImg(FileUtil.copyNFSByFileName(wineryWineProdvo.getWineProdImg(),FilePathConsts.TEST_FILE_CP_PATH));
+                wineryWineProdvo.setCreateDate(new Date());
+                wineryWineProdvo.setModifyDate(new Date());
+                wineryWineProdMapper.save(wineryWineProdvo);
             }
         }
     }
@@ -124,25 +125,23 @@ public class WineryWineServiceImpl extends BaseServiceImpl<WineryWine, Long> imp
     public void updateWineryWine(WineryWine wineryWine,Long wineryId) {
         wineryWine.setWineryId(wineryId);
         wineryWine.setCoverImg(FileUtil.copyNFSByFileName(wineryWine.getCoverImg(), FilePathConsts.TEST_FILE_CP_PATH));
-        wineryWine.setModifyDate(new Date());
-        wineryWineMapper.update(wineryWine);
-       List<WineryWineProd> wineryWineProdList = wineryWineProdMapper.getByWineryWineById(wineryWine.getId());
-       if(wineryWineProdList != null && wineryWineProdList.size() > 0){
-           wineryWineProdMapper.deleteWineryWineById(wineryWine.getId());
-       }
-       if(wineryWine.getWineryWineProdList() != null && wineryWine.getWineryWineProdList().size() >0 ){
-            for (WineryWineProd wineryWineProdvo :wineryWine.getWineryWineProdList()) {
-                WineryWineProd wineryWineProd = new WineryWineProd();
-                wineryWineProd.setId(IDUtil.getId());
-                wineryWineProd.setWineryWineId(wineryWine.getId());
-                wineryWineProd.setWineryId(wineryId);
-                wineryWineProd.setProdId(wineryWineProdvo.getWineryWineId());
-                wineryWineProd.setTotalSellCnt(wineryWineProdvo.getTotalSellCnt());
-                wineryWineProd.setCreateDate(new Date());
-                wineryWineProd.setModifyDate(new Date());
-                wineryWineProdMapper.save(wineryWineProd);
-            }
+        try {
+            wineryWine.setModifyDate(DateUtil.getCurDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+        wineryWineMapper.update(wineryWine);
+        for (WineryWineProd wineryWineProd:wineryWine.getWineryWineProdList()) {
+            wineryWineProd.setWineProdImg(FileUtil.copyNFSByFileName(wineryWineProd.getWineProdImg(),FilePathConsts.TEST_FILE_CP_PATH));
+            try {
+                wineryWineProd.setModifyDate(DateUtil.getCurDate());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            wineryWineProd.setWineryId(wineryId);
+            wineryWineProdMapper.update(wineryWineProd);
+        }
+
     }
 
     /**
@@ -192,10 +191,6 @@ public class WineryWineServiceImpl extends BaseServiceImpl<WineryWine, Long> imp
     @Override
     @Transactional
     public boolean deleteWineryWine(Long id) {
-        List<WineryWineProd> wineryWineProdList = wineryWineProdMapper.getByWineryWineById(id);
-        if(wineryWineProdList != null && wineryWineProdList.size() > 0){
-            wineryWineProdMapper.deleteWineryWineById(id);
-        }
         return wineryWineMapper.delete(id) > 0 ? true : false;
     }
 }

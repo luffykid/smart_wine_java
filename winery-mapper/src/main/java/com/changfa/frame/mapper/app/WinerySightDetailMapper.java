@@ -9,6 +9,7 @@ package com.changfa.frame.mapper.app;
 
 import com.changfa.frame.mapper.common.BaseMapper;
 import com.changfa.frame.model.app.WinerySightDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,9 @@ public interface WinerySightDetailMapper extends BaseMapper<WinerySightDetail, L
 
     List<WinerySightDetail> findSightImageTextByWinerySightId(Long id);
 
+    int saveList(@Param("list") List<WinerySightDetail> winerySightDetailListvo);
+
+    int updateList(@Param("list") List<WinerySightDetail> updateWinerySightDetailList);
+
+    List<WinerySightDetail> selectListBySightIdAndStatus(@Param("id") Long id,@Param("status")  Integer status);
 }

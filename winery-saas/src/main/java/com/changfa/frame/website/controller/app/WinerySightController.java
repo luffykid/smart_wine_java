@@ -42,14 +42,18 @@ public class WinerySightController extends BaseController {
      * @return Map<String, Object>
      */
     @ApiOperation(value = "查询景点列表",notes = "查询景点列表")
+    @ApiImplicitParams(@ApiImplicitParam(name = "winerySight", value = "景点添加对象", dataType = "WinerySight"))
     @RequestMapping(value = "/getWinerySightList", method = RequestMethod.GET)
-    public Map<String, Object> getWinerySightList(HttpServletRequest request, PageInfo pageInfo){
+    public Map<String, Object> getWinerySightList(HttpServletRequest request,WinerySight winerySight, int pageNum,int pageSize){
         Admin curAdmin = getCurAdmin(request);
-        PageInfo<WinerySight> winerySightList =winerySightService.findWinerySightList(curAdmin,pageInfo);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        PageInfo<WinerySight> winerySightList =winerySightService.findWinerySightList(winerySight,curAdmin,pageInfo);
         if (winerySightList.getList().size() == 0 && winerySightList == null){
             throw new CustomException(RESPONSE_CODE_ENUM.NO_DATA);
         }
-        return getResult(winerySightList);
+        return getResult(winerySightList.getList());
     }
 
     /**
@@ -63,7 +67,7 @@ public class WinerySightController extends BaseController {
     @RequestMapping(value = "/addWinerySight", method = RequestMethod.POST)
     public Map<String, Object> addWinerySight(@RequestBody WinerySight winerySight,HttpServletRequest request){
         Admin curAdmin = getCurAdmin(request);
-        winerySightService.addWinerySight(winerySight,curAdmin);
+        winerySightService.addWinerySight(winerySight,curAdmin.getWineryId());
         return getResult("添加成功");
     }
 
@@ -79,23 +83,6 @@ public class WinerySightController extends BaseController {
         return getResult(winerySightService.findWinerySight(id));
     }
 
-    /**
-     * 编辑景点
-     * @param winerySight 景点对象
-     * @return Map<String,Object>
-     */
-    @ApiOperation(value = "编辑景点",notes = "编辑景点")
-    @ApiImplicitParams(@ApiImplicitParam(name = "winerySight", value = "景点修改对象", dataType = "WinerySight"))
-    @RequestMapping(value = "/updateWinerySight", method = RequestMethod.POST)
-    public Map<String,Object> updateWinerySight(@RequestBody  WinerySight winerySight){
-        try{
-            winerySightService.updateWinerySight(winerySight);
-        }catch (Exception e){
-            log.info("此处有错误:{}",e.getMessage());
-            throw new CustomException(RESPONSE_CODE_ENUM.UPDATE_FAILED);
-        }
-        return getResult("修改成功");
-    }
 
     /**
      * 删除景点
@@ -123,6 +110,21 @@ public class WinerySightController extends BaseController {
     public Map<String,Object> addScenicImageText(@RequestBody List<WinerySightDetail> winerySightDetailList){
         winerySightService.addScenicImageText(winerySightDetailList);
         return getResult("添加成功");
+    }
+
+    /**
+     * 删除景点
+     * @param id  景点id
+     * @return Map<String,Object>
+     */
+    @ApiOperation(value = "删除景点图文",notes = "删除景点图文")
+    @ApiImplicitParams(@ApiImplicitParam(name = "id", value = "景点图文Id", dataType = "Long"))
+    @RequestMapping(value = "/deleteScenicImageText", method = RequestMethod.POST)
+    public Map<String,Object> deleteScenicImageText(@RequestParam("id") Long id){
+        if ( winerySightService.deleteScenicImageText(id) ){
+            return getResult("删除成功");
+        }
+        throw new CustomException(RESPONSE_CODE_ENUM.DELETE_FAILED);
     }
 
     /**

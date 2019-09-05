@@ -2,13 +2,11 @@ package com.changfa.frame.website.controller.app;
 
 import com.changfa.frame.model.app.Area;
 import com.changfa.frame.service.mybatis.app.AreaService;
-import com.changfa.frame.service.mybatis.app.impl.AreaServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +17,6 @@ import java.util.Map;
 
 /**
  * 区域接口
- *
  */
 @Api(value = "区域接口", tags = "区域接口")
 @RestController("wxMiniAreaController")
@@ -27,6 +24,7 @@ import java.util.Map;
 public class AreaController extends BaseController {
     @Resource(name = "areaServiceImpl")
     private AreaService areaServiceImpl;
+
     /**
      * 根据上级代码获取区域列表
      *

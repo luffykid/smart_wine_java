@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.changfa.frame.mapper.app.MbrAdjustOrderMapper" >
+    <resultMap id="mbrAdjustOrderMap" type="com.changfa.frame.model.app.MbrAdjustOrder" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="winery_adjust_wine_id" property="wineryAdjustWineId" jdbcType="BIGINT" />
+        <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
+        <result column="winery_id" property="wineryId" jdbcType="BIGINT" />
+        <result column="pay_mode" property="payMode" jdbcType="INTEGER" />
+        <result column="pay_total_amt" property="payTotalAmt" jdbcType="DECIMAL" />
+        <result column="pay_real_amt" property="payRealAmt" jdbcType="DECIMAL" />
+        <result column="print_img" property="printImg" jdbcType="VARCHAR" />
+        <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+        <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="table_column" >
+        mao.id as id, mao.winery_adjust_wine_id as winery_adjust_wine_id, mao.mbr_id as mbr_id,
+        mao.winery_id as winery_id, mao.pay_mode as pay_mode, mao.pay_total_amt as pay_total_amt,
+        mao.pay_real_amt as pay_real_amt, mao.print_img as print_img, mao.order_status as order_status,
+        mao.transaction_no as transaction_no, mao.order_no as order_no, mao.pay_date as pay_date,
+        mao.create_date as create_date, mao.modify_date as modify_date
+    </sql>
+
+    <select id="getById" resultMap="mbrAdjustOrderMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from m_mbr_adjust_order mao
+        where mao.id = #{id}
+    </select>
+
+    <select id="getByOrderNo" resultMap="mbrAdjustOrderMap" parameterType="java.lang.String" >
+        select
+        <include refid="table_column" />
+        from m_mbr_adjust_order mao
+        where mao.order_no = #{orderNo}
+    </select>
+
+    <insert id="save" parameterType="com.changfa.frame.model.app.MbrAdjustOrder" >
+        insert into m_mbr_adjust_order (id, winery_adjust_wine_id, mbr_id, winery_id, pay_mode, pay_total_amt,
+        pay_real_amt, print_img, order_status, transaction_no, order_no, pay_date,
+        create_date, modify_date)
+        values (#{id}, #{wineryAdjustWineId}, #{mbrId}, #{wineryId}, #{payMode}, #{payTotalAmt},
+        #{payRealAmt}, #{printImg}, #{orderStatus}, #{transactionNo}, #{orderNo}, #{payDate},
+        #{createDate}, #{modifyDate})
+    </insert>
+
+    <update id="update" parameterType="com.changfa.frame.model.app.MbrAdjustOrder" >
+        update m_mbr_adjust_order
+        <set >
+            <if test="wineryAdjustWineId != null" >
+                winery_adjust_wine_id = #{wineryAdjustWineId},
+            </if>
+            <if test="mbrId != null" >
+                mbr_id = #{mbrId},
+            </if>
+            <if test="wineryId != null" >
+                winery_id = #{wineryId},
+            </if>
+            <if test="payMode != null" >
+                pay_mode = #{payMode},
+            </if>
+            <if test="payTotalAmt != null" >
+                pay_total_amt = #{payTotalAmt},
+            </if>
+            <if test="payRealAmt != null" >
+                pay_real_amt = #{payRealAmt},
+            </if>
+            <if test="printImg != null and printImg != ''" >
+                print_img = #{printImg},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus},
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                transaction_no = #{transactionNo},
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                order_no = #{orderNo},
+            </if>
+            <if test="payDate != null" >
+                pay_date = #{payDate},
+            </if>
+            <if test="createDate != null" >
+                create_date = #{createDate},
+            </if>
+            <if test="modifyDate != null" >
+                modify_date = #{modifyDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long" >
+        delete from m_mbr_adjust_order
+        where id = #{id}
+    </delete>
+
+    <select id="selectList" resultMap="mbrAdjustOrderMap" >
+        select
+        <include refid="table_column" />
+        from m_mbr_adjust_order mao
+        <where >
+            <if test="wineryAdjustWineId != null" >
+                and mao.winery_adjust_wine_id = #{wineryAdjustWineId}
+            </if>
+            <if test="mbrId != null" >
+                and mao.mbr_id = #{mbrId}
+            </if>
+            <if test="wineryId != null" >
+                and mao.winery_id = #{wineryId}
+            </if>
+            <if test="payMode != null" >
+                and mao.pay_mode = #{payMode}
+            </if>
+            <if test="payTotalAmt != null" >
+                and mao.pay_total_amt = #{payTotalAmt}
+            </if>
+            <if test="payRealAmt != null" >
+                and mao.pay_real_amt = #{payRealAmt}
+            </if>
+            <if test="printImg != null and printImg != ''" >
+                and mao.print_img = #{printImg}
+            </if>
+            <if test="orderStatus != null" >
+                and mao.order_status = #{orderStatus}
+            </if>
+            <if test="transactionNo != null and transactionNo != ''" >
+                and mao.transaction_no = #{transactionNo}
+            </if>
+            <if test="orderNo != null and orderNo != ''" >
+                and mao.order_no = #{orderNo}
+            </if>
+            <if test="payDate != null" >
+                and mao.pay_date = #{payDate}
+            </if>
+            <if test="createDate != null" >
+                and mao.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and mao.modify_date = #{modifyDate}
+            </if>
+        </where>
+    </select>
+
+</mapper>

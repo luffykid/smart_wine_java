@@ -8,36 +8,45 @@
         <result column="mbr_id" property="mbrId" jdbcType="BIGINT" />
         <result column="prod_sku_id" property="prodSkuId" jdbcType="BIGINT" />
         <result column="prod_sku_cnt" property="prodSkuCnt" jdbcType="INTEGER" />
-        <result column="sku_name" property="skuName" jdbcType="BIGINT" />
+        <result column="sku_name" property="skuName" jdbcType="VARCHAR" />
         <result column="sku_market_price" property="skuMarketPrice" jdbcType="DECIMAL" />
         <result column="sku_sell_price" property="skuSellPrice" jdbcType="DECIMAL" />
-        <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="BIGINT" />
+        <result column="sku_mbr_price" property="skuMbrPrice" jdbcType="DECIMAL" />
         <result column="is_integral" property="isIntegral" jdbcType="TINYINT" />
         <result column="integral_amt" property="integralAmt" jdbcType="DECIMAL" />
-        <result column="integral_cnt" property="integralCnt" jdbcType="BIGINT" />
+        <result column="integral_cnt" property="integralCnt" jdbcType="DECIMAL" />
         <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
         <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="table_column" >
-        id, mbr_prod_order_id, winery_id, mbr_id, prod_sku_id, prod_sku_cnt, sku_name, sku_market_price, 
-        sku_sell_price, sku_mbr_price, is_integral, integral_amt, integral_cnt, create_date, 
-        modify_date
+        mpoi.id as id, mpoi.mbr_prod_order_id as mbr_prod_order_id, mpoi.winery_id as winery_id,
+        mpoi.mbr_id as mbr_id, mpoi.prod_sku_id as prod_sku_id, mpoi.prod_sku_cnt as prod_sku_cnt,
+        mpoi.sku_name as sku_name, mpoi.sku_market_price as sku_market_price, mpoi.sku_sell_price as sku_sell_price,
+        mpoi.sku_mbr_price as sku_mbr_price, mpoi.is_integral as is_integral, mpoi.integral_amt as integral_amt,
+        mpoi.integral_cnt as integral_cnt, mpoi.create_date as create_date, mpoi.modify_date as modify_date
     </sql>
 
     <select id="getById" resultMap="mbrProdOrderItemMap" parameterType="java.lang.Long" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_prod_order_item
-        where id = #{id}
+        from m_mbr_prod_order_item mpoi
+        where mpoi.id = #{id}
+    </select>
+
+    <select id="getByMbrProdOrderId" resultMap="mbrProdOrderItemMap" parameterType="java.lang.Long" >
+        select
+        <include refid="table_column" />
+        from m_mbr_prod_order_item mpoi
+        where mpoi.mbr_prod_order_id = #{mbrProdOrderId}
     </select>
 
     <insert id="save" parameterType="com.changfa.frame.model.app.MbrProdOrderItem" >
-        insert into m_mbr_prod_order_item (id, mbr_prod_order_id, winery_id, mbr_id, prod_sku_id, prod_sku_cnt, 
-            sku_name, sku_market_price, sku_sell_price, sku_mbr_price, is_integral, 
+        insert into m_mbr_prod_order_item (id, mbr_prod_order_id, winery_id, mbr_id, prod_sku_id, prod_sku_cnt,
+            sku_name, sku_market_price, sku_sell_price, sku_mbr_price, is_integral,
             integral_amt, integral_cnt, create_date, modify_date)
-        values (#{id}, #{mbrProdOrderId}, #{wineryId}, #{mbrId}, #{prodSkuId}, #{prodSkuCnt}, 
-            #{skuName}, #{skuMarketPrice}, #{skuSellPrice}, #{skuMbrPrice}, #{isIntegral}, 
+        values (#{id}, #{mbrProdOrderId}, #{wineryId}, #{mbrId}, #{prodSkuId}, #{prodSkuCnt},
+            #{skuName}, #{skuMarketPrice}, #{skuSellPrice}, #{skuMbrPrice}, #{isIntegral},
             #{integralAmt}, #{integralCnt}, #{createDate}, #{modifyDate})
     </insert>
 
@@ -96,51 +105,51 @@
     </delete>
 
     <select id="selectList" resultMap="mbrProdOrderItemMap" >
-        select 
+        select
         <include refid="table_column" />
-        from m_mbr_prod_order_item
-        <where >
+        from m_mbr_prod_order_item mpoi
+        <where>
             <if test="mbrProdOrderId != null" >
-                and null.mbr_prod_order_id = #{mbrProdOrderId}
+                and mpoi.mbr_prod_order_id = #{mbrProdOrderId}
             </if>
             <if test="wineryId != null" >
-                and null.winery_id = #{wineryId}
+                and mpoi.winery_id = #{wineryId}
             </if>
             <if test="mbrId != null" >
-                and null.mbr_id = #{mbrId}
+                and mpoi.mbr_id = #{mbrId}
             </if>
             <if test="prodSkuId != null" >
-                and null.prod_sku_id = #{prodSkuId}
+                and mpoi.prod_sku_id = #{prodSkuId}
             </if>
             <if test="prodSkuCnt != null" >
-                and null.prod_sku_cnt = #{prodSkuCnt}
+                and mpoi.prod_sku_cnt = #{prodSkuCnt}
             </if>
             <if test="skuName != null" >
-                and null.sku_name = #{skuName}
+                and mpoi.sku_name = #{skuName}
             </if>
             <if test="skuMarketPrice != null" >
-                and null.sku_market_price = #{skuMarketPrice}
+                and mpoi.sku_market_price = #{skuMarketPrice}
             </if>
             <if test="skuSellPrice != null" >
-                and null.sku_sell_price = #{skuSellPrice}
+                and mpoi.sku_sell_price = #{skuSellPrice}
             </if>
             <if test="skuMbrPrice != null" >
-                and null.sku_mbr_price = #{skuMbrPrice}
+                and mpoi.sku_mbr_price = #{skuMbrPrice}
             </if>
             <if test="isIntegral != null" >
-                and null.is_integral = #{isIntegral}
+                and mpoi.is_integral = #{isIntegral}
             </if>
             <if test="integralAmt != null" >
-                and null.integral_amt = #{integralAmt}
+                and mpoi.integral_amt = #{integralAmt}
             </if>
             <if test="integralCnt != null" >
-                and null.integral_cnt = #{integralCnt}
+                and mpoi.integral_cnt = #{integralCnt}
             </if>
             <if test="createDate != null" >
-                and null.create_date = #{createDate}
+                and mpoi.create_date = #{createDate}
             </if>
             <if test="modifyDate != null" >
-                and null.modify_date = #{modifyDate}
+                and mpoi.modify_date = #{modifyDate}
             </if>
         </where>
     </select>

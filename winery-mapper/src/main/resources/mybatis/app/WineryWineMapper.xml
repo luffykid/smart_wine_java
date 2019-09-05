@@ -92,10 +92,33 @@
         </where>
     </select>
 
-    <select id="getWineryWineList" resultMap="wineryWineMap">
+    <select id="getWineryWineList" parameterType="com.changfa.frame.model.app.WineryWine" resultMap="wineryWineMap" >
         select
-        <include refid="table_column"/>
-        from b_winery_wine
+        <include refid="table_column" />
+        from b_winery_wine ww
+        <where >
+            <if test="wineryId != null" >
+                and ww.winery_id = #{wineryId}
+            </if>
+            <if test="name != null and name != ''" >
+                and ww.name like concat(concat('%',#{name}),'%')
+            </if>
+            <if test="coverImg != null and coverImg != ''" >
+                and ww.cover_img = #{coverImg}
+            </if>
+            <if test="totalSellCnt != null" >
+                and ww.total_sell_cnt = #{totalSellCnt}
+            </if>
+            <if test="status != null" >
+                and ww.status = #{status}
+            </if>
+            <if test="createDate != null" >
+                and ww.create_date = #{createDate}
+            </if>
+            <if test="modifyDate != null" >
+                and ww.modify_date = #{modifyDate}
+            </if>
+        </where>
     </select>
 
     <select id="getWineryWineListByName" resultMap="wineryWineMap">

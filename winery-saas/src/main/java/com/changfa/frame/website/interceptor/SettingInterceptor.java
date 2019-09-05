@@ -1,6 +1,6 @@
 package com.changfa.frame.website.interceptor;
 
-import com.changfa.frame.website.utils.SettingUtils;
+import com.changfa.frame.service.mybatis.common.SettingUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

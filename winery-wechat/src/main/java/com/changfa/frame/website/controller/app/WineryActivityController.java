@@ -1,9 +1,11 @@
 package com.changfa.frame.website.controller.app;
 
-import com.changfa.frame.model.app.Member;
+import com.changfa.frame.model.app.*;
 import com.changfa.frame.service.mybatis.app.MbrWineryActivitySignService;
+import com.changfa.frame.service.mybatis.app.WineryActivityDetailService;
 import com.changfa.frame.service.mybatis.app.WineryActivityService;
-import com.changfa.frame.service.mybatis.app.impl.MbrWineryActivitySignServiceImpl;
+import com.changfa.frame.service.mybatis.app.impl.ProdServiceImpl;
+import com.changfa.frame.service.mybatis.app.impl.ProdSkuServiceImpl;
 import com.changfa.frame.website.controller.common.BaseController;
 import com.changfa.frame.website.controller.common.CustomException;
 import com.changfa.frame.website.controller.common.RESPONSE_CODE_ENUM;
@@ -12,14 +14,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,21 +33,119 @@ import java.util.Map;
 @RestController("wxMiniWineryActivityController")
 @RequestMapping("/wxMini/auth/wineryActivity")
 public class WineryActivityController extends BaseController {
+
     @Resource(name = "wineryActivityServiceImpl")
     private WineryActivityService wineryActivityServiceImpl;
+
+    @Resource(name = "wineryActivityDetailServiceImpl")
+    private WineryActivityDetailService wineryActivityDetailServiceImpl;
+
+    @Resource(name = "prodServiceImpl")
+    private ProdServiceImpl prodServiceImpl;
+
+    @Resource(name = "prodSkuServiceImpl")
+    private ProdSkuServiceImpl prodSkuServiceImpl;
+
     @Resource(name = "mbrWineryActivitySignServiceImpl")
     private MbrWineryActivitySignService mbrWineryActivitySignServiceImpl;
+
     /**
      * 获取未结束活动列表
      *
      * @return
      */
-    @ApiOperation(value = "获取未结束活动列表", notes = "获取未开始活动列表")
+    @ApiOperation(value = "获取未结束活动列表", notes = "获取未结束活动列表")
     @RequestMapping(value = "/getNoEndList", method = RequestMethod.GET)
-    public Map<String, Object> getNoEndList(PageInfo pageInfo) {
+    public Map<String, Object> getNoEndList(int pageNum, int pageSize, HttpServletRequest request) {
+        Member member = getCurMember(request);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(pageInfo));
+        resultMap.put("list", wineryActivityServiceImpl.getNoEndList(member.getId(), pageInfo).getList());
         return getResult(resultMap);
+    }
+
+    /**
+     * 获取酒庄活动列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取酒庄活动列表", notes = "获取酒庄活动列表")
+    @RequestMapping(value = "/getList", method = RequestMethod.GET)
+    public Map<String, Object> getList(HttpServletRequest request, int pageSize,int pageNum) {
+        Member member = getCurMember(request);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPageSize(pageSize);
+        pageInfo = wineryActivityServiceImpl.getSecList(member.getId(), pageInfo);
+        return getResult(pageInfo.getList());
+    }
+
+    /**
+     * 获取活动详情
+     *
+     * @return
+     */
+    @ApiOperation(value = "获取活动详情", notes = "获取活动详情")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "id", value = "酒庄酒窖活动id", dataType = "Long"))
+    @RequestMapping(value = "/getDetail", method = RequestMethod.GET)
+    public Map<String, Object> getDetail(Long id, HttpServletRequest request) {
+        Member member = getCurMember(request);
+        if(id ==null){
+            log.info("此处有错误:{}", "错误信息");
+            throw new CustomException(RESPONSE_CODE_ENUM.MISS_PARAMETER);
+        }
+        Map<String, Object> returnMap = new HashMap<>();
+        WineryActivity wineryActivity = wineryActivityServiceImpl.getSecById(id, member.getId());
+        List<Map<String,Object>> detailList = new ArrayList<>();
+
+        WineryActivityDetail wineryActivityDetailEntity = new WineryActivityDetail();
+        wineryActivityDetailEntity.setWineryActivityId(id);
+        List<WineryActivityDetail> wineryActivityDetailList= wineryActivityDetailServiceImpl.selectList(wineryActivityDetailEntity);
+
+        if(wineryActivityDetailList != null){
+            for (WineryActivityDetail wineryActivityDetail:wineryActivityDetailList) {
+                Map<String,Object> wineryActivityDetailMap = new HashMap<>();
+                wineryActivityDetailMap.put("detailTitle",wineryActivityDetail.getDetailTitle());
+                wineryActivityDetailMap.put("detailImg",wineryActivityDetail.getDetailImg());
+                wineryActivityDetailMap.put("detailBrief",wineryActivityDetail.getDetailBrief());
+                ProdSku prodSku = prodSkuServiceImpl.getById(wineryActivityDetail.getProdSkuId());
+                wineryActivityDetailMap.put("skuName",prodSku.getSkuName());
+                wineryActivityDetailMap.put("skuSellPrice",prodSku.getSkuSellPrice());
+                detailList.add(wineryActivityDetailMap);
+            }
+        }
+
+        returnMap.put("wineryActivity",wineryActivity);
+        returnMap.put("detailList",detailList);
+
+        return getResult(returnMap);
+    }
+    /**
+     * 活动点赞
+     *
+     * @return
+     */
+    @ApiOperation(value = "活动点赞", notes = "活动点赞")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "wineryActivityId", value = "活动id", dataType = "Long")
+    )
+    @RequestMapping(value = "/thumbup", method = RequestMethod.POST)
+    public Map<String, Object> thumbup(Long wineryActivityId, HttpServletRequest request) {
+        Member member = getCurMember(request);
+        Long wineryId = getCurWineryId();
+        if (member == null){
+            throw new CustomException(RESPONSE_CODE_ENUM.NOT_LOGIN_ERROR);
+        }
+        try {
+            wineryActivityServiceImpl.thumbup(wineryActivityId, member.getId(), wineryId);
+        }catch (Exception e){
+            log.info("此处有错误:{}", "点赞失败！");
+            throw new CustomException(RESPONSE_CODE_ENUM.UPDTATE_EXIST);
+        }
+        return getResult(new HashMap<>());
     }
 
     /**
@@ -55,14 +156,26 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动报名", notes = "活动报名")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/singUp", method = RequestMethod.GET)
-    public void singUp(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signUp", method = RequestMethod.POST)
+    public Map<String, Object> signUp(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.singUp(wineryActivityId, member.getId());
-        if (!flag){
+
+            //是否已经过期
+            if(mbrWineryActivitySignServiceImpl.IsExpireSignUp(wineryActivityId)){
+                throw new CustomException(RESPONSE_CODE_ENUM.SIGN_OUT_TIME);
+            }
+
+            //是否已经报过名了
+            if(mbrWineryActivitySignServiceImpl.IsExistSingUp(wineryActivityId,member.getId())){
+                throw new CustomException(RESPONSE_CODE_ENUM.SIGN_UP_EXIST);
+            }
+        try {
+            mbrWineryActivitySignServiceImpl.signUp(wineryActivityId, member.getId());
+        }catch (Exception e){
             log.info("此处有错误:{}", "活动报名失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
+        return getResult(new HashMap<>());
     }
 
     /**
@@ -73,14 +186,16 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动签到", notes = "活动签到")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/singIn", method = RequestMethod.GET)
-    public void singIn(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
+    public Map<String, Object> signIn(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.singIn(wineryActivityId, member.getId());
-        {
+        try {
+            mbrWineryActivitySignServiceImpl.signIn(wineryActivityId, member.getId());
+        }catch (Exception e) {
             log.info("此处有错误:{}", "活动签到失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
+        return getResult(new HashMap<>());
     }
 
 
@@ -92,13 +207,27 @@ public class WineryActivityController extends BaseController {
     @ApiOperation(value = "活动签退", notes = "活动签退")
     @ApiImplicitParams(
             @ApiImplicitParam(name = "WineryActivityId", value = "酒庄活动id", dataType = "Long"))
-    @RequestMapping(value = "/singOff", method = RequestMethod.GET)
-    public void singOff(HttpServletRequest request, Long wineryActivityId){
+    @RequestMapping(value = "/signOff", method = RequestMethod.POST)
+    public Map<String, Object> signOff(HttpServletRequest request, Long wineryActivityId){
         Member member = getCurMember(request);
-        boolean flag = mbrWineryActivitySignServiceImpl.singOff(wineryActivityId, member.getId());
-        {
+        try {
+            mbrWineryActivitySignServiceImpl.signOff(wineryActivityId, member.getId());
+        }catch (Exception e) {
             log.info("此处有错误:{}", "活动签退失败！");
             throw new CustomException(RESPONSE_CODE_ENUM.SERVER_ERROR);
         }
+        return getResult(new HashMap<>());
+    }
+
+    /**
+     * 我参加的活动列表
+     * @return
+     */
+    @ApiOperation(value = "我参加的活动列表", notes = "我参加的活动列表")
+    @RequestMapping(value = "/getMySignAct", method = RequestMethod.GET)
+    public Map<String, Object> getMySignAct(HttpServletRequest request) {
+        Member member = getCurMember(request);
+
+        return getResult(wineryActivityServiceImpl.getMySignAct(member.getId()));
     }
 }

@@ -9,6 +9,9 @@ package com.changfa.frame.model.app;
 
 import com.changfa.frame.model.common.BaseEntity;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * 酒庄酒表
  * @version 1.0 2019-08-24
@@ -29,7 +32,53 @@ public class WineryWineProd extends BaseEntity {
     /** 售卖总数量 */
     private Integer totalSellCnt;
 
-    
+
+    /** 酒商品简介*/
+    private String wineProdBreif;
+
+    /** 酒商品图片*/
+    private String wineProdImg;
+
+    /**
+     * 扩展字段
+     * 酒庄酒产品价格
+     */
+    private BigDecimal mbrPrice;
+
+    /**
+     * 酒庄酒产品图片
+     */
+    private List<ProdImg> prodImgs;
+
+    /**
+     * 酒庄酒产品相关信息
+     */
+    private Prod prod;
+
+    public Prod getProd() {
+        return prod;
+    }
+
+    public void setProd(Prod prod) {
+        this.prod = prod;
+    }
+
+    public List<ProdImg> getProdImgs() {
+        return prodImgs;
+    }
+
+    public void setProdImgs(List<ProdImg> prodImgs) {
+        this.prodImgs = prodImgs;
+    }
+
+    public BigDecimal getMbrPrice() {
+        return mbrPrice;
+    }
+
+    public void setMbrPrice(BigDecimal mbrPrice) {
+        this.mbrPrice = mbrPrice;
+    }
+
     /**
      * 获取酒庄酒ID
     */
@@ -84,5 +133,22 @@ public class WineryWineProd extends BaseEntity {
     */
     public void setTotalSellCnt(Integer totalSellCnt) {
         this.totalSellCnt = totalSellCnt;
+    }
+
+
+    public String getWineProdBreif() {
+        return wineProdBreif;
+    }
+
+    public void setWineProdBreif(String wineProdBreif) {
+        this.wineProdBreif = wineProdBreif;
+    }
+
+    public String getWineProdImg() {
+        return wineProdImg;
+    }
+
+    public void setWineProdImg(String wineProdImg) {
+        this.wineProdImg = wineProdImg;
     }
 }
