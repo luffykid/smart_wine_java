@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false" >
     <!-- 定义日志路径、级别 -->
-    <property name="LOG_DIR" value="/var/log/jenkins-app/smart_wine_java" />
+    <property name="LOG_DIR" value="~/jenkins-app/smart_wine_java/" />
     <property name="project.artifactId" value="winery-wechat" />
 
     <!-- 打印日志到控制台 -->
