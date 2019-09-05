@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.changfa.frame.model.app.MbrWineCustom;
 import com.changfa.frame.model.app.MbrWineCustomDetail;
 import com.changfa.frame.service.mybatis.app.*;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,6 +39,7 @@ public class WechatNotifyTest {
     private MbrWineCustomOrderService mbrWineCustomOrderService;
 
 
+    @Ignore
     @Test
     public void test() {
 
@@ -52,6 +54,7 @@ public class WechatNotifyTest {
         mbrWineCustomOrderService.handleNotifyOfWineCustomOrder("1", "1", new Date());
     }
 
+    @Ignore
     @Test
     public void testCustomInfo() {
 // 保存定制信息接口参数
